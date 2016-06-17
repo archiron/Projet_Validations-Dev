@@ -469,7 +469,8 @@ def list_search_1(my_choice_0):
     ## Define options
     option_is_from_data = "mc" # mc ou data
     option_release_1 = str( my_choice_0 )
-    option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
+#    print "**list search 1 : ", option_release_1
+#    option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
     option_mthreads = 3
     option_dry_run = True # False for loading files
     
@@ -589,6 +590,22 @@ def sub_releases(tab_files):
 #        print '%d, %s' % (i+1, tt[1])
         temp.append(tt[1])
         i += 1
+    temp = sorted(set(temp))
+    return temp
+    
+def sub_releases2(release, tab_files):
+    import re
+    print "sub_releases2", len(tab_files)
+    i = 0
+    temp = []
+    for t in tab_files:
+        if ( re.search(release, t) ):
+#            print 'sub_releases2 : %s' % t
+            tt = explode_item(t)
+            print 'sub_releases2 : %d, %s, %s' % (i+1, tt[0], tt[1])
+            temp.append(tt[0])
+        i += 1
+    temp = sorted(set(temp))
     return temp
     
 def explode_item(item):

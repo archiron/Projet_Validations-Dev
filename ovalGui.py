@@ -9,7 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
-from fonctions import list_search_0, list_search_1, list_search, explode_item, sub_releases
+from fonctions import list_search_0, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from getChoice import *
 #from getPublish import *
@@ -18,7 +18,7 @@ from getChoice import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.0.1')
+        self.setWindowTitle('Validations gui v0.0.2')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -33,13 +33,15 @@ class ovalGui(QWidget):
         self.working_dir_rel = os.getcwd()
         self.working_dir_ref = os.getcwd()
         
-        self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
+#        self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
         self.my_choice_rel_0 = "" # 
         self.my_choice_rel_1 = "" # 
         self.my_choice_ref_0 = "" # 
         self.my_choice_ref_1 = "" # 
         self.rel_list_0 = []
         self.ref_list_0 = []
+        self.rel_list_1 = []
+        self.ref_list_1 = []
         self.profondeur_rel = 0
         self.profondeur_ref = 0
 						
@@ -108,42 +110,6 @@ class ovalGui(QWidget):
         vboxAllNone.addStretch(1)
         self.QGBoxAllNone.setLayout(vboxAllNone)
                 				
-		# creation des texEdit pour release/reference
-        self.QGBox6 = QGroupBox("release")
-        self.QGBox6.setMaximumHeight(150)
-        self.QGBox6.setMinimumHeight(150)
-        self.QGBox6.setMinimumWidth(250)
-        
-        self.labelCombo1 = QLabel(self.trUtf8("Release"), self)
-        self.listeReference1 = QComboBox()
-        self.listeReference1.setSizeAdjustPolicy(self.listeReference1.AdjustToContents)
-        self.connect(self.listeReference1, SIGNAL("currentIndexChanged(int)"), self.listeReferencehighlighted1)
-        self.listeReference1.addItem("Release")
-        self.listeReference1.addItem("Init")
-        for elems in self.releasesList_0:
-            self.listeReference1.addItem(elems)
-        self.labelCombo2 = QLabel(self.trUtf8("Reference"), self)
-        self.listeReference2 = QComboBox()
-        self.listeReference2.setSizeAdjustPolicy(self.listeReference2.AdjustToContents)
-        self.connect(self.listeReference2, SIGNAL("currentIndexChanged(int)"), self.listeReferencehighlighted2)
-        self.listeReference2.addItem("Reference")
-        self.listeReference2.addItem("Init")
-        for elems in self.releasesList_0:
-            self.listeReference2.addItem(elems)
-
-        hbox63 = QHBoxLayout()
-        hbox63.addWidget(self.labelCombo1)
-        hbox63.addWidget(self.listeReference1)
-        hbox64 = QHBoxLayout()
-        hbox64.addWidget(self.labelCombo2)
-        hbox64.addWidget(self.listeReference2)
-
-        vbox6 = QVBoxLayout()
-        vbox6.addLayout(hbox63)
-        vbox6.addLayout(hbox64)
-        vbox6.addStretch(1)
-        self.QGBox6.setLayout(vbox6)
-
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
         self.layoutH_radio.addWidget(self.QGBox1)
@@ -151,7 +117,6 @@ class ovalGui(QWidget):
         self.layoutH_radio.addWidget(self.QGBox32)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addStretch(1)
-        self.layoutH_radio.addWidget(self.QGBox6)
 
         # Création du bouton Get choice !, ayant pour parent la "fenetre"
         self.bouton3 = QPushButton(self.trUtf8("Get choice !"),self)
@@ -245,14 +210,12 @@ class ovalGui(QWidget):
         if ( self.my_choice_rel_0 ) :
             print "clientchoice : self.my_choice_rel_0 : %s " % self.my_choice_rel_0
             tmp += self.my_choice_rel_0 # 
-            tmp += ' - ' + self.my_choice_rel1 # 
-#            tmp += ' - ' + str(self.my_choice_rel[2]) # to not write self.my_choice_rel[3]
+            tmp += '/' + self.my_choice_rel_1 # 
         tmp += "<br /><strong>Reference : </strong>"
         if ( self.my_choice_ref_0 ) :
             print "clientchoice : self.my_choice_ref_0 : %s " % self.my_choice_ref_0
             tmp += str(self.my_choice_ref_0) # 
-            tmp += ' - ' + self.my_choice_ref1 # 
-#            tmp += ' - ' + str(self.my_choice_ref[2]) # to not write self.my_choice_ref[3]
+            tmp += '/' + self.my_choice_ref_1 # 
         self.labelResume.setText(tmp)
         QtCore.QCoreApplication.processEvents()
 #        self.bouton5.setEnabled(False) # to be seen later
@@ -338,90 +301,4 @@ class ovalGui(QWidget):
             self.check37.setChecked(False)
             self.check38.setChecked(False)
         QtCore.QCoreApplication.processEvents() 
-
-    def listeReferencehighlighted1(self):
-        print "coucou 1 - index", self.listeReference1.currentText(), '-', self.listeReference1.currentIndex()
-        print "coucou 1 - profondeur", self.profondeur_rel
-        self.my_choice_rel_1 = self.listeReference1.currentText()
-        index_rel = self.listeReference1.currentIndex()
-        if self.listeReference1.currentIndex() > 1:
-            print "coucou 1b", self.listeReference1.currentText()
-            temp = list_search_1(self.my_choice_rel_1)
-            if ( len(temp) == 0 ): # we do not have to go here since it's tested on list_search_0
-                print "Warning : no sub releases nor files inside !"
-                BoiteMessage = QMessageBox()
-                BoiteMessage.setText("Warning : no sub releases nor files inside !")
-                BoiteMessage.setWindowTitle("WARNING !")
-                BoiteMessage.exec_()
-            else:
-                print "sub releases - len : ", len(temp)
-                # tester si self.profondeur = 1. oui: on choisit la sous release, non: on reaffiche la liste
-                if ( self.profondeur_rel == 1 ):
-                    print "profondeur 1 : ", self.listeReference1.currentText()
-                    self.my_choice_rel_1 = self.listeReference1.currentText()
-                    self.listeReference1.setCurrentIndex(index_rel)
-                else:
-                    self.profondeur_rel = 1 # 
-                    self.rel_list_0 = sub_releases(temp)
-                    tmp1 = sorted(list(set(self.rel_list_0)))
-                    self.rel_list_0 = tmp1
-                    i = 0
-                    self.listeReference1.clear()
-                    self.listeReference1.addItem("Release")
-                    self.listeReference1.addItem("Init")
-                    for items in self.rel_list_0:
-#                        print "%d : %s" % (i+1, items)
-                        self.listeReference1.addItem(items)
-                        i += 1
-        if self.listeReference1.currentIndex() == 1:
-            print "coucou 1b - Init"
-            self.listeReference1.clear()
-            self.listeReference1.addItem("Release")
-            self.listeReference1.addItem("Init")
-            self.profondeur_rel = 0 # remet la profondeur a 0
-            for elems in self.releasesList_0:
-                self.listeReference1.addItem(elems)
-
-    def listeReferencehighlighted2(self):
-        print "coucou 2 - index", self.listeReference2.currentText()
-        print "coucou 2 - profondeur", self.profondeur_ref
-        self.my_choice_ref_1 = self.listeReference2.currentText()
-        index_ref = self.listeReference2.currentIndex()
-        if self.listeReference2.currentIndex() > 1:
-            print "coucou 2b", self.listeReference2.currentText()
-            temp = list_search_1(self.my_choice_ref_1)
-            if ( len(temp) == 0 ): # we do not have to go here since it's tested on list_search_0
-                print "Warning : no sub releases nor files inside !"
-                BoiteMessage = QMessageBox()
-                BoiteMessage.setText("Warning : no sub releases nor files inside !")
-                BoiteMessage.setWindowTitle("WARNING !")
-                BoiteMessage.exec_()
-            else:
-                print "sub releases - len : ", len(temp)
-                # tester si self.profondeur = 2. oui: on choisit la sous release, non: on reaffiche la liste
-                if ( self.profondeur_ref == 1 ):
-                    print "profondeur 1 : ", self.listeReference2.currentText()
-                    self.my_choice_ref_1 = self.listeReference2.currentText()
-                    self.listeReference2.setCurrentIndex(index_ref)
-                else:
-                    self.profondeur_ref = 1 # 
-                    self.ref_list_0 = sub_releases(temp)
-                    tmp2 = sorted(list(set(self.ref_list_0)))
-                    self.ref_list_0 = tmp2
-                    i = 0
-                    self.listeReference2.clear()
-                    self.listeReference2.addItem("Reference")
-                    self.listeReference2.addItem("Init")
-                    for items in self.ref_list_0:
-#                       print "%d : %s" % (i+1, items)
-                        self.listeReference2.addItem(items)
-                        i += 1
-        if self.listeReference2.currentIndex() == 1:
-            print "coucou 2 - Init"
-            self.listeReference2.clear()
-            self.listeReference2.addItem("Reference")
-            self.listeReference2.addItem("Init")
-            self.profondeur_ref = 0
-            for elems in self.releasesList_0:
-                self.listeReference2.addItem(elems)
 

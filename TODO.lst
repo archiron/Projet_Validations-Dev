@@ -1,10 +1,17 @@
 
+utiliser clean_collections pour nettoyer en fonction de Full, PU, Fast
+
 mettre les langues sous forme de fichier txt.
 pour les valeurs self.my_choice_rel_1 et self.my_choice_ref_1 tester si un choix est fait avant de faire la commande :
 self.my_choice_rel(f)_1 = self.QLW1_rel(f)2.currentItem().text()
 verifier si les listes temp = sub_releases(list_search_1(self.my_choice_rel(f)_0)) sont vides ou pas.
 
-resume:
+possibiliter d'editeur pour changer le global tag dans les fichiers _cfg dans /Tests
+choix des datatsets par radio bouton
+possibilité d'ajouter un dataset dans les classiques
+idem pour les calculs
+
+RESUME :
 self.choix_calcul = 'Full'   # default
 self.choix_job = '8nh'       # default
 self.choix_etape = 'analyze' # default
@@ -30,6 +37,6 @@ self.profondeur_rel = 0 : indique la profondeur de recherche : (0:liset_search_0
 self.profondeur_ref = 0 : indique la profondeur de recherche : (0:liset_search_0, 1:self.my_choice_ref_0,self.ref_list_0, 2:sous_release choisie)
 self.my_choice_rel_1 = '' : valeur choisie pour la release de travail
 self.my_choice_ref_1 = '' : valeur choisie pour la release de reference
+self.rel_list_1 = [] : liste des datasets à partir de self.my_choice_rel_1 (CMSSW_8_0_0_pre1, ...)
+self.ref_list_1 = [] : liste des datasets à partir de self.my_choice_ref_1
 
-listeReferencehighlighted1 : liste les releases possibles pour la release à partir de https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
-listeReferencehighlighted2 : liste les releases possibles pour la référence à partir de https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
