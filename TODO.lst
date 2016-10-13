@@ -2,6 +2,10 @@
 utiliser clean_collections pour nettoyer en fonction de Full, PU, Fast
 
 mettre les langues sous forme de fichier txt.
+verifier que les fichiers sont bien chargés.
+pour pmx et miniAOD, on fait comme dans le FastSim Oval, on ne tient pas compte de la référence.
+faire un bouton pmx ? et sortir les pmx des PU classiques.
+
 pour les valeurs self.my_choice_rel_1 et self.my_choice_ref_1 tester si un choix est fait avant de faire la commande :
 self.my_choice_rel(f)_1 = self.QLW1_rel(f)2.currentItem().text()
 verifier si les listes temp = sub_releases(list_search_1(self.my_choice_rel(f)_0)) sont vides ou pas.
@@ -10,6 +14,12 @@ possibiliter d'editeur pour changer le global tag dans les fichiers _cfg dans /T
 choix des datatsets par radio bouton
 possibilité d'ajouter un dataset dans les classiques
 idem pour les calculs
+
+Get Choice :
+DataSets Type
+    Classical : classical electron validation DataSets
+    Others    : other datatset to work with
+    All       : ???
 
 RESUME :
 self.choix_calcul = 'Full'   # default
@@ -40,3 +50,4 @@ self.my_choice_ref_1 = '' : valeur choisie pour la release de reference
 self.rel_list_1 = [] : liste des datasets à partir de self.my_choice_rel_1 (CMSSW_8_0_0_pre1, ...)
 self.ref_list_1 = [] : liste des datasets à partir de self.my_choice_ref_1
 
+get choice removed
