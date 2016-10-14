@@ -18,7 +18,7 @@ from getChoice import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.0.3')
+        self.setWindowTitle('Validations gui v0.0.4')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -44,6 +44,8 @@ class ovalGui(QWidget):
         self.ref_list_1 = []
         self.profondeur_rel = 0
         self.profondeur_ref = 0
+        self.tasks_list = ['Release', 'Reference', 'DataSets']
+        self.tasks_counter = 0
 						
         ## PART 1 ##
 		# creation du grpe Calcul
@@ -157,23 +159,30 @@ class ovalGui(QWidget):
         self.generalTab.setLayout(self.layoutV_combobox)   
 
         ## BOTTOM PART ##
-        # Création du bouton quitter, ayant pour parent la "fenetre"
-        self.boutonQ = QPushButton(self.trUtf8("Quitter ?"),self)
-        self.boutonQ.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
-        self.boutonQ.setIcon(QIcon("../images/smile.png"))
-        self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))
-        
         # créer un bouton
         self.bouton_Next = QPushButton("Next", self)
         self.bouton_Next.clicked.connect(self.Next_Choice)
         self.bouton_Previous = QPushButton("Previous", self)
         self.bouton_Previous.clicked.connect(self.Previous_Choice)
         self.bouton_Previous.setEnabled(False) #default
+#        self.bouton_Next.setText(self.trUtf8(self.tasks_list[1]))
+        self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
+        
+        #label button creation
+        txt = "(" + str(self.tasks_counter) + ",1) Next : " + self.tasks_list[1]
+        self.labelCombo3 = QLabel(self.trUtf8(txt), self)
+
+        # Création du bouton quitter, ayant pour parent la "fenetre"
+        self.boutonQ = QPushButton(self.trUtf8("Quitter ?"),self)
+        self.boutonQ.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
+        self.boutonQ.setIcon(QIcon("../images/smile.png"))
+        self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))
         
         #Layout intermédiaire : boutons
         self.layoutH_boutons = QHBoxLayout()
         self.layoutH_boutons.addWidget(self.bouton_Previous)
         self.layoutH_boutons.addWidget(self.bouton_Next)
+        self.layoutH_boutons.addWidget(self.labelCombo3)
         self.layoutH_boutons.addStretch(1)
         self.layoutH_boutons.addWidget(self.boutonQ)
 
@@ -330,24 +339,58 @@ class ovalGui(QWidget):
         
     def Next_Choice(self):
         print "Next_Choice: "
-        self.bouton_Previous.setEnabled(True)
-        self.bouton_Next.setEnabled(False)
-        self.QGBox_rel0.setTitle("Reference list")
-        self.QLW_rel1.clear()
-        self.QLW_rel2.clear()
-        self.QLW_rel3.clear()
-        for it in self.releasesList_0:
-            item = QListWidgetItem("%s" % it)
-            self.QLW_rel1.addItem(item)
+        if self.tasks_counter + 1 > len(self.tasks_list) - 1:
+            print "no way : %i" % self.tasks_counter
+            self.bouton_Next.setEnabled(False)
+        else:
+            self.tasks_counter += 1
+            if self.tasks_counter == len(self.tasks_list) - 1:
+                self.bouton_Next.setEnabled(False)
+                txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter) + ") Next : " 
+                self.labelCombo3.setText(self.trUtf8(txt))
+                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
+            else:
+                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
+                txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
+                self.labelCombo3.setText(self.trUtf8(txt))
 
+        if self.tasks_counter == 1:
+            self.bouton_Previous.setEnabled(True)
+            self.QGBox_rel0.setTitle("Reference list")
+            self.QLW_rel1.clear()
+            self.QLW_rel2.clear()
+            self.QLW_rel3.clear()
+            self.labelCombo2.setText("Reference")
+            for it in self.releasesList_0:
+                item = QListWidgetItem("%s" % it)
+                self.QLW_rel1.addItem(item)
+        else :
+            print self.tasks_list[self.tasks_counter]
+        
     def Previous_Choice(self):
         print "Previous_Choice: "
-        self.bouton_Previous.setEnabled(False)
-        self.bouton_Next.setEnabled(True)
-        self.QGBox_rel0.setTitle("Release list")
-        self.QLW_rel1.clear()
-        self.QLW_rel2.clear()
-        self.QLW_rel3.clear()
-        for it in self.releasesList_0:
-            item = QListWidgetItem("%s" % it)
-            self.QLW_rel1.addItem(item)
+        if self.tasks_counter - 1 < 0:
+            print "no way : %i" % self.tasks_counter
+            self.bouton_Previous.setEnabled(False)
+        else:
+            self.tasks_counter -= 1
+            if self.tasks_counter == 0:
+                self.bouton_Previous.setEnabled(False)
+                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
+            else:
+                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
+            txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
+            self.labelCombo3.setText(self.trUtf8(txt))
+        
+        if self.tasks_counter == 0:
+            self.bouton_Next.setEnabled(True)
+            self.QGBox_rel0.setTitle("Release list")
+            self.QLW_rel1.clear()
+            self.QLW_rel2.clear()
+            self.QLW_rel3.clear()
+            self.labelCombo1.setText("Release")
+            for it in self.releasesList_0:
+                item = QListWidgetItem("%s" % it)
+                self.QLW_rel1.addItem(item)
+        else :
+            print self.tasks_list[self.tasks_counter]
