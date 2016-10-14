@@ -51,3 +51,4 @@ self.rel_list_1 = [] : liste des datasets à partir de self.my_choice_rel_1 (CMSS
 self.ref_list_1 = [] : liste des datasets à partir de self.my_choice_ref_1
 
 get choice removed
+parti pris de vider les precedents choix en cas de aller/revenir sur reference/release

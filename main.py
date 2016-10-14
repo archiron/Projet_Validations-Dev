@@ -17,7 +17,8 @@ def main(args):
     
     fenetre = ovalGui.ovalGui()
     fenetre.move(100, 100)
-    fenetre.resize(1000, 370)
+#    fenetre.resize(1000, 1400)
+    fenetre.setFixedSize(1000, 700)
     fenetre.show()
     r = a.exec_()
     return r
