@@ -12,13 +12,14 @@ from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul
 from fonctions import list_search_0, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from getChoice import *
+from Datasets import DataSetsFilter
 #from getPublish import *
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.0.5')
+        self.setWindowTitle('Validations gui v0.0.6')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -212,30 +213,39 @@ class ovalGui(QWidget):
         self.QGBox_rel2.setLayout(self.vbox_rel2)
         self.QHL_rel.addWidget(self.QGBox_rel2)
         
-        self.QGBox_rel3 = QGroupBox("DataSets")
-        self.QGBox_rel3.setMinimumWidth(250)
-        self.QGBox_rel3.setMaximumWidth(250)
-        self.vbox_rel3 = QVBoxLayout()
-        self.QLW_rel3 = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_rel3.addItem(item)
-        self.connect(self.QLW_rel3, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
-        self.vbox_rel3.addWidget(self.QLW_rel3)        
-        self.QGBox_rel3.setLayout(self.vbox_rel3)
-        self.QHL_rel.addWidget(self.QGBox_rel3)
-        
         self.layout_Search = QVBoxLayout()
         self.layout_Search.addWidget(self.QGBox_rel0)
 
         # DataSets
-        self.QGBox_DataSets= QGroupBox("DataSetst") # default
+        self.QGBox_DataSets= QGroupBox("DataSets") # default
         self.QGBox_DataSets.setMinimumHeight(250)
         self.QGBox_DataSets.setMaximumHeight(250)
-        self.QGBox_test1 = QGroupBox("Test")
-        self.QGBox_test1.setMinimumWidth(180)
-        self.QGBox_test1.setMaximumWidth(180)
-        self.QHL_DataSets = QHBoxLayout(self.QGBox_DataSets)
-        self.QHL_DataSets.addWidget(self.QGBox_test1)
+        self.QHL_DataSets = QHBoxLayout(self.QGBox_DataSets) 
+        
+        self.QGBox_rel = QGroupBox("Release")
+        self.QGBox_rel.setMinimumWidth(250)
+        self.QGBox_rel.setMaximumWidth(250)
+        self.vbox_rel4 = QVBoxLayout()
+        self.QLW_rel_dataset = QListWidget()
+        item = QListWidgetItem("%s" % "")
+        self.QLW_rel_dataset.addItem(item)
+#        self.connect(self.QLW_rel_dataset, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
+        self.vbox_rel4.addWidget(self.QLW_rel_dataset) 
+        self.QGBox_rel.setLayout(self.vbox_rel4)
+        
+        self.QGBox_ref = QGroupBox("Reference")
+        self.QGBox_ref.setMinimumWidth(250)
+        self.QGBox_ref.setMaximumWidth(250)
+        self.vbox_ref4 = QVBoxLayout()
+        self.QLW_ref_dataset = QListWidget()
+        item = QListWidgetItem("%s" % "")
+        self.QLW_ref_dataset.addItem(item)
+#        self.connect(self.QLW_ref_dataset, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
+        self.vbox_ref4.addWidget(self.QLW_ref_dataset) 
+        self.QGBox_ref.setLayout(self.vbox_ref4)
+        
+        self.QHL_DataSets.addWidget(self.QGBox_rel)
+        self.QHL_DataSets.addWidget(self.QGBox_ref)
         self.layout_DataSets = QVBoxLayout()
         self.layout_DataSets.addWidget(self.QGBox_DataSets)
         self.QGBox_DataSets.setVisible(False)
@@ -300,7 +310,6 @@ class ovalGui(QWidget):
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
         self.QLW_rel2.clear()
-        self.QLW_rel3.clear()
         if self.QGBox_rel0.title() == "Reference list":
             print "reference"
             self.my_choice_ref_0 = self.QLW_rel1.currentItem().text()
@@ -321,8 +330,6 @@ class ovalGui(QWidget):
         
     def ItemRelRefClicked2(self):
         rel_text = self.QLW_rel2.currentItem().text() + " DataSets"
-        self.QGBox_rel3.setTitle(rel_text)
-        self.QLW_rel3.clear()
         if self.QGBox_rel0.title() == "Reference list":
             print "reference"
             self.my_choice_ref_1 = self.QLW_rel2.currentItem().text()
@@ -330,9 +337,6 @@ class ovalGui(QWidget):
             tmp = "Reference : " + self.my_choice_ref_1
             self.labelCombo2.setText(tmp)
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), list_search_1(self.my_choice_ref_1))
-            for it in self.ref_list_1:
-                item = QListWidgetItem("%s" % it)
-                self.QLW_rel3.addItem(item)
         else:
             print "release"
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
@@ -340,9 +344,6 @@ class ovalGui(QWidget):
             tmp = "Release : " + self.my_choice_rel_1
             self.labelCombo1.setText(tmp)
             self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), list_search_1(self.my_choice_rel_1))
-            for it in self.rel_list_1:
-                item = QListWidgetItem("%s" % it)
-                self.QLW_rel3.addItem(item)
         resume_text = self.texte
         resume_text += "<br />Release   : " + self.my_choice_rel_1
         resume_text += "<br />Reference : " + self.my_choice_ref_1
@@ -367,6 +368,15 @@ class ovalGui(QWidget):
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 self.QGBox_DataSets.setVisible(True)
                 self.QGBox_rel0.setVisible(False)
+                for it in self.rel_list_1:
+                    item = QListWidgetItem("%s" % it)
+                    self.QLW_rel_dataset.addItem(item)
+                for it in self.ref_list_1:
+                    item = QListWidgetItem("%s" % it)
+                    self.QLW_ref_dataset.addItem(item)
+                table = DataSetsFilter(self)
+                for it in table:
+                    print it
             else:
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
@@ -379,7 +389,8 @@ class ovalGui(QWidget):
             self.QGBox_rel0.setTitle("Reference list")
             self.QLW_rel1.clear()
             self.QLW_rel2.clear()
-            self.QLW_rel3.clear()
+            self.QLW_rel_dataset.clear()
+            self.QLW_ref_dataset.clear()
             self.labelCombo2.setText("Reference")
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
@@ -409,7 +420,8 @@ class ovalGui(QWidget):
             self.QGBox_rel0.setTitle("Release list")
             self.QLW_rel1.clear()
             self.QLW_rel2.clear()
-            self.QLW_rel3.clear()
+            self.QLW_rel_dataset.clear()
+            self.QLW_ref_dataset.clear()
             self.labelCombo1.setText("Release")
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
@@ -419,7 +431,8 @@ class ovalGui(QWidget):
             self.QGBox_rel0.setTitle("Reference list")
             self.QLW_rel1.clear()
             self.QLW_rel2.clear()
-            self.QLW_rel3.clear()
+            self.QLW_rel_dataset.clear()
+            self.QLW_ref_dataset.clear()
             self.labelCombo2.setText("Reference")
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
