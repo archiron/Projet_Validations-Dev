@@ -5,21 +5,24 @@ faire attention pour le choix des datasets : pouvoir faire SingleElectronPt1000_
 mettre les langues sous forme de fichier txt.
 verifier que les fichiers sont bien chargés.
 pour pmx et miniAOD, on fait comme dans le FastSim Oval, on ne tient pas compte de la référence.
-faire un bouton pmx ? et sortir les pmx des PU classiques.
+faire un bouton pmx et sortir les pmx des PU classiques.
 
-pour les valeurs self.my_choice_rel_1 et self.my_choice_ref_1 tester si un choix est fait avant de faire la commande :
-self.my_choice_rel(f)_1 = self.QLW1_rel(f)2.currentItem().text()
+pour les valeurs self.my_choice_rel_1 et self.my_choice_ref_1 tester si un choix est fait avant de faire la commande : self.my_choice_rel(f)_1 = self.QLW1_rel(f)2.currentItem().text()
 verifier si les listes temp = sub_releases(list_search_1(self.my_choice_rel(f)_0)) sont vides ou pas.
 
 possibiliter d'editeur pour changer le global tag dans les fichiers _cfg dans /Tests
-choix des datatsets par radio bouton
-possibilité d'ajouter un dataset dans les classiques
+
+intégration des DataSets par fichier du type DataSets_xxx.py ou xxx sera default par defaut et/ou une autre extension
+choix des datatsets par radio bouton et on garde All/None
+possibilité d'ajouter un dataset dans le fichier _default
+On intégrera les chemins (WEBURL et autres) dans un fichier PATHS_default.py
+
 idem pour les calculs
 
 Get Choice :
 DataSets Type
     Classical : classical electron validation DataSets
-    Others    : other datatset to work with
+    Others    : other dataset to work with
     All       : ???
 
 self.rel_list : liste les fichiers DQM_V001_**.root pour les différents datasets cochés (check3*) pour la release a valider
