@@ -13,6 +13,7 @@ from fonctions import list_search_0, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from getChoice import *
 from Datasets import DataSetsFilter
+from Paths_default import *
 #from getPublish import *
 		
 #############################################################################
@@ -377,6 +378,7 @@ class ovalGui(QWidget):
                 table = DataSetsFilter(self)
                 for it in table:
                     print it
+                print BaseURL(self) # temporaire
             else:
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
