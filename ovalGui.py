@@ -99,6 +99,20 @@ class ovalGui(QWidget):
         qform32 = QFormLayout() # new
         qform32.addRow(self.check37, self.check38) # new
         self.QGBox32.setLayout(qform32) # new
+        				
+		# creation du grpe liste des collections new version
+        self.QGBoxDataSets = QGroupBox("DataSets")
+        self.QGBoxDataSets.setMaximumHeight(120)
+        self.QGBoxDataSets.setMinimumHeight(120)
+        self.checkDataSets1 = QPushButton("List")
+        self.checkDataSets2 = QPushButton("Reload")
+#        self.connect(self.checkDataSets1, SIGNAL("clicked()"), self.checkAllNone1Clicked)
+        self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
+        vboxDataSets = QVBoxLayout()
+        vboxDataSets.addWidget(self.checkDataSets1)
+        vboxDataSets.addWidget(self.checkDataSets2)
+        vboxDataSets.addStretch(1)
+        self.QGBoxDataSets.setLayout(vboxDataSets)
         
 		# creation du grpe All/None
         self.QGBoxAllNone = QGroupBox("All / None")
@@ -136,6 +150,7 @@ class ovalGui(QWidget):
         self.layoutH_radio.addWidget(self.QGBox31)
         self.layoutH_radio.addWidget(self.QGBox32)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
+        self.layoutH_radio.addWidget(self.QGBoxDataSets)
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
@@ -308,6 +323,11 @@ class ovalGui(QWidget):
             self.check38.setChecked(False)
         QtCore.QCoreApplication.processEvents() 
 
+    def checkDataSets2Clicked(self):
+        from Paths_default import BaseURL
+        Paths_default = reload(Paths_default)
+        print BaseURL(self) # temporaire
+    
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
         self.QLW_rel2.clear()

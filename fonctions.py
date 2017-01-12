@@ -5,6 +5,7 @@ import os,sys,subprocess
 import urllib2
 import re
 from getEnv import env
+from Paths_default import *
 
 def cmd_folder_creation(choix_calcul, working_dir):
     import subprocess, os, datetime
@@ -590,7 +591,7 @@ def sub_releases(tab_files):
 #        print '%d, %s' % (i+1, tt[1])
         temp.append(tt[1])
         i += 1
-    temp = sorted(set(temp))
+    temp = sorted(set(temp), reverse=True)
     return temp
     
 def sub_releases2(release, tab_files):
@@ -605,7 +606,7 @@ def sub_releases2(release, tab_files):
             print 'sub_releases2 : %d, %s, %s' % (i+1, tt[0], tt[1])
             temp.append(tt[0])
         i += 1
-    temp = sorted(set(temp))
+    temp = sorted(set(temp)) # , reverse=True
     return temp
     
 def explode_item(item):
