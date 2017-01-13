@@ -12,7 +12,7 @@ from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul
 from fonctions import list_search_0, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from getChoice import *
-from Datasets import DataSetsFilter
+from Datasets_default import DataSetsFilter
 from Paths_default import *
 #from getPublish import *
 		
@@ -68,46 +68,18 @@ class ovalGui(QWidget):
         vbox1.addStretch(1)
         self.QGBox1.setLayout(vbox1)
         				
-		# creation du grpe liste des collections
-        self.QGBox31 = QGroupBox("Data Sets")
-        self.QGBox32 = QGroupBox("Data Sets")
-        self.QGBox31.setMaximumHeight(120)
-        self.QGBox32.setMaximumHeight(120)
-        self.QGBox31.setVisible(True)
-        self.QGBox32.setVisible(False)
-        self.check31 = QCheckBox("Pt10Startup_UP15")
-        self.check32 = QCheckBox("Pt35Startup_UP15")
-        self.check33 = QCheckBox("Pt1000Startup_UP15")
-        self.check34 = QCheckBox("QcdPt80120Startup_13") # ex QcdPt80Pt120Startup_13
-        self.check35 = QCheckBox("TTbarStartup_13")
-        self.check36 = QCheckBox("ZEEStartup_13")
-        self.check37 = QCheckBox("TTbarStartup_13")
-        self.check38 = QCheckBox("ZEEStartup_13")
-        self.check31.setChecked(True)
-        self.check32.setChecked(True)
-        self.check33.setChecked(True)
-        self.check34.setChecked(True)
-        self.check35.setChecked(True)
-        self.check36.setChecked(True)
-        self.check37.setChecked(True)
-        self.check38.setChecked(True)
-        qform31 = QFormLayout() # new
-        qform31.addRow(self.check31, self.check32) # new
-        qform31.addRow(self.check33, self.check34) # new
-        qform31.addRow(self.check35, self.check36) # new
-        self.QGBox31.setLayout(qform31) # new
-        qform32 = QFormLayout() # new
-        qform32.addRow(self.check37, self.check38) # new
-        self.QGBox32.setLayout(qform32) # new
-        				
 		# creation du grpe liste des collections new version
         self.QGBoxDataSets = QGroupBox("DataSets")
         self.QGBoxDataSets.setMaximumHeight(120)
         self.QGBoxDataSets.setMinimumHeight(120)
         self.checkDataSets1 = QPushButton("List")
         self.checkDataSets2 = QPushButton("Reload")
-#        self.connect(self.checkDataSets1, SIGNAL("clicked()"), self.checkAllNone1Clicked)
         self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
+        self.menu = QMenu()
+        table = DataSetsFilter(self)
+        for it in table:
+            self.menu.addAction(it)
+        self.checkDataSets1.setMenu(self.menu)
         vboxDataSets = QVBoxLayout()
         vboxDataSets.addWidget(self.checkDataSets1)
         vboxDataSets.addWidget(self.checkDataSets2)
@@ -147,8 +119,6 @@ class ovalGui(QWidget):
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
         self.layoutH_radio.addWidget(self.QGBox1)
-        self.layoutH_radio.addWidget(self.QGBox31)
-        self.layoutH_radio.addWidget(self.QGBox32)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addWidget(self.QGBoxDataSets)
         self.layoutH_radio.addStretch(1)
@@ -324,9 +294,12 @@ class ovalGui(QWidget):
         QtCore.QCoreApplication.processEvents() 
 
     def checkDataSets2Clicked(self):
-        from Paths_default import BaseURL
-        Paths_default = reload(Paths_default)
-        print BaseURL(self) # temporaire
+        reload(sys.modules['Datasets_default'])
+        from Datasets_default import DataSetsFilter
+        table = DataSetsFilter(self)
+        self.menu.clear()
+        for it in table:
+            self.menu.addAction(it)
     
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
