@@ -488,6 +488,14 @@ def list_search_1(my_choice_0):
 
     return temp_1
 
+def list_search_2(collection, filtre):
+    temp_1 = []  
+    for item in collection:
+        print "collection : ", item
+        for item in filtre:
+            print "filtre : ", item
+    return temp_1
+    
 def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
     # fetchall_from_DQM_v2.py -r CMSSW_7_0_0 -e='TTbar,PU,25' --mc --dry
     import re

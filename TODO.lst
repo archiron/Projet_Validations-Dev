@@ -17,6 +17,8 @@ choix des datatsets par radio bouton et on garde All/None
 possibilité d'ajouter un dataset dans le fichier _default
 On intégrera les chemins (WEBURL et autres) dans un fichier PATHS_default.py
 
+dans la page web, afficher le nom des fichiers root
+
 idem pour les calculs
 
 Get Choice :
@@ -40,8 +42,11 @@ self.profondeur_rel = 0 : indique la profondeur de recherche : (0:liset_search_0
 self.profondeur_ref = 0 : indique la profondeur de recherche : (0:liset_search_0, 1:self.my_choice_ref_0,self.ref_list_0, 2:sous_release choisie) // peut etre pas utile
 self.my_choice_rel_1 = '' : valeur choisie pour la release de travail
 self.my_choice_ref_1 = '' : valeur choisie pour la release de reference
-self.rel_list_1 = [] : liste des datasets à partir de self.my_choice_rel_1 (CMSSW_8_0_0_pre1, ...)
-self.ref_list_1 = [] : liste des datasets à partir de self.my_choice_ref_1
+self.rel_list_1 = [] : liste de tous les datasets à partir de self.my_choice_rel_1 (CMSSW_8_0_0_pre1, ...)
+self.ref_list_1 = [] : liste de tous les datasets à partir de self.my_choice_ref_1
+self.rel_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_rel_1 (CMSSW_8_0_0_pre1, ...)
+self.ref_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_ref_1
+list_search_1() # list of DQM_000...root files
 
 get choice removed
 parti pris de vider les precedents choix en cas de aller/revenir sur reference/release

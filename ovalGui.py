@@ -9,7 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
-from fonctions import list_search_0, list_search, explode_item
+from fonctions import list_search_0, list_search_2, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from getChoice import *
 from Datasets_default import DataSetsFilter
@@ -20,7 +20,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.0.6')
+        self.setWindowTitle('Validations gui v0.0.7')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -44,10 +44,13 @@ class ovalGui(QWidget):
         self.ref_list_0 = []
         self.rel_list_1 = []
         self.ref_list_1 = []
+        self.rel_list_2 = []
+        self.ref_list_2 = []
         self.profondeur_rel = 0
         self.profondeur_ref = 0
-        self.tasks_list = ['Release', 'Reference', 'DataSets']
+        self.tasks_list = ['Release', 'Reference', 'DataSets', 'Lists']
         self.tasks_counter = 0
+        self.selectedDataSets = []
 						
         ## PART 1 ##
 		# creation du grpe Calcul
@@ -76,10 +79,12 @@ class ovalGui(QWidget):
         self.checkDataSets2 = QPushButton("Reload")
         self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
         self.menu = QMenu()
-        table = DataSetsFilter(self)
-        for it in table:
+        self.DataSetTable = DataSetsFilter(self)
+        for it in self.DataSetTable:
             self.menu.addAction(it)
         self.checkDataSets1.setMenu(self.menu)
+        self.selectedDataSets = self.DataSetTable # default, all datasets selected
+#        print self.selectedDataSets
         vboxDataSets = QVBoxLayout()
         vboxDataSets.addWidget(self.checkDataSets1)
         vboxDataSets.addWidget(self.checkDataSets2)
@@ -203,10 +208,10 @@ class ovalGui(QWidget):
         self.layout_Search.addWidget(self.QGBox_rel0)
 
         # DataSets
-        self.QGBox_DataSets= QGroupBox("DataSets") # default
-        self.QGBox_DataSets.setMinimumHeight(250)
-        self.QGBox_DataSets.setMaximumHeight(250)
-        self.QHL_DataSets = QHBoxLayout(self.QGBox_DataSets) 
+        self.QGBox_Lists= QGroupBox("Lists") # default
+        self.QGBox_Lists.setMinimumHeight(250)
+        self.QGBox_Lists.setMaximumHeight(250)
+        self.QHL_Lists = QHBoxLayout(self.QGBox_Lists) 
         
         self.QGBox_rel = QGroupBox("Release")
         self.QGBox_rel.setMinimumWidth(250)
@@ -230,10 +235,28 @@ class ovalGui(QWidget):
         self.vbox_ref4.addWidget(self.QLW_ref_dataset) 
         self.QGBox_ref.setLayout(self.vbox_ref4)
         
-        self.QHL_DataSets.addWidget(self.QGBox_rel)
-        self.QHL_DataSets.addWidget(self.QGBox_ref)
+        self.QHL_Lists.addWidget(self.QGBox_rel)
+        self.QHL_Lists.addWidget(self.QGBox_ref)
+        self.layout_Lists = QVBoxLayout()
+        self.layout_Lists.addWidget(self.QGBox_Lists)
+        self.QGBox_Lists.setVisible(False)
+
+        # DataSets
+        self.QGBox_DataSets = QGroupBox("DataSets")
+        self.QGBox_DataSets.setMinimumWidth(250)
+        self.QGBox_DataSets.setMaximumWidth(250)
+        #self.QHL_DataSets = QHBoxLayout(self.QGBox_DataSets) 
+        self.vbox_ds = QVBoxLayout()
+        self.QLW_dataset = QListWidget()
+        for it in self.selectedDataSets:
+            print "== step 0 ==", it
+            item = QListWidgetItem("%s" % it)
+        self.QLW_dataset.addItem(item)
+        self.vbox_ds.addWidget(self.QLW_dataset) 
+        self.QGBox_DataSets.setLayout(self.vbox_ds)
         self.layout_DataSets = QVBoxLayout()
         self.layout_DataSets.addWidget(self.QGBox_DataSets)
+        self.layout_DataSets.setAlignment(QtCore.Qt.AlignHCenter)
         self.QGBox_DataSets.setVisible(False)
 
         ## FINAL PART ##
@@ -242,6 +265,7 @@ class ovalGui(QWidget):
         self.layout_general.addLayout(self.layoutH_radio)
         self.layout_general.addLayout(self.layoutH_resume)
         self.layout_general.addLayout(self.layout_Search)
+        self.layout_general.addLayout(self.layout_Lists)
         self.layout_general.addLayout(self.layout_DataSets)
         self.layout_general.addLayout(self.layoutH_boutons)
         self.setLayout(self.layout_general)
@@ -270,35 +294,30 @@ class ovalGui(QWidget):
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
 #            print "All"
-            self.check31.setChecked(True)
-            self.check32.setChecked(True)
-            self.check33.setChecked(True)
-            self.check34.setChecked(True)
-            self.check35.setChecked(True)
-            self.check36.setChecked(True)
-            self.check37.setChecked(True)
-            self.check38.setChecked(True)
+            self.QLW_dataset.clear()
+            for item in self.DataSetTable:
+                print item
+                item1 = QListWidgetItem("%s" % item)
+                print "item1 : ", item1.text()
+                print "state : ", item1.checkState()
+                item1.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+                item1.setCheckState(QtCore.Qt.Checked)
+                self.QLW_dataset.addItem(item1)
+                print "state : ", item1.checkState()
         QtCore.QCoreApplication.processEvents() 
 
     def checkAllNone2Clicked(self):
         if self.checkAllNone2.isChecked():
 #            print "None"
-            self.check31.setChecked(False)
-            self.check32.setChecked(False)
-            self.check33.setChecked(False)
-            self.check34.setChecked(False)
-            self.check35.setChecked(False)
-            self.check36.setChecked(False)
-            self.check37.setChecked(False)
-            self.check38.setChecked(False)
+            self.QLW_dataset.clear() # clear all datasets
         QtCore.QCoreApplication.processEvents() 
 
     def checkDataSets2Clicked(self):
         reload(sys.modules['Datasets_default'])
         from Datasets_default import DataSetsFilter
-        table = DataSetsFilter(self)
+        self.DataSetTable = DataSetsFilter(self)
         self.menu.clear()
-        for it in table:
+        for it in self.DataSetTable:
             self.menu.addAction(it)
     
     def ItemRelRefClicked1(self):
@@ -360,24 +379,51 @@ class ovalGui(QWidget):
                 txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter) + ") Next : " 
                 self.labelCombo3.setText(self.trUtf8(txt))
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
-                self.QGBox_DataSets.setVisible(True)
+                self.QGBox_Lists.setVisible(True)
+                self.QGBox_DataSets.setVisible(False)
                 self.QGBox_rel0.setVisible(False)
+                self.selectedDataSets = []
+                index = 0
+                for it in self.DataSetTable:
+                    item1 = QListWidgetItem (self.QLW_dataset.item(index) )
+                    if item1.checkState() == 2:
+                        self.selectedDataSets.append(it)
+                    index += 1
+                print "toto", self.selectedDataSets
+
+                self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
+                self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
                 for it in self.rel_list_1:
                     item = QListWidgetItem("%s" % it)
                     self.QLW_rel_dataset.addItem(item)
                 for it in self.ref_list_1:
                     item = QListWidgetItem("%s" % it)
                     self.QLW_ref_dataset.addItem(item)
-                table = DataSetsFilter(self)
-                for it in table:
-                    print it
+                self.selectedDataSets = DataSetsFilter(self)
                 print BaseURL(self) # temporaire
+            elif (self.tasks_counter == 2):
+                print "*-*-**--*-*-*-*-*-*", self.tasks_list[2]
+                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
+                self.bouton_Next.setEnabled(True)
+                txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : "  + self.tasks_list[self.tasks_counter+1]
+                self.labelCombo3.setText(self.trUtf8(txt))
+                self.QGBox_Lists.setVisible(False)
+                self.QGBox_rel0.setVisible(False)
+                self.QGBox_DataSets.setVisible(True)
+                self.QLW_dataset.clear()
+                for it in self.DataSetTable: # list of DataSets
+                    print it, "******"
+                    item = QListWidgetItem("%s" % it)
+                    item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+                    item.setCheckState(QtCore.Qt.Checked)
+                    self.QLW_dataset.addItem(item)
             else:
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
                 self.labelCombo3.setText(self.trUtf8(txt))
-                self.QGBox_DataSets.setVisible(False)
+                self.QGBox_Lists.setVisible(False)
                 self.QGBox_rel0.setVisible(True)
+                self.QGBox_DataSets.setVisible(False)
 
         if self.tasks_counter == 1:
             self.bouton_Previous.setEnabled(True)
@@ -399,6 +445,7 @@ class ovalGui(QWidget):
             print "no way : %i" % self.tasks_counter
             self.bouton_Previous.setEnabled(False)
         else:
+            self.QGBox_Lists.setVisible(False)
             self.QGBox_DataSets.setVisible(False)
             self.QGBox_rel0.setVisible(True)
             self.tasks_counter -= 1
@@ -432,5 +479,11 @@ class ovalGui(QWidget):
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
+        elif self.tasks_counter == 2:
+            self.bouton_Next.setEnabled(True)
+            self.QGBox_rel0.setTitle("DataSets")
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_rel0.setVisible(False)
+            self.QGBox_DataSets.setVisible(True)
         else :
             print self.tasks_list[self.tasks_counter]
