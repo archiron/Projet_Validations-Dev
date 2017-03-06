@@ -489,6 +489,7 @@ def list_search_1(my_choice_0):
     return temp_1
 
 def list_search_2(collection, filtre):
+# new search function
     temp_1 = []  
     for item in collection:
         print "collection : ", item

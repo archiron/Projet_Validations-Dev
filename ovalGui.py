@@ -20,7 +20,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.0.7')
+        self.setWindowTitle('Validations gui v0.1.0')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()

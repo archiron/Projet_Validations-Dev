@@ -9,7 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_folder_creation, get_choix_calcul, clean_files, copy_files, cmd_fetch, explode_item
-from fonctions import list_search_0, list_search_1, list_search, explode_item, sub_releases, sub_releases2
+from fonctions import list_search_0, list_search_1, list_search, explode_item, sub_releases, sub_releases2 
 from fonctions import list_simplify
 		
 #############################################################################
