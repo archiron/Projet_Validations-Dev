@@ -11,6 +11,7 @@ from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
 from fonctions import list_search_0, list_search_2, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
+from functionGui import initDataSets
 from getChoice import *
 from Datasets_default import DataSetsFilter
 from Paths_default import *
@@ -20,7 +21,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.0')
+        self.setWindowTitle('Validations gui v0.1.2')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -248,10 +249,11 @@ class ovalGui(QWidget):
         #self.QHL_DataSets = QHBoxLayout(self.QGBox_DataSets) 
         self.vbox_ds = QVBoxLayout()
         self.QLW_dataset = QListWidget()
-        for it in self.selectedDataSets:
-            print "== step 0 ==", it
-            item = QListWidgetItem("%s" % it)
-        self.QLW_dataset.addItem(item)
+        initDataSets(self)
+#        for it in self.selectedDataSets:
+#            print "== step 0 ==", it
+#            item = QListWidgetItem("%s" % it)
+#            self.QLW_dataset.addItem(item)
         self.vbox_ds.addWidget(self.QLW_dataset) 
         self.QGBox_DataSets.setLayout(self.vbox_ds)
         self.layout_DataSets = QVBoxLayout()
@@ -294,16 +296,13 @@ class ovalGui(QWidget):
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
 #            print "All"
-            self.QLW_dataset.clear()
-            for item in self.DataSetTable:
-                print item
-                item1 = QListWidgetItem("%s" % item)
-                print "item1 : ", item1.text()
-                print "state : ", item1.checkState()
-                item1.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
-                item1.setCheckState(QtCore.Qt.Checked)
-                self.QLW_dataset.addItem(item1)
-                print "state : ", item1.checkState()
+            initDataSets(self)
+#            self.QLW_dataset.clear()
+#            for item in self.DataSetTable:
+#                item1 = QListWidgetItem("%s" % item)
+#                item1.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+#                item1.setCheckState(QtCore.Qt.Checked)
+#                self.QLW_dataset.addItem(item1)
         QtCore.QCoreApplication.processEvents() 
 
     def checkAllNone2Clicked(self):
@@ -319,6 +318,13 @@ class ovalGui(QWidget):
         self.menu.clear()
         for it in self.DataSetTable:
             self.menu.addAction(it)
+        initDataSets(self)
+#        self.QLW_dataset.clear()
+#        for it in self.DataSetTable: # list of DataSets
+#            item = QListWidgetItem("%s" % it)
+#            item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+#            item.setCheckState(QtCore.Qt.Checked)
+#            self.QLW_dataset.addItem(item)
     
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
@@ -393,10 +399,12 @@ class ovalGui(QWidget):
 
                 self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
                 self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
-                for it in self.rel_list_1:
+                self.QLW_rel_dataset.clear()
+                for it in self.rel_list_2:
                     item = QListWidgetItem("%s" % it)
                     self.QLW_rel_dataset.addItem(item)
-                for it in self.ref_list_1:
+                self.QLW_ref_dataset.clear()
+                for it in self.ref_list_2:
                     item = QListWidgetItem("%s" % it)
                     self.QLW_ref_dataset.addItem(item)
                 self.selectedDataSets = DataSetsFilter(self)
@@ -410,13 +418,14 @@ class ovalGui(QWidget):
                 self.QGBox_Lists.setVisible(False)
                 self.QGBox_rel0.setVisible(False)
                 self.QGBox_DataSets.setVisible(True)
-                self.QLW_dataset.clear()
-                for it in self.DataSetTable: # list of DataSets
-                    print it, "******"
-                    item = QListWidgetItem("%s" % it)
-                    item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
-                    item.setCheckState(QtCore.Qt.Checked)
-                    self.QLW_dataset.addItem(item)
+                initDataSets(self)
+#                self.QLW_dataset.clear()
+#                for it in self.DataSetTable: # list of DataSets
+#                    print it, "******"
+#                    item = QListWidgetItem("%s" % it)
+#                    item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+#                    item.setCheckState(QtCore.Qt.Checked)
+#                    self.QLW_dataset.addItem(item)
             else:
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
