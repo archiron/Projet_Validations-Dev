@@ -489,12 +489,18 @@ def list_search_1(my_choice_0):
     return temp_1
 
 def list_search_2(collection, filtre):
-# new search function
+    import re
+
+    print collection
+    print filtre
     temp_1 = []  
-    for item in collection:
-        print "collection : ", item
-        for item in filtre:
-            print "filtre : ", item
+    for item1 in collection:
+        print "collection : ", item1
+        for item2 in filtre:
+            print "filtre : ", item2
+            if re.search(item2, item1):
+                temp_1.append(item1)
+    print temp_1
     return temp_1
     
 def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):

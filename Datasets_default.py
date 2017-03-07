@@ -3,10 +3,11 @@
 
 def DataSetsFilter(self):
     table=[
-    "SingleElectronPt10", 
+#    "SingleElectronPt10", 
+#    "SingleElectronPt10_UP15", 
     "SingleElectronPt35",
     "SingleElectronPt1000",
-    "TTbar",
-    "ZEE",
+    "TTbar_13",
+    "ZEE_13",
     ]
     return table
