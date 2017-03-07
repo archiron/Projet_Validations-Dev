@@ -13,7 +13,7 @@ verifier si les listes temp = sub_releases(list_search_1(self.my_choice_rel(f)_0
 possibiliter d'editeur pour changer le global tag dans les fichiers _cfg dans /Tests
 
 intégration des DataSets par fichier du type DataSets_xxx.py ou xxx sera default par defaut et/ou une autre extension
-choix des datatsets par radio bouton et on garde All/None
+choix des datasets par radio bouton et on garde All/None
 possibilité d'ajouter un dataset dans le fichier _default
 On intégrera les chemins (WEBURL et autres) dans un fichier PATHS_default.py
 
@@ -34,18 +34,22 @@ self.rel_list_mod : liste les releases, globaltags et datasets a partir des data
 self.ref_list_mod : liste les releases, globaltags et datasets a partir des datasets cochés (check3*) pour la release de reference
 
 self.releasesList_0 = [] : list_search_0(self) # liste des pre-releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
-self.my_choice_rel_0 = '' : une des valeurs au dessus choisie pour la release de travail
-self.my_choice_ref_0 = '' : une des valeurs au dessus choisie pour la release de reference
+self.releasesList_rel_1 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la release choisie ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
+self.releasesList_ref_1 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la reference choisie ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
+self.releasesList_rel_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie
+self.releasesList_ref_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie
+self.my_choice_rel_0 = '' : une des valeurs au dessus choisie pour la release de travail : RELEASE
+self.my_choice_ref_0 = '' : une des valeurs au dessus choisie pour la release de reference : REFERENCE
 self.rel_list_0 = [] : liste des sous releases à partir de self.my_choice_rel_0 (CMSSW_8_0_0_pre1, ...)
 self.ref_list_0 = [] : liste des sous releases à partir de self.my_choice_ref_0
 self.profondeur_rel = 0 : indique la profondeur de recherche : (0:liset_search_0, 1:self.my_choice_rel_0,self.rel_list_0, 2:sous_release choisie) // peut etre pas utile
 self.profondeur_ref = 0 : indique la profondeur de recherche : (0:liset_search_0, 1:self.my_choice_ref_0,self.ref_list_0, 2:sous_release choisie) // peut etre pas utile
-self.my_choice_rel_1 = '' : valeur choisie pour la release de travail
-self.my_choice_ref_1 = '' : valeur choisie pour la release de reference
-self.rel_list_1 = [] : liste de tous les datasets à partir de self.my_choice_rel_1 (CMSSW_8_0_0_pre1, ...)
+self.my_choice_rel_1 = '' : valeur choisie pour la release de travail : SOUS RELEASE
+self.my_choice_ref_1 = '' : valeur choisie pour la release de reference : SOUS REFERENCE
+self.rel_list_1 = [] : liste de tous les datasets à partir de self.my_choice_rel_1 (sous release comme CMSSW_8_0_0_pre1, ...)
 self.ref_list_1 = [] : liste de tous les datasets à partir de self.my_choice_ref_1
-self.rel_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_rel_1 (CMSSW_8_0_0_pre1, ...)
-self.ref_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_ref_1 
+self.rel_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_rel_1 (sous release comme CMSSW_8_0_0_pre1, ...)
+self.ref_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_ref_1
 list_search_1() # list of DQM_000...root files
 
 get choice removed

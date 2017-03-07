@@ -9,7 +9,7 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
-from fonctions import list_search_0, list_search_2, list_search, explode_item
+from fonctions import list_search_0, list_search_2, list_search_3, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from functionGui import initDataSets
 from getChoice import *
@@ -21,7 +21,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.2')
+        self.setWindowTitle('Validations gui v0.1.3')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -37,6 +37,8 @@ class ovalGui(QWidget):
         self.working_dir_ref = os.getcwd()
         
         self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
+        self.releasesList_rel_1 = []
+        self.releasesList_ref_1 = []
         self.my_choice_rel_0 = "" # 
         self.my_choice_rel_1 = "" # 
         self.my_choice_ref_0 = "" # 
@@ -274,22 +276,16 @@ class ovalGui(QWidget):
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
-            self.QGBox31.setVisible(True)
-            self.QGBox32.setVisible(False)
             self.choix_calcul = 'Full'
         QtCore.QCoreApplication.processEvents()
 
     def radio12Clicked(self):
         if self.radio12.isChecked():
-            self.QGBox31.setVisible(False)
-            self.QGBox32.setVisible(True)
             self.choix_calcul = 'PileUp'
         QtCore.QCoreApplication.processEvents()
         
     def radio13Clicked(self):
         if self.radio13.isChecked():
-            self.QGBox31.setVisible(False)
-            self.QGBox32.setVisible(True)
             self.choix_calcul = 'Fast'
         QtCore.QCoreApplication.processEvents()
                         
@@ -333,7 +329,8 @@ class ovalGui(QWidget):
             print "reference"
             self.my_choice_ref_0 = self.QLW_rel1.currentItem().text()
             print "ItemRefClicked1 : self.my_choice_ref_0 : %s " % self.my_choice_ref_0
-            self.ref_list_0 = sub_releases(list_search_1(self.my_choice_ref_0))
+            self.releasesList_ref_1 = list_search_1(self.my_choice_ref_0)
+            self.ref_list_0 = sub_releases(self.releasesList_ref_1) #list_search_1(self.my_choice_ref_0))
             for it in self.ref_list_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel2.addItem(item)
@@ -341,7 +338,8 @@ class ovalGui(QWidget):
             print "release"
             self.my_choice_rel_0 = self.QLW_rel1.currentItem().text()
             print "ItemRelRefClicked1 : self.my_choice_rel_0 : %s " % self.my_choice_rel_0
-            self.rel_list_0 = sub_releases(list_search_1(self.my_choice_rel_0))
+            self.releasesList_rel_1 = list_search_1(self.my_choice_rel_0)
+            self.rel_list_0 = sub_releases(self.releasesList_rel_1) #list_search_1(self.my_choice_rel_0))
             # tester si =0 
             for it in self.rel_list_0:
                 item = QListWidgetItem("%s" % it)
@@ -355,14 +353,23 @@ class ovalGui(QWidget):
             print "ItemRefClicked2 : self.my_choice_ref_1 : %s " % self.my_choice_ref_1
             tmp = "Reference : " + self.my_choice_ref_1
             self.labelCombo2.setText(tmp)
-            self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), list_search_1(self.my_choice_ref_1))
+            self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
+            self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
         else:
             print "release"
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
             print "ItemRelRefClicked2 : self.my_choice_rel_1 : %s " % self.my_choice_rel_1
             tmp = "Release : " + self.my_choice_rel_1
             self.labelCombo1.setText(tmp)
-            self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), list_search_1(self.my_choice_rel_1))
+            self.releasesList_rel_2 = list_search_3(self.releasesList_rel_1, str(self.my_choice_rel_1))
+            #### TEMP
+ #           with open("releasesList_rel_2.txt", "w+") as f:
+ #               f.write(self.my_choice_rel_1 + "\n")
+ #               for line in self.releasesList_rel_2:
+ #                   f.write(line + "\n") # write the line
+ #               f.close()
+            #### TEMP
+            self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), self.releasesList_rel_2)
         resume_text = self.texte
         resume_text += "<br />Release   : " + self.my_choice_rel_1
         resume_text += "<br />Reference : " + self.my_choice_ref_1
@@ -395,7 +402,7 @@ class ovalGui(QWidget):
                     if item1.checkState() == 2:
                         self.selectedDataSets.append(it)
                     index += 1
-                print "toto", self.selectedDataSets
+                print "selectedDataSets : ", self.selectedDataSets
 
                 self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
                 self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
@@ -407,8 +414,10 @@ class ovalGui(QWidget):
                 for it in self.ref_list_2:
                     item = QListWidgetItem("%s" % it)
                     self.QLW_ref_dataset.addItem(item)
-                self.selectedDataSets = DataSetsFilter(self)
+                
+                # what to do if len(self.QLW_rel(f)_datasets) = 0?
                 print BaseURL(self) # temporaire
+                
             elif (self.tasks_counter == 2):
                 print "*-*-**--*-*-*-*-*-*", self.tasks_list[2]
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))

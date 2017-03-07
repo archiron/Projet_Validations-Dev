@@ -488,6 +488,21 @@ def list_search_1(my_choice_0):
 
     return temp_1
 
+def list_search_3(collection, filtre):
+    import re
+
+#    print "lg collection : ", len(collection)
+#    print "lg filtre     : ", len(filtre), filtre
+    temp_1 = []  
+    for item1 in collection:
+        if re.search(filtre, item1):
+            temp_1.append(item1)
+#            print "OK : ", filtre, item1
+#        else:
+#            print "KO : ", filtre, item1
+#    print "lg temp : ", len(temp_1)
+    return temp_1
+    
 def list_search_2(collection, filtre):
     import re
 
@@ -496,7 +511,7 @@ def list_search_2(collection, filtre):
         for item2 in filtre:
             if re.search(item2, item1):
                 temp_1.append(item1)
-    print temp_1
+
     return temp_1
     
 def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
@@ -567,12 +582,15 @@ def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthre
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
-    release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
-    if not release:
-        parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
-    releasedir = release[0] + "x"
+    
+    #release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
+    #if not release:
+    #    parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
+    #releasedir = release[0] + "x"
+    releasedir = option_release
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/'  + releasedir + '/'
+#    print "filedir_url = ", filedir_url
     filedir_html = auth_wget(filedir_url)
 
     #auth_wget("https://cmsweb.cern.ch/dqm/offline/data/browse/ROOT/OfflineData/Run2012/JetHT/0002029xx/DQM_V0001_R000202950__JetHT__Run2012C-PromptReco-v2__DQM.root")
@@ -607,14 +625,15 @@ def sub_releases(tab_files):
     
 def sub_releases2(release, tab_files):
     import re
-    print "sub_releases2", len(tab_files)
+    print "sub_releases2 : ", len(tab_files)
+    print "release : ", release
     i = 0
     temp = []
     for t in tab_files:
         if ( re.search(release, t) ):
 #            print 'sub_releases2 : %s' % t
             tt = explode_item(t)
-            print 'sub_releases2 : %d, %s, %s' % (i+1, tt[0], tt[1])
+#            print 'sub_releases2 : %d, %s, %s' % (i+1, tt[0], tt[1])
             temp.append(tt[0])
         i += 1
     temp = sorted(set(temp)) # , reverse=True
