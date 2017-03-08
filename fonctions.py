@@ -511,6 +511,7 @@ def list_search_2(collection, filtre):
         for item2 in filtre:
             if re.search(item2, item1):
                 temp_1.append(item1)
+                print "OK : ", item2, item1
 
     return temp_1
     

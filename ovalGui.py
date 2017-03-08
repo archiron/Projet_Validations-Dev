@@ -21,7 +21,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.3')
+        self.setWindowTitle('Validations gui v0.1.3.1')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -83,16 +83,36 @@ class ovalGui(QWidget):
         self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
         self.menu = QMenu()
         self.DataSetTable = DataSetsFilter(self)
-        for it in self.DataSetTable:
-            self.menu.addAction(it)
+        for item in self.DataSetTable:
+            self.menu.addAction(item)
+#            self.menu.triggered.connect(lambda item=item: self.menuClicked(item)) # fonctionne mais envoi autant de fois le signal qu'il y a de datasets
         self.checkDataSets1.setMenu(self.menu)
         self.selectedDataSets = self.DataSetTable # default, all datasets selected
-#        print self.selectedDataSets
         vboxDataSets = QVBoxLayout()
         vboxDataSets.addWidget(self.checkDataSets1)
         vboxDataSets.addWidget(self.checkDataSets2)
         vboxDataSets.addStretch(1)
         self.QGBoxDataSets.setLayout(vboxDataSets)
+        
+		# creation du grpe test menu
+        self.QGBoxTestMenu = QGroupBox("DataSets")
+        self.QGBoxTestMenu.setMaximumHeight(120)
+        self.QGBoxTestMenu.setMinimumHeight(120)
+        self.checkTestMenu1 = QPushButton("List")
+        self.menu = QMenu()
+        self.ag = QActionGroup(self, exclusive=True)
+        self.DataSetTable = DataSetsFilter(self)
+        for it in self.DataSetTable:
+            a = self.ag.addAction(QAction(it, self, checkable=True, checked=True))
+            self.menu.addAction(a)
+            self.connect(a, SIGNAL('triggered()'), self.menuClicked)
+            #receiver = lambda film=film: self.onFilmSet(self, film)
+            #self.connect(menuItem_Film, SIGNAL('triggered()'), receiver)
+        
+        self.checkTestMenu1.setMenu(self.menu)
+        vboxTestMenu = QVBoxLayout()
+        vboxTestMenu.addWidget(self.checkTestMenu1)
+        self.QGBoxTestMenu.setLayout(vboxTestMenu)
         
 		# creation du grpe All/None
         self.QGBoxAllNone = QGroupBox("All / None")
@@ -129,6 +149,7 @@ class ovalGui(QWidget):
         self.layoutH_radio.addWidget(self.QGBox1)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addWidget(self.QGBoxDataSets)
+        self.layoutH_radio.addWidget(self.QGBoxTestMenu) # TEST
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
@@ -330,6 +351,13 @@ class ovalGui(QWidget):
             self.my_choice_ref_0 = self.QLW_rel1.currentItem().text()
             print "ItemRefClicked1 : self.my_choice_ref_0 : %s " % self.my_choice_ref_0
             self.releasesList_ref_1 = list_search_1(self.my_choice_ref_0)
+            #### TEMP
+            with open("releasesList_ref_1.txt", "w+") as f:
+                f.write(self.my_choice_ref_0 + "\n")
+                for line in self.releasesList_ref_1:
+                    f.write(line + "\n") # write the line
+                f.close()
+            #### TEMP
             self.ref_list_0 = sub_releases(self.releasesList_ref_1) #list_search_1(self.my_choice_ref_0))
             for it in self.ref_list_0:
                 item = QListWidgetItem("%s" % it)
@@ -339,6 +367,13 @@ class ovalGui(QWidget):
             self.my_choice_rel_0 = self.QLW_rel1.currentItem().text()
             print "ItemRelRefClicked1 : self.my_choice_rel_0 : %s " % self.my_choice_rel_0
             self.releasesList_rel_1 = list_search_1(self.my_choice_rel_0)
+            #### TEMP
+            with open("releasesList_rel_1.txt", "w+") as f:
+                f.write(self.my_choice_rel_0 + "\n")
+                for line in self.releasesList_rel_1:
+                    f.write(line + "\n") # write the line
+                f.close()
+            #### TEMP
             self.rel_list_0 = sub_releases(self.releasesList_rel_1) #list_search_1(self.my_choice_rel_0))
             # tester si =0 
             for it in self.rel_list_0:
@@ -354,7 +389,21 @@ class ovalGui(QWidget):
             tmp = "Reference : " + self.my_choice_ref_1
             self.labelCombo2.setText(tmp)
             self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
+            #### TEMP
+            with open("releasesList_ref_2.txt", "w+") as f:
+                f.write(self.my_choice_ref_1 + "\n")
+                for line in self.releasesList_ref_2:
+                    f.write(line + "\n") # write the line
+                f.close()
+            #### TEMP
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
+            #### TEMP
+            with open("ref_list_1.txt", "w+") as f:
+                f.write(self.my_choice_ref_1 + "\n")
+                for line in self.ref_list_1:
+                    f.write(line + "\n") # write the line
+                f.close()
+            #### TEMP
         else:
             print "release"
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
@@ -363,13 +412,20 @@ class ovalGui(QWidget):
             self.labelCombo1.setText(tmp)
             self.releasesList_rel_2 = list_search_3(self.releasesList_rel_1, str(self.my_choice_rel_1))
             #### TEMP
- #           with open("releasesList_rel_2.txt", "w+") as f:
- #               f.write(self.my_choice_rel_1 + "\n")
- #               for line in self.releasesList_rel_2:
- #                   f.write(line + "\n") # write the line
- #               f.close()
+            with open("releasesList_rel_2.txt", "w+") as f:
+                f.write(self.my_choice_rel_1 + "\n")
+                for line in self.releasesList_rel_2:
+                    f.write(line + "\n") # write the line
+                f.close()
             #### TEMP
             self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), self.releasesList_rel_2)
+            #### TEMP
+            with open("rel_list_1.txt", "w+") as f:
+                f.write(self.my_choice_rel_1 + "\n")
+                for line in self.rel_list_1:
+                    f.write(line + "\n") # write the line
+                f.close()
+            #### TEMP
         resume_text = self.texte
         resume_text += "<br />Release   : " + self.my_choice_rel_1
         resume_text += "<br />Reference : " + self.my_choice_ref_1
@@ -406,6 +462,20 @@ class ovalGui(QWidget):
 
                 self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
                 self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
+                #### TEMP
+                with open("ref_list_2.txt", "w+") as f:
+                    f.write(self.my_choice_ref_1 + "\n")
+                    for line in self.ref_list_2:
+                        f.write(line + "\n") # write the line
+                    f.close()
+                #### TEMP
+                #### TEMP
+                with open("rel_list_2.txt", "w+") as f:
+                    f.write(self.my_choice_rel_1 + "\n")
+                    for line in self.rel_list_2:
+                        f.write(line + "\n") # write the line
+                    f.close()
+                #### TEMP
                 self.QLW_rel_dataset.clear()
                 for it in self.rel_list_2:
                     item = QListWidgetItem("%s" % it)
@@ -505,3 +575,16 @@ class ovalGui(QWidget):
             self.QGBox_DataSets.setVisible(True)
         else :
             print self.tasks_list[self.tasks_counter]
+
+    def menuClicked(self):
+        print "menu clicked !"
+        for index in xrange(self.QLW_rel1.count()):
+            print self.QLW_rel1.item(index).text()
+        tt = self.ag.actions()
+        for it in tt:
+            print it.text()
+            if it.isChecked():
+                print "checked"
+            else:
+                print "unchecked"
+        
