@@ -21,7 +21,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.3.1')
+        self.setWindowTitle('Validations gui v0.1.3.2')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -82,10 +82,12 @@ class ovalGui(QWidget):
         self.checkDataSets2 = QPushButton("Reload")
         self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
         self.menu = QMenu()
+        self.ag = QActionGroup(self, exclusive=True)
         self.DataSetTable = DataSetsFilter(self)
         for item in self.DataSetTable:
-            self.menu.addAction(item)
-#            self.menu.triggered.connect(lambda item=item: self.menuClicked(item)) # fonctionne mais envoi autant de fois le signal qu'il y a de datasets
+            a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
+            self.menu.addAction(a)
+            self.connect(a, SIGNAL('triggered()'), self.menuClicked)
         self.checkDataSets1.setMenu(self.menu)
         self.selectedDataSets = self.DataSetTable # default, all datasets selected
         vboxDataSets = QVBoxLayout()
@@ -95,19 +97,17 @@ class ovalGui(QWidget):
         self.QGBoxDataSets.setLayout(vboxDataSets)
         
 		# creation du grpe test menu
-        self.QGBoxTestMenu = QGroupBox("DataSets")
-        self.QGBoxTestMenu.setMaximumHeight(120)
-        self.QGBoxTestMenu.setMinimumHeight(120)
-        self.checkTestMenu1 = QPushButton("List")
-        self.menu = QMenu()
-        self.ag = QActionGroup(self, exclusive=True)
-        self.DataSetTable = DataSetsFilter(self)
-        for it in self.DataSetTable:
-            a = self.ag.addAction(QAction(it, self, checkable=True, checked=True))
-            self.menu.addAction(a)
-            self.connect(a, SIGNAL('triggered()'), self.menuClicked)
-            #receiver = lambda film=film: self.onFilmSet(self, film)
-            #self.connect(menuItem_Film, SIGNAL('triggered()'), receiver)
+#        self.QGBoxTestMenu = QGroupBox("DataSets")                                 # TEST
+#        self.QGBoxTestMenu.setMaximumHeight(120)                                   # TEST
+#        self.QGBoxTestMenu.setMinimumHeight(120)                                   # TEST
+#        self.checkTestMenu1 = QPushButton("List")                                  # TEST
+#        self.menu = QMenu()                                                        # TEST
+#        self.ag = QActionGroup(self, exclusive=True)                               # TEST
+#        self.DataSetTable = DataSetsFilter(self)                                   # TEST
+#        for it in self.DataSetTable:                                               # TEST
+#            a = self.ag.addAction(QAction(it, self, checkable=True, checked=True)) # TEST
+#            self.menu.addAction(a)                                                 # TEST
+#            self.connect(a, SIGNAL('triggered()'), self.menuClicked)               # TEST
         
         self.checkTestMenu1.setMenu(self.menu)
         vboxTestMenu = QVBoxLayout()
@@ -149,7 +149,7 @@ class ovalGui(QWidget):
         self.layoutH_radio.addWidget(self.QGBox1)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addWidget(self.QGBoxDataSets)
-        self.layoutH_radio.addWidget(self.QGBoxTestMenu) # TEST
+#        self.layoutH_radio.addWidget(self.QGBoxTestMenu) # TEST
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
@@ -578,13 +578,15 @@ class ovalGui(QWidget):
 
     def menuClicked(self):
         print "menu clicked !"
-        for index in xrange(self.QLW_rel1.count()):
-            print self.QLW_rel1.item(index).text()
-        tt = self.ag.actions()
-        for it in tt:
-            print it.text()
-            if it.isChecked():
-                print "checked"
-            else:
-                print "unchecked"
+        if (self.my_choice_rel_0 != ''):
+            for index in xrange(self.QLW_rel1.count()):
+                print self.QLW_rel1.item(index).text()
+        if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chossen
+            tt = self.ag.actions()
+            for it in tt:
+                print it.text()
+                if it.isChecked():
+                    print "checked"
+                else:
+                    print "unchecked"
         
