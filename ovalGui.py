@@ -22,7 +22,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.3.5')
+        self.setWindowTitle('Validations gui v0.1.3.6')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -315,6 +315,7 @@ class ovalGui(QWidget):
         if self.checkAllNone1.isChecked():
 #            print "All"
             self.menu.clear()
+            self.ag = QActionGroup(self, exclusive=False)
             for item in self.DataSetTable:
                 a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
                 self.menu.addAction(a)
@@ -326,6 +327,7 @@ class ovalGui(QWidget):
         if self.checkAllNone2.isChecked():
 #            print "None"
             self.menu.clear()
+            self.ag = QActionGroup(self, exclusive=False)
             for item in self.DataSetTable:
                 a = self.ag.addAction(QAction(item, self, checkable=True, checked=False))
                 self.menu.addAction(a)
@@ -338,6 +340,7 @@ class ovalGui(QWidget):
         from Datasets_default import DataSetsFilter
         self.DataSetTable = DataSetsFilter(self)
         self.menu.clear()
+        self.ag = QActionGroup(self, exclusive=False)
         for item in self.DataSetTable:
             a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
             self.menu.addAction(a)
