@@ -9,19 +9,20 @@ import os,sys,subprocess
 
 from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
-from fonctions import list_search_0, list_search_2, list_search_3, list_search, explode_item
+from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
+from fonctions import sub_releases, sub_releases2
 from functionGui import initDataSets
-from getChoice import *
 from Datasets_default import DataSetsFilter
 from Paths_default import *
+#from getChoice import *
 #from getPublish import *
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.3.2')
+        self.setWindowTitle('Validations gui v0.1.3.3')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -82,7 +83,7 @@ class ovalGui(QWidget):
         self.checkDataSets2 = QPushButton("Reload")
         self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
         self.menu = QMenu()
-        self.ag = QActionGroup(self, exclusive=True)
+        self.ag = QActionGroup(self, exclusive=False)
         self.DataSetTable = DataSetsFilter(self)
         for item in self.DataSetTable:
             a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
@@ -107,12 +108,11 @@ class ovalGui(QWidget):
 #        for it in self.DataSetTable:                                               # TEST
 #            a = self.ag.addAction(QAction(it, self, checkable=True, checked=True)) # TEST
 #            self.menu.addAction(a)                                                 # TEST
-#            self.connect(a, SIGNAL('triggered()'), self.menuClicked)               # TEST
-        
-        self.checkTestMenu1.setMenu(self.menu)
-        vboxTestMenu = QVBoxLayout()
-        vboxTestMenu.addWidget(self.checkTestMenu1)
-        self.QGBoxTestMenu.setLayout(vboxTestMenu)
+#            self.connect(a, SIGNAL('triggered()'), self.menuClicked)               # TEST        
+#        self.checkTestMenu1.setMenu(self.menu)                                     # TEST
+#        vboxTestMenu = QVBoxLayout()                                               # TEST
+#        vboxTestMenu.addWidget(self.checkTestMenu1)                                # TEST
+#        self.QGBoxTestMenu.setLayout(vboxTestMenu)                                 # TEST
         
 		# creation du grpe All/None
         self.QGBoxAllNone = QGroupBox("All / None")
@@ -582,11 +582,26 @@ class ovalGui(QWidget):
             for index in xrange(self.QLW_rel1.count()):
                 print self.QLW_rel1.item(index).text()
         if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chossen
+            self.selectedDataSets = []
             tt = self.ag.actions()
             for it in tt:
                 print it.text()
                 if it.isChecked():
                     print "checked"
+                    self.selectedDataSets.append(str(it.text()))
                 else:
                     print "unchecked"
-        
+            print "////// selectedDataSets : ", self.selectedDataSets
+
+            self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
+            self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
+
+            self.QLW_rel_dataset.clear()
+            for it in self.rel_list_2:
+                item = QListWidgetItem("%s" % it)
+                self.QLW_rel_dataset.addItem(item)
+            self.QLW_ref_dataset.clear()
+            for it in self.ref_list_2:
+                item = QListWidgetItem("%s" % it)
+                self.QLW_ref_dataset.addItem(item)
+                    
