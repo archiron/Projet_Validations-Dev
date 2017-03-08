@@ -507,12 +507,19 @@ def list_search_2(collection, filtre):
     import re
 
     temp_1 = []  
+    filtre = sorted(set(filtre), reverse=True)
+    print "filtre : ", filtre
+    print "collection : ", collection
     for item1 in collection:
         for item2 in filtre:
-            if re.search(item2, item1):
+            if (item2 == item1):
+#            if re.search(item2, item1):
                 temp_1.append(item1)
                 print "OK : ", item2, item1
-
+                break
+            else:
+                print "KO : ", item2, item1
+    temp_1 = sorted(set(temp_1), reverse=True)
     return temp_1
     
 def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
