@@ -508,17 +508,16 @@ def list_search_2(collection, filtre):
 
     temp_1 = []  
     filtre = sorted(set(filtre), reverse=True)
-    print "filtre : ", filtre
-    print "collection : ", collection
+#    print "filtre : ", filtre
+#    print "collection : ", collection
     for item1 in collection:
         for item2 in filtre:
             if (item2 == item1):
-#            if re.search(item2, item1):
                 temp_1.append(item1)
-                print "OK : ", item2, item1
+#                print "OK : ", item2, item1
                 break
-            else:
-                print "KO : ", item2, item1
+#            else:
+#                print "KO : ", item2, item1
     temp_1 = sorted(set(temp_1), reverse=True)
     return temp_1
     

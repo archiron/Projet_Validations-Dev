@@ -22,7 +22,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.3.4')
+        self.setWindowTitle('Validations gui v0.1.3.5')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -314,19 +314,23 @@ class ovalGui(QWidget):
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
 #            print "All"
-            initDataSets(self)
-#            self.QLW_dataset.clear()
-#            for item in self.DataSetTable:
-#                item1 = QListWidgetItem("%s" % item)
-#                item1.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
-#                item1.setCheckState(QtCore.Qt.Checked)
-#                self.QLW_dataset.addItem(item1)
+            self.menu.clear()
+            for item in self.DataSetTable:
+                a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
+                self.menu.addAction(a)
+                self.connect(a, SIGNAL('triggered()'), self.menuClicked)
+            self.menuClicked()
         QtCore.QCoreApplication.processEvents() 
 
     def checkAllNone2Clicked(self):
         if self.checkAllNone2.isChecked():
 #            print "None"
-            self.QLW_dataset.clear() # clear all datasets
+            self.menu.clear()
+            for item in self.DataSetTable:
+                a = self.ag.addAction(QAction(item, self, checkable=True, checked=False))
+                self.menu.addAction(a)
+                self.connect(a, SIGNAL('triggered()'), self.menuClicked)
+            self.menuClicked()
         QtCore.QCoreApplication.processEvents() 
 
     def checkDataSets2Clicked(self):
