@@ -19,9 +19,8 @@ On intégrera les chemins (WEBURL et autres) dans un fichier PATHS_default.py
 
 dans la page web, afficher le nom des fichiers root
 
-idem pour les calculs
+validationType (anciennement choix_calcul) : Full, Fast, PU
 
-Get Choice :
 DataSets Type
     Classical : classical electron validation DataSets
     Others    : other dataset to work with
@@ -40,6 +39,9 @@ self.releasesList_rel_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/
 self.releasesList_ref_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie
 self.releasesList_rel_3 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés
 self.releasesList_ref_3 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie et pour les datasets selectionnés
+self.releasesList_rel_3b = [] : liste des caractéristiques in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés (CMSSW_9_0_0_pre6-90X_mcRun2_asymptotic_v4-v1)
+self.releasesList_ref_3b = [] : liste des caractéristiques in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie et pour les datasets selectionnés (CMSSW_9_0_0_pre6-90X_mcRun2_asymptotic_v4-v1)
+
 self.my_choice_rel_0 = '' : une des valeurs au dessus choisie pour la release de travail : RELEASE
 self.my_choice_ref_0 = '' : une des valeurs au dessus choisie pour la release de reference : REFERENCE
 self.rel_list_0 = [] : liste des sous releases à partir de self.my_choice_rel_0 (CMSSW_8_0_0_pre1, ...)
@@ -54,5 +56,7 @@ self.rel_list_2 = [] : liste des datasets selectionnes à partir de self.my_choic
 self.ref_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_ref_1
 list_search_1() # list of DQM_000...root files
 
-get choice removed
+clean_collections : for a given collection, keep the caracteristics that match with self.validationType
+clean_collections2 : same as previous, for a given item, keep the caracteristics that match with self.validationType
+
 parti pris de vider les precedents choix en cas de aller/revenir sur reference/release

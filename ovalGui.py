@@ -8,7 +8,7 @@ from PyQt4 import QtCore
 import os,sys,subprocess
 
 from getEnv import env
-from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
+from fonctions import cmd_folder_creation, get_collection_list, get_validationType, clean_files, copy_files
 from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4
@@ -22,11 +22,11 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.4')
+        self.setWindowTitle('Validations gui v0.1.4.1')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
-        self.choix_calcul = 'Full'   # default
+        self.validationType = 'Full'   # default
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
@@ -44,6 +44,8 @@ class ovalGui(QWidget):
         self.releasesList_ref_2 = []
         self.releasesList_rel_3 = []
         self.releasesList_ref_3 = []
+        self.releasesList_rel_3b = []
+        self.releasesList_ref_3b = []
         self.my_choice_rel_0 = "" # 
         self.my_choice_rel_1 = "" # 
         self.my_choice_ref_0 = "" # 
@@ -243,8 +245,8 @@ class ovalGui(QWidget):
         self.QHL_Lists = QHBoxLayout(self.QGBox_Lists) 
         
         self.QGBox_rel = QGroupBox("Release")
-        self.QGBox_rel.setMinimumWidth(200)
-        self.QGBox_rel.setMaximumWidth(200)
+        self.QGBox_rel.setMinimumWidth(180)
+        self.QGBox_rel.setMaximumWidth(180)
         self.vbox_rel4 = QVBoxLayout()
         self.QLW_rel_dataset = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -254,8 +256,8 @@ class ovalGui(QWidget):
         self.QGBox_rel.setLayout(self.vbox_rel4)
         
         self.QGBox_rel_list = QGroupBox("Release List")
-        self.QGBox_rel_list.setMinimumWidth(250)
-        self.QGBox_rel_list.setMaximumWidth(250)
+        self.QGBox_rel_list.setMinimumWidth(270)
+        self.QGBox_rel_list.setMaximumWidth(270)
         self.vbox_rel_list = QVBoxLayout()
         self.QLW_rel_dataset_list = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -265,8 +267,8 @@ class ovalGui(QWidget):
         self.QGBox_rel_list.setLayout(self.vbox_rel_list)
         
         self.QGBox_ref = QGroupBox("Reference")
-        self.QGBox_ref.setMinimumWidth(200)
-        self.QGBox_ref.setMaximumWidth(200)
+        self.QGBox_ref.setMinimumWidth(180)
+        self.QGBox_ref.setMaximumWidth(180)
         self.vbox_ref4 = QVBoxLayout()
         self.QLW_ref_dataset = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -276,8 +278,8 @@ class ovalGui(QWidget):
         self.QGBox_ref.setLayout(self.vbox_ref4)
         
         self.QGBox_ref_list = QGroupBox("Release List")
-        self.QGBox_ref_list.setMinimumWidth(250)
-        self.QGBox_ref_list.setMaximumWidth(250)
+        self.QGBox_ref_list.setMinimumWidth(270)
+        self.QGBox_ref_list.setMaximumWidth(270)
         self.vbox_ref_list = QVBoxLayout()
         self.QLW_ref_dataset_list = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -326,17 +328,23 @@ class ovalGui(QWidget):
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
-            self.choix_calcul = 'Full'
+            self.validationType = 'Full'
+#            print "self.validationType :", self.validationType
+            self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
 
     def radio12Clicked(self):
         if self.radio12.isChecked():
-            self.choix_calcul = 'PileUp'
+            self.validationType = 'PU'
+#            print "self.validationType :", self.validationType
+            self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
     def radio13Clicked(self):
         if self.radio13.isChecked():
-            self.choix_calcul = 'Fast'
+            self.validationType = 'Fast'
+#            print "self.validationType :", self.validationType
+            self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
                         
     def checkAllNone1Clicked(self):
@@ -548,6 +556,7 @@ class ovalGui(QWidget):
                 print self.QLW_rel1.item(index).text()
         if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chossen
             self.selectedDataSets = []
+            print "self.validationType :", self.validationType
             tt = self.ag.actions()
             for it in tt:
                 print it.text()
@@ -561,8 +570,8 @@ class ovalGui(QWidget):
             self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
             self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
                 
-            self.releasesList_rel_3 = list_search_4(self.releasesList_rel_2, self.selectedDataSets)
-            self.releasesList_ref_3 = list_search_4(self.releasesList_ref_2, self.selectedDataSets)
+            (self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType)
+            (self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType)
 
             self.QLW_rel_dataset.clear()
             for it in self.rel_list_2:
@@ -574,11 +583,11 @@ class ovalGui(QWidget):
                 self.QLW_ref_dataset.addItem(item)
 
             self.QLW_rel_dataset_list.clear()
-            for it in self.releasesList_rel_3:
+            for it in self.releasesList_rel_3b:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel_dataset_list.addItem(item)
             self.QLW_ref_dataset_list.clear()
-            for it in self.releasesList_ref_3:
+            for it in self.releasesList_ref_3b:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_ref_dataset_list.addItem(item)
-                                        
+

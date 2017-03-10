@@ -7,7 +7,7 @@ import re
 from getEnv import env
 from Paths_default import *
 
-def cmd_folder_creation(choix_calcul, working_dir):
+def cmd_folder_creation(validationType, working_dir):
     import subprocess, os, datetime
     now = datetime.datetime.now()
     newDirName = now.strftime("%Y_%m_%d-%H%M%S")
@@ -17,11 +17,11 @@ def cmd_folder_creation(choix_calcul, working_dir):
 #    print "cmd_folder_creation - actual dir : ", actual_dir
     os.chdir(working_dir)
 #    print "cmd_folder_creation - je suis en : ", os.getcwd()
-    if ( ( choix_calcul == 'Full' ) or ( choix_calcul == 'gedvsgedFull'  )):
+    if ( ( validationType == 'Full' ) or ( validationType == 'gedvsgedFull'  )):
         newDirName = '/GED_' + newDirName
-    elif ( choix_calcul == 'Fast' ):
+    elif ( validationType == 'Fast' ):
         newDirName = '/FAST_' + newDirName
-    elif ( choix_calcul == 'PileUp' ):
+    elif ( validationType == 'PileUp' ):
         newDirName = '/PU_' + newDirName
     
     m_dir = working_dir + newDirName
@@ -83,24 +83,24 @@ def get_collection_list_search(self):
             collection_list.append('ZEE_13')
     return collection_list
    
-def get_choix_calcul(self):
+def get_validationType(self):
     if self.radio11.isChecked(): # FULL
-        self.choix_calcul = 'Full'
-        self.choix_calcul = 'gedvsgedFull' # because radio04 is always checked
+        self.validationType = 'Full'
+        self.validationType = 'gedvsgedFull' # because radio04 is always checked
     if self.radio12.isChecked(): # PU
-        self.choix_calcul = 'PileUp'
+        self.validationType = 'PileUp'
     if self.radio13.isChecked(): # FAST
-        self.choix_calcul = 'Fast'
+        self.validationType = 'Fast'
     return
     
-def get_choix_calcul_search(self):
+def get_validationType_search(self):
     if self.radio11.isChecked(): # FULL
-        get_choix_calcul = 'Full'
+        get_validationType = 'Full'
     if self.radio12.isChecked(): # PU
-        get_choix_calcul = 'PU'
+        get_validationType = 'PU'
     if self.radio13.isChecked(): # FAST
-        get_choix_calcul = 'Fast'
-    return get_choix_calcul
+        get_validationType = 'Fast'
+    return get_validationType
     
 def clean_files(self):
     import os,sys,subprocess,glob,shutil
@@ -282,8 +282,8 @@ def list_search(self):
     option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
     option_mthreads = 3
     option_dry_run = True # False for loading files
-    self.gccs = get_choix_calcul_search(self) 
-#    print "**********", "choix calcul : ", self.choix_calcul, self.gccs # to be removed
+    self.gccs = get_validationType_search(self) 
+#    print "**********", "choix calcul : ", self.validationType, self.gccs # to be removed
     
     # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
     coll_list = get_collection_list_search(self)
@@ -341,6 +341,38 @@ def clean_collections(collection, gccs):
                 print " PU exist in Fast", items # to be removed
             else:
                 temp.append(items)
+    return temp
+
+def clean_collections2(collectionItem, validationType):
+    import re
+    temp = True
+    if ( validationType == 'Full' ): # does not take into account miniAOD
+        if ( re.search('PU', collectionItem) ):
+            print " PU exist in Full", collectionItem # to be removed
+            temp = False
+        elif ( re.search('Fast', collectionItem) ):
+            print " Fast exist in Full", collectionItem # to be removed
+            temp = False
+        else:
+            temp= True
+    elif ( validationType == 'PU' ): # does not take into account pmx
+        if ( re.search('Fast', collectionItem) ):
+            print " Fast exist in PU", collectionItem # to be removed
+            temp = False
+        elif ( re.search('PU', collectionItem) ): # match PU
+            print " PU added", collectionItem # to be removed
+            temp = True
+        else:
+            temp = False
+    else: # validationType == 'FAST', does not take into account PU & Fast
+        if ( re.search('PU', collectionItem) ):
+            print " PU exist in Fast", collectionItem # to be removed
+            temp = False
+        elif ( re.search('Fast', collectionItem) ): #  match Fast
+            print " Fast added", collectionItem # to be removed
+            temp = True
+        else:
+            temp = False
     return temp
 
 def list_search_0(self):
@@ -521,23 +553,26 @@ def list_search_3(collection, filtre):
 #    print "lg temp : ", len(temp_1)
     return temp_1
     
-def list_search_4(collection, filtre):
+def list_search_4(collection, filtre, validationType):
     import re
 
-    temp_1 = []  
+    temp_1 = []
+    temp_2 = []
     filtre = sorted(set(filtre), reverse=True)
 #    print "filtre : ", filtre
 #    print "collection : ", collection
     for item1 in collection:
         for item2 in filtre:
             if re.search(item2, item1):
-                temp_1.append(item1)
-                print "OK : ", item2, item1
+                if clean_collections2(item1, validationType):
+                    temp_1.append(item1)
+                    temp_2.append(explode_item(item1)[2])
                 break
 #            else:
 #                print "KO : ", item2, item1
     temp_1 = sorted(set(temp_1), reverse=True)
-    return temp_1
+    temp_2 = sorted(set(temp_2), reverse=True)
+    return (temp_1, temp_2)
     
 def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
     # fetchall_from_DQM_v2.py -r CMSSW_7_0_0 -e='TTbar,PU,25' --mc --dry
