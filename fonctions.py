@@ -488,6 +488,24 @@ def list_search_1(my_choice_0):
 
     return temp_1
 
+def list_search_2(collection, filtre):
+    import re
+
+    temp_1 = []  
+    filtre = sorted(set(filtre), reverse=True)
+#    print "filtre : ", filtre
+#    print "collection : ", collection
+    for item1 in collection:
+        for item2 in filtre:
+            if (item2 == item1):
+                temp_1.append(item1)
+#                print "OK : ", item2, item1
+                break
+#            else:
+#                print "KO : ", item2, item1
+    temp_1 = sorted(set(temp_1), reverse=True)
+    return temp_1
+    
 def list_search_3(collection, filtre):
     import re
 
@@ -503,7 +521,7 @@ def list_search_3(collection, filtre):
 #    print "lg temp : ", len(temp_1)
     return temp_1
     
-def list_search_2(collection, filtre):
+def list_search_4(collection, filtre):
     import re
 
     temp_1 = []  
@@ -512,9 +530,9 @@ def list_search_2(collection, filtre):
 #    print "collection : ", collection
     for item1 in collection:
         for item2 in filtre:
-            if (item2 == item1):
+            if re.search(item2, item1):
                 temp_1.append(item1)
-#                print "OK : ", item2, item1
+                print "OK : ", item2, item1
                 break
 #            else:
 #                print "KO : ", item2, item1
@@ -793,3 +811,61 @@ def clean_files_list(t1, t2):
                 tmp = [it1[0], it1[1], it2[1], it2[2]]
                 temp.append(tmp)
     return temp
+
+def print_arrays(self):
+
+    with open("array_list.txt", "w+") as f:
+        f.write("self.releasesList_0" + "\n")
+        for line in self.releasesList_0:
+            f.write(line + "\n") # write the line
+
+        f.write( "\n" + "self.releasesList_rel_1" + "\n")
+        for line in self.releasesList_rel_1:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_ref_1" + "\n")
+        for line in self.releasesList_ref_1:
+            f.write(line + "\n") # write the line
+
+        f.write( "\n" + "self.releasesList_rel_2" + "\n")
+        for line in self.releasesList_rel_2:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_ref_2" + "\n")
+        for line in self.releasesList_ref_2:
+            f.write(line + "\n") # write the line
+
+        f.write( "\n" + "self.releasesList_rel_3" + "\n")
+        for line in self.releasesList_rel_3:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_ref_3" + "\n")
+        for line in self.releasesList_ref_3:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.rel_list_0" + "\n")
+        for line in self.rel_list_0:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.ref_list_0" + "\n")
+        for line in self.ref_list_0:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.rel_list_1" + "\n")
+        for line in self.rel_list_1:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.ref_list_1" + "\n")
+        for line in self.ref_list_1:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.rel_list_2" + "\n")
+        for line in self.rel_list_2:
+            f.write(line + "\n") # write the line
+
+        f.write("\n" + "self.ref_list_2" + "\n")
+        for line in self.ref_list_2:
+            f.write(line + "\n") # write the line
+
+        f.close()
+    return

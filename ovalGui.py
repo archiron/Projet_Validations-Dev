@@ -11,7 +11,7 @@ from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
 from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
-from fonctions import sub_releases, sub_releases2
+from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4
 #from functionGui import initDataSets # not needed
 from Datasets_default import DataSetsFilter
 from Paths_default import *
@@ -22,7 +22,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.3.6')
+        self.setWindowTitle('Validations gui v0.1.4')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -40,6 +40,10 @@ class ovalGui(QWidget):
         self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
         self.releasesList_rel_1 = []
         self.releasesList_ref_1 = []
+        self.releasesList_rel_2 = []
+        self.releasesList_ref_2 = []
+        self.releasesList_rel_3 = []
+        self.releasesList_ref_3 = []
         self.my_choice_rel_0 = "" # 
         self.my_choice_rel_1 = "" # 
         self.my_choice_ref_0 = "" # 
@@ -89,7 +93,7 @@ class ovalGui(QWidget):
         for item in self.DataSetTable:
             a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
             self.menu.addAction(a)
-            self.connect(a, SIGNAL('triggered()'), self.menuClicked)
+            self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
         self.checkDataSets1.setMenu(self.menu)
         self.selectedDataSets = self.DataSetTable # default, all datasets selected
         vboxDataSets = QVBoxLayout()
@@ -109,7 +113,7 @@ class ovalGui(QWidget):
 #        for it in self.DataSetTable:                                               # TEST
 #            a = self.ag.addAction(QAction(it, self, checkable=True, checked=True)) # TEST
 #            self.menu.addAction(a)                                                 # TEST
-#            self.connect(a, SIGNAL('triggered()'), self.menuClicked)               # TEST        
+#            self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)          # TEST        
 #        self.checkTestMenu1.setMenu(self.menu)                                     # TEST
 #        vboxTestMenu = QVBoxLayout()                                               # TEST
 #        vboxTestMenu.addWidget(self.checkTestMenu1)                                # TEST
@@ -239,8 +243,8 @@ class ovalGui(QWidget):
         self.QHL_Lists = QHBoxLayout(self.QGBox_Lists) 
         
         self.QGBox_rel = QGroupBox("Release")
-        self.QGBox_rel.setMinimumWidth(250)
-        self.QGBox_rel.setMaximumWidth(250)
+        self.QGBox_rel.setMinimumWidth(200)
+        self.QGBox_rel.setMaximumWidth(200)
         self.vbox_rel4 = QVBoxLayout()
         self.QLW_rel_dataset = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -249,9 +253,20 @@ class ovalGui(QWidget):
         self.vbox_rel4.addWidget(self.QLW_rel_dataset) 
         self.QGBox_rel.setLayout(self.vbox_rel4)
         
+        self.QGBox_rel_list = QGroupBox("Release List")
+        self.QGBox_rel_list.setMinimumWidth(250)
+        self.QGBox_rel_list.setMaximumWidth(250)
+        self.vbox_rel_list = QVBoxLayout()
+        self.QLW_rel_dataset_list = QListWidget()
+        item = QListWidgetItem("%s" % "")
+        self.QLW_rel_dataset_list.addItem(item)
+#        self.connect(self.QLW_rel_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
+        self.vbox_rel_list.addWidget(self.QLW_rel_dataset_list) 
+        self.QGBox_rel_list.setLayout(self.vbox_rel_list)
+        
         self.QGBox_ref = QGroupBox("Reference")
-        self.QGBox_ref.setMinimumWidth(250)
-        self.QGBox_ref.setMaximumWidth(250)
+        self.QGBox_ref.setMinimumWidth(200)
+        self.QGBox_ref.setMaximumWidth(200)
         self.vbox_ref4 = QVBoxLayout()
         self.QLW_ref_dataset = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -260,8 +275,21 @@ class ovalGui(QWidget):
         self.vbox_ref4.addWidget(self.QLW_ref_dataset) 
         self.QGBox_ref.setLayout(self.vbox_ref4)
         
+        self.QGBox_ref_list = QGroupBox("Release List")
+        self.QGBox_ref_list.setMinimumWidth(250)
+        self.QGBox_ref_list.setMaximumWidth(250)
+        self.vbox_ref_list = QVBoxLayout()
+        self.QLW_ref_dataset_list = QListWidget()
+        item = QListWidgetItem("%s" % "")
+        self.QLW_ref_dataset_list.addItem(item)
+#        self.connect(self.QLW_ref_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
+        self.vbox_ref_list.addWidget(self.QLW_ref_dataset_list) 
+        self.QGBox_ref_list.setLayout(self.vbox_ref_list)
+        
         self.QHL_Lists.addWidget(self.QGBox_rel)
+        self.QHL_Lists.addWidget(self.QGBox_rel_list)
         self.QHL_Lists.addWidget(self.QGBox_ref)
+        self.QHL_Lists.addWidget(self.QGBox_ref_list)
         self.layout_Lists = QVBoxLayout()
         self.layout_Lists.addWidget(self.QGBox_Lists)
         self.QGBox_Lists.setVisible(False)
@@ -319,8 +347,8 @@ class ovalGui(QWidget):
             for item in self.DataSetTable:
                 a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
                 self.menu.addAction(a)
-                self.connect(a, SIGNAL('triggered()'), self.menuClicked)
-            self.menuClicked()
+                self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+            self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
 
     def checkAllNone2Clicked(self):
@@ -331,8 +359,8 @@ class ovalGui(QWidget):
             for item in self.DataSetTable:
                 a = self.ag.addAction(QAction(item, self, checkable=True, checked=False))
                 self.menu.addAction(a)
-                self.connect(a, SIGNAL('triggered()'), self.menuClicked)
-            self.menuClicked()
+                self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+            self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
 
     def checkDataSets2Clicked(self):
@@ -344,8 +372,8 @@ class ovalGui(QWidget):
         for item in self.DataSetTable:
             a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
             self.menu.addAction(a)
-            self.connect(a, SIGNAL('triggered()'), self.menuClicked)
-        self.menuClicked()
+            self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+        self.QGBoxListsUpdate()
 #        initDataSets(self)
 #        self.QLW_dataset.clear()
 #        for it in self.DataSetTable: # list of DataSets
@@ -362,13 +390,6 @@ class ovalGui(QWidget):
             self.my_choice_ref_0 = self.QLW_rel1.currentItem().text()
             print "ItemRefClicked1 : self.my_choice_ref_0 : %s " % self.my_choice_ref_0
             self.releasesList_ref_1 = list_search_1(self.my_choice_ref_0)
-            #### TEMP
-            with open("releasesList_ref_1.txt", "w+") as f:
-                f.write(self.my_choice_ref_0 + "\n")
-                for line in self.releasesList_ref_1:
-                    f.write(line + "\n") # write the line
-                f.close()
-            #### TEMP
             self.ref_list_0 = sub_releases(self.releasesList_ref_1) #list_search_1(self.my_choice_ref_0))
             for it in self.ref_list_0:
                 item = QListWidgetItem("%s" % it)
@@ -378,13 +399,6 @@ class ovalGui(QWidget):
             self.my_choice_rel_0 = self.QLW_rel1.currentItem().text()
             print "ItemRelRefClicked1 : self.my_choice_rel_0 : %s " % self.my_choice_rel_0
             self.releasesList_rel_1 = list_search_1(self.my_choice_rel_0)
-            #### TEMP
-            with open("releasesList_rel_1.txt", "w+") as f:
-                f.write(self.my_choice_rel_0 + "\n")
-                for line in self.releasesList_rel_1:
-                    f.write(line + "\n") # write the line
-                f.close()
-            #### TEMP
             self.rel_list_0 = sub_releases(self.releasesList_rel_1) #list_search_1(self.my_choice_rel_0))
             # tester si =0 
             for it in self.rel_list_0:
@@ -400,21 +414,7 @@ class ovalGui(QWidget):
             tmp = "Reference : " + self.my_choice_ref_1
             self.labelCombo2.setText(tmp)
             self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
-            #### TEMP
-            with open("releasesList_ref_2.txt", "w+") as f:
-                f.write(self.my_choice_ref_1 + "\n")
-                for line in self.releasesList_ref_2:
-                    f.write(line + "\n") # write the line
-                f.close()
-            #### TEMP
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
-            #### TEMP
-            with open("ref_list_1.txt", "w+") as f:
-                f.write(self.my_choice_ref_1 + "\n")
-                for line in self.ref_list_1:
-                    f.write(line + "\n") # write the line
-                f.close()
-            #### TEMP
         else:
             print "release"
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
@@ -422,21 +422,7 @@ class ovalGui(QWidget):
             tmp = "Release : " + self.my_choice_rel_1
             self.labelCombo1.setText(tmp)
             self.releasesList_rel_2 = list_search_3(self.releasesList_rel_1, str(self.my_choice_rel_1))
-            #### TEMP
-            with open("releasesList_rel_2.txt", "w+") as f:
-                f.write(self.my_choice_rel_1 + "\n")
-                for line in self.releasesList_rel_2:
-                    f.write(line + "\n") # write the line
-                f.close()
-            #### TEMP
             self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), self.releasesList_rel_2)
-            #### TEMP
-            with open("rel_list_1.txt", "w+") as f:
-                f.write(self.my_choice_rel_1 + "\n")
-                for line in self.rel_list_1:
-                    f.write(line + "\n") # write the line
-                f.close()
-            #### TEMP
         resume_text = self.texte
         resume_text += "<br />Release   : " + self.my_choice_rel_1
         resume_text += "<br />Reference : " + self.my_choice_ref_1
@@ -460,63 +446,36 @@ class ovalGui(QWidget):
                 self.labelCombo3.setText(self.trUtf8(txt))
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 self.QGBox_Lists.setVisible(True)
-#                self.QGBox_DataSets.setVisible(False)
                 self.QGBox_rel0.setVisible(False)
-#                self.selectedDataSets = []
-#                index = 0
-#                for it in self.DataSetTable:
-#                    item1 = QListWidgetItem (self.QLW_dataset.item(index) )
-#                    if item1.checkState() == 2:
-#                        self.selectedDataSets.append(it)
-#                    index += 1
-                self.menuClicked()
-                print "selectedDataSets : ", self.selectedDataSets
+#                self.QGBoxListsUpdate()
+#                print "selectedDataSets : ", self.selectedDataSets
 
-                self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
-                self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
-                #### TEMP
-                with open("ref_list_2.txt", "w+") as f:
-                    f.write(self.my_choice_ref_1 + "\n")
-                    for line in self.ref_list_2:
-                        f.write(line + "\n") # write the line
-                    f.close()
-                #### TEMP
-                #### TEMP
-                with open("rel_list_2.txt", "w+") as f:
-                    f.write(self.my_choice_rel_1 + "\n")
-                    for line in self.rel_list_2:
-                        f.write(line + "\n") # write the line
-                    f.close()
-                #### TEMP
-                self.QLW_rel_dataset.clear()
-                for it in self.rel_list_2:
-                    item = QListWidgetItem("%s" % it)
-                    self.QLW_rel_dataset.addItem(item)
-                self.QLW_ref_dataset.clear()
-                for it in self.ref_list_2:
-                    item = QListWidgetItem("%s" % it)
-                    self.QLW_ref_dataset.addItem(item)
+#                self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
+#                self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
                 
+#                self.releasesList_rel_3 = list_search_4(self.releasesList_rel_2, self.selectedDataSets)
+#                self.releasesList_ref_3 = list_search_4(self.releasesList_ref_2, self.selectedDataSets)
+                
+#                self.QLW_rel_dataset.clear()
+#                for it in self.rel_list_2:
+#                    item = QListWidgetItem("%s" % it)
+#                    self.QLW_rel_dataset.addItem(item)
+#                self.QLW_ref_dataset.clear()
+#                for it in self.ref_list_2:
+#                    item = QListWidgetItem("%s" % it)
+#                    self.QLW_ref_dataset.addItem(item)
+                
+                self.QGBoxListsUpdate()
                 # what to do if len(self.QLW_rel(f)_datasets) = 0?
                 print BaseURL(self) # temporaire
+                print_arrays(self)
                 
-#            elif (self.tasks_counter == 2):
-#                print "*-*-**--*-*-*-*-*-*", self.tasks_list[2]
-#                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
-#                self.bouton_Next.setEnabled(True)
-#                txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : "  + self.tasks_list[self.tasks_counter+1]
-#                self.labelCombo3.setText(self.trUtf8(txt))
-#                self.QGBox_Lists.setVisible(False)
-#                self.QGBox_rel0.setVisible(False)
-#                self.QGBox_DataSets.setVisible(True)
-#                initDataSets(self)
             else:
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
                 self.labelCombo3.setText(self.trUtf8(txt))
                 self.QGBox_Lists.setVisible(False)
                 self.QGBox_rel0.setVisible(True)
-#                self.QGBox_DataSets.setVisible(False)
 
         if self.tasks_counter == 1:
             self.bouton_Previous.setEnabled(True)
@@ -581,7 +540,7 @@ class ovalGui(QWidget):
         else :
             print self.tasks_list[self.tasks_counter]
 
-    def menuClicked(self):
+    def QGBoxListsUpdate(self):
         print "menu clicked !"
         print "*-*-**--*-*-*-*-*-* DataSets"
         if (self.my_choice_rel_0 != ''):
@@ -601,6 +560,9 @@ class ovalGui(QWidget):
 
             self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
             self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
+                
+            self.releasesList_rel_3 = list_search_4(self.releasesList_rel_2, self.selectedDataSets)
+            self.releasesList_ref_3 = list_search_4(self.releasesList_ref_2, self.selectedDataSets)
 
             self.QLW_rel_dataset.clear()
             for it in self.rel_list_2:
@@ -610,4 +572,13 @@ class ovalGui(QWidget):
             for it in self.ref_list_2:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_ref_dataset.addItem(item)
-                    
+
+            self.QLW_rel_dataset_list.clear()
+            for it in self.releasesList_rel_3:
+                item = QListWidgetItem("%s" % it)
+                self.QLW_rel_dataset_list.addItem(item)
+            self.QLW_ref_dataset_list.clear()
+            for it in self.releasesList_ref_3:
+                item = QListWidgetItem("%s" % it)
+                self.QLW_ref_dataset_list.addItem(item)
+                                        
