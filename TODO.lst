@@ -19,7 +19,8 @@ On intégrera les chemins (WEBURL et autres) dans un fichier PATHS_default.py
 
 dans la page web, afficher le nom des fichiers root
 
-validationType (anciennement choix_calcul) : Full, Fast, PU
+self.validationType1 (anciennement choix_calcul) : Full, Fast
+self.validationType2 RECO, PU, pmx, miniAOD
 
 DataSets Type
     Classical : classical electron validation DataSets
@@ -56,7 +57,7 @@ self.rel_list_2 = [] : liste des datasets selectionnes à partir de self.my_choic
 self.ref_list_2 = [] : liste des datasets selectionnes à partir de self.my_choice_ref_1
 list_search_1() # list of DQM_000...root files
 
-clean_collections : for a given collection, keep the caracteristics that match with self.validationType
-clean_collections2 : same as previous, for a given item, keep the caracteristics that match with self.validationType
+clean_collections : for a given collection, keep the caracteristics that match with self.validationType1
+clean_collections2 : same as previous, for a given item, keep the caracteristics that match with self.validationType1
 
 parti pris de vider les precedents choix en cas de aller/revenir sur reference/release

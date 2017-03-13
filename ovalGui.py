@@ -22,11 +22,12 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.4.1')
+        self.setWindowTitle('Validations gui v0.1.4.2')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
-        self.validationType = 'Full'   # default
+        self.validationType1 = 'Full'   # default
+        self.validationType2 = 'RECO'   # default
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
@@ -69,18 +70,39 @@ class ovalGui(QWidget):
         self.QGBox1.setMaximumHeight(120)
         self.QGBox1.setMaximumWidth(100)
         self.radio11 = QRadioButton("FULL") # par defaut
-        self.radio12 = QRadioButton("PU")
-        self.radio13 = QRadioButton("FAST")
+        self.radio12 = QRadioButton("FAST")
+#        self.radio13 = QRadioButton("PU")
         self.radio11.setChecked(True)
         self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
         self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
-        self.connect(self.radio13, SIGNAL("clicked()"), self.radio13Clicked) 
+#        self.connect(self.radio13, SIGNAL("clicked()"), self.radio13Clicked) 
         vbox1 = QVBoxLayout()
         vbox1.addWidget(self.radio11)
         vbox1.addWidget(self.radio12)
-        vbox1.addWidget(self.radio13)
+#        vbox1.addWidget(self.radio13)
         vbox1.addStretch(1)
         self.QGBox1.setLayout(vbox1)
+        				
+		# creation du grpe Calcul
+        self.QGBox2 = QGroupBox("Validation")
+        self.QGBox2.setMaximumHeight(120)
+        self.QGBox2.setMaximumWidth(100)
+        self.radio21 = QRadioButton("RECO") # par defaut
+        self.radio22 = QRadioButton("PU")
+        self.radio23 = QRadioButton("pmx")
+        self.radio24 = QRadioButton("miniAOD")
+        self.radio21.setChecked(True)
+        self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked) 
+        self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked) 
+        self.connect(self.radio23, SIGNAL("clicked()"), self.radio23Clicked) 
+        self.connect(self.radio24, SIGNAL("clicked()"), self.radio24Clicked) 
+        vbox2 = QVBoxLayout()
+        vbox2.addWidget(self.radio21)
+        vbox2.addWidget(self.radio22)
+        vbox2.addWidget(self.radio23)
+        vbox2.addWidget(self.radio24)
+        vbox2.addStretch(1)
+        self.QGBox2.setLayout(vbox2)
         				
 		# creation du grpe liste des collections new version
         self.QGBoxDataSets = QGroupBox("DataSets")
@@ -154,6 +176,7 @@ class ovalGui(QWidget):
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
         self.layoutH_radio.addWidget(self.QGBox1)
+        self.layoutH_radio.addWidget(self.QGBox2)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addWidget(self.QGBoxDataSets)
 #        self.layoutH_radio.addWidget(self.QGBoxTestMenu) # TEST
@@ -328,22 +351,50 @@ class ovalGui(QWidget):
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
-            self.validationType = 'Full'
-#            print "self.validationType :", self.validationType
+            self.validationType1 = 'Full'
+#            print "self.validationType1 :", self.validationType1
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
 
     def radio12Clicked(self):
         if self.radio12.isChecked():
-            self.validationType = 'PU'
-#            print "self.validationType :", self.validationType
+            self.validationType1 = 'Fast'
+#            print "self.validationType1 :", self.validationType1
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
     def radio13Clicked(self):
         if self.radio13.isChecked():
-            self.validationType = 'Fast'
-#            print "self.validationType :", self.validationType
+            self.validationType1 = 'PU'
+#            print "self.validationType1 :", self.validationType1
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents()
+                        
+    def radio21Clicked(self):
+        if self.radio21.isChecked():
+            self.validationType2 = 'RECO'
+            print "self.validationType2 :", self.validationType2
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents()
+
+    def radio22Clicked(self):
+        if self.radio22.isChecked():
+            self.validationType2 = 'PU'
+            print "self.validationType2 :", self.validationType2
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents()
+        
+    def radio23Clicked(self):
+        if self.radio23.isChecked():
+            self.validationType2 = 'Pmx'
+            print "self.validationType2 :", self.validationType2
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents()
+                        
+    def radio24Clicked(self):
+        if self.radio24.isChecked():
+            self.validationType2 = 'miniAOD'
+            print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
                         
@@ -556,7 +607,8 @@ class ovalGui(QWidget):
                 print self.QLW_rel1.item(index).text()
         if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chossen
             self.selectedDataSets = []
-            print "self.validationType :", self.validationType
+            print "self.validationType1 :", self.validationType1
+            print "self.validationType2 :", self.validationType2
             tt = self.ag.actions()
             for it in tt:
                 print it.text()
@@ -570,8 +622,8 @@ class ovalGui(QWidget):
             self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
             self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
                 
-            (self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType)
-            (self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType)
+            (self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType1)
+            (self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1)
 
             self.QLW_rel_dataset.clear()
             for it in self.rel_list_2:
