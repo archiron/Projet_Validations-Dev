@@ -8,7 +8,7 @@ from PyQt4 import QtCore
 import os,sys,subprocess
 
 from getEnv import env
-from fonctions import cmd_folder_creation, get_collection_list, get_validationType, clean_files, copy_files
+from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files
 from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4
@@ -71,15 +71,12 @@ class ovalGui(QWidget):
         self.QGBox1.setMaximumWidth(100)
         self.radio11 = QRadioButton("FULL") # par defaut
         self.radio12 = QRadioButton("FAST")
-#        self.radio13 = QRadioButton("PU")
         self.radio11.setChecked(True)
         self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
         self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
-#        self.connect(self.radio13, SIGNAL("clicked()"), self.radio13Clicked) 
         vbox1 = QVBoxLayout()
         vbox1.addWidget(self.radio11)
         vbox1.addWidget(self.radio12)
-#        vbox1.addWidget(self.radio13)
         vbox1.addStretch(1)
         self.QGBox1.setLayout(vbox1)
         				
@@ -363,13 +360,6 @@ class ovalGui(QWidget):
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
-    def radio13Clicked(self):
-        if self.radio13.isChecked():
-            self.validationType1 = 'PU'
-#            print "self.validationType1 :", self.validationType1
-            self.QGBoxListsUpdate()
-        QtCore.QCoreApplication.processEvents()
-                        
     def radio21Clicked(self):
         if self.radio21.isChecked():
             self.validationType2 = 'RECO'

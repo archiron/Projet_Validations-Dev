@@ -83,24 +83,20 @@ def get_collection_list_search(self):
             collection_list.append('ZEE_13')
     return collection_list
    
-def get_validationType(self):
+def get_validationType1(self):
     if self.radio11.isChecked(): # FULL
         self.validationType = 'Full'
         self.validationType = 'gedvsgedFull' # because radio04 is always checked
-    if self.radio12.isChecked(): # PU
-        self.validationType = 'PileUp'
-    if self.radio13.isChecked(): # FAST
+    if self.radio12.isChecked(): # FAST
         self.validationType = 'Fast'
     return
     
-def get_validationType_search(self):
+def get_validationType1_search(self):
     if self.radio11.isChecked(): # FULL
-        get_validationType = 'Full'
-    if self.radio12.isChecked(): # PU
-        get_validationType = 'PU'
-    if self.radio13.isChecked(): # FAST
-        get_validationType = 'Fast'
-    return get_validationType
+        get_validationType1 = 'Full'
+    if self.radio12.isChecked(): # FAST
+        get_validationType1 = 'Fast'
+    return get_validationType1
     
 def clean_files(self):
     import os,sys,subprocess,glob,shutil
@@ -282,7 +278,7 @@ def list_search(self):
     option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
     option_mthreads = 3
     option_dry_run = True # False for loading files
-    self.gccs = get_validationType_search(self) 
+    self.gccs = get_validationType1_search(self) 
 #    print "**********", "choix calcul : ", self.validationType, self.gccs # to be removed
     
     # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
@@ -355,15 +351,6 @@ def clean_collections2(collectionItem, validationType):
             temp = False
         else:
             temp= True
-    elif ( validationType == 'PU' ): # does not take into account pmx
-        if ( re.search('Fast', collectionItem) ):
-            print " Fast exist in PU", collectionItem # to be removed
-            temp = False
-        elif ( re.search('PU', collectionItem) ): # match PU
-            print " PU added", collectionItem # to be removed
-            temp = True
-        else:
-            temp = False
     else: # validationType == 'FAST', does not take into account PU & Fast
         if ( re.search('PU', collectionItem) ):
             print " PU exist in Fast", collectionItem # to be removed
