@@ -22,7 +22,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.4.2')
+        self.setWindowTitle('Validations gui v0.1.5.0')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -376,7 +376,7 @@ class ovalGui(QWidget):
         
     def radio23Clicked(self):
         if self.radio23.isChecked():
-            self.validationType2 = 'Pmx'
+            self.validationType2 = 'pmx'
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
@@ -612,8 +612,8 @@ class ovalGui(QWidget):
             self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
             self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
                 
-            (self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType1)
-            (self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1)
+            (self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType1, self.validationType2)
+            (self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1, self.validationType2)
 
             self.QLW_rel_dataset.clear()
             for it in self.rel_list_2:

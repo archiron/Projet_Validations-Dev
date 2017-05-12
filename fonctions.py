@@ -339,25 +339,37 @@ def clean_collections(collection, gccs):
                 temp.append(items)
     return temp
 
-def clean_collections2(collectionItem, validationType):
+def clean_collections2(collectionItem, validationType_1, validationType_2):
     import re
     temp = True
-    if ( validationType == 'Full' ): # does not take into account miniAOD
-        if ( re.search('PU', collectionItem) ):
-            print " PU exist in Full", collectionItem # to be removed
-            temp = False
-        elif ( re.search('Fast', collectionItem) ):
+    if ( validationType_1 == 'Full' ): # does not take into account miniAOD
+        if ( re.search('Fast', collectionItem) ):
             print " Fast exist in Full", collectionItem # to be removed
             temp = False
-        else:
-            temp= True
-    else: # validationType == 'FAST', does not take into account PU & Fast
-        if ( re.search('PU', collectionItem) ):
-            print " PU exist in Fast", collectionItem # to be removed
-            temp = False
-        elif ( re.search('Fast', collectionItem) ): #  match Fast
+        else: # all Full + PU + pmx + miniAOD
+            temp= True # temporaire
+            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'minAOD' ) ):
+                if ( re.search('PU', collectionItem) ):
+                    temp = False
+            elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
+                if ( re.search('PU', collectionItem) ):
+                    print " PU ask for PU", collectionItem # to be removed
+                    temp = True
+                else:
+                    temp = False
+    else: # validationType_1 == 'FAST', does not take into account PU & Fast
+        if ( re.search('Fast', collectionItem) ): #  match Fast all Fast + PU + pmx + miniAOD
             print " Fast added", collectionItem # to be removed
-            temp = True
+            temp = True # Temporaire
+            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'minAOD' ) ):
+                if ( re.search('PU', collectionItem) ):
+                    temp = False
+            elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
+                if ( re.search('PU', collectionItem) ):
+                    print " PU ask for PU", collectionItem # to be removed
+                    temp = True
+                else:
+                    temp = False
         else:
             temp = False
     return temp
@@ -540,7 +552,7 @@ def list_search_3(collection, filtre):
 #    print "lg temp : ", len(temp_1)
     return temp_1
     
-def list_search_4(collection, filtre, validationType):
+def list_search_4(collection, filtre, validationType_1, validationType_2):
     import re
 
     temp_1 = []
@@ -551,7 +563,7 @@ def list_search_4(collection, filtre, validationType):
     for item1 in collection:
         for item2 in filtre:
             if re.search(item2, item1):
-                if clean_collections2(item1, validationType):
+                if clean_collections2(item1, validationType_1, validationType_2):
                     temp_1.append(item1)
                     temp_2.append(explode_item(item1)[2])
                 break
