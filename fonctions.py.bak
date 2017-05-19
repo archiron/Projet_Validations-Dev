@@ -7,7 +7,7 @@ import re
 from getEnv import env
 from Paths_default import *
 
-def cmd_folder_creation(validationType, working_dir):
+def cmd_folder_creation(choix_calcul, working_dir):
     import subprocess, os, datetime
     now = datetime.datetime.now()
     newDirName = now.strftime("%Y_%m_%d-%H%M%S")
@@ -17,11 +17,11 @@ def cmd_folder_creation(validationType, working_dir):
 #    print "cmd_folder_creation - actual dir : ", actual_dir
     os.chdir(working_dir)
 #    print "cmd_folder_creation - je suis en : ", os.getcwd()
-    if ( ( validationType == 'Full' ) or ( validationType == 'gedvsgedFull'  )):
+    if ( ( choix_calcul == 'Full' ) or ( choix_calcul == 'gedvsgedFull'  )):
         newDirName = '/GED_' + newDirName
-    elif ( validationType == 'Fast' ):
+    elif ( choix_calcul == 'Fast' ):
         newDirName = '/FAST_' + newDirName
-    elif ( validationType == 'PileUp' ):
+    elif ( choix_calcul == 'PileUp' ):
         newDirName = '/PU_' + newDirName
     
     m_dir = working_dir + newDirName
@@ -83,20 +83,24 @@ def get_collection_list_search(self):
             collection_list.append('ZEE_13')
     return collection_list
    
-def get_validationType1(self):
+def get_choix_calcul(self):
     if self.radio11.isChecked(): # FULL
-        self.validationType = 'Full'
-        self.validationType = 'gedvsgedFull' # because radio04 is always checked
-    if self.radio12.isChecked(): # FAST
-        self.validationType = 'Fast'
+        self.choix_calcul = 'Full'
+        self.choix_calcul = 'gedvsgedFull' # because radio04 is always checked
+    if self.radio12.isChecked(): # PU
+        self.choix_calcul = 'PileUp'
+    if self.radio13.isChecked(): # FAST
+        self.choix_calcul = 'Fast'
     return
     
-def get_validationType1_search(self):
+def get_choix_calcul_search(self):
     if self.radio11.isChecked(): # FULL
-        get_validationType1 = 'Full'
-    if self.radio12.isChecked(): # FAST
-        get_validationType1 = 'Fast'
-    return get_validationType1
+        get_choix_calcul = 'Full'
+    if self.radio12.isChecked(): # PU
+        get_choix_calcul = 'PU'
+    if self.radio13.isChecked(): # FAST
+        get_choix_calcul = 'Fast'
+    return get_choix_calcul
     
 def clean_files(self):
     import os,sys,subprocess,glob,shutil
@@ -278,8 +282,8 @@ def list_search(self):
     option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
     option_mthreads = 3
     option_dry_run = True # False for loading files
-    self.gccs = get_validationType1_search(self) 
-#    print "**********", "choix calcul : ", self.validationType, self.gccs # to be removed
+    self.gccs = get_choix_calcul_search(self) 
+#    print "**********", "choix calcul : ", self.choix_calcul, self.gccs # to be removed
     
     # get collections list to do (Pt35, Pt10, TTbar, .... if checked)
     coll_list = get_collection_list_search(self)
@@ -337,41 +341,6 @@ def clean_collections(collection, gccs):
                 print " PU exist in Fast", items # to be removed
             else:
                 temp.append(items)
-    return temp
-
-def clean_collections2(collectionItem, validationType_1, validationType_2):
-    import re
-    temp = True
-    if ( validationType_1 == 'Full' ): # does not take into account miniAOD
-        if ( re.search('Fast', collectionItem) ):
-            print " Fast exist in Full", collectionItem # to be removed
-            temp = False
-        else: # all Full + PU + pmx + miniAOD
-            temp= True # temporaire
-            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'minAOD' ) ):
-                if ( re.search('PU', collectionItem) ):
-                    temp = False
-            elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
-                if ( re.search('PU', collectionItem) ):
-                    print " PU ask for PU", collectionItem # to be removed
-                    temp = True
-                else:
-                    temp = False
-    else: # validationType_1 == 'FAST', does not take into account PU & Fast
-        if ( re.search('Fast', collectionItem) ): #  match Fast all Fast + PU + pmx + miniAOD
-            print " Fast added", collectionItem # to be removed
-            temp = True # Temporaire
-            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'minAOD' ) ):
-                if ( re.search('PU', collectionItem) ):
-                    temp = False
-            elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
-                if ( re.search('PU', collectionItem) ):
-                    print " PU ask for PU", collectionItem # to be removed
-                    temp = True
-                else:
-                    temp = False
-        else:
-            temp = False
     return temp
 
 def list_search_0(self):
@@ -520,101 +489,12 @@ def list_search_1(my_choice_0):
     return temp_1
 
 def list_search_2(collection, filtre):
-    import re
-
     temp_1 = []  
-    filtre = sorted(set(filtre), reverse=True)
-#    print "filtre : ", filtre
-#    print "collection : ", collection
-    for item1 in collection:
-        for item2 in filtre:
-            if (item2 == item1):
-                temp_1.append(item1)
-#                print "OK : ", item2, item1
-                break
-#            else:
-#                print "KO : ", item2, item1
-    temp_1 = sorted(set(temp_1), reverse=True)
+    for item in collection:
+        print "collection : ", item
+        for item in filtre:
+            print "filtre : ", item
     return temp_1
-    
-def list_search_3(collection, filtre):
-    import re
-
-#    print "lg collection : ", len(collection)
-#    print "lg filtre     : ", len(filtre), filtre
-    temp_1 = []  
-    for item1 in collection:
-        if re.search(filtre, item1):
-            temp_1.append(item1)
-#            print "OK : ", filtre, item1
-#        else:
-#            print "KO : ", filtre, item1
-#    print "lg temp : ", len(temp_1)
-    return temp_1
-    
-def list_search_4(collection, filtre, validationType_1, validationType_2):
-    import re
-
-    temp_1 = []
-    temp_2 = []
-    filtre = sorted(set(filtre), reverse=True)
-#    print "filtre : ", filtre
-#    print "collection : ", collection
-    for item1 in collection:
-        for item2 in filtre:
-            if re.search(item2, item1):
-                if clean_collections2(item1, validationType_1, validationType_2):
-                    temp_1.append(item1)
-                    temp_2.append(explode_item(item1)[2])
-                break
-#            else:
-#                print "KO : ", item2, item1
-    temp_1 = sorted(set(temp_1), reverse=True)
-    temp_2 = sorted(set(temp_2), reverse=True)
-    return (temp_1, temp_2)
-    
-def list_search_5(self):
-    import re
-
-    print " self.validationType1 = ",  self.validationType1
-    print " self.validationType2 = ",  self.validationType2
-    #print " self.selectedDataSets = ", self.selectedDataSets # OK
-    #print " self.releasesList_rel_2 = ", self.releasesList_rel_2 # OK
-    #print " self.releasesList_ref_2 = ", self.releasesList_ref_2 # OK
-    
-    temp_1 = []
-    temp_2 = []
-    temp_3 = []
-    temp_4 = []
-    filtre = sorted(set(self.selectedDataSets), reverse=True)
-
-    # PART REL
-    for item1 in self.releasesList_rel_2:
-        for item2 in filtre:
-            if re.search(item2, item1):
-                if clean_collections2(item1, self.validationType1, self.validationType2):
-                    temp_1.append(item1)
-                    temp_2.append(explode_item(item1)[2])
-                break
-#            else:
-#                print "KO : ", item2, item1
-    temp_1 = sorted(set(temp_1), reverse=True)
-    temp_2 = sorted(set(temp_2), reverse=True)
-    
-    # PART REL
-    for item1 in self.releasesList_ref_2:
-        for item2 in filtre:
-            if re.search(item2, item1):
-                if clean_collections2(item1, self.validationType1, self.validationType2):
-                    temp_3.append(item1)
-                    temp_4.append(explode_item(item1)[2])
-                break
-#            else:
-#                print "KO : ", item2, item1
-    temp_3 = sorted(set(temp_3), reverse=True)
-    temp_4 = sorted(set(temp_4), reverse=True)
-    
-    return (temp_1, temp_2, temp_3, temp_4)
     
 def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
     # fetchall_from_DQM_v2.py -r CMSSW_7_0_0 -e='TTbar,PU,25' --mc --dry
@@ -684,15 +564,12 @@ def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthre
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
-    
-    #release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
-    #if not release:
-    #    parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
-    #releasedir = release[0] + "x"
-    releasedir = option_release
+    release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
+    if not release:
+        parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
+    releasedir = release[0] + "x"
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/'  + releasedir + '/'
-#    print "filedir_url = ", filedir_url
     filedir_html = auth_wget(filedir_url)
 
     #auth_wget("https://cmsweb.cern.ch/dqm/offline/data/browse/ROOT/OfflineData/Run2012/JetHT/0002029xx/DQM_V0001_R000202950__JetHT__Run2012C-PromptReco-v2__DQM.root")
@@ -727,15 +604,14 @@ def sub_releases(tab_files):
     
 def sub_releases2(release, tab_files):
     import re
-    print "sub_releases2 : ", len(tab_files)
-    print "release : ", release
+    print "sub_releases2", len(tab_files)
     i = 0
     temp = []
     for t in tab_files:
         if ( re.search(release, t) ):
 #            print 'sub_releases2 : %s' % t
             tt = explode_item(t)
-#            print 'sub_releases2 : %d, %s, %s' % (i+1, tt[0], tt[1])
+            print 'sub_releases2 : %d, %s, %s' % (i+1, tt[0], tt[1])
             temp.append(tt[0])
         i += 1
     temp = sorted(set(temp)) # , reverse=True
@@ -888,61 +764,3 @@ def clean_files_list(t1, t2):
                 tmp = [it1[0], it1[1], it2[1], it2[2]]
                 temp.append(tmp)
     return temp
-
-def print_arrays(self):
-
-    with open("array_list.txt", "w+") as f:
-        f.write("self.releasesList_0" + "\n")
-        for line in self.releasesList_0:
-            f.write(line + "\n") # write the line
-
-        f.write( "\n" + "self.releasesList_rel_1" + "\n")
-        for line in self.releasesList_rel_1:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.releasesList_ref_1" + "\n")
-        for line in self.releasesList_ref_1:
-            f.write(line + "\n") # write the line
-
-        f.write( "\n" + "self.releasesList_rel_2" + "\n")
-        for line in self.releasesList_rel_2:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.releasesList_ref_2" + "\n")
-        for line in self.releasesList_ref_2:
-            f.write(line + "\n") # write the line
-
-        f.write( "\n" + "self.releasesList_rel_3" + "\n")
-        for line in self.releasesList_rel_3:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.releasesList_ref_3" + "\n")
-        for line in self.releasesList_ref_3:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.rel_list_0" + "\n")
-        for line in self.rel_list_0:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.ref_list_0" + "\n")
-        for line in self.ref_list_0:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.rel_list_1" + "\n")
-        for line in self.rel_list_1:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.ref_list_1" + "\n")
-        for line in self.ref_list_1:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.rel_list_2" + "\n")
-        for line in self.rel_list_2:
-            f.write(line + "\n") # write the line
-
-        f.write("\n" + "self.ref_list_2" + "\n")
-        for line in self.ref_list_2:
-            f.write(line + "\n") # write the line
-
-        f.close()
-    return

@@ -8,26 +8,23 @@ from PyQt4 import QtCore
 import os,sys,subprocess
 
 from getEnv import env
-from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files
-from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
+from fonctions import cmd_folder_creation, get_collection_list, get_choix_calcul, clean_files, copy_files
+from fonctions import list_search_0, list_search_2, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
-from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4, list_search_5
-#from functionGui import initDataSets # not needed
+from getChoice import *
 from Datasets_default import DataSetsFilter
 from Paths_default import *
-#from getChoice import *
 #from getPublish import *
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.5.1')
+        self.setWindowTitle('Validations gui v0.0.7')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
-        self.validationType1 = 'Full'   # default
-        self.validationType2 = 'RECO'   # default
+        self.choix_calcul = 'Full'   # default
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
@@ -39,14 +36,6 @@ class ovalGui(QWidget):
         self.working_dir_ref = os.getcwd()
         
         self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
-        self.releasesList_rel_1 = []
-        self.releasesList_ref_1 = []
-        self.releasesList_rel_2 = []
-        self.releasesList_ref_2 = []
-        self.releasesList_rel_3 = []
-        self.releasesList_ref_3 = []
-        self.releasesList_rel_3b = []
-        self.releasesList_ref_3b = []
         self.my_choice_rel_0 = "" # 
         self.my_choice_rel_1 = "" # 
         self.my_choice_ref_0 = "" # 
@@ -59,8 +48,7 @@ class ovalGui(QWidget):
         self.ref_list_2 = []
         self.profondeur_rel = 0
         self.profondeur_ref = 0
-#        self.tasks_list = ['Release', 'Reference', 'DataSets', 'Lists']
-        self.tasks_list = ['Release', 'Reference', 'Lists']
+        self.tasks_list = ['Release', 'Reference', 'DataSets', 'Lists']
         self.tasks_counter = 0
         self.selectedDataSets = []
 						
@@ -70,36 +58,18 @@ class ovalGui(QWidget):
         self.QGBox1.setMaximumHeight(120)
         self.QGBox1.setMaximumWidth(100)
         self.radio11 = QRadioButton("FULL") # par defaut
-        self.radio12 = QRadioButton("FAST")
+        self.radio12 = QRadioButton("PU")
+        self.radio13 = QRadioButton("FAST")
         self.radio11.setChecked(True)
         self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
         self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
+        self.connect(self.radio13, SIGNAL("clicked()"), self.radio13Clicked) 
         vbox1 = QVBoxLayout()
         vbox1.addWidget(self.radio11)
         vbox1.addWidget(self.radio12)
+        vbox1.addWidget(self.radio13)
         vbox1.addStretch(1)
         self.QGBox1.setLayout(vbox1)
-        				
-		# creation du grpe Calcul
-        self.QGBox2 = QGroupBox("Validation")
-        self.QGBox2.setMaximumHeight(120)
-        self.QGBox2.setMaximumWidth(100)
-        self.radio21 = QRadioButton("RECO") # par defaut
-        self.radio22 = QRadioButton("PU")
-        self.radio23 = QRadioButton("pmx")
-        self.radio24 = QRadioButton("miniAOD")
-        self.radio21.setChecked(True)
-        self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked) 
-        self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked) 
-        self.connect(self.radio23, SIGNAL("clicked()"), self.radio23Clicked) 
-        self.connect(self.radio24, SIGNAL("clicked()"), self.radio24Clicked) 
-        vbox2 = QVBoxLayout()
-        vbox2.addWidget(self.radio21)
-        vbox2.addWidget(self.radio22)
-        vbox2.addWidget(self.radio23)
-        vbox2.addWidget(self.radio24)
-        vbox2.addStretch(1)
-        self.QGBox2.setLayout(vbox2)
         				
 		# creation du grpe liste des collections new version
         self.QGBoxDataSets = QGroupBox("DataSets")
@@ -109,36 +79,17 @@ class ovalGui(QWidget):
         self.checkDataSets2 = QPushButton("Reload")
         self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
         self.menu = QMenu()
-        self.ag = QActionGroup(self, exclusive=False)
         self.DataSetTable = DataSetsFilter(self)
-        for item in self.DataSetTable:
-            a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
-            self.menu.addAction(a)
-            self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+        for it in self.DataSetTable:
+            self.menu.addAction(it)
         self.checkDataSets1.setMenu(self.menu)
         self.selectedDataSets = self.DataSetTable # default, all datasets selected
+#        print self.selectedDataSets
         vboxDataSets = QVBoxLayout()
         vboxDataSets.addWidget(self.checkDataSets1)
         vboxDataSets.addWidget(self.checkDataSets2)
         vboxDataSets.addStretch(1)
         self.QGBoxDataSets.setLayout(vboxDataSets)
-        
-		# creation du grpe test menu
-#        self.QGBoxTestMenu = QGroupBox("DataSets")                                 # TEST
-#        self.QGBoxTestMenu.setMaximumHeight(120)                                   # TEST
-#        self.QGBoxTestMenu.setMinimumHeight(120)                                   # TEST
-#        self.checkTestMenu1 = QPushButton("List")                                  # TEST
-#        self.menu = QMenu()                                                        # TEST
-#        self.ag = QActionGroup(self, exclusive=True)                               # TEST
-#        self.DataSetTable = DataSetsFilter(self)                                   # TEST
-#        for it in self.DataSetTable:                                               # TEST
-#            a = self.ag.addAction(QAction(it, self, checkable=True, checked=True)) # TEST
-#            self.menu.addAction(a)                                                 # TEST
-#            self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)          # TEST        
-#        self.checkTestMenu1.setMenu(self.menu)                                     # TEST
-#        vboxTestMenu = QVBoxLayout()                                               # TEST
-#        vboxTestMenu.addWidget(self.checkTestMenu1)                                # TEST
-#        self.QGBoxTestMenu.setLayout(vboxTestMenu)                                 # TEST
         
 		# creation du grpe All/None
         self.QGBoxAllNone = QGroupBox("All / None")
@@ -173,10 +124,8 @@ class ovalGui(QWidget):
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
         self.layoutH_radio.addWidget(self.QGBox1)
-        self.layoutH_radio.addWidget(self.QGBox2)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addWidget(self.QGBoxDataSets)
-#        self.layoutH_radio.addWidget(self.QGBoxTestMenu) # TEST
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
@@ -265,8 +214,8 @@ class ovalGui(QWidget):
         self.QHL_Lists = QHBoxLayout(self.QGBox_Lists) 
         
         self.QGBox_rel = QGroupBox("Release")
-        self.QGBox_rel.setMinimumWidth(180)
-        self.QGBox_rel.setMaximumWidth(180)
+        self.QGBox_rel.setMinimumWidth(250)
+        self.QGBox_rel.setMaximumWidth(250)
         self.vbox_rel4 = QVBoxLayout()
         self.QLW_rel_dataset = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -275,20 +224,9 @@ class ovalGui(QWidget):
         self.vbox_rel4.addWidget(self.QLW_rel_dataset) 
         self.QGBox_rel.setLayout(self.vbox_rel4)
         
-        self.QGBox_rel_list = QGroupBox("Release List")
-        self.QGBox_rel_list.setMinimumWidth(270)
-        self.QGBox_rel_list.setMaximumWidth(270)
-        self.vbox_rel_list = QVBoxLayout()
-        self.QLW_rel_dataset_list = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_rel_dataset_list.addItem(item)
-#        self.connect(self.QLW_rel_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
-        self.vbox_rel_list.addWidget(self.QLW_rel_dataset_list) 
-        self.QGBox_rel_list.setLayout(self.vbox_rel_list)
-        
         self.QGBox_ref = QGroupBox("Reference")
-        self.QGBox_ref.setMinimumWidth(180)
-        self.QGBox_ref.setMaximumWidth(180)
+        self.QGBox_ref.setMinimumWidth(250)
+        self.QGBox_ref.setMaximumWidth(250)
         self.vbox_ref4 = QVBoxLayout()
         self.QLW_ref_dataset = QListWidget()
         item = QListWidgetItem("%s" % "")
@@ -297,43 +235,29 @@ class ovalGui(QWidget):
         self.vbox_ref4.addWidget(self.QLW_ref_dataset) 
         self.QGBox_ref.setLayout(self.vbox_ref4)
         
-        self.QGBox_ref_list = QGroupBox("Release List")
-        self.QGBox_ref_list.setMinimumWidth(270)
-        self.QGBox_ref_list.setMaximumWidth(270)
-        self.vbox_ref_list = QVBoxLayout()
-        self.QLW_ref_dataset_list = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_ref_dataset_list.addItem(item)
-#        self.connect(self.QLW_ref_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
-        self.vbox_ref_list.addWidget(self.QLW_ref_dataset_list) 
-        self.QGBox_ref_list.setLayout(self.vbox_ref_list)
-        
         self.QHL_Lists.addWidget(self.QGBox_rel)
-        self.QHL_Lists.addWidget(self.QGBox_rel_list)
         self.QHL_Lists.addWidget(self.QGBox_ref)
-        self.QHL_Lists.addWidget(self.QGBox_ref_list)
         self.layout_Lists = QVBoxLayout()
         self.layout_Lists.addWidget(self.QGBox_Lists)
         self.QGBox_Lists.setVisible(False)
 
         # DataSets
-#        self.QGBox_DataSets = QGroupBox("DataSets")
-#        self.QGBox_DataSets.setMinimumWidth(250)
-#        self.QGBox_DataSets.setMaximumWidth(250)
+        self.QGBox_DataSets = QGroupBox("DataSets")
+        self.QGBox_DataSets.setMinimumWidth(250)
+        self.QGBox_DataSets.setMaximumWidth(250)
         #self.QHL_DataSets = QHBoxLayout(self.QGBox_DataSets) 
-#        self.vbox_ds = QVBoxLayout()
-#        self.QLW_dataset = QListWidget()
-#        initDataSets(self)
-        #for it in self.selectedDataSets:
-        #    print "== step 0 ==", it
-        #    item = QListWidgetItem("%s" % it)
-        #    self.QLW_dataset.addItem(item)
-#        self.vbox_ds.addWidget(self.QLW_dataset) 
-#        self.QGBox_DataSets.setLayout(self.vbox_ds)
-#        self.layout_DataSets = QVBoxLayout()
-#        self.layout_DataSets.addWidget(self.QGBox_DataSets)
-#        self.layout_DataSets.setAlignment(QtCore.Qt.AlignHCenter)
-#        self.QGBox_DataSets.setVisible(False)
+        self.vbox_ds = QVBoxLayout()
+        self.QLW_dataset = QListWidget()
+        for it in self.selectedDataSets:
+            print "== step 0 ==", it
+            item = QListWidgetItem("%s" % it)
+        self.QLW_dataset.addItem(item)
+        self.vbox_ds.addWidget(self.QLW_dataset) 
+        self.QGBox_DataSets.setLayout(self.vbox_ds)
+        self.layout_DataSets = QVBoxLayout()
+        self.layout_DataSets.addWidget(self.QGBox_DataSets)
+        self.layout_DataSets.setAlignment(QtCore.Qt.AlignHCenter)
+        self.QGBox_DataSets.setVisible(False)
 
         ## FINAL PART ##
         #Layout principal : création et peuplement
@@ -342,74 +266,50 @@ class ovalGui(QWidget):
         self.layout_general.addLayout(self.layoutH_resume)
         self.layout_general.addLayout(self.layout_Search)
         self.layout_general.addLayout(self.layout_Lists)
-#        self.layout_general.addLayout(self.layout_DataSets)
+        self.layout_general.addLayout(self.layout_DataSets)
         self.layout_general.addLayout(self.layoutH_boutons)
         self.setLayout(self.layout_general)
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
-            self.validationType1 = 'Full'
-#            print "self.validationType1 :", self.validationType1
-            self.QGBoxListsUpdate()
+            self.QGBox31.setVisible(True)
+            self.QGBox32.setVisible(False)
+            self.choix_calcul = 'Full'
         QtCore.QCoreApplication.processEvents()
 
     def radio12Clicked(self):
         if self.radio12.isChecked():
-            self.validationType1 = 'Fast'
-#            print "self.validationType1 :", self.validationType1
-            self.QGBoxListsUpdate()
+            self.QGBox31.setVisible(False)
+            self.QGBox32.setVisible(True)
+            self.choix_calcul = 'PileUp'
         QtCore.QCoreApplication.processEvents()
         
-    def radio21Clicked(self):
-        if self.radio21.isChecked():
-            self.validationType2 = 'RECO'
-            print "self.validationType2 :", self.validationType2
-            self.QGBoxListsUpdate()
-        QtCore.QCoreApplication.processEvents()
-
-    def radio22Clicked(self):
-        if self.radio22.isChecked():
-            self.validationType2 = 'PU'
-            print "self.validationType2 :", self.validationType2
-            self.QGBoxListsUpdate()
-        QtCore.QCoreApplication.processEvents()
-        
-    def radio23Clicked(self):
-        if self.radio23.isChecked():
-            self.validationType2 = 'pmx'
-            print "self.validationType2 :", self.validationType2
-            self.QGBoxListsUpdate()
-        QtCore.QCoreApplication.processEvents()
-                        
-    def radio24Clicked(self):
-        if self.radio24.isChecked():
-            self.validationType2 = 'miniAOD'
-            print "self.validationType2 :", self.validationType2
-            self.QGBoxListsUpdate()
+    def radio13Clicked(self):
+        if self.radio13.isChecked():
+            self.QGBox31.setVisible(False)
+            self.QGBox32.setVisible(True)
+            self.choix_calcul = 'Fast'
         QtCore.QCoreApplication.processEvents()
                         
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
 #            print "All"
-            self.menu.clear()
-            self.ag = QActionGroup(self, exclusive=False)
+            self.QLW_dataset.clear()
             for item in self.DataSetTable:
-                a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
-                self.menu.addAction(a)
-                self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
-            self.QGBoxListsUpdate()
+                print item
+                item1 = QListWidgetItem("%s" % item)
+                print "item1 : ", item1.text()
+                print "state : ", item1.checkState()
+                item1.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+                item1.setCheckState(QtCore.Qt.Checked)
+                self.QLW_dataset.addItem(item1)
+                print "state : ", item1.checkState()
         QtCore.QCoreApplication.processEvents() 
 
     def checkAllNone2Clicked(self):
         if self.checkAllNone2.isChecked():
 #            print "None"
-            self.menu.clear()
-            self.ag = QActionGroup(self, exclusive=False)
-            for item in self.DataSetTable:
-                a = self.ag.addAction(QAction(item, self, checkable=True, checked=False))
-                self.menu.addAction(a)
-                self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
-            self.QGBoxListsUpdate()
+            self.QLW_dataset.clear() # clear all datasets
         QtCore.QCoreApplication.processEvents() 
 
     def checkDataSets2Clicked(self):
@@ -417,19 +317,8 @@ class ovalGui(QWidget):
         from Datasets_default import DataSetsFilter
         self.DataSetTable = DataSetsFilter(self)
         self.menu.clear()
-        self.ag = QActionGroup(self, exclusive=False)
-        for item in self.DataSetTable:
-            a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
-            self.menu.addAction(a)
-            self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
-        self.QGBoxListsUpdate()
-#        initDataSets(self)
-#        self.QLW_dataset.clear()
-#        for it in self.DataSetTable: # list of DataSets
-#            item = QListWidgetItem("%s" % it)
-#            item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
-#            item.setCheckState(QtCore.Qt.Checked)
-#            self.QLW_dataset.addItem(item)
+        for it in self.DataSetTable:
+            self.menu.addAction(it)
     
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
@@ -438,8 +327,7 @@ class ovalGui(QWidget):
             print "reference"
             self.my_choice_ref_0 = self.QLW_rel1.currentItem().text()
             print "ItemRefClicked1 : self.my_choice_ref_0 : %s " % self.my_choice_ref_0
-            self.releasesList_ref_1 = list_search_1(self.my_choice_ref_0)
-            self.ref_list_0 = sub_releases(self.releasesList_ref_1) #list_search_1(self.my_choice_ref_0))
+            self.ref_list_0 = sub_releases(list_search_1(self.my_choice_ref_0))
             for it in self.ref_list_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel2.addItem(item)
@@ -447,8 +335,7 @@ class ovalGui(QWidget):
             print "release"
             self.my_choice_rel_0 = self.QLW_rel1.currentItem().text()
             print "ItemRelRefClicked1 : self.my_choice_rel_0 : %s " % self.my_choice_rel_0
-            self.releasesList_rel_1 = list_search_1(self.my_choice_rel_0)
-            self.rel_list_0 = sub_releases(self.releasesList_rel_1) #list_search_1(self.my_choice_rel_0))
+            self.rel_list_0 = sub_releases(list_search_1(self.my_choice_rel_0))
             # tester si =0 
             for it in self.rel_list_0:
                 item = QListWidgetItem("%s" % it)
@@ -462,16 +349,14 @@ class ovalGui(QWidget):
             print "ItemRefClicked2 : self.my_choice_ref_1 : %s " % self.my_choice_ref_1
             tmp = "Reference : " + self.my_choice_ref_1
             self.labelCombo2.setText(tmp)
-            self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
-            self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
+            self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), list_search_1(self.my_choice_ref_1))
         else:
             print "release"
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
             print "ItemRelRefClicked2 : self.my_choice_rel_1 : %s " % self.my_choice_rel_1
             tmp = "Release : " + self.my_choice_rel_1
             self.labelCombo1.setText(tmp)
-            self.releasesList_rel_2 = list_search_3(self.releasesList_rel_1, str(self.my_choice_rel_1))
-            self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), self.releasesList_rel_2)
+            self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), list_search_1(self.my_choice_rel_1))
         resume_text = self.texte
         resume_text += "<br />Release   : " + self.my_choice_rel_1
         resume_text += "<br />Reference : " + self.my_choice_ref_1
@@ -495,36 +380,50 @@ class ovalGui(QWidget):
                 self.labelCombo3.setText(self.trUtf8(txt))
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 self.QGBox_Lists.setVisible(True)
+                self.QGBox_DataSets.setVisible(False)
                 self.QGBox_rel0.setVisible(False)
-#                self.QGBoxListsUpdate()
-#                print "selectedDataSets : ", self.selectedDataSets
+                self.selectedDataSets = []
+                index = 0
+                for it in self.DataSetTable:
+                    item1 = QListWidgetItem (self.QLW_dataset.item(index) )
+                    if item1.checkState() == 2:
+                        self.selectedDataSets.append(it)
+                    index += 1
+                print "toto", self.selectedDataSets
 
-#                self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
-#                self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
-                
-#                self.releasesList_rel_3 = list_search_4(self.releasesList_rel_2, self.selectedDataSets)
-#                self.releasesList_ref_3 = list_search_4(self.releasesList_ref_2, self.selectedDataSets)
-                
-#                self.QLW_rel_dataset.clear()
-#                for it in self.rel_list_2:
-#                    item = QListWidgetItem("%s" % it)
-#                    self.QLW_rel_dataset.addItem(item)
-#                self.QLW_ref_dataset.clear()
-#                for it in self.ref_list_2:
-#                    item = QListWidgetItem("%s" % it)
-#                    self.QLW_ref_dataset.addItem(item)
-                
-                self.QGBoxListsUpdate()
-                # what to do if len(self.QLW_rel(f)_datasets) = 0?
+                self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
+                self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
+                for it in self.rel_list_1:
+                    item = QListWidgetItem("%s" % it)
+                    self.QLW_rel_dataset.addItem(item)
+                for it in self.ref_list_1:
+                    item = QListWidgetItem("%s" % it)
+                    self.QLW_ref_dataset.addItem(item)
+                self.selectedDataSets = DataSetsFilter(self)
                 print BaseURL(self) # temporaire
-                print_arrays(self)
-                
+            elif (self.tasks_counter == 2):
+                print "*-*-**--*-*-*-*-*-*", self.tasks_list[2]
+                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
+                self.bouton_Next.setEnabled(True)
+                txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : "  + self.tasks_list[self.tasks_counter+1]
+                self.labelCombo3.setText(self.trUtf8(txt))
+                self.QGBox_Lists.setVisible(False)
+                self.QGBox_rel0.setVisible(False)
+                self.QGBox_DataSets.setVisible(True)
+                self.QLW_dataset.clear()
+                for it in self.DataSetTable: # list of DataSets
+                    print it, "******"
+                    item = QListWidgetItem("%s" % it)
+                    item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+                    item.setCheckState(QtCore.Qt.Checked)
+                    self.QLW_dataset.addItem(item)
             else:
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
                 self.labelCombo3.setText(self.trUtf8(txt))
                 self.QGBox_Lists.setVisible(False)
                 self.QGBox_rel0.setVisible(True)
+                self.QGBox_DataSets.setVisible(False)
 
         if self.tasks_counter == 1:
             self.bouton_Previous.setEnabled(True)
@@ -547,7 +446,7 @@ class ovalGui(QWidget):
             self.bouton_Previous.setEnabled(False)
         else:
             self.QGBox_Lists.setVisible(False)
-#            self.QGBox_DataSets.setVisible(False)
+            self.QGBox_DataSets.setVisible(False)
             self.QGBox_rel0.setVisible(True)
             self.tasks_counter -= 1
             if self.tasks_counter == 0:
@@ -580,66 +479,11 @@ class ovalGui(QWidget):
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
-#        elif self.tasks_counter == 2:
-#            self.bouton_Next.setEnabled(True)
-#            self.QGBox_rel0.setTitle("DataSets")
-#            self.QGBox_Lists.setVisible(False)
-#            self.QGBox_rel0.setVisible(False)
-#            self.QGBox_DataSets.setVisible(True)
+        elif self.tasks_counter == 2:
+            self.bouton_Next.setEnabled(True)
+            self.QGBox_rel0.setTitle("DataSets")
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_rel0.setVisible(False)
+            self.QGBox_DataSets.setVisible(True)
         else :
             print self.tasks_list[self.tasks_counter]
-
-    def QGBoxListsUpdate(self):
-        print "menu clicked !"
-        print "*-*-**--*-*-*-*-*-* DataSets"
-        if (self.my_choice_rel_0 != ''):
-            for index in xrange(self.QLW_rel1.count()):
-                print self.QLW_rel1.item(index).text()
-        if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chossen
-            self.selectedDataSets = []
-            print "self.validationType1 :", self.validationType1
-            print "self.validationType2 :", self.validationType2
-            tt = self.ag.actions()
-            for it in tt:
-                print it.text()
-                if it.isChecked():
-                    print "checked"
-                    self.selectedDataSets.append(str(it.text()))
-                else:
-                    print "unchecked"
-            print "////// selectedDataSets : ", self.selectedDataSets
-
-            self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
-            self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
-                
-            #(self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used
-            #(self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used
-            
-            (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
-            #print a
-            #print self.releasesList_rel_3
-            #print b
-            #print self.releasesList_rel_3b
-            #print c
-            #print self.releasesList_ref_3
-            #print d
-            #print self.releasesList_ref_3b
-
-            self.QLW_rel_dataset.clear()
-            for it in self.rel_list_2:
-                item = QListWidgetItem("%s" % it)
-                self.QLW_rel_dataset.addItem(item)
-            self.QLW_ref_dataset.clear()
-            for it in self.ref_list_2:
-                item = QListWidgetItem("%s" % it)
-                self.QLW_ref_dataset.addItem(item)
-
-            self.QLW_rel_dataset_list.clear()
-            for it in self.releasesList_rel_3b:
-                item = QListWidgetItem("%s" % it)
-                self.QLW_rel_dataset_list.addItem(item)
-            self.QLW_ref_dataset_list.clear()
-            for it in self.releasesList_ref_3b:
-                item = QListWidgetItem("%s" % it)
-                self.QLW_ref_dataset_list.addItem(item)
-
