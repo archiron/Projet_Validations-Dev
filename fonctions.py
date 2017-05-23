@@ -587,12 +587,13 @@ def list_search_5(self):
     temp_3 = []
     temp_4 = []
     filtre = sorted(set(self.selectedDataSets), reverse=True)
+    validationType_2 = self.validationType2
 
-    # PART REL
+    # PART RELEASE
     for item1 in self.releasesList_rel_2:
         for item2 in filtre:
             if re.search(item2, item1):
-                if clean_collections2(item1, self.validationType1, self.validationType2):
+                if clean_collections2(item1, self.validationType1, validationType_2):
                     temp_1.append(item1)
                     temp_2.append(explode_item(item1)[2])
                 break
@@ -601,11 +602,11 @@ def list_search_5(self):
     temp_1 = sorted(set(temp_1), reverse=True)
     temp_2 = sorted(set(temp_2), reverse=True)
     
-    # PART REL
+    # PART REFERENCE
     for item1 in self.releasesList_ref_2:
         for item2 in filtre:
             if re.search(item2, item1):
-                if clean_collections2(item1, self.validationType1, self.validationType2):
+                if clean_collections2(item1, self.validationType1, validationType_2):
                     temp_3.append(item1)
                     temp_4.append(explode_item(item1)[2])
                 break
