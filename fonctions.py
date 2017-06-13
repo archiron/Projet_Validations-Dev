@@ -348,7 +348,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2):
             temp = False
         else: # all Full + PU + pmx + miniAOD
             temp= True # temporaire
-            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'minAOD' ) ):
+            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'miniAOD' ) ):
                 if ( re.search('PU', collectionItem) ):
                     temp = False
             elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
@@ -361,7 +361,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2):
         if ( re.search('Fast', collectionItem) ): #  match Fast all Fast + PU + pmx + miniAOD
             print " Fast added", collectionItem # to be removed
             temp = True # Temporaire
-            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'minAOD' ) ):
+            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'miniAOD' ) ):
                 if ( re.search('PU', collectionItem) ):
                     temp = False
             elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
@@ -603,15 +603,19 @@ def list_search_5(self):
     temp_2 = sorted(set(temp_2), reverse=True)
     
     # PART REFERENCE
-    for item1 in self.releasesList_ref_2:
-        for item2 in filtre:
-            if re.search(item2, item1):
-                if clean_collections2(item1, self.validationType1, validationType_2):
-                    temp_3.append(item1)
-                    temp_4.append(explode_item(item1)[2])
-                break
-#            else:
-#                print "KO : ", item2, item1
+    if ( validationType_2 == 'miniAOD' ):
+        temp_3 = temp_1
+        temp_4 = temp_2
+    else:
+        for item1 in self.releasesList_ref_2:
+            for item2 in filtre:
+                if re.search(item2, item1):
+                    if clean_collections2(item1, self.validationType1, validationType_2):
+                        temp_3.append(item1)
+                        temp_4.append(explode_item(item1)[2])
+                    break
+#                else:
+#                   print "KO : ", item2, item1
     temp_3 = sorted(set(temp_3), reverse=True)
     temp_4 = sorted(set(temp_4), reverse=True)
     

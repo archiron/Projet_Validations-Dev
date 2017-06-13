@@ -22,7 +22,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.5.2')
+        self.setWindowTitle('Validations gui v0.1.5.32')
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -616,11 +616,9 @@ class ovalGui(QWidget):
             print "////// selectedDataSets : ", self.selectedDataSets
 
             self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
-            self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
-                
+            self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)                
             #(self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used
-            #(self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used
-            
+            #(self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used            
             (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
 
             self.QLW_rel_dataset.clear()
