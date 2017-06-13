@@ -351,9 +351,18 @@ def clean_collections2(collectionItem, validationType_1, validationType_2):
             if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'miniAOD' ) ):
                 if ( re.search('PU', collectionItem) ):
                     temp = False
-            elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
+            elif ( ( validationType_2 == 'PU' )): 
                 if ( re.search('PU', collectionItem) ):
                     print " PU ask for PU", collectionItem # to be removed
+                    if ( re.search('pmx', collectionItem) ):
+                        temp = False
+                    else:
+                        temp = True
+                else:
+                    temp = False
+            elif ( validationType_2 == 'pmx' ):
+                if ( re.search('pmx', collectionItem) ):
+                    print " pmx ask for pmx", collectionItem # to be removed
                     temp = True
                 else:
                     temp = False
