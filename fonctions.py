@@ -614,6 +614,7 @@ def list_search_5(self):
 
     # PART RELEASE
     for item1 in self.releasesList_rel_2:
+        # print item1
         for item2 in filtre:
             if re.search(item2, item1):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3):

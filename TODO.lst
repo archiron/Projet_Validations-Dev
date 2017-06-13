@@ -62,3 +62,8 @@ clean_collections : for a given collection, keep the caracteristics that match w
 clean_collections2 : same as previous, for a given item, keep the caracteristics that match with self.validationType1
 
 parti pris de vider les precedents choix en cas de aller/revenir sur reference/release
+
+pour colorer du texte :
+        ## TEMP
+        self.texte+="<br /><strong><font color = \"blue\">coucou !!</font></strong>" 
+        ## TEMP        

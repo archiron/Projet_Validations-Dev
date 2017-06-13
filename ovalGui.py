@@ -22,13 +22,13 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.5.5') #
+        self.setWindowTitle('Validations gui v0.1.6.0') # minor corrections, beginning of colored datasets. need to reorganize dataset check(self.rel(f)_list_2 = list_search_2(), ...) and list_search_5.
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
-        self.validationType1 = 'Full'     # default
-        self.validationType2 = 'RECO'     # default
-        self.validationType3 = 'specific' # default
+        self.validationType1 = 'Full'   # default
+        self.validationType2 = 'RECO'   # default
+        self.validationType3 = 'global' # default
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
@@ -640,6 +640,7 @@ class ovalGui(QWidget):
             self.selectedDataSets = []
             print "self.validationType1 :", self.validationType1
             print "self.validationType2 :", self.validationType2
+            print "self.validationType3 :", self.validationType3
             tt = self.ag.actions()
             for it in tt:
                 print it.text()
@@ -650,21 +651,29 @@ class ovalGui(QWidget):
                     print "unchecked"
             print "////// selectedDataSets : ", self.selectedDataSets
 
-            self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
-            self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)                
+            self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets) # get dataset list used in rel_list_1
+            self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets) # get dataset list used in ref_list_1
             #(self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used
             #(self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used            
             (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
 
+            #doing dataset display
+            if ( self.rel_list_2 == self.ref_list_2 ):
+                print "HHHHHH : equal"
+            else:
+                print "HHHHHH : NO EQUALITY"
+
             self.QLW_rel_dataset.clear()
             for it in self.rel_list_2:
                 item = QListWidgetItem("%s" % it)
+                item.setTextColor(QColor("blue"))
                 self.QLW_rel_dataset.addItem(item)
             self.QLW_ref_dataset.clear()
             for it in self.ref_list_2:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_ref_dataset.addItem(item)
 
+            #doing release/reference display
             self.QLW_rel_dataset_list.clear()
             for it in self.releasesList_rel_3b:
                 item = QListWidgetItem("%s" % it)
