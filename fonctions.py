@@ -339,7 +339,7 @@ def clean_collections(collection, gccs):
                 temp.append(items)
     return temp
 
-def clean_collections2(collectionItem, validationType_1, validationType_2):
+def clean_collections2(collectionItem, validationType_1, validationType_2, validationType_3):
     import re
     temp = True
     if ( validationType_1 == 'Full' ): # does not take into account miniAOD
@@ -364,6 +364,8 @@ def clean_collections2(collectionItem, validationType_1, validationType_2):
                 if ( re.search('pmx', collectionItem) ):
                     print " pmx ask for pmx", collectionItem # to be removed
                     temp = True
+                elif ( re.search('PU', collectionItem) and ( validationType_3 == 'global' ) ):
+                    temp = True
                 else:
                     temp = False
     else: # validationType_1 == 'FAST', does not take into account PU & Fast
@@ -373,9 +375,20 @@ def clean_collections2(collectionItem, validationType_1, validationType_2):
             if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'miniAOD' ) ):
                 if ( re.search('PU', collectionItem) ):
                     temp = False
-            elif ( ( validationType_2 == 'PU' ) or ( validationType_2 == 'pmx' ) ):
+            elif ( validationType_2 == 'PU' ):
                 if ( re.search('PU', collectionItem) ):
                     print " PU ask for PU", collectionItem # to be removed
+                    if ( re.search('pmx', collectionItem) ):
+                        temp = False
+                    else:
+                        temp = True
+                else:
+                    temp = False
+            elif ( validationType_2 == 'pmx' ):
+                if ( re.search('pmx', collectionItem) ):
+                    print " pmx ask for pmx", collectionItem # to be removed
+                    temp = True
+                elif ( re.search('PU', collectionItem) and ( validationType_3 == 'global' ) ):
                     temp = True
                 else:
                     temp = False
@@ -597,12 +610,13 @@ def list_search_5(self):
     temp_4 = []
     filtre = sorted(set(self.selectedDataSets), reverse=True)
     validationType_2 = self.validationType2
+    validationType_3 = self.validationType3
 
     # PART RELEASE
     for item1 in self.releasesList_rel_2:
         for item2 in filtre:
             if re.search(item2, item1):
-                if clean_collections2(item1, self.validationType1, validationType_2):
+                if clean_collections2(item1, self.validationType1, validationType_2, validationType_3):
                     temp_1.append(item1)
                     temp_2.append(explode_item(item1)[2])
                 break
@@ -619,7 +633,7 @@ def list_search_5(self):
         for item1 in self.releasesList_ref_2:
             for item2 in filtre:
                 if re.search(item2, item1):
-                    if clean_collections2(item1, self.validationType1, validationType_2):
+                    if clean_collections2(item1, self.validationType1, validationType_2, validationType_3):
                         temp_3.append(item1)
                         temp_4.append(explode_item(item1)[2])
                     break

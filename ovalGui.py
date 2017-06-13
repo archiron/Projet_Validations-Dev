@@ -22,12 +22,13 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.5.4') #
+        self.setWindowTitle('Validations gui v0.1.5.5') #
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
-        self.validationType1 = 'Full'   # default
-        self.validationType2 = 'RECO'   # default
+        self.validationType1 = 'Full'     # default
+        self.validationType2 = 'RECO'     # default
+        self.validationType3 = 'specific' # default
         self.choice_rel = ""
         self.choice_ref = ""
         self.coll_list = []
@@ -101,6 +102,22 @@ class ovalGui(QWidget):
         vbox2.addStretch(1)
         self.QGBox2.setLayout(vbox2)
         				
+		# creation du grpe Specific/Global
+        self.QGBoxSpecificGlobal = QGroupBox("Specific / Global")
+        self.QGBoxSpecificGlobal.setMaximumHeight(120)
+        self.QGBoxSpecificGlobal.setMinimumHeight(120)
+        self.checkSpecificGlobal1 = QRadioButton("Specific")
+        self.checkSpecificGlobal2 = QRadioButton("Global")
+        self.checkSpecificGlobal2.setChecked(True)
+        self.checkSpecificGlobal1.setEnabled(False) #default
+        self.connect(self.checkSpecificGlobal1, SIGNAL("clicked()"), self.checkSpecificGlobal1Clicked)
+        self.connect(self.checkSpecificGlobal2, SIGNAL("clicked()"), self.checkSpecificGlobal2Clicked)
+        vboxSpecificGlobal = QVBoxLayout()
+        vboxSpecificGlobal.addWidget(self.checkSpecificGlobal1)
+        vboxSpecificGlobal.addWidget(self.checkSpecificGlobal2)
+        vboxSpecificGlobal.addStretch(1)
+        self.QGBoxSpecificGlobal.setLayout(vboxSpecificGlobal)
+                				
 		# creation du grpe liste des collections new version
         self.QGBoxDataSets = QGroupBox("DataSets")
         self.QGBoxDataSets.setMaximumHeight(120)
@@ -174,9 +191,9 @@ class ovalGui(QWidget):
         self.layoutH_radio = QHBoxLayout()
         self.layoutH_radio.addWidget(self.QGBox1)
         self.layoutH_radio.addWidget(self.QGBox2)
+        self.layoutH_radio.addWidget(self.QGBoxSpecificGlobal)
         self.layoutH_radio.addWidget(self.QGBoxAllNone)
         self.layoutH_radio.addWidget(self.QGBoxDataSets)
-#        self.layoutH_radio.addWidget(self.QGBoxTestMenu) # TEST
         self.layoutH_radio.addStretch(1)
         self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
@@ -366,6 +383,7 @@ class ovalGui(QWidget):
         if self.radio21.isChecked():
             self.validationType2 = 'RECO'
             self.checkDataSets2Clicked()
+            self.checkSpecificGlobal1.setEnabled(False) #default
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
@@ -374,6 +392,7 @@ class ovalGui(QWidget):
         if self.radio22.isChecked():
             self.validationType2 = 'PU'
             self.checkDataSets2Clicked()
+            self.checkSpecificGlobal1.setEnabled(False) #default
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
@@ -382,6 +401,7 @@ class ovalGui(QWidget):
         if self.radio23.isChecked():
             self.validationType2 = 'pmx'
             self.checkDataSets2Clicked()
+            self.checkSpecificGlobal1.setEnabled(True)
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
@@ -390,6 +410,7 @@ class ovalGui(QWidget):
         if self.radio24.isChecked():
             self.validationType2 = 'miniAOD'
             self.checkDataSets2Clicked()
+            self.checkSpecificGlobal1.setEnabled(False) #default
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
@@ -415,6 +436,20 @@ class ovalGui(QWidget):
                 a = self.ag.addAction(QAction(item, self, checkable=True, checked=False))
                 self.menu.addAction(a)
                 self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents() 
+
+    def checkSpecificGlobal1Clicked(self):
+        if self.checkSpecificGlobal1.isChecked():
+            self.validationType3 = 'specific'
+#            print "Specific"
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents() 
+
+    def checkSpecificGlobal2Clicked(self):
+        if self.checkSpecificGlobal2.isChecked():
+            self.validationType3 = 'global'
+#            print "Global"
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
 
