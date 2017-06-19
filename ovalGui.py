@@ -22,7 +22,7 @@ from Paths_default import *
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.1') # self.rel(f)_list_2 = list_search_2(), ...included into list_search_5.
+        self.setWindowTitle('Validations gui v0.1.6.2') # tests on color
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -651,10 +651,6 @@ class ovalGui(QWidget):
                     print "unchecked"
             print "////// selectedDataSets : ", self.selectedDataSets
 
-            #self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets) # get dataset list used in rel_list_1
-            #self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets) # get dataset list used in ref_list_1
-            #(self.releasesList_rel_3, self.releasesList_rel_3b) = list_search_4(self.releasesList_rel_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used
-            #(self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_4(self.releasesList_ref_2, self.selectedDataSets, self.validationType1, self.validationType2) # no more used            
             (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
 
             #doing dataset display
@@ -662,17 +658,33 @@ class ovalGui(QWidget):
                 print "HHHHHH : equal"
             else:
                 print "HHHHHH : NO EQUALITY"
+            # to do : test between dataset extracted for release vs reference (green reference) after selection
+            tempDataset = self.selectedDataSets
+            tempDataset.sort()
+            datasetList = self.selectedDataSets[0]
+            for it in range(1, len(tempDataset)):
+                datasetList += ', ' + self.selectedDataSets[it]
+            print datasetList, type(datasetList)
 
             self.QLW_rel_dataset.clear()
             for it in self.releasesList_rel_3:
+                print it, type(it)
                 item = QListWidgetItem("%s" % it)
-                item.setTextColor(QColor("blue"))
+                if ( it == datasetList ):
+                    print "equal"
+                    item.setTextColor(QColor("blue"))
+                else:
+                    print "no equal"
+                    item.setTextColor(QColor("black"))
                 self.QLW_rel_dataset.addItem(item)
             self.QLW_ref_dataset.clear()
             for it in self.releasesList_ref_3:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_ref_dataset.addItem(item)
-
+            it = "<br /><strong><font color=\"green\">test green</font></strong>" # temporaire
+            item = QListWidgetItem("%s" % it)
+            self.QLW_ref_dataset.addItem(item)
+            
             #doing release/reference display
             self.QLW_rel_dataset_list.clear()
             for it in self.releasesList_rel_3b:

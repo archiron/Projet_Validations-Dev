@@ -623,19 +623,12 @@ def list_search_5(self):
     # PART RELEASE
     filtre = sorted(set(self.rel_list_2), reverse=True)
     for item1 in self.releasesList_rel_2:
-        # print item1
         for item2 in filtre:
             if re.search(item2, item1):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3):
-#                    temp_1.append(item1)
-#                    temp_2.append(explode_item(item1)[2])
                     temp_12.append([explode_item(item1)[2], item2])
                     print "len = %i" % len(temp_12)
                 break
-#            else:
-#                print "KO : ", item2, item1
-#    temp_1 = sorted(set(temp_1), reverse=True)
-#    temp_2 = sorted(set(temp_2), reverse=True)
 
     print "len of temp_12 = %i." % len(temp_12)
     if ( len(temp_12) > 0 ):
@@ -650,12 +643,9 @@ def list_search_5(self):
             else:
                 k +=1
                 temp_rel.append( [temp_12[i][0], temp_12[i][1]] )
-#        print temp_rel
     for i in range(0, len(temp_rel)):
-        print temp_rel[i]
         temp_1.append(temp_rel[i][1])
         temp_2.append(temp_rel[i][0])
-        print temp_2[i], temp_1[i]
         
     # PART REFERENCE
     filtre = sorted(set(self.ref_list_2), reverse=True)
@@ -667,18 +657,10 @@ def list_search_5(self):
             for item2 in filtre:
                 if re.search(item2, item1):
                     if clean_collections2(item1, self.validationType1, validationType_2, validationType_3):
-#                        temp_3.append(item1)
-#                        temp_4.append(explode_item(item1)[2])
                         temp_34.append([explode_item(item1)[2], item2])
                     break
-#                else:
-#                   print "KO : ", item2, item1
-#    temp_3 = sorted(set(temp_3), reverse=True)
-#    temp_4 = sorted(set(temp_4), reverse=True)
     
-    print "len of temp_34 = %i." % len(temp_34)
     if ( len(temp_34) > 0 ):
-        print temp_34
         temp_34.sort()
 
         temp_ref.append( [temp_34[0][0], temp_34[0][1]] )
@@ -689,12 +671,9 @@ def list_search_5(self):
             else:
                 k +=1
                 temp_ref.append( [temp_34[i][0], temp_34[i][1]] )
-        print temp_ref
     for i in range(0, len(temp_ref)):
-        print temp_ref[i]
         temp_3.append(temp_ref[i][1])
         temp_4.append(temp_ref[i][0])
-        print temp_4[i], temp_3[i]
         
     return (temp_1, temp_2, temp_3, temp_4)
     

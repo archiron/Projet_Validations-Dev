@@ -67,3 +67,6 @@ pour colorer du texte :
         ## TEMP
         self.texte+="<br /><strong><font color = \"blue\">coucou !!</font></strong>" 
         ## TEMP        
+pour les datasets de release/reference, si les datasets extraits sont les même que pour les datasets initiaux alors on le affiche en bleu.
+une fois le choix fait, sir les deux lots de datasets sont égaux alors il sont en vert.
+
