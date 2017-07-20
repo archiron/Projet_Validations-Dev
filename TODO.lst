@@ -12,6 +12,7 @@ pour les valeurs self.my_choice_rel_1 et self.my_choice_ref_1 tester si un choix
 verifier si les listes temp = sub_releases(list_search_1(self.my_choice_rel(f)_0)) sont vides ou pas.
 
 possibiliter d'editeur pour changer le global tag dans les fichiers _cfg dans /Tests
+voir si on ne peut pas intégrer les mails de validation (ou une partie) et le chemin des fichiers root des DataSets
 
 intégration des DataSets par fichier du type DataSets_xxx.py ou xxx sera default par defaut et/ou une autre extension
 choix des datasets par radio bouton et on garde All/None
@@ -67,6 +68,6 @@ pour colorer du texte :
         ## TEMP
         self.texte+="<br /><strong><font color = \"blue\">coucou !!</font></strong>" 
         ## TEMP        
-pour les datasets de release/reference, si les datasets extraits sont les même que pour les datasets initiaux alors on le affiche en bleu.
-une fois le choix fait, sir les deux lots de datasets sont égaux alors il sont en vert.
+pour les datasets de release/reference, si les datasets extraits sont les même que pour les datasets initiaux alors on les affichent en bleu.
+une fois le choix fait, si les deux lots de datasets sont égaux alors il sont en vert, sinon les communs sont en bleu (à voir si ca peut se faire).
 

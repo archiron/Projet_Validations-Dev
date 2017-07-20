@@ -16,3 +16,9 @@ def initDataSets(self):
         self.QLW_dataset.addItem(item)
     return
     
+def clearDataSets(self):
+    self.QLW_rel1.clear()
+    self.QLW_rel2.clear()
+    self.QLW_rel_dataset.clear()
+    self.QLW_ref_dataset.clear()
+    return

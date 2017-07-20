@@ -12,17 +12,27 @@ from fonctions import cmd_folder_creation, get_collection_list, get_validationTy
 from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4, list_search_5
-#from functionGui import initDataSets # not needed
 from Datasets_default import DataSetsFilter
 from Paths_default import *
-#from getChoice import *
-#from getPublish import *
+from functionGui import clearDataSets
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.2') # tests on color
+        self.setWindowTitle('Validations gui v0.1.6.4') # set main window size to 1200x700
+        # use clearDataSets(self) insteads of:
+        #   self.QLW_rel1.clear()
+        #   self.QLW_rel2.clear()
+        #   self.QLW_rel_dataset.clear()
+        #   self.QLW_ref_dataset.clear()
+
+        # From top to bottom, there is 4 parts :
+        # PART 1 : GroupBoxes for validation choice
+        # PART 2 : Resume label for actions listing
+        # PART 3 : GroupBoxes for Tag selection
+        # BOTTOM PART : buttons
+        # FINAL PART : keeping all previous part into one
 
         self.cmsenv = env()
         self.texte = self.cmsenv.cmsAll()
@@ -60,8 +70,11 @@ class ovalGui(QWidget):
         self.ref_list_2 = []
         self.profondeur_rel = 0
         self.profondeur_ref = 0
-#        self.tasks_list = ['Release', 'Reference', 'DataSets', 'Lists']
-        self.tasks_list = ['Release', 'Reference', 'Lists']
+        # Release : the release to be validated
+        # Reference : the reference release
+        # Lists : list of globalTags for release/reference
+        # Selected : the selected globalTag and associated DataSets
+        self.tasks_list = ['Release', 'Reference', 'Lists'] # , 'Selected'
         self.tasks_counter = 0
         self.selectedDataSets = []
 						
@@ -172,14 +185,14 @@ class ovalGui(QWidget):
         vboxAllNone.addStretch(1)
         self.QGBoxAllNone.setLayout(vboxAllNone)
                 				
-		# creation des texEdit pour release/reference
+		# creation des textEdit pour release/reference
         self.QGBoxRelRef = QGroupBox("release")
         self.QGBoxRelRef.setMaximumHeight(120)
         self.QGBoxRelRef.setMinimumHeight(120)
         self.QGBoxRelRef.setMinimumWidth(250)
         
-        self.labelCombo1 = QLabel(self.trUtf8("Release"), self)
-        self.labelCombo2 = QLabel(self.trUtf8("Reference"), self)
+        self.labelCombo1 = QLabel(self.trUtf8("Release"), self)   # label used for resuming the rel/ref.
+        self.labelCombo2 = QLabel(self.trUtf8("Reference"), self) # label used for resuming the rel/ref.
 
         vbox6 = QVBoxLayout()
         vbox6.addWidget(self.labelCombo1) 
@@ -464,13 +477,6 @@ class ovalGui(QWidget):
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
         self.QGBoxListsUpdate()
-#        initDataSets(self)
-#        self.QLW_dataset.clear()
-#        for it in self.DataSetTable: # list of DataSets
-#            item = QListWidgetItem("%s" % it)
-#            item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
-#            item.setCheckState(QtCore.Qt.Checked)
-#            self.QLW_dataset.addItem(item)
     
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
@@ -518,10 +524,10 @@ class ovalGui(QWidget):
         resume_text += "<br />Reference : " + self.my_choice_ref_1
         self.QText_Resume.setText(self.trUtf8(resume_text))
         
-    def ItemRelRefClicked3(self): # to be used later
-        #self.QGBox_rel4.setTitle(self.QLW_rel3.currentItem().text())
-        #self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
-        print "ItemRelRefClicked3 : self.my_choice_rel_1 : %s " % self.QLW_rel3.currentItem().text()
+#    def ItemRelRefClicked3(self): # to be used later
+#        #self.QGBox_rel4.setTitle(self.QLW_rel3.currentItem().text())
+#        #self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
+#        print "ItemRelRefClicked3 : self.my_choice_rel_1 : %s " % self.QLW_rel3.currentItem().text()
         
     def Next_Choice(self):
         print "Next_Choice: "
@@ -537,23 +543,6 @@ class ovalGui(QWidget):
                 self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
                 self.QGBox_Lists.setVisible(True)
                 self.QGBox_rel0.setVisible(False)
-#                self.QGBoxListsUpdate()
-#                print "selectedDataSets : ", self.selectedDataSets
-
-#                self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets)
-#                self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets)
-                
-#                self.releasesList_rel_3 = list_search_4(self.releasesList_rel_2, self.selectedDataSets)
-#                self.releasesList_ref_3 = list_search_4(self.releasesList_ref_2, self.selectedDataSets)
-                
-#                self.QLW_rel_dataset.clear()
-#                for it in self.rel_list_2:
-#                    item = QListWidgetItem("%s" % it)
-#                    self.QLW_rel_dataset.addItem(item)
-#                self.QLW_ref_dataset.clear()
-#                for it in self.ref_list_2:
-#                    item = QListWidgetItem("%s" % it)
-#                    self.QLW_ref_dataset.addItem(item)
                 
                 self.QGBoxListsUpdate()
                 # what to do if len(self.QLW_rel(f)_datasets) = 0?
@@ -570,14 +559,19 @@ class ovalGui(QWidget):
         if self.tasks_counter == 1:
             self.bouton_Previous.setEnabled(True)
             self.QGBox_rel0.setTitle("Reference list")
-            self.QLW_rel1.clear()
-            self.QLW_rel2.clear()
-            self.QLW_rel_dataset.clear()
-            self.QLW_ref_dataset.clear()
-            self.labelCombo2.setText("Reference")
+            #self.QLW_rel1.clear()
+            #self.QLW_rel2.clear()
+            #self.QLW_rel_dataset.clear()
+            #self.QLW_ref_dataset.clear()
+            clearDataSets(self)
+            self.labelCombo2.setText("Reference") # label used for resuming the rel/ref.
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
+#        elif self.tasks_counter == 2:
+#            print "self.tasks_counter == 2"
+#            self.bouton_Previous.setEnabled(True)
+#            self.QGBox_rel0.setTitle("Lists")
         else :
             print self.tasks_list[self.tasks_counter]
         
@@ -588,7 +582,6 @@ class ovalGui(QWidget):
             self.bouton_Previous.setEnabled(False)
         else:
             self.QGBox_Lists.setVisible(False)
-#            self.QGBox_DataSets.setVisible(False)
             self.QGBox_rel0.setVisible(True)
             self.tasks_counter -= 1
             if self.tasks_counter == 0:
@@ -602,26 +595,29 @@ class ovalGui(QWidget):
         if self.tasks_counter == 0:
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Release list")
-            self.QLW_rel1.clear()
-            self.QLW_rel2.clear()
-            self.QLW_rel_dataset.clear()
-            self.QLW_ref_dataset.clear()
-            self.labelCombo1.setText("Release")
+            #self.QLW_rel1.clear()
+            #self.QLW_rel2.clear()
+            #self.QLW_rel_dataset.clear()
+            #self.QLW_ref_dataset.clear()
+            clearDataSets(self)
+            self.labelCombo1.setText("Release") # label used for resuming the rel/ref.
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
         elif self.tasks_counter == 1:
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Reference list")
-            self.QLW_rel1.clear()
-            self.QLW_rel2.clear()
-            self.QLW_rel_dataset.clear()
-            self.QLW_ref_dataset.clear()
-            self.labelCombo2.setText("Reference")
+            #self.QLW_rel1.clear()
+            #self.QLW_rel2.clear()
+            #self.QLW_rel_dataset.clear()
+            #self.QLW_ref_dataset.clear()
+            clearDataSets(self)
+            self.labelCombo2.setText("Reference") # label used for resuming the rel/ref.
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
 #        elif self.tasks_counter == 2:
+#            print "self.tasks_counter == 2"
 #            self.bouton_Next.setEnabled(True)
 #            self.QGBox_rel0.setTitle("DataSets")
 #            self.QGBox_Lists.setVisible(False)
@@ -668,21 +664,20 @@ class ovalGui(QWidget):
 
             self.QLW_rel_dataset.clear()
             for it in self.releasesList_rel_3:
-                print it, type(it)
                 item = QListWidgetItem("%s" % it)
                 if ( it == datasetList ):
-                    print "equal"
                     item.setTextColor(QColor("blue"))
                 else:
-                    print "no equal"
                     item.setTextColor(QColor("black"))
                 self.QLW_rel_dataset.addItem(item)
             self.QLW_ref_dataset.clear()
             for it in self.releasesList_ref_3:
                 item = QListWidgetItem("%s" % it)
+                if ( it == datasetList ):
+                    item.setTextColor(QColor("blue"))
+                else:
+                    item.setTextColor(QColor("black"))
                 self.QLW_ref_dataset.addItem(item)
-            it = "<br /><strong><font color=\"green\">test green</font></strong>" # temporaire
-            item = QListWidgetItem("%s" % it)
             self.QLW_ref_dataset.addItem(item)
             
             #doing release/reference display
