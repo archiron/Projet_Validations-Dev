@@ -15,29 +15,13 @@ from fonctions import list_simplify, create_file_list, create_commonfile_list, c
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4, list_search_5
 from Datasets_default import DataSetsFilter
 from Paths_default import *
-from functionGui import clearDataSets
+from functionGui import clearDataSets, writeLabelCombo3
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.5') # use initGpCalcul(self) insteads of:
-		# creation du grpe Calcul
-        #self.QGBox1 = QGroupBox("Calcul")
-        #self.QGBox1.setMaximumHeight(120)
-        #self.QGBox1.setMaximumWidth(100)
-        #self.radio11 = QRadioButton("FULL") # par defaut
-        #self.radio12 = QRadioButton("FAST")
-        #self.radio11.setChecked(True)
-        #self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
-        #self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
-        #vbox1 = QVBoxLayout()
-        #vbox1.addWidget(self.radio11)
-        #vbox1.addWidget(self.radio12)
-        #vbox1.addStretch(1)
-        #self.QGBox1.setLayout(vbox1)        
-
-        # same thing with GPValidation
+        self.setWindowTitle('Validations gui v0.1.6.6') # new architecture for next/previous, all/none : datasetList = self.selectedDataSets[0] at line 590
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -94,41 +78,9 @@ class ovalGui(QWidget):
 						
         ## PART 1 ##
 		# creation du grpe Calcul
-        #self.QGBox1 = QGroupBox("Calcul")
-        #self.QGBox1.setMaximumHeight(120)
-        #self.QGBox1.setMaximumWidth(100)
-        #self.radio11 = QRadioButton("FULL") # par defaut
-        #self.radio12 = QRadioButton("FAST")
-        #self.radio11.setChecked(True)
-        #self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
-        #self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
-        #vbox1 = QVBoxLayout()
-        #vbox1.addWidget(self.radio11)
-        #vbox1.addWidget(self.radio12)
-        #vbox1.addStretch(1)
-        #self.QGBox1.setLayout(vbox1)
         initGpCalcul(self)
         				
 		# creation du grpe Validation
-        #self.QGBox2 = QGroupBox("Validation")
-        #self.QGBox2.setMaximumHeight(120)
-        #self.QGBox2.setMaximumWidth(100)
-        #self.radio21 = QRadioButton("RECO") # par defaut
-        #self.radio22 = QRadioButton("PU")
-        #self.radio23 = QRadioButton("pmx")
-        #self.radio24 = QRadioButton("miniAOD")
-        #self.radio21.setChecked(True)
-        #self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked) 
-        #self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked) 
-        #self.connect(self.radio23, SIGNAL("clicked()"), self.radio23Clicked) 
-        #self.connect(self.radio24, SIGNAL("clicked()"), self.radio24Clicked) 
-        #vbox2 = QVBoxLayout()
-        #vbox2.addWidget(self.radio21)
-        #vbox2.addWidget(self.radio22)
-        #vbox2.addWidget(self.radio23)
-        #vbox2.addWidget(self.radio24)
-        #vbox2.addStretch(1)
-        #self.QGBox2.setLayout(vbox2)
         initGpValidation(self)
         				
 		# creation du grpe Specific/Global
@@ -246,9 +198,11 @@ class ovalGui(QWidget):
         ## BOTTOM PART ##
         # créer un bouton
         self.bouton_Next = QPushButton("Next", self)
-        self.bouton_Next.clicked.connect(self.Next_Choice)
+        #self.bouton_Next.clicked.connect(self.Next_Choice)
+        self.bouton_Next.clicked.connect(self.Next_Choice) # 
         self.bouton_Previous = QPushButton("Previous", self)
-        self.bouton_Previous.clicked.connect(self.Previous_Choice)
+        #self.bouton_Previous.clicked.connect(self.Previous_Choice)
+        self.bouton_Previous.clicked.connect(self.Previous_Choice) # 
         self.bouton_Previous.setEnabled(False) #default
         self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
         
@@ -545,91 +499,63 @@ class ovalGui(QWidget):
 #        #self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
 #        print "ItemRelRefClicked3 : self.my_choice_rel_1 : %s " % self.QLW_rel3.currentItem().text()
         
+    def Previous_Choice(self):
+        print "Previous_Choice tmp: "
+        if self.tasks_counter == 0:
+            print "no way !, self.tasks_counter = 0"
+        else:
+            self.tasks_counter -= 1
+            self.checkTaskCounter()
+
     def Next_Choice(self):
-        print "Next_Choice: "
-        if self.tasks_counter + 1 > len(self.tasks_list) - 1:
-            print "no way : %i" % self.tasks_counter
-            self.bouton_Next.setEnabled(False)
+        print "Next_Choice tmp: "
+        if self.tasks_counter == self.tasks_counterMax:
+            print "no way !, self.tasks_counter = %d" % self.tasks_counterMax
         else:
             self.tasks_counter += 1
-            if self.tasks_counter == len(self.tasks_list) - 1:
-                self.bouton_Next.setEnabled(False)
-                txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter) + ") Next : " 
-                self.labelCombo3.setText(self.trUtf8(txt))
-                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
-                self.QGBox_Lists.setVisible(True)
-                self.QGBox_rel0.setVisible(False)
-                
-                self.QGBoxListsUpdate()
-                # what to do if len(self.QLW_rel(f)_datasets) = 0?
-                print BaseURL(self) # temporaire
-                print_arrays(self)
-                
-            else:
-                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
-                txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
-                self.labelCombo3.setText(self.trUtf8(txt))
-                self.QGBox_Lists.setVisible(False)
-                self.QGBox_rel0.setVisible(True)
+            self.checkTaskCounter()
 
-        if self.tasks_counter == 1:
-            self.bouton_Previous.setEnabled(True)
-            self.QGBox_rel0.setTitle("Reference list")
-            clearDataSets(self)
-            self.labelCombo2.setText("Reference") # label used for resuming the rel/ref.
-            for it in self.releasesList_0:
-                item = QListWidgetItem("%s" % it)
-                self.QLW_rel1.addItem(item)
-#        elif self.tasks_counter == 2:
-#            print "self.tasks_counter == 2"
-#            self.bouton_Previous.setEnabled(True)
-#            self.QGBox_rel0.setTitle("Lists")
-        else :
-            print self.tasks_list[self.tasks_counter]
-        
-    def Previous_Choice(self):
-        print "Previous_Choice: "
-        if self.tasks_counter - 1 < 0:
-            print "no way : %i" % self.tasks_counter
-            self.bouton_Previous.setEnabled(False)
-        else:
-            self.QGBox_Lists.setVisible(False)
-            self.QGBox_rel0.setVisible(True)
-            self.tasks_counter -= 1
-            if self.tasks_counter == 0:
-                self.bouton_Previous.setEnabled(False)
-                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
-            else:
-                self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
-            txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter+1) + ") Next : " + self.tasks_list[self.tasks_counter+1]
-            self.labelCombo3.setText(self.trUtf8(txt))
-        
+    def checkTaskCounter(self):
         if self.tasks_counter == 0:
+            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.bouton_Previous.setEnabled(False)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Release list")
             clearDataSets(self)
-            self.labelCombo1.setText("Release") # label used for resuming the rel/ref.
+            self.labelCombo1.setText("Release ") # label used for resuming the rel/ref.
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_rel0.setVisible(True)
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
         elif self.tasks_counter == 1:
+            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Reference list")
             clearDataSets(self)
-            self.labelCombo2.setText("Reference") # label used for resuming the rel/ref.
+            self.labelCombo2.setText("Reference ") # label used for resuming the rel/ref.
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_rel0.setVisible(True)
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
-#        elif self.tasks_counter == 2:
-#            print "self.tasks_counter == 2"
-#            self.bouton_Next.setEnabled(True)
-#            self.QGBox_rel0.setTitle("DataSets")
-#            self.QGBox_Lists.setVisible(False)
-#            self.QGBox_rel0.setVisible(False)
-#            self.QGBox_DataSets.setVisible(True)
-        else :
-            print self.tasks_list[self.tasks_counter]
-
+        elif self.tasks_counter == 2:
+            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.bouton_Previous.setEnabled(True)
+            self.bouton_Next.setEnabled(False)
+            self.QGBox_rel0.setTitle("Lists")
+            self.QGBox_Lists.setVisible(True)
+            self.QGBox_rel0.setVisible(False)                
+            self.QGBoxListsUpdate()
+            # what to do if len(self.QLW_rel(f)_datasets) = 0?
+            print BaseURL(self) # temporaire
+            print_arrays(self)
+        else:
+            "Hello Houston, we have a pbm !!"
+        writeLabelCombo3(self)
+        self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter]))
+    
     def QGBoxListsUpdate(self):
         print "menu clicked !"
         print "*-*-**--*-*-*-*-*-* DataSets"
