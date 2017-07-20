@@ -7,6 +7,7 @@ from PyQt4 import QtCore
 
 import os,sys,subprocess
 
+from ovalOptionsGp import *
 from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files
 from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
@@ -20,13 +21,24 @@ from functionGui import clearDataSets
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.4') # set main window size to 1200x700
-        # use clearDataSets(self) insteads of:
-        #   self.QLW_rel1.clear()
-        #   self.QLW_rel2.clear()
-        #   self.QLW_rel_dataset.clear()
-        #   self.QLW_ref_dataset.clear()
+        self.setWindowTitle('Validations gui v0.1.6.5') # use initGpCalcul(self) insteads of:
+		# creation du grpe Calcul
+        #self.QGBox1 = QGroupBox("Calcul")
+        #self.QGBox1.setMaximumHeight(120)
+        #self.QGBox1.setMaximumWidth(100)
+        #self.radio11 = QRadioButton("FULL") # par defaut
+        #self.radio12 = QRadioButton("FAST")
+        #self.radio11.setChecked(True)
+        #self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
+        #self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
+        #vbox1 = QVBoxLayout()
+        #vbox1.addWidget(self.radio11)
+        #vbox1.addWidget(self.radio12)
+        #vbox1.addStretch(1)
+        #self.QGBox1.setLayout(vbox1)        
 
+        # same thing with GPValidation
+        
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
         # PART 2 : Resume label for actions listing
@@ -76,44 +88,48 @@ class ovalGui(QWidget):
         # Selected : the selected globalTag and associated DataSets
         self.tasks_list = ['Release', 'Reference', 'Lists'] # , 'Selected'
         self.tasks_counter = 0
+        self.tasks_counterMax = len(self.tasks_list) -1
+        print "self.tasks_counterMax = %d" % self.tasks_counterMax
         self.selectedDataSets = []
 						
         ## PART 1 ##
 		# creation du grpe Calcul
-        self.QGBox1 = QGroupBox("Calcul")
-        self.QGBox1.setMaximumHeight(120)
-        self.QGBox1.setMaximumWidth(100)
-        self.radio11 = QRadioButton("FULL") # par defaut
-        self.radio12 = QRadioButton("FAST")
-        self.radio11.setChecked(True)
-        self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
-        self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
-        vbox1 = QVBoxLayout()
-        vbox1.addWidget(self.radio11)
-        vbox1.addWidget(self.radio12)
-        vbox1.addStretch(1)
-        self.QGBox1.setLayout(vbox1)
+        #self.QGBox1 = QGroupBox("Calcul")
+        #self.QGBox1.setMaximumHeight(120)
+        #self.QGBox1.setMaximumWidth(100)
+        #self.radio11 = QRadioButton("FULL") # par defaut
+        #self.radio12 = QRadioButton("FAST")
+        #self.radio11.setChecked(True)
+        #self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
+        #self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
+        #vbox1 = QVBoxLayout()
+        #vbox1.addWidget(self.radio11)
+        #vbox1.addWidget(self.radio12)
+        #vbox1.addStretch(1)
+        #self.QGBox1.setLayout(vbox1)
+        initGpCalcul(self)
         				
-		# creation du grpe Calcul
-        self.QGBox2 = QGroupBox("Validation")
-        self.QGBox2.setMaximumHeight(120)
-        self.QGBox2.setMaximumWidth(100)
-        self.radio21 = QRadioButton("RECO") # par defaut
-        self.radio22 = QRadioButton("PU")
-        self.radio23 = QRadioButton("pmx")
-        self.radio24 = QRadioButton("miniAOD")
-        self.radio21.setChecked(True)
-        self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked) 
-        self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked) 
-        self.connect(self.radio23, SIGNAL("clicked()"), self.radio23Clicked) 
-        self.connect(self.radio24, SIGNAL("clicked()"), self.radio24Clicked) 
-        vbox2 = QVBoxLayout()
-        vbox2.addWidget(self.radio21)
-        vbox2.addWidget(self.radio22)
-        vbox2.addWidget(self.radio23)
-        vbox2.addWidget(self.radio24)
-        vbox2.addStretch(1)
-        self.QGBox2.setLayout(vbox2)
+		# creation du grpe Validation
+        #self.QGBox2 = QGroupBox("Validation")
+        #self.QGBox2.setMaximumHeight(120)
+        #self.QGBox2.setMaximumWidth(100)
+        #self.radio21 = QRadioButton("RECO") # par defaut
+        #self.radio22 = QRadioButton("PU")
+        #self.radio23 = QRadioButton("pmx")
+        #self.radio24 = QRadioButton("miniAOD")
+        #self.radio21.setChecked(True)
+        #self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked) 
+        #self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked) 
+        #self.connect(self.radio23, SIGNAL("clicked()"), self.radio23Clicked) 
+        #self.connect(self.radio24, SIGNAL("clicked()"), self.radio24Clicked) 
+        #vbox2 = QVBoxLayout()
+        #vbox2.addWidget(self.radio21)
+        #vbox2.addWidget(self.radio22)
+        #vbox2.addWidget(self.radio23)
+        #vbox2.addWidget(self.radio24)
+        #vbox2.addStretch(1)
+        #self.QGBox2.setLayout(vbox2)
+        initGpValidation(self)
         				
 		# creation du grpe Specific/Global
         self.QGBoxSpecificGlobal = QGroupBox("Specific / Global")
@@ -559,10 +575,6 @@ class ovalGui(QWidget):
         if self.tasks_counter == 1:
             self.bouton_Previous.setEnabled(True)
             self.QGBox_rel0.setTitle("Reference list")
-            #self.QLW_rel1.clear()
-            #self.QLW_rel2.clear()
-            #self.QLW_rel_dataset.clear()
-            #self.QLW_ref_dataset.clear()
             clearDataSets(self)
             self.labelCombo2.setText("Reference") # label used for resuming the rel/ref.
             for it in self.releasesList_0:
@@ -595,10 +607,6 @@ class ovalGui(QWidget):
         if self.tasks_counter == 0:
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Release list")
-            #self.QLW_rel1.clear()
-            #self.QLW_rel2.clear()
-            #self.QLW_rel_dataset.clear()
-            #self.QLW_ref_dataset.clear()
             clearDataSets(self)
             self.labelCombo1.setText("Release") # label used for resuming the rel/ref.
             for it in self.releasesList_0:
@@ -607,10 +615,6 @@ class ovalGui(QWidget):
         elif self.tasks_counter == 1:
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Reference list")
-            #self.QLW_rel1.clear()
-            #self.QLW_rel2.clear()
-            #self.QLW_rel_dataset.clear()
-            #self.QLW_ref_dataset.clear()
             clearDataSets(self)
             self.labelCombo2.setText("Reference") # label used for resuming the rel/ref.
             for it in self.releasesList_0:
