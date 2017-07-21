@@ -46,3 +46,58 @@ def initGpValidation(self):
     vbox2.addStretch(1)
     self.QGBox2.setLayout(vbox2)
     return
+
+def initGpSpecific(self):
+    print "initGpSpecific"
+
+    self.QGBoxSpecificGlobal = QGroupBox("Specific / Global")
+    self.QGBoxSpecificGlobal.setMaximumHeight(120)
+    self.QGBoxSpecificGlobal.setMinimumHeight(120)
+    self.checkSpecificGlobal1 = QRadioButton("Specific")
+    self.checkSpecificGlobal2 = QRadioButton("Global")
+    self.checkSpecificGlobal2.setChecked(True)
+    self.checkSpecificGlobal1.setEnabled(False) #default
+    self.connect(self.checkSpecificGlobal1, SIGNAL("clicked()"), self.checkSpecificGlobal1Clicked)
+    self.connect(self.checkSpecificGlobal2, SIGNAL("clicked()"), self.checkSpecificGlobal2Clicked)
+    vboxSpecificGlobal = QVBoxLayout()
+    vboxSpecificGlobal.addWidget(self.checkSpecificGlobal1)
+    vboxSpecificGlobal.addWidget(self.checkSpecificGlobal2)
+    vboxSpecificGlobal.addStretch(1)
+    self.QGBoxSpecificGlobal.setLayout(vboxSpecificGlobal)
+        				
+    return
+
+def initGpAllNone(self):
+    print "initGpAllNone"
+
+    self.QGBoxAllNone = QGroupBox("All / None")
+    self.QGBoxAllNone.setMaximumHeight(120)
+    self.QGBoxAllNone.setMinimumHeight(120)
+    self.checkAllNone1 = QRadioButton("All")
+    self.checkAllNone2 = QRadioButton("None")
+    self.checkAllNone1.setChecked(True)
+    self.connect(self.checkAllNone1, SIGNAL("clicked()"), self.checkAllNone1Clicked)
+    self.connect(self.checkAllNone2, SIGNAL("clicked()"), self.checkAllNone2Clicked)
+    vboxAllNone = QVBoxLayout()
+    vboxAllNone.addWidget(self.checkAllNone1)
+    vboxAllNone.addWidget(self.checkAllNone2)
+    vboxAllNone.addStretch(1)
+    self.QGBoxAllNone.setLayout(vboxAllNone)
+  
+    return
+
+def initGpOptions(self):
+	# creation du grpe Calcul
+    initGpCalcul(self)
+    
+	# creation du grpe Validation
+    initGpValidation(self)
+        				
+	# creation du grpe Specific/Global
+    initGpSpecific(self)
+
+    # creation du grpe All/None
+    initGpAllNone(self)
+    
+    return
+
