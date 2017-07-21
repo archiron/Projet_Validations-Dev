@@ -5,6 +5,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
+from Datasets_default import DataSetsFilter
+
 def initGpCalcul(self):
     print "initGpCalcul"
 
@@ -86,6 +88,50 @@ def initGpAllNone(self):
   
     return
 
+def initGpDataSets(self):
+    print "initGpDataSets"
+
+    self.QGBoxDataSets = QGroupBox("DataSets")
+    self.QGBoxDataSets.setMaximumHeight(120)
+    self.QGBoxDataSets.setMinimumHeight(120)
+    self.checkDataSets1 = QPushButton("List")
+    self.checkDataSets2 = QPushButton("Reload")
+    self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
+    self.menu = QMenu()
+    self.ag = QActionGroup(self, exclusive=False)
+    self.DataSetTable = DataSetsFilter(self)
+    for item in self.DataSetTable:
+        a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
+        self.menu.addAction(a)
+        self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+    self.checkDataSets1.setMenu(self.menu)
+    self.selectedDataSets = self.DataSetTable # default, all datasets selected
+    vboxDataSets = QVBoxLayout()
+    vboxDataSets.addWidget(self.checkDataSets1)
+    vboxDataSets.addWidget(self.checkDataSets2)
+    vboxDataSets.addStretch(1)
+    self.QGBoxDataSets.setLayout(vboxDataSets)
+        
+    return
+
+def initGpResume(self):
+    print "initGpResume"
+
+    self.QGBoxRelRef = QGroupBox("release")
+    self.QGBoxRelRef.setMaximumHeight(120)
+    self.QGBoxRelRef.setMinimumHeight(120)
+    self.QGBoxRelRef.setMinimumWidth(250)
+        
+    self.labelCombo1 = QLabel(self.trUtf8("Release"), self)   # label used for resuming the rel/ref.
+    self.labelCombo2 = QLabel(self.trUtf8("Reference"), self) # label used for resuming the rel/ref.
+
+    vbox6 = QVBoxLayout()
+    vbox6.addWidget(self.labelCombo1) 
+    vbox6.addWidget(self.labelCombo2) 
+    vbox6.addStretch(1)
+    self.QGBoxRelRef.setLayout(vbox6)
+    return
+
 def initGpOptions(self):
 	# creation du grpe Calcul
     initGpCalcul(self)
@@ -96,8 +142,14 @@ def initGpOptions(self):
 	# creation du grpe Specific/Global
     initGpSpecific(self)
 
+    # creation du grpe initGpDataSets
+    initGpDataSets(self)
+    
     # creation du grpe All/None
     initGpAllNone(self)
+
+    # creation des Label pour release/reference resume
+    initGpResume(self)    
     
     return
 

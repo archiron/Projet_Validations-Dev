@@ -21,7 +21,8 @@ from functionGui import clearDataSets, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.7') # simplification of the __init__ with call to 
+        self.setWindowTitle('Validations gui v0.1.6.8') # simplication : suite
+        # add a little correction for the manu List/Reload : the All/None radio button is put in All mode after reload.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -73,84 +74,48 @@ class ovalGui(QWidget):
         self.tasks_list = ['Release', 'Reference', 'Lists'] # , 'Selected'
         self.tasks_counter = 0
         self.tasks_counterMax = len(self.tasks_list) -1
-        print "self.tasks_counterMax = %d" % self.tasks_counterMax
+        print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
         self.selectedDataSets = []
 						
-        ## PART 1 ##
-		# creation du grpe Calcul
-#        initGpCalcul(self)
-        				
-		# creation du grpe Validation
-#        initGpValidation(self)
+        ## PART 1 - Options Grp ##
         initGpOptions(self)
         
-		# creation du grpe Specific/Global
-        #self.QGBoxSpecificGlobal = QGroupBox("Specific / Global")
-        #self.QGBoxSpecificGlobal.setMaximumHeight(120)
-        #self.QGBoxSpecificGlobal.setMinimumHeight(120)
-        #self.checkSpecificGlobal1 = QRadioButton("Specific")
-        #self.checkSpecificGlobal2 = QRadioButton("Global")
-        #self.checkSpecificGlobal2.setChecked(True)
-        #self.checkSpecificGlobal1.setEnabled(False) #default
-        #self.connect(self.checkSpecificGlobal1, SIGNAL("clicked()"), self.checkSpecificGlobal1Clicked)
-        #self.connect(self.checkSpecificGlobal2, SIGNAL("clicked()"), self.checkSpecificGlobal2Clicked)
-        #vboxSpecificGlobal = QVBoxLayout()
-        #vboxSpecificGlobal.addWidget(self.checkSpecificGlobal1)
-        #vboxSpecificGlobal.addWidget(self.checkSpecificGlobal2)
-        #vboxSpecificGlobal.addStretch(1)
-        #self.QGBoxSpecificGlobal.setLayout(vboxSpecificGlobal)
-                				
 		# creation du grpe liste des collections new version
-        self.QGBoxDataSets = QGroupBox("DataSets")
-        self.QGBoxDataSets.setMaximumHeight(120)
-        self.QGBoxDataSets.setMinimumHeight(120)
-        self.checkDataSets1 = QPushButton("List")
-        self.checkDataSets2 = QPushButton("Reload")
-        self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
-        self.menu = QMenu()
-        self.ag = QActionGroup(self, exclusive=False)
-        self.DataSetTable = DataSetsFilter(self)
-        for item in self.DataSetTable:
-            a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
-            self.menu.addAction(a)
-            self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
-        self.checkDataSets1.setMenu(self.menu)
-        self.selectedDataSets = self.DataSetTable # default, all datasets selected
-        vboxDataSets = QVBoxLayout()
-        vboxDataSets.addWidget(self.checkDataSets1)
-        vboxDataSets.addWidget(self.checkDataSets2)
-        vboxDataSets.addStretch(1)
-        self.QGBoxDataSets.setLayout(vboxDataSets)
+        #self.QGBoxDataSets = QGroupBox("DataSets")
+        #self.QGBoxDataSets.setMaximumHeight(120)
+        #self.QGBoxDataSets.setMinimumHeight(120)
+        #self.checkDataSets1 = QPushButton("List")
+        #self.checkDataSets2 = QPushButton("Reload")
+        #self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
+        #self.menu = QMenu()
+        #self.ag = QActionGroup(self, exclusive=False)
+        #self.DataSetTable = DataSetsFilter(self)
+        #for item in self.DataSetTable:
+        #    a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
+        #    self.menu.addAction(a)
+        #    self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+        #self.checkDataSets1.setMenu(self.menu)
+        #self.selectedDataSets = self.DataSetTable # default, all datasets selected
+        #vboxDataSets = QVBoxLayout()
+        #vboxDataSets.addWidget(self.checkDataSets1)
+        #vboxDataSets.addWidget(self.checkDataSets2)
+        #vboxDataSets.addStretch(1)
+        #self.QGBoxDataSets.setLayout(vboxDataSets)
         
-		# creation du grpe All/None
-        #self.QGBoxAllNone = QGroupBox("All / None")
-        #self.QGBoxAllNone.setMaximumHeight(120)
-        #self.QGBoxAllNone.setMinimumHeight(120)
-        #self.checkAllNone1 = QRadioButton("All")
-        #self.checkAllNone2 = QRadioButton("None")
-        #self.checkAllNone1.setChecked(True)
-        #self.connect(self.checkAllNone1, SIGNAL("clicked()"), self.checkAllNone1Clicked)
-        #self.connect(self.checkAllNone2, SIGNAL("clicked()"), self.checkAllNone2Clicked)
-        #vboxAllNone = QVBoxLayout()
-        #vboxAllNone.addWidget(self.checkAllNone1)
-        #vboxAllNone.addWidget(self.checkAllNone2)
-        #vboxAllNone.addStretch(1)
-        #self.QGBoxAllNone.setLayout(vboxAllNone)
-                				
-		# creation des Label pour release/reference
-        self.QGBoxRelRef = QGroupBox("release")
-        self.QGBoxRelRef.setMaximumHeight(120)
-        self.QGBoxRelRef.setMinimumHeight(120)
-        self.QGBoxRelRef.setMinimumWidth(250)
+		# creation des Label pour release/reference resume
+        #self.QGBoxRelRef = QGroupBox("release")
+        #self.QGBoxRelRef.setMaximumHeight(120)
+        #self.QGBoxRelRef.setMinimumHeight(120)
+        #self.QGBoxRelRef.setMinimumWidth(250)
         
-        self.labelCombo1 = QLabel(self.trUtf8("Release"), self)   # label used for resuming the rel/ref.
-        self.labelCombo2 = QLabel(self.trUtf8("Reference"), self) # label used for resuming the rel/ref.
+        #self.labelCombo1 = QLabel(self.trUtf8("Release"), self)   # label used for resuming the rel/ref.
+        #self.labelCombo2 = QLabel(self.trUtf8("Reference"), self) # label used for resuming the rel/ref.
 
-        vbox6 = QVBoxLayout()
-        vbox6.addWidget(self.labelCombo1) 
-        vbox6.addWidget(self.labelCombo2) 
-        vbox6.addStretch(1)
-        self.QGBoxRelRef.setLayout(vbox6)
+        #vbox6 = QVBoxLayout()
+        #vbox6.addWidget(self.labelCombo1) 
+        #vbox6.addWidget(self.labelCombo2) 
+        #vbox6.addStretch(1)
+        #self.QGBoxRelRef.setLayout(vbox6)
 
         #Layout intermédiaire : création et peuplement des gpes radios
         self.layoutH_radio = QHBoxLayout()
@@ -431,6 +396,7 @@ class ovalGui(QWidget):
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
         self.QGBoxListsUpdate()
+        self.checkAllNone1.setChecked(True) # as all DataSets are checked, we need the radiobutton All to be checked
     
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
