@@ -8,7 +8,8 @@ from PyQt4 import QtCore
 import os,sys,subprocess
 
 from Variables import *
-from ovalOptionsGp import *
+from ovalOptionsGp import initGpOptions
+from ovalChoiceGp import initGpChoice
 from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files
 from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
@@ -22,7 +23,7 @@ from functionGui import clearDataSets, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.9') # simplication : Variables
+        self.setWindowTitle('Validations gui v0.1.6.10') # simplication : PART 3
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -31,66 +32,11 @@ class ovalGui(QWidget):
         # BOTTOM PART : buttons
         # FINAL PART : keeping all previous part into one
 
-#        self.cmsenv = env()
-#        self.texte = self.cmsenv.cmsAll()
-#        self.validationType1 = 'Full'   # default
-#        self.validationType2 = 'RECO'   # default
-#        self.validationType3 = 'global' # default
-#        self.choice_rel = ""
-#        self.choice_ref = ""
-#        self.coll_list = []
-#        self.files_list = []
-#        self.my_choice_rel = "" # release to work on
-#        self.my_choice_ref = "" # reference for comparison
-#        self.working_dir_base = os.getcwd()
-#        self.working_dir_rel = os.getcwd()
-#        self.working_dir_ref = os.getcwd()
-        
-#        self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
-#        self.releasesList_rel_1 = []
-#        self.releasesList_ref_1 = []
-#        self.releasesList_rel_2 = []
-#        self.releasesList_ref_2 = []
-#        self.releasesList_rel_3 = []
-#        self.releasesList_ref_3 = []
-#        self.releasesList_rel_3b = []
-#        self.releasesList_ref_3b = []
-#        self.my_choice_rel_0 = "" # 
-#        self.my_choice_rel_1 = "" # 
-#        self.my_choice_ref_0 = "" # 
-#        self.my_choice_ref_1 = "" # 
-#        self.rel_list_0 = []
-#        self.ref_list_0 = []
-#        self.rel_list_1 = []
-#        self.ref_list_1 = []
-#        self.rel_list_2 = []
-#        self.ref_list_2 = []
-#        self.profondeur_rel = 0
-#        self.profondeur_ref = 0
-        # Release : the release to be validated
-        # Reference : the reference release
-        # Lists : list of globalTags for release/reference
-        # Selected : the selected globalTag and associated DataSets
-#        self.tasks_list = ['Release', 'Reference', 'Lists'] # , 'Selected'
-#        self.tasks_counter = 0
-#        self.tasks_counterMax = len(self.tasks_list) -1
-#        print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
-#        self.selectedDataSets = []
         initVariables(self)
 						
         ## PART 1 - Options Grp ##
         initGpOptions(self)
         
-        #Layout intermédiaire : création et peuplement des gpes radios
-        #self.layoutH_radio = QHBoxLayout()
-        #self.layoutH_radio.addWidget(self.QGBox1)
-        #self.layoutH_radio.addWidget(self.QGBox2)
-        #self.layoutH_radio.addWidget(self.QGBoxSpecificGlobal)
-        #self.layoutH_radio.addWidget(self.QGBoxAllNone)
-        #self.layoutH_radio.addWidget(self.QGBoxDataSets)
-        #self.layoutH_radio.addStretch(1)
-        #self.layoutH_radio.addWidget(self.QGBoxRelRef)
-
         ## PART 2 ##
         # Resume
         self.QText_Resume = QTextEdit()
@@ -111,10 +57,8 @@ class ovalGui(QWidget):
         ## BOTTOM PART ##
         # créer un bouton
         self.bouton_Next = QPushButton("Next", self)
-        #self.bouton_Next.clicked.connect(self.Next_Choice)
         self.bouton_Next.clicked.connect(self.Next_Choice) # 
         self.bouton_Previous = QPushButton("Previous", self)
-        #self.bouton_Previous.clicked.connect(self.Previous_Choice)
         self.bouton_Previous.clicked.connect(self.Previous_Choice) # 
         self.bouton_Previous.setEnabled(False) #default
         self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
@@ -139,95 +83,93 @@ class ovalGui(QWidget):
 
         ## PART 3 ##
         # release/reference
-        self.QGBox_rel0 = QGroupBox("Release list") # default
-        self.QGBox_rel0.setMinimumHeight(250)
-        self.QGBox_rel0.setMaximumHeight(250)
-        self.QHL_rel = QHBoxLayout(self.QGBox_rel0)
-        self.QGBox_rel1 = QGroupBox("List")
-        self.QGBox_rel1.setMinimumWidth(180)
-        self.QGBox_rel1.setMaximumWidth(180)
-        self.vbox_rel1 = QVBoxLayout()
-        self.QLW_rel1 = QListWidget()
-        for it in self.releasesList_0:
-            item = QListWidgetItem("%s" % it)
-            self.QLW_rel1.addItem(item)
-        self.connect(self.QLW_rel1, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked1)
-        self.vbox_rel1.addWidget(self.QLW_rel1)        
-        self.QGBox_rel1.setLayout(self.vbox_rel1)
-        self.QHL_rel.addWidget(self.QGBox_rel1)
+        #self.QGBox_rel0 = QGroupBox("Release list") # default
+        #self.QGBox_rel0.setMinimumHeight(250)
+        #self.QGBox_rel0.setMaximumHeight(250)
+        #self.QHL_rel = QHBoxLayout(self.QGBox_rel0)
+        #self.QGBox_rel1 = QGroupBox("List")
+        #self.QGBox_rel1.setMinimumWidth(180)
+        #self.QGBox_rel1.setMaximumWidth(180)
+        #self.vbox_rel1 = QVBoxLayout()
+        #self.QLW_rel1 = QListWidget()
+        #for it in self.releasesList_0:
+        #    item = QListWidgetItem("%s" % it)
+        #    self.QLW_rel1.addItem(item)
+        #self.connect(self.QLW_rel1, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked1)
+        #self.vbox_rel1.addWidget(self.QLW_rel1)        
+        #self.QGBox_rel1.setLayout(self.vbox_rel1)
+        #self.QHL_rel.addWidget(self.QGBox_rel1)
         
-        self.QGBox_rel2 = QGroupBox("Release")
-        self.QGBox_rel2.setMinimumWidth(200)
-        self.QGBox_rel2.setMaximumWidth(200)
-        self.vbox_rel2 = QVBoxLayout()
-        self.QLW_rel2 = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_rel2.addItem(item)
-        self.connect(self.QLW_rel2, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked2)
-        self.vbox_rel2.addWidget(self.QLW_rel2)        
-        self.QGBox_rel2.setLayout(self.vbox_rel2)
-        self.QHL_rel.addWidget(self.QGBox_rel2)
+        #self.QGBox_rel2 = QGroupBox("Release")
+        #self.QGBox_rel2.setMinimumWidth(200)
+        #self.QGBox_rel2.setMaximumWidth(200)
+        #self.vbox_rel2 = QVBoxLayout()
+        #self.QLW_rel2 = QListWidget()
+        #item = QListWidgetItem("%s" % "")
+        #self.QLW_rel2.addItem(item)
+        #self.connect(self.QLW_rel2, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked2)
+        #self.vbox_rel2.addWidget(self.QLW_rel2)        
+        #self.QGBox_rel2.setLayout(self.vbox_rel2)
+        #self.QHL_rel.addWidget(self.QGBox_rel2)
         
-        self.layout_Search = QVBoxLayout()
-        self.layout_Search.addWidget(self.QGBox_rel0)
+        #self.layout_Search = QVBoxLayout()
+        #self.layout_Search.addWidget(self.QGBox_rel0)
+        initGpChoice(self)
 
         # DataSets
-        self.QGBox_Lists= QGroupBox("Lists") # default
-        self.QGBox_Lists.setMinimumHeight(250)
-        self.QGBox_Lists.setMaximumHeight(250)
-        self.QHL_Lists = QHBoxLayout(self.QGBox_Lists) 
+        #self.QGBox_Lists= QGroupBox("Lists") # default
+        #self.QGBox_Lists.setMinimumHeight(250)
+        #self.QGBox_Lists.setMaximumHeight(250)
+        #self.QGBox_Lists.setVisible(False)
+        #self.QHL_Lists = QHBoxLayout(self.QGBox_Lists) 
         
-        self.QGBox_rel = QGroupBox("Release")
-        self.QGBox_rel.setMinimumWidth(180)
-        self.QGBox_rel.setMaximumWidth(180)
-        self.vbox_rel4 = QVBoxLayout()
-        self.QLW_rel_dataset = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_rel_dataset.addItem(item)
-#        self.connect(self.QLW_rel_dataset, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
-        self.vbox_rel4.addWidget(self.QLW_rel_dataset) 
-        self.QGBox_rel.setLayout(self.vbox_rel4)
+        #self.QGBox_rel = QGroupBox("Release")
+        #self.QGBox_rel.setMinimumWidth(180)
+        #self.QGBox_rel.setMaximumWidth(180)
+        #self.vbox_rel4 = QVBoxLayout()
+        #self.QLW_rel_dataset = QListWidget()
+        #item = QListWidgetItem("%s" % "")
+        #self.QLW_rel_dataset.addItem(item)
+        #self.vbox_rel4.addWidget(self.QLW_rel_dataset) 
+        #self.QGBox_rel.setLayout(self.vbox_rel4)
         
-        self.QGBox_rel_list = QGroupBox("Release List")
-        self.QGBox_rel_list.setMinimumWidth(270)
-        self.QGBox_rel_list.setMaximumWidth(270)
-        self.vbox_rel_list = QVBoxLayout()
-        self.QLW_rel_dataset_list = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_rel_dataset_list.addItem(item)
-#        self.connect(self.QLW_rel_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
-        self.vbox_rel_list.addWidget(self.QLW_rel_dataset_list) 
-        self.QGBox_rel_list.setLayout(self.vbox_rel_list)
+        #self.QGBox_rel_list = QGroupBox("Release List")
+        #self.QGBox_rel_list.setMinimumWidth(270)
+        #self.QGBox_rel_list.setMaximumWidth(270)
+        #self.vbox_rel_list = QVBoxLayout()
+        #self.QLW_rel_dataset_list = QListWidget()
+        #item = QListWidgetItem("%s" % "")
+        #self.QLW_rel_dataset_list.addItem(item)
+        #self.vbox_rel_list.addWidget(self.QLW_rel_dataset_list) 
+        #self.QGBox_rel_list.setLayout(self.vbox_rel_list)
         
-        self.QGBox_ref = QGroupBox("Reference")
-        self.QGBox_ref.setMinimumWidth(180)
-        self.QGBox_ref.setMaximumWidth(180)
-        self.vbox_ref4 = QVBoxLayout()
-        self.QLW_ref_dataset = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_ref_dataset.addItem(item)
-#        self.connect(self.QLW_ref_dataset, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
-        self.vbox_ref4.addWidget(self.QLW_ref_dataset) 
-        self.QGBox_ref.setLayout(self.vbox_ref4)
+        #self.QGBox_ref = QGroupBox("Reference")
+        #self.QGBox_ref.setMinimumWidth(180)
+        #self.QGBox_ref.setMaximumWidth(180)
+        #self.vbox_ref4 = QVBoxLayout()
+        #self.QLW_ref_dataset = QListWidget()
+        #item = QListWidgetItem("%s" % "")
+        #self.QLW_ref_dataset.addItem(item)
+        #self.vbox_ref4.addWidget(self.QLW_ref_dataset) 
+        #self.QGBox_ref.setLayout(self.vbox_ref4)
         
-        self.QGBox_ref_list = QGroupBox("Reference List")
-        self.QGBox_ref_list.setMinimumWidth(270)
-        self.QGBox_ref_list.setMaximumWidth(270)
-        self.vbox_ref_list = QVBoxLayout()
-        self.QLW_ref_dataset_list = QListWidget()
-        item = QListWidgetItem("%s" % "")
-        self.QLW_ref_dataset_list.addItem(item)
-#        self.connect(self.QLW_ref_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked3)
-        self.vbox_ref_list.addWidget(self.QLW_ref_dataset_list) 
-        self.QGBox_ref_list.setLayout(self.vbox_ref_list)
+        #self.QGBox_ref_list = QGroupBox("Reference List")
+        #self.QGBox_ref_list.setMinimumWidth(270)
+        #self.QGBox_ref_list.setMaximumWidth(270)
+        #self.vbox_ref_list = QVBoxLayout()
+        #self.QLW_ref_dataset_list = QListWidget()
+        #item = QListWidgetItem("%s" % "")
+        #self.QLW_ref_dataset_list.addItem(item)
+        #self.vbox_ref_list.addWidget(self.QLW_ref_dataset_list) 
+        #self.QGBox_ref_list.setLayout(self.vbox_ref_list)
         
-        self.QHL_Lists.addWidget(self.QGBox_rel)
-        self.QHL_Lists.addWidget(self.QGBox_rel_list)
-        self.QHL_Lists.addWidget(self.QGBox_ref)
-        self.QHL_Lists.addWidget(self.QGBox_ref_list)
-        self.layout_Lists = QVBoxLayout()
-        self.layout_Lists.addWidget(self.QGBox_Lists)
-        self.QGBox_Lists.setVisible(False)
+        #self.QHL_Lists.addWidget(self.QGBox_rel)
+        #self.QHL_Lists.addWidget(self.QGBox_rel_list)
+        #self.QHL_Lists.addWidget(self.QGBox_ref)
+        #self.QHL_Lists.addWidget(self.QGBox_ref_list)
+        #self.layout_Lists = QVBoxLayout()
+        #self.layout_Lists.addWidget(self.QGBox_Lists)
+        #self.QGBox_Lists.setVisible(False)
 
         # DataSets
 #        self.QGBox_DataSets = QGroupBox("DataSets")
@@ -407,11 +349,6 @@ class ovalGui(QWidget):
         resume_text += "<br />Release   : " + self.my_choice_rel_1
         resume_text += "<br />Reference : " + self.my_choice_ref_1
         self.QText_Resume.setText(self.trUtf8(resume_text))
-        
-#    def ItemRelRefClicked3(self): # to be used later
-#        #self.QGBox_rel4.setTitle(self.QLW_rel3.currentItem().text())
-#        #self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
-#        print "ItemRelRefClicked3 : self.my_choice_rel_1 : %s " % self.QLW_rel3.currentItem().text()
         
     def Previous_Choice(self):
         print "Previous_Choice tmp: "
