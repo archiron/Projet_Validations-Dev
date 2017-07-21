@@ -23,7 +23,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.11') # correcting pbm with len(self.selectedDataSets) = 0. Need to click 2 times with reload button to see something after a None - Need to click only one time with All button.
+        self.setWindowTitle('Validations gui v0.1.6.12') # pbm with 2 times clicks OK (see self.checkAllNone1.setChecked(True) in checkDataSets2Clicked function)
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -186,6 +186,7 @@ class ovalGui(QWidget):
         QtCore.QCoreApplication.processEvents() 
 
     def checkDataSets2Clicked(self):
+        self.checkAllNone1.setChecked(True) # as all DataSets are checked, we need the radiobutton All to be checked
         reload(sys.modules['Datasets_default'])
         from Datasets_default import DataSetsFilter
         self.DataSetTable = DataSetsFilter(self)
@@ -196,7 +197,6 @@ class ovalGui(QWidget):
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
         self.QGBoxListsUpdate()
-        self.checkAllNone1.setChecked(True) # as all DataSets are checked, we need the radiobutton All to be checked
         QtCore.QCoreApplication.processEvents() 
     
     def ItemRelRefClicked1(self):
