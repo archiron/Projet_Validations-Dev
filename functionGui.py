@@ -23,6 +23,13 @@ def clearDataSets(self):
     self.QLW_ref_dataset.clear()
     return
 
+def clearDataSetsLists(self):
+    self.QLW_rel_dataset.clear()
+    self.QLW_ref_dataset.clear()
+    self.QLW_rel_dataset_list.clear()
+    self.QLW_ref_dataset_list.clear()
+    return
+
 def writeLabelCombo3(self):
     if self.tasks_counter == len(self.tasks_list) - 1:
         txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter) + ") Next : " 
