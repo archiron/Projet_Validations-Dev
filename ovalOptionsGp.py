@@ -151,5 +151,15 @@ def initGpOptions(self):
     # creation des Label pour release/reference resume
     initGpResume(self)    
     
+    #Layout intermédiaire : création et peuplement des gpes radios
+    self.layoutH_radio = QHBoxLayout()
+    self.layoutH_radio.addWidget(self.QGBox1)
+    self.layoutH_radio.addWidget(self.QGBox2)
+    self.layoutH_radio.addWidget(self.QGBoxSpecificGlobal)
+    self.layoutH_radio.addWidget(self.QGBoxAllNone)
+    self.layoutH_radio.addWidget(self.QGBoxDataSets)
+    self.layoutH_radio.addStretch(1)
+    self.layoutH_radio.addWidget(self.QGBoxRelRef)
+
     return
 

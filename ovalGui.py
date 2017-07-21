@@ -7,6 +7,7 @@ from PyQt4 import QtCore
 
 import os,sys,subprocess
 
+from Variables import *
 from ovalOptionsGp import *
 from getEnv import env
 from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files
@@ -21,8 +22,7 @@ from functionGui import clearDataSets, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.8') # simplication : suite
-        # add a little correction for the manu List/Reload : the All/None radio button is put in All mode after reload.
+        self.setWindowTitle('Validations gui v0.1.6.9') # simplication : Variables
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -31,101 +31,65 @@ class ovalGui(QWidget):
         # BOTTOM PART : buttons
         # FINAL PART : keeping all previous part into one
 
-        self.cmsenv = env()
-        self.texte = self.cmsenv.cmsAll()
-        self.validationType1 = 'Full'   # default
-        self.validationType2 = 'RECO'   # default
-        self.validationType3 = 'global' # default
-        self.choice_rel = ""
-        self.choice_ref = ""
-        self.coll_list = []
-        self.files_list = []
-        self.my_choice_rel = "" # release to work on
-        self.my_choice_ref = "" # reference for comparison
-        self.working_dir_base = os.getcwd()
-        self.working_dir_rel = os.getcwd()
-        self.working_dir_ref = os.getcwd()
+#        self.cmsenv = env()
+#        self.texte = self.cmsenv.cmsAll()
+#        self.validationType1 = 'Full'   # default
+#        self.validationType2 = 'RECO'   # default
+#        self.validationType3 = 'global' # default
+#        self.choice_rel = ""
+#        self.choice_ref = ""
+#        self.coll_list = []
+#        self.files_list = []
+#        self.my_choice_rel = "" # release to work on
+#        self.my_choice_ref = "" # reference for comparison
+#        self.working_dir_base = os.getcwd()
+#        self.working_dir_rel = os.getcwd()
+#        self.working_dir_ref = os.getcwd()
         
-        self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
-        self.releasesList_rel_1 = []
-        self.releasesList_ref_1 = []
-        self.releasesList_rel_2 = []
-        self.releasesList_ref_2 = []
-        self.releasesList_rel_3 = []
-        self.releasesList_ref_3 = []
-        self.releasesList_rel_3b = []
-        self.releasesList_ref_3b = []
-        self.my_choice_rel_0 = "" # 
-        self.my_choice_rel_1 = "" # 
-        self.my_choice_ref_0 = "" # 
-        self.my_choice_ref_1 = "" # 
-        self.rel_list_0 = []
-        self.ref_list_0 = []
-        self.rel_list_1 = []
-        self.ref_list_1 = []
-        self.rel_list_2 = []
-        self.ref_list_2 = []
-        self.profondeur_rel = 0
-        self.profondeur_ref = 0
+#        self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
+#        self.releasesList_rel_1 = []
+#        self.releasesList_ref_1 = []
+#        self.releasesList_rel_2 = []
+#        self.releasesList_ref_2 = []
+#        self.releasesList_rel_3 = []
+#        self.releasesList_ref_3 = []
+#        self.releasesList_rel_3b = []
+#        self.releasesList_ref_3b = []
+#        self.my_choice_rel_0 = "" # 
+#        self.my_choice_rel_1 = "" # 
+#        self.my_choice_ref_0 = "" # 
+#        self.my_choice_ref_1 = "" # 
+#        self.rel_list_0 = []
+#        self.ref_list_0 = []
+#        self.rel_list_1 = []
+#        self.ref_list_1 = []
+#        self.rel_list_2 = []
+#        self.ref_list_2 = []
+#        self.profondeur_rel = 0
+#        self.profondeur_ref = 0
         # Release : the release to be validated
         # Reference : the reference release
         # Lists : list of globalTags for release/reference
         # Selected : the selected globalTag and associated DataSets
-        self.tasks_list = ['Release', 'Reference', 'Lists'] # , 'Selected'
-        self.tasks_counter = 0
-        self.tasks_counterMax = len(self.tasks_list) -1
-        print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
-        self.selectedDataSets = []
+#        self.tasks_list = ['Release', 'Reference', 'Lists'] # , 'Selected'
+#        self.tasks_counter = 0
+#        self.tasks_counterMax = len(self.tasks_list) -1
+#        print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
+#        self.selectedDataSets = []
+        initVariables(self)
 						
         ## PART 1 - Options Grp ##
         initGpOptions(self)
         
-		# creation du grpe liste des collections new version
-        #self.QGBoxDataSets = QGroupBox("DataSets")
-        #self.QGBoxDataSets.setMaximumHeight(120)
-        #self.QGBoxDataSets.setMinimumHeight(120)
-        #self.checkDataSets1 = QPushButton("List")
-        #self.checkDataSets2 = QPushButton("Reload")
-        #self.connect(self.checkDataSets2, SIGNAL("clicked()"), self.checkDataSets2Clicked)
-        #self.menu = QMenu()
-        #self.ag = QActionGroup(self, exclusive=False)
-        #self.DataSetTable = DataSetsFilter(self)
-        #for item in self.DataSetTable:
-        #    a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
-        #    self.menu.addAction(a)
-        #    self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
-        #self.checkDataSets1.setMenu(self.menu)
-        #self.selectedDataSets = self.DataSetTable # default, all datasets selected
-        #vboxDataSets = QVBoxLayout()
-        #vboxDataSets.addWidget(self.checkDataSets1)
-        #vboxDataSets.addWidget(self.checkDataSets2)
-        #vboxDataSets.addStretch(1)
-        #self.QGBoxDataSets.setLayout(vboxDataSets)
-        
-		# creation des Label pour release/reference resume
-        #self.QGBoxRelRef = QGroupBox("release")
-        #self.QGBoxRelRef.setMaximumHeight(120)
-        #self.QGBoxRelRef.setMinimumHeight(120)
-        #self.QGBoxRelRef.setMinimumWidth(250)
-        
-        #self.labelCombo1 = QLabel(self.trUtf8("Release"), self)   # label used for resuming the rel/ref.
-        #self.labelCombo2 = QLabel(self.trUtf8("Reference"), self) # label used for resuming the rel/ref.
-
-        #vbox6 = QVBoxLayout()
-        #vbox6.addWidget(self.labelCombo1) 
-        #vbox6.addWidget(self.labelCombo2) 
-        #vbox6.addStretch(1)
-        #self.QGBoxRelRef.setLayout(vbox6)
-
         #Layout intermédiaire : création et peuplement des gpes radios
-        self.layoutH_radio = QHBoxLayout()
-        self.layoutH_radio.addWidget(self.QGBox1)
-        self.layoutH_radio.addWidget(self.QGBox2)
-        self.layoutH_radio.addWidget(self.QGBoxSpecificGlobal)
-        self.layoutH_radio.addWidget(self.QGBoxAllNone)
-        self.layoutH_radio.addWidget(self.QGBoxDataSets)
-        self.layoutH_radio.addStretch(1)
-        self.layoutH_radio.addWidget(self.QGBoxRelRef)
+        #self.layoutH_radio = QHBoxLayout()
+        #self.layoutH_radio.addWidget(self.QGBox1)
+        #self.layoutH_radio.addWidget(self.QGBox2)
+        #self.layoutH_radio.addWidget(self.QGBoxSpecificGlobal)
+        #self.layoutH_radio.addWidget(self.QGBoxAllNone)
+        #self.layoutH_radio.addWidget(self.QGBoxDataSets)
+        #self.layoutH_radio.addStretch(1)
+        #self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
         ## PART 2 ##
         # Resume
