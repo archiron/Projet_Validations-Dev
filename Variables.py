@@ -59,6 +59,7 @@ def initVariables(self):
     self.selectedDataSets = []
     
     self.allMenuListDatasetsChecked = False # default
+    self.checkFastvsFull = False # default
     
     return
     

@@ -15,6 +15,7 @@ from fonctions import cmd_folder_creation, get_collection_list, get_validationTy
 from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
 from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4, list_search_5
+from fonctions import checkFastvsFull, changeFastvsFullSize
 from Datasets_default import DataSetsFilter
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
@@ -23,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.7.1') # correcting minor bug : Warning what's happen if all is checked but every button is unchecked ? self.allMenuListDatasetsChecked
+        self.setWindowTitle('Validations gui v0.1.7.2') # setVisible(True) FastvsFull QGBox_ for Fast & RECO. False elsewhere
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -97,10 +98,10 @@ class ovalGui(QWidget):
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
-            print "windows height : ", self.height()
-            self.setFixedSize(1200, 700)
-            self.QGBox_FastvsFull.setVisible(False)
-            self.QGBox_FastvsFull_list.setVisible(False)
+            changeFastvsFullSize(self)
+#            self.setFixedSize(1200, 700)
+#            self.QGBox_FastvsFull.setVisible(False)
+#            self.QGBox_FastvsFull_list.setVisible(False)
             self.validationType1 = 'Full'
             self.checkDataSets2Clicked()
 #            print "self.validationType1 :", self.validationType1
@@ -109,10 +110,7 @@ class ovalGui(QWidget):
 
     def radio12Clicked(self):
         if self.radio12.isChecked():
-            print "windows width : ", self.width()
-            self.setFixedSize(1500, 700)
-            self.QGBox_FastvsFull.setVisible(True)
-            self.QGBox_FastvsFull_list.setVisible(True)
+            changeFastvsFullSize(self)
             self.validationType1 = 'Fast'
             self.checkDataSets2Clicked()
 #            print "self.validationType1 :", self.validationType1
@@ -121,6 +119,7 @@ class ovalGui(QWidget):
         
     def radio21Clicked(self):
         if self.radio21.isChecked():
+            changeFastvsFullSize(self)
             self.validationType2 = 'RECO'
             self.checkDataSets2Clicked()
             self.checkSpecificGlobal1.setEnabled(False) #default
@@ -130,6 +129,7 @@ class ovalGui(QWidget):
 
     def radio22Clicked(self):
         if self.radio22.isChecked():
+            changeFastvsFullSize(self)
             self.validationType2 = 'PU'
             self.checkDataSets2Clicked()
             self.checkSpecificGlobal1.setEnabled(False) #default
@@ -139,6 +139,7 @@ class ovalGui(QWidget):
         
     def radio23Clicked(self):
         if self.radio23.isChecked():
+            changeFastvsFullSize(self)
             self.validationType2 = 'pmx'
             self.checkDataSets2Clicked()
             self.checkSpecificGlobal1.setEnabled(True)
@@ -148,6 +149,7 @@ class ovalGui(QWidget):
                         
     def radio24Clicked(self):
         if self.radio24.isChecked():
+            changeFastvsFullSize(self)
             self.validationType2 = 'miniAOD'
             self.checkDataSets2Clicked()
             self.checkSpecificGlobal1.setEnabled(False) #default
@@ -335,7 +337,6 @@ class ovalGui(QWidget):
             print "////// allMenuListDatasetsChecked : ", self.allMenuListDatasetsChecked
 
             if (self.checkAllNone1.isChecked() and self.allMenuListDatasetsChecked): # ALL and at least one selected
-            # Warning what's happen if all is checked but every button is unchecked ?
                 (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
 
                 # FAST 
