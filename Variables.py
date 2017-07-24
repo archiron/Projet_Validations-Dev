@@ -58,5 +58,7 @@ def initVariables(self):
     print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
     self.selectedDataSets = []
     
+    self.allMenuListDatasetsChecked = False # default
+    
     return
     

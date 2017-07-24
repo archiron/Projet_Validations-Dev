@@ -23,7 +23,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.7.0') # developping Fast choice (FastvsFast [1] & FastvsFull [2]). [1] already done as release vs reference. [2] need new choice for Full release
+        self.setWindowTitle('Validations gui v0.1.7.1') # correcting minor bug : Warning what's happen if all is checked but every button is unchecked ? self.allMenuListDatasetsChecked
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -322,16 +322,19 @@ class ovalGui(QWidget):
             print "self.validationType2 :", self.validationType2
             print "self.validationType3 :", self.validationType3
             tt = self.ag.actions()
+            self.allMenuListDatasetsChecked = False # default
             for it in tt:
                 print "self.ag.actions()", it.text()
                 if it.isChecked():
-                    print "checked"
+                    print "%s is checked" % it.text()
                     self.selectedDataSets.append(str(it.text()))
+                    self.allMenuListDatasetsChecked = True # we need only one Dataset selected
                 else:
-                    print "unchecked"
+                    print "%s is unchecked" % it.text()
             print "////// selectedDataSets : ", self.selectedDataSets
+            print "////// allMenuListDatasetsChecked : ", self.allMenuListDatasetsChecked
 
-            if self.checkAllNone1.isChecked(): # ALL 
+            if (self.checkAllNone1.isChecked() and self.allMenuListDatasetsChecked): # ALL and at least one selected
             # Warning what's happen if all is checked but every button is unchecked ?
                 (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
 
