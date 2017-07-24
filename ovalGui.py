@@ -23,7 +23,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.6.12') # pbm with 2 times clicks OK (see self.checkAllNone1.setChecked(True) in checkDataSets2Clicked function)
+        self.setWindowTitle('Validations gui v0.1.7.0') # developping Fast choice (FastvsFast [1] & FastvsFull [2]). [1] already done as release vs reference. [2] need new choice for Full release
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -97,6 +97,10 @@ class ovalGui(QWidget):
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
+            print "windows height : ", self.height()
+            self.setFixedSize(1200, 700)
+            self.QGBox_FastvsFull.setVisible(False)
+            self.QGBox_FastvsFull_list.setVisible(False)
             self.validationType1 = 'Full'
             self.checkDataSets2Clicked()
 #            print "self.validationType1 :", self.validationType1
@@ -105,6 +109,10 @@ class ovalGui(QWidget):
 
     def radio12Clicked(self):
         if self.radio12.isChecked():
+            print "windows width : ", self.width()
+            self.setFixedSize(1500, 700)
+            self.QGBox_FastvsFull.setVisible(True)
+            self.QGBox_FastvsFull_list.setVisible(True)
             self.validationType1 = 'Fast'
             self.checkDataSets2Clicked()
 #            print "self.validationType1 :", self.validationType1
@@ -323,9 +331,12 @@ class ovalGui(QWidget):
                     print "unchecked"
             print "////// selectedDataSets : ", self.selectedDataSets
 
-            if self.checkAllNone1.isChecked(): # ALL
+            if self.checkAllNone1.isChecked(): # ALL 
+            # Warning what's happen if all is checked but every button is unchecked ?
                 (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
 
+                # FAST 
+                
                 #doing dataset display
                 if ( self.releasesList_rel_3 == self.releasesList_ref_3 ):
                     print "HHHHHH : equal"
