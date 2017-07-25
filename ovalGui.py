@@ -24,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.7.4') # minor simplifications (function unused are commented
+        self.setWindowTitle('Validations gui v0.1.7.5') # removing old files (getChoice.py & getPublish.py, ...)
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
