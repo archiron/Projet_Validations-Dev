@@ -11,10 +11,10 @@ from Variables import *
 from ovalOptionsGp import initGpOptions
 from ovalChoiceGp import initGpChoice
 from getEnv import env
-from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files
-from fonctions import list_search_0, list_search_1, list_search_2, list_search_3, list_search, explode_item
-from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation
-from fonctions import sub_releases, sub_releases2, print_arrays, list_search_4, list_search_5
+#from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files  
+from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
+#from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation 
+from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, changeFastvsFullSize
 from Datasets_default import DataSetsFilter
 from Paths_default import *
@@ -24,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.7.3') # filling QGBox_FastvsFull & QGBox_FastvsFull_list
+        self.setWindowTitle('Validations gui v0.1.7.4') # minor simplifications (function unused are commented
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
