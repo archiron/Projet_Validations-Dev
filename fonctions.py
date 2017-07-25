@@ -1044,6 +1044,8 @@ def print_arrays(self):
 
 def checkFastvsFull(self):
     if ( self.radio12.isChecked() and self.radio21.isChecked() ):
+    # check for FastvsFull for Fast and RECO.
+    # if you want to use it also for PU you have to modify the previous test
         self.checkFastvsFull = True
     else:
         self.checkFastvsFull = False

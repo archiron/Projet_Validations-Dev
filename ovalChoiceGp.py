@@ -126,26 +126,16 @@ def initGpLists(self):
 
     return
 
-def initGpBLOB(self):
-    print "initGpBLOB"
+def initGpSelected(self):
+    print "initGpSelected"
 
-#        self.QGBox_DataSets = QGroupBox("DataSets")
-#        self.QGBox_DataSets.setMinimumWidth(250)
-#        self.QGBox_DataSets.setMaximumWidth(250)
-        #self.QHL_DataSets = QHBoxLayout(self.QGBox_DataSets) 
-#        self.vbox_ds = QVBoxLayout()
-#        self.QLW_dataset = QListWidget()
-#        initDataSets(self)
-        #for it in self.selectedDataSets:
-        #    print "== step 0 ==", it
-        #    item = QListWidgetItem("%s" % it)
-        #    self.QLW_dataset.addItem(item)
-#        self.vbox_ds.addWidget(self.QLW_dataset) 
-#        self.QGBox_DataSets.setLayout(self.vbox_ds)
-#        self.layout_DataSets = QVBoxLayout()
-#        self.layout_DataSets.addWidget(self.QGBox_DataSets)
-#        self.layout_DataSets.setAlignment(QtCore.Qt.AlignHCenter)
-#        self.QGBox_DataSets.setVisible(False)
+    self.QGBox_Selected = QGroupBox("Selected")
+    self.QGBox_Selected.setMinimumHeight(250)
+    self.QGBox_Selected.setMaximumHeight(250)
+    self.QGBox_Selected.setVisible(False)       
+    
+    self.layout_Selected = QVBoxLayout()
+    self.layout_Selected.addWidget(self.QGBox_Selected)
 
     return
 
@@ -156,8 +146,8 @@ def initGpChoice(self):
     # Datasets Lists
     initGpLists(self)
     
-    # DataSets
-
+    # Selected DataSets
+    initGpSelected(self)
     
     return
     

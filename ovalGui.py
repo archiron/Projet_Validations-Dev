@@ -24,7 +24,14 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.7.5') # removing old files (getChoice.py & getPublish.py, ...)
+        self.setWindowTitle('Validations gui v0.1.7.6') # correction for button previous label. beginning of add of selected option with use of special variables
+        #    self.selectedRelDatasets = []
+        # self.selectedRefDatasets = []
+        # self.selectedRelGlobalTag = ""
+        # self.selectedRefGlobalTag = ""
+        # self.selectedFvsFDatasets = [] # FastvsFull
+        # self.selectedFvsFGlobalTag = "" # FastvsFull
+
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -92,16 +99,13 @@ class ovalGui(QWidget):
         self.layout_general.addLayout(self.layoutH_resume)
         self.layout_general.addLayout(self.layout_Search)
         self.layout_general.addLayout(self.layout_Lists)
-#        self.layout_general.addLayout(self.layout_DataSets)
+        self.layout_general.addLayout(self.layout_Selected)
         self.layout_general.addLayout(self.layoutH_boutons)
         self.setLayout(self.layout_general)
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
             changeFastvsFullSize(self)
-#            self.setFixedSize(1200, 700)
-#            self.QGBox_FastvsFull.setVisible(False)
-#            self.QGBox_FastvsFull_list.setVisible(False)
             self.validationType1 = 'Full'
             self.checkDataSets2Clicked()
 #            print "self.validationType1 :", self.validationType1
@@ -276,11 +280,12 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.bouton_Previous.setEnabled(False)
             self.bouton_Next.setEnabled(True)
-            self.QGBox_rel0.setTitle("Release list")
             clearDataSets(self)
             self.labelCombo1.setText("Release ") # label used for resuming the rel/ref.
-            self.QGBox_Lists.setVisible(False)
+            self.QGBox_rel0.setTitle("Release list")
             self.QGBox_rel0.setVisible(True)
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_Selected.setVisible(False)
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
@@ -288,29 +293,48 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
-            self.QGBox_rel0.setTitle("Reference list")
             clearDataSets(self)
             self.labelCombo2.setText("Reference ") # label used for resuming the rel/ref.
-            self.QGBox_Lists.setVisible(False)
+            self.QGBox_rel0.setTitle("Reference list")
             self.QGBox_rel0.setVisible(True)
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_Selected.setVisible(False)
             for it in self.releasesList_0:
                 item = QListWidgetItem("%s" % it)
                 self.QLW_rel1.addItem(item)
         elif self.tasks_counter == 2:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.bouton_Previous.setEnabled(True)
-            self.bouton_Next.setEnabled(False)
+            self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Lists")
+            self.QGBox_rel0.setVisible(False) 
             self.QGBox_Lists.setVisible(True)
-            self.QGBox_rel0.setVisible(False)                
+            self.QGBox_Selected.setVisible(False)
             self.QGBoxListsUpdate()
-            # what to do if len(self.QLW_rel(f)_datasets) = 0?
+            # what to do if len(self.QLW_rel(f)_datasets) = 0? -> solved before arriving here !
+        elif self.tasks_counter == 3:
+            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.bouton_Previous.setEnabled(True)
+            self.bouton_Next.setEnabled(False)
+            self.QGBox_rel0.setTitle("Selected")
+            self.QGBox_rel0.setVisible(False)
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_Selected.setVisible(True)
+            self.QGBoxListsUpdate()
             print BaseURL(self) # temporaire
             print_arrays(self)
+            
+            print "self.selectedRelDatasets : %s " % self.selectedRelDatasets
+            print "self.selectedRefDatasets : %s " % self.selectedRefDatasets
+            print "self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
+            print "self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
+            print "self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets
+            print "self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
+           
         else:
             "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)
-        self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter]))
+        self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
     
     def QGBoxListsUpdate(self):
         print "menu clicked !"
@@ -338,18 +362,16 @@ class ovalGui(QWidget):
 
             if (self.checkAllNone1.isChecked() and self.allMenuListDatasetsChecked): # ALL and at least one selected
                 (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
+                # perhaps we can rewrite later as list_search_5(self) instead of (...) = list_search_5(self) 
+                # as all the self.releasesList_re[l|f]_3[b] can be wrote in the list_search_5 function directly.
 
-                # FAST 
-                #(self.releasesList_rel_4, self.releasesList_rel_4b, self.releasesList_ref_4, self.releasesList_ref_4b) = list_search_5(self)
-                if ( checkFastvsFull(self) ):
-                    print "QGBoxListsUpdate Fast vs Full OK"
-                    
                 #doing dataset display
                 if ( self.releasesList_rel_3 == self.releasesList_ref_3 ):
                     print "HHHHHH : equal"
                 else:
                     print "HHHHHH : NO EQUALITY"
                 # to do : test between dataset extracted for release vs reference (green reference) after selection
+                
                 tempDataset = self.selectedDataSets
                 tempDataset.sort()
                 datasetList = self.selectedDataSets[0]
@@ -365,6 +387,7 @@ class ovalGui(QWidget):
                     else:
                         item.setTextColor(QColor("black"))
                     self.QLW_rel_dataset.addItem(item)
+                self.connect(self.QLW_rel_dataset, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked1)
                 for it in self.releasesList_ref_3:
                     item = QListWidgetItem("%s" % it)
                     if ( it == datasetList ):
@@ -372,6 +395,7 @@ class ovalGui(QWidget):
                     else:
                         item.setTextColor(QColor("black"))
                     self.QLW_ref_dataset.addItem(item)
+                self.connect(self.QLW_ref_dataset, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked2)
                 if ( checkFastvsFull(self) ): # FastvsFull
                     for it in self.releasesList_rel_4:
                         item = QListWidgetItem("%s" % it)
@@ -380,22 +404,56 @@ class ovalGui(QWidget):
                         else:
                             item.setTextColor(QColor("black"))
                         self.QLW_FastvsFull_dataset.addItem(item)
+                    self.connect(self.QLW_FastvsFull_dataset, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked5)
             
                 #doing release/reference display
                 for it in self.releasesList_rel_3b:
                     print "releasesList_rel_3b : ", it
                     item = QListWidgetItem("%s" % it)
                     self.QLW_rel_dataset_list.addItem(item)
+                self.connect(self.QLW_rel_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked3)
                 for it in self.releasesList_ref_3b:
                     item = QListWidgetItem("%s" % it)
                     self.QLW_ref_dataset_list.addItem(item)
+                self.connect(self.QLW_ref_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked4)
                 if ( checkFastvsFull(self) ): # FastvsFull
                     for it in self.releasesList_rel_4b:
                         print "releasesList_rel_4b : ", it
                         item = QListWidgetItem("%s" % it)
                         self.QLW_FastvsFull_dataset_list.addItem(item)
+                    self.connect(self.QLW_FastvsFull_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked6)
                 
             else: # NONE
                 print "len of selectedDataSets = %d" % len(self.selectedDataSets)
                 clearDataSetsLists(self)
 
+    def ItemSelectedClicked1(self):
+        print "Datasets Rel"
+        self.selectedRelDatasets = self.QLW_rel_dataset.currentItem().text()
+        print "ItemRelClicked1 : self.selectedRelDatasets : %s " % self.selectedRelDatasets
+        
+    def ItemSelectedClicked2(self):
+        print "Datasets Ref"
+        self.selectedRefDatasets = self.QLW_ref_dataset.currentItem().text()
+        print "ItemRefClicked1 : self.selectedRefDatasets : %s " % self.selectedRefDatasets
+        
+    def ItemSelectedClicked3(self):
+        print "Datasets Rel"
+        self.selectedRelGlobalTag = self.QLW_rel_dataset_list.currentItem().text()
+        print "ItemRelClicked3 : self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
+        
+    def ItemSelectedClicked4(self):
+        print "Datasets Ref"
+        self.selectedRefGlobalTag = self.QLW_ref_dataset_list.currentItem().text()
+        print "ItemRefClicked4 : self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
+        
+    def ItemSelectedClicked5(self):
+        print "Datasets Rel"
+        self.selectedFvsFDatasets = self.QLW_FastvsFull_dataset.currentItem().text()
+        print "ItemRelClicked5 : self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets
+        
+    def ItemSelectedClicked6(self):
+        print "Datasets Ref"
+        self.selectedFvsFGlobalTag = self.QLW_FastvsFull_dataset_list.currentItem().text()
+        print "ItemRefClicked46 : self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
+        
