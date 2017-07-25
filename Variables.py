@@ -35,6 +35,8 @@ def initVariables(self):
     self.releasesList_ref_3 = []
     self.releasesList_rel_3b = []
     self.releasesList_ref_3b = []
+    self.releasesList_rel_4 = []
+    self.releasesList_rel_4b = []
     self.my_choice_rel_0 = "" # 
     self.my_choice_rel_1 = "" # 
     self.my_choice_ref_0 = "" # 

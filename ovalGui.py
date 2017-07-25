@@ -24,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.7.2') # setVisible(True) FastvsFull QGBox_ for Fast & RECO. False elsewhere
+        self.setWindowTitle('Validations gui v0.1.7.3') # filling QGBox_FastvsFull & QGBox_FastvsFull_list
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -340,7 +340,10 @@ class ovalGui(QWidget):
                 (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
 
                 # FAST 
-                
+                #(self.releasesList_rel_4, self.releasesList_rel_4b, self.releasesList_ref_4, self.releasesList_ref_4b) = list_search_5(self)
+                if ( checkFastvsFull(self) ):
+                    print "QGBoxListsUpdate Fast vs Full OK"
+                    
                 #doing dataset display
                 if ( self.releasesList_rel_3 == self.releasesList_ref_3 ):
                     print "HHHHHH : equal"
@@ -369,6 +372,14 @@ class ovalGui(QWidget):
                     else:
                         item.setTextColor(QColor("black"))
                     self.QLW_ref_dataset.addItem(item)
+                if ( checkFastvsFull(self) ): # FastvsFull
+                    for it in self.releasesList_rel_4:
+                        item = QListWidgetItem("%s" % it)
+                        if ( it == datasetList ):
+                            item.setTextColor(QColor("blue"))
+                        else:
+                            item.setTextColor(QColor("black"))
+                        self.QLW_FastvsFull_dataset.addItem(item)
             
                 #doing release/reference display
                 for it in self.releasesList_rel_3b:
@@ -378,6 +389,12 @@ class ovalGui(QWidget):
                 for it in self.releasesList_ref_3b:
                     item = QListWidgetItem("%s" % it)
                     self.QLW_ref_dataset_list.addItem(item)
+                if ( checkFastvsFull(self) ): # FastvsFull
+                    for it in self.releasesList_rel_4b:
+                        print "releasesList_rel_4b : ", it
+                        item = QListWidgetItem("%s" % it)
+                        self.QLW_FastvsFull_dataset_list.addItem(item)
+                
             else: # NONE
                 print "len of selectedDataSets = %d" % len(self.selectedDataSets)
                 clearDataSetsLists(self)

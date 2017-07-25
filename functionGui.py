@@ -28,6 +28,8 @@ def clearDataSetsLists(self):
     self.QLW_ref_dataset.clear()
     self.QLW_rel_dataset_list.clear()
     self.QLW_ref_dataset_list.clear()
+    self.QLW_FastvsFull_dataset.clear()
+    self.QLW_FastvsFull_dataset_list.clear()
     return
 
 def writeLabelCombo3(self):

@@ -612,6 +612,8 @@ def list_search_5(self):
     temp_4 = []
     temp_34 = []
     temp_ref = []
+    temp_56 = []
+    temp_FastvsFull = []
     filtre = sorted(set(self.selectedDataSets), reverse=True)
     validationType_2 = self.validationType2
     validationType_3 = self.validationType3
@@ -674,7 +676,39 @@ def list_search_5(self):
     for i in range(0, len(temp_ref)):
         temp_3.append(temp_ref[i][1])
         temp_4.append(temp_ref[i][0])
+    
+    # FAST vs FULL TREATMENT
+#    if ( self.validationType1 == "Fast" and self.validationType2 == "RECO" ): # FAST vs FULL TREATMENT
+    self.releasesList_rel_4 = []
+    self.releasesList_rel_4b = []
+    if ( checkFastvsFull(self) ):
+        print "Fast vs Full treatment :"
+        for item1 in self.releasesList_rel_2:
+            for item2 in filtre:
+                if re.search(item2, item1):
+                    if clean_collections2(item1, "Full", validationType_2, validationType_3):
+                        temp_56.append([explode_item(item1)[2], item2])
+                        print "len = %i" % len(temp_56)
+                    break
+
+        print "len of temp_56 = %i." % len(temp_56)
+        if ( len(temp_56) > 0 ):
+            #print "temp_56 : ", temp_56
+            temp_56.sort()
+
+            temp_FastvsFull.append( [temp_56[0][0], temp_56[0][1]] )
+            k = 0
+            for i in range(1, len(temp_56)):
+                if ( temp_56[i][0] == temp_FastvsFull[k][0] ):
+                    temp_FastvsFull[k][1] += ', ' + temp_56[i][1]
+                else:
+                    k +=1
+                    temp_FastvsFull.append( [temp_56[i][0], temp_56[i][1]] )
         
+        for i in range(0, len(temp_FastvsFull)):
+            self.releasesList_rel_4.append(temp_FastvsFull[i][1])
+            self.releasesList_rel_4b.append(temp_FastvsFull[i][0])
+
     return (temp_1, temp_2, temp_3, temp_4)
     
 def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):

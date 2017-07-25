@@ -92,7 +92,7 @@ def initGpLists(self):
     self.vbox_ref_list.addWidget(self.QLW_ref_dataset_list) 
     self.QGBox_ref_list.setLayout(self.vbox_ref_list)
         
-    self.QGBox_FastvsFull = QGroupBox("Reference")
+    self.QGBox_FastvsFull = QGroupBox("FastvsFull Reference")
     self.QGBox_FastvsFull.setMinimumWidth(180)
     self.QGBox_FastvsFull.setMaximumWidth(180)
     self.vbox_FastvsFull = QVBoxLayout()
