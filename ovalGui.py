@@ -24,9 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.7.7') # minor correction in All/None selection. Add colored text for resuming choice. 
-        #Need to extract the non common datasets and need to have one selection for datasets & globaltag instead of one selection per item.
-        # correct the size change of the window to keep only those for Lists choice display
+        self.setWindowTitle('Validations gui v0.1.8.0') # introducing the use of QTableWidget instead of QListWidget.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -414,73 +412,69 @@ class ovalGui(QWidget):
                 print datasetList # TEMPORAIRE
 
                 clearDataSetsLists(self)
+                print "nb of datasets  : ", len(self.releasesList_rel_3) # TEMPORAIRE
+                print "nb of globaltags : ", len(self.releasesList_rel_3b) # TEMPORAIRE
+                self.QTable_rel.setRowCount( len(self.releasesList_rel_3) )
+                i_count = 0
                 for it in self.releasesList_rel_3:
-                    item = QListWidgetItem("%s" % it)
+                    item = QTableWidgetItem("%s" % it)
                     if ( it == datasetList ):
                         item.setTextColor(QColor("blue"))
                     else:
                         item.setTextColor(QColor("black"))
-                    self.QLW_rel_dataset.addItem(item)
-                self.connect(self.QLW_rel_dataset, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked1)
+                    self.QTable_rel.setItem(i_count, 0, item)
+                    i_count += 1
+                i_count = 0
+                for it in self.releasesList_rel_3b:
+                    item = QTableWidgetItem("%s" % it)
+                    self.QTable_rel.setItem(i_count, 1, item)
+                    i_count += 1
+                self.connect(self.QTable_rel, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_rel)
+                
+                print "nb of datasets  : ", len(self.releasesList_ref_3) # TEMPORAIRE
+                print "nb of globaltags : ", len(self.releasesList_ref_3b) # TEMPORAIRE
+                self.QTable_ref.setRowCount( len(self.releasesList_ref_3) )
+                i_count = 0
                 for it in self.releasesList_ref_3:
-                    item = QListWidgetItem("%s" % it)
+                    item = QTableWidgetItem("%s" % it)
                     if ( it == datasetList ):
                         item.setTextColor(QColor("blue"))
                     else:
                         item.setTextColor(QColor("black"))
-                    self.QLW_ref_dataset.addItem(item)
-                self.connect(self.QLW_ref_dataset, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked2)
+                    self.QTable_ref.setItem(i_count, 0, item)
+                    i_count += 1
+                i_count = 0
+                for it in self.releasesList_ref_3b:
+                    item = QTableWidgetItem("%s" % it)
+                    self.QTable_ref.setItem(i_count, 1, item)
+                    i_count += 1
+                self.connect(self.QTable_ref, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_ref)
+                
+                #for it in self.releasesList_ref_3:
                 if ( checkFastvsFull(self) ): # FastvsFull
+                    print "nb of datasets  : ", len(self.releasesList_rel_4) # TEMPORAIRE
+                    print "nb of globaltags : ", len(self.releasesList_rel_4b) # TEMPORAIRE
+                    self.QTable_FastvsFull.setRowCount( len(self.releasesList_rel_4) )
+                    i_count = 0
                     for it in self.releasesList_rel_4:
-                        item = QListWidgetItem("%s" % it)
+                        item = QTableWidgetItem("%s" % it)
                         if ( it == datasetList ):
                             item.setTextColor(QColor("blue"))
                         else:
                             item.setTextColor(QColor("black"))
-                        self.QLW_FastvsFull_dataset.addItem(item)
-                    self.connect(self.QLW_FastvsFull_dataset, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked5)
-            
-                #doing release/reference display
-                for it in self.releasesList_rel_3b:
-                    print "releasesList_rel_3b : ", it
-                    item = QListWidgetItem("%s" % it)
-                    self.QLW_rel_dataset_list.addItem(item)
-                self.connect(self.QLW_rel_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked3)
-                for it in self.releasesList_ref_3b:
-                    item = QListWidgetItem("%s" % it)
-                    self.QLW_ref_dataset_list.addItem(item)
-                self.connect(self.QLW_ref_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked4)
-                if ( checkFastvsFull(self) ): # FastvsFull
+                        self.QTable_FastvsFull.setItem(i_count, 0, item)
+                        i_count += 1
+                    i_count = 0
                     for it in self.releasesList_rel_4b:
-                        print "releasesList_rel_4b : ", it
-                        item = QListWidgetItem("%s" % it)
-                        self.QLW_FastvsFull_dataset_list.addItem(item)
-                    self.connect(self.QLW_FastvsFull_dataset_list, SIGNAL("itemSelectionChanged()"),self.ItemSelectedClicked6)
-                
+                        item = QTableWidgetItem("%s" % it)
+                        self.QTable_FastvsFull.setItem(i_count, 1, item)
+                        i_count += 1
+                    self.connect(self.QTable_FastvsFull, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_FastvsFull)
+                    
             else: # NONE & none checked, or ALL & none checked
                 print "len of selectedDataSets = %d" % len(self.selectedDataSets)
                 clearDataSetsLists(self)
 
-    def ItemSelectedClicked1(self):
-        print "Datasets Rel"
-        self.selectedRelDatasets = self.QLW_rel_dataset.currentItem().text()
-        print "ItemRelClicked1 : self.selectedRelDatasets : %s " % self.selectedRelDatasets
-        
-    def ItemSelectedClicked2(self):
-        print "Datasets Ref"
-        self.selectedRefDatasets = self.QLW_ref_dataset.currentItem().text()
-        print "ItemRefClicked1 : self.selectedRefDatasets : %s " % self.selectedRefDatasets
-        
-    def ItemSelectedClicked3(self):
-        print "Datasets Rel"
-        self.selectedRelGlobalTag = self.QLW_rel_dataset_list.currentItem().text()
-        print "ItemRelClicked3 : self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
-        
-    def ItemSelectedClicked4(self):
-        print "Datasets Ref"
-        self.selectedRefGlobalTag = self.QLW_ref_dataset_list.currentItem().text()
-        print "ItemRefClicked4 : self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
-        
     def ItemSelectedClicked5(self):
         print "Datasets Rel"
         self.selectedFvsFDatasets = self.QLW_FastvsFull_dataset.currentItem().text()
@@ -491,3 +485,54 @@ class ovalGui(QWidget):
         self.selectedFvsFGlobalTag = self.QLW_FastvsFull_dataset_list.currentItem().text()
         print "ItemRefClicked46 : self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
         
+    def ItemSelectedTable_rel(self, nRow, nCol):
+        print "(%d, %d)" % (nRow, nCol)
+        if (nCol): # nCol=1, True
+            print self.QTable_rel.item(nRow, nCol-1).text()
+            self.QTable_rel.item(nRow, nCol-1).setSelected(True)
+            print self.QTable_rel.item(nRow, nCol).text()
+            self.selectedRelDatasets = self.QTable_rel.item(nRow, nCol-1).text()
+            self.selectedRelGlobalTag = self.QTable_rel.item(nRow, nCol).text()
+        else : # nCol=0, False
+            print self.QTable_rel.item(nRow, nCol).text()
+            print self.QTable_rel.item(nRow, nCol+1).text()
+            self.QTable_rel.item(nRow, nCol+1).setSelected(True)
+            self.selectedRelDatasets = self.QTable_rel.item(nRow, nCol).text()
+            self.selectedRelGlobalTag = self.QTable_rel.item(nRow, nCol+1).text()
+        print "ItemSelectedTable_rel : self.selectedRelDatasets : %s " % self.selectedRelDatasets
+        print "ItemSelectedTable_rel : self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
+
+    def ItemSelectedTable_ref(self, nRow, nCol):
+        print "(%d, %d)" % (nRow, nCol)
+        if (nCol): # nCol=1, True
+            print self.QTable_ref.item(nRow, nCol-1).text()
+            self.QTable_ref.item(nRow, nCol-1).setSelected(True)
+            print self.QTable_ref.item(nRow, nCol).text()
+            self.selectedRefDatasets = self.QTable_ref.item(nRow, nCol-1).text()
+            self.selectedRefGlobalTag = self.QTable_ref.item(nRow, nCol).text()
+        else : # nCol=0, False
+            print self.QTable_ref.item(nRow, nCol).text()
+            print self.QTable_ref.item(nRow, nCol+1).text()
+            self.QTable_ref.item(nRow, nCol+1).setSelected(True)
+            self.selectedRefDatasets = self.QTable_ref.item(nRow, nCol).text()
+            self.selectedRefGlobalTag = self.QTable_ref.item(nRow, nCol+1).text()
+        print "ItemSelectedTable_ref : self.selectedRefDatasets : %s " % self.selectedRefDatasets
+        print "ItemSelectedTable_ref : self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
+
+    def ItemSelectedTable_FastvsFull(self, nRow, nCol):
+        print "(%d, %d)" % (nRow, nCol)
+        if (nCol): # nCol=1, True
+            print self.QTable_FastvsFull.item(nRow, nCol-1).text()
+            self.QTable_FastvsFull.item(nRow, nCol-1).setSelected(True)
+            print self.QTable_FastvsFull.item(nRow, nCol).text()
+            self.selectedRefDatasets = self.QTable_FastvsFull.item(nRow, nCol-1).text()
+            self.selectedRefGlobalTag = self.QTable_FastvsFull.item(nRow, nCol).text()
+        else : # nCol=0, False
+            print self.QTable_FastvsFull.item(nRow, nCol).text()
+            print self.QTable_FastvsFull.item(nRow, nCol+1).text()
+            self.QTable_FastvsFull.item(nRow, nCol+1).setSelected(True)
+            self.selectedFvsFDatasets = self.QTable_FastvsFull.item(nRow, nCol).text()
+            self.selectedFvsFGlobalTag = self.QTable_FastvsFull.item(nRow, nCol+1).text()
+        print "ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets
+        print "ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
+

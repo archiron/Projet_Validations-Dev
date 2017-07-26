@@ -21,17 +21,14 @@ def initDataSets(self):
 def clearDataSets(self):
     self.QLW_rel1.clear()
     self.QLW_rel2.clear()
-    self.QLW_rel_dataset.clear()
-    self.QLW_ref_dataset.clear()
+    self.QTable_rel.clearContents()
+    self.QTable_ref.clearContents()
     return
 
 def clearDataSetsLists(self):
-    self.QLW_rel_dataset.clear()
-    self.QLW_ref_dataset.clear()
-    self.QLW_rel_dataset_list.clear()
-    self.QLW_ref_dataset_list.clear()
-    self.QLW_FastvsFull_dataset.clear()
-    self.QLW_FastvsFull_dataset_list.clear()
+    self.QTable_rel.clearContents()
+    self.QTable_ref.clearContents()
+    self.QTable_FastvsFull.clearContents()
     return
 
 def writeLabelCombo3(self):
@@ -47,10 +44,8 @@ def changeFastvsFullSize(self):
     if ( self.tasks_counter == 2 and checkFastvsFull(self) ):
         print "self.checkFastvsFull = %s" % self.checkFastvsFull
         self.setFixedSize(1500, 700)
-        self.QGBox_FastvsFull.setVisible(True)
-        self.QGBox_FastvsFull_list.setVisible(True)
+        self.QGBox_FastvsFull_0.setVisible(True)
     else:
         self.setFixedSize(1200, 700)
-        self.QGBox_FastvsFull.setVisible(False)
-        self.QGBox_FastvsFull_list.setVisible(False)
+        self.QGBox_FastvsFull_0.setVisible(False)
     return

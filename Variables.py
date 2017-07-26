@@ -63,6 +63,8 @@ def initVariables(self):
     self.allMenuListDatasetsChecked = False # default
     self.checkFastvsFull = False # default
     
+    self.listHeader = ["DataSets", "GlobalTags"]
+    
     self.selectedRelDatasets = ""
     self.selectedRefDatasets = ""
     self.selectedRelGlobalTag = ""
