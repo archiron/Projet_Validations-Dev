@@ -1051,15 +1051,3 @@ def checkFastvsFull(self):
         self.checkFastvsFull = False
     return self.checkFastvsFull
 
-def changeFastvsFullSize(self):
-    if checkFastvsFull(self):
-        print "self.checkFastvsFull = %s" % self.checkFastvsFull
-        self.setFixedSize(1500, 700)
-        self.QGBox_FastvsFull.setVisible(True)
-        self.QGBox_FastvsFull_list.setVisible(True)
-    else:
-        self.setFixedSize(1200, 700)
-        self.QGBox_FastvsFull.setVisible(False)
-        self.QGBox_FastvsFull_list.setVisible(False)
-    return
-

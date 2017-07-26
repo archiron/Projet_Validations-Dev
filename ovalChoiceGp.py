@@ -134,6 +134,11 @@ def initGpSelected(self):
     self.QGBox_Selected.setMaximumHeight(250)
     self.QGBox_Selected.setVisible(False)       
     
+    self.labelResumeSelected = QLabel(self.trUtf8("<strong>Selected :</strong>"), self)   # label used for resuming the rel/ref.
+    vboxSelected = QVBoxLayout()
+    vboxSelected.addWidget(self.labelResumeSelected)
+    self.QGBox_Selected.setLayout(vboxSelected)
+
     self.layout_Selected = QVBoxLayout()
     self.layout_Selected.addWidget(self.QGBox_Selected)
 

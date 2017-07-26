@@ -63,11 +63,11 @@ def initVariables(self):
     self.allMenuListDatasetsChecked = False # default
     self.checkFastvsFull = False # default
     
-    self.selectedRelDatasets = []
-    self.selectedRefDatasets = []
+    self.selectedRelDatasets = ""
+    self.selectedRefDatasets = ""
     self.selectedRelGlobalTag = ""
     self.selectedRefGlobalTag = ""
-    self.selectedFvsFDatasets = [] # FastvsFull
+    self.selectedFvsFDatasets = "" # FastvsFull
     self.selectedFvsFGlobalTag = "" # FastvsFull
     
     return
