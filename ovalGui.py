@@ -24,8 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.8.1') #  add self.okToPublishDatasets & self.okToPublishFvsFDatasets for DataSets for Publish action.
-
+        self.setWindowTitle('Validations gui v0.1.9.0') #  new way to load datasets items into the menu. datasets are presented as [name, True/False] with True/False the default choice to be checked or not.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -157,11 +156,13 @@ class ovalGui(QWidget):
                         
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
+        # ALL : reload the default
 #            print "All"
             self.menu.clear()
             self.ag = QActionGroup(self, exclusive=False)
             for item in self.DataSetTable:
-                a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
+                (item_name, item_checked) = item
+                a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
                 self.menu.addAction(a)
                 self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
             self.QGBoxListsUpdate() # needed ?
@@ -169,11 +170,13 @@ class ovalGui(QWidget):
 
     def checkAllNone2Clicked(self):
         if self.checkAllNone2.isChecked():
+        # NONE : uncheck all
 #            print "None"
             self.menu.clear()
             self.ag = QActionGroup(self, exclusive=False)
             for item in self.DataSetTable:
-                a = self.ag.addAction(QAction(item, self, checkable=True, checked=False))
+                (item_name, item_checked) = item
+                a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=False))
                 self.menu.addAction(a)
                 self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
             self.QGBoxListsUpdate() # needed ?
@@ -195,13 +198,14 @@ class ovalGui(QWidget):
 
     def checkDataSets2Clicked(self):
         self.checkAllNone1.setChecked(True) # as all DataSets are checked, we need the radiobutton All to be checked
-        reload(sys.modules['Datasets_default'])
         from Datasets_default import DataSetsFilter
         self.DataSetTable = DataSetsFilter(self)
+        reload(sys.modules['Datasets_default'])
         self.menu.clear()
         self.ag = QActionGroup(self, exclusive=False)
         for item in self.DataSetTable:
-            a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
+            (item_name, item_checked) = item
+            a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
         self.QGBoxListsUpdate()
@@ -340,7 +344,7 @@ class ovalGui(QWidget):
                 (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
                 selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
             selectedText += "<td>  </td>"
-            selectedText += "<td><font color = \"blue\">For Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong></td>"           
+            selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
             selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
             selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
             selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
@@ -355,9 +359,9 @@ class ovalGui(QWidget):
                     selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
                 else:
                     (self.okToPublishFvsFDatasets, self.okToDisplayFvsFDatasets) = extractDatasetsFastvsFull(self)
-                    selectedText += "<td colspan=\"2\"><br /><strong>Selected Fast vs Full Datasets : " + self.okToDisplayFvsFDatasets + "</strong><br /></td>"
+                    selectedText += "<td colspan=\"2\"><br /><strong>Selected Fast vs Full Datasets : " + self.okToDisplayFvsFDatasets + "</strong><br /><br /></td>"
                 selectedText += "<td>  </td>"
-                selectedText += "<td><font color = \"blue\">For Publish</font><br /><strong><font color = \"red\">" + self.okToPublishFvsFDatasets + "</font></strong></td>"           
+                selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishFvsFDatasets + "</font></strong></td>"           
                 selectedText += "</tr><tr><td><strong>GlobalTags : </td>"
                 selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag  + "</td>" 
                 selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"

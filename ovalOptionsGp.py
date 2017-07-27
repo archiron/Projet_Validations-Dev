@@ -100,8 +100,10 @@ def initGpDataSets(self):
     self.menu = QMenu()
     self.ag = QActionGroup(self, exclusive=False)
     self.DataSetTable = DataSetsFilter(self)
+    print "###################################################", self.DataSetTable # TEMPORAIRE
     for item in self.DataSetTable:
-        a = self.ag.addAction(QAction(item, self, checkable=True, checked=True))
+        (item_name, item_checked) = item
+        a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
         self.menu.addAction(a)
         self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
     self.checkDataSets1.setMenu(self.menu)
