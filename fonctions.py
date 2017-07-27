@@ -1051,3 +1051,53 @@ def checkFastvsFull(self):
         self.checkFastvsFull = False
     return self.checkFastvsFull
 
+def extractDatasets(self):
+    extraction = ""
+    extractionDisplay = ""
+    # display of the datasets strings
+    print "datasets release   : ", self.selectedRelDatasets
+    print "datasets reference : ", self.selectedRefDatasets
+    # cutting self.selectedRelDatasets
+    cuttedRelease = str(self.selectedRelDatasets).split(',')
+    print "cuttedRelease : ", cuttedRelease
+    # searching in self.selectedRefDatasets
+    for elem in cuttedRelease:
+        print elem
+        if re.search(elem, self.selectedRefDatasets):
+            print "OK"
+            extraction += ', ' + elem
+            extractionDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
+        else:
+            print "KO"
+            extractionDisplay += ', ' + elem
+
+    extraction = extraction[2:]
+    extractionDisplay = extractionDisplay[2:]
+    
+    return extraction, extractionDisplay
+    
+def extractDatasetsFastvsFull(self): # do not verify if checkFastvsFull(self) !! MUST be called inside a if(checkFastvsFull(self)): !!
+    extractionFastvsFull = ""
+    extractionFastvsFullDisplay = ""
+    # display of the datasets strings
+    print "datasets release   : ", self.selectedRelDatasets
+    print "datasets reference : ", self.selectedFvsFDatasets
+    # cutting self.selectedRelDatasets
+    cuttedRelease = str(self.selectedRelDatasets).split(',')
+    print "cuttedRelease : ", cuttedRelease
+    # searching in self.selectedFvsFDatasets
+    for elem in cuttedRelease:
+        print elem
+        if re.search(elem, self.selectedFvsFDatasets):
+            print "OK"
+            extractionFastvsFull += ', ' + elem
+            extractionFastvsFullDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
+        else:
+            print "KO"
+            extractionFastvsFullDisplay += ', ' + elem
+    
+    extractionFastvsFull = extractionFastvsFull[2:]
+    extractionFastvsFullDisplay = extractionFastvsFullDisplay[2:]
+    
+    return extractionFastvsFull, extractionFastvsFullDisplay
+ 

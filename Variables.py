@@ -72,5 +72,10 @@ def initVariables(self):
     self.selectedFvsFDatasets = "" # FastvsFull
     self.selectedFvsFGlobalTag = "" # FastvsFull
     
+    self.okToPublishDatasets = ""
+    self.okToPublishFvsFDatasets = ""
+    self.okToDisplayDatasets = "" # only for display
+    self.okToDisplayFvsFDatasets = "" # only for display
+    
     return
     

@@ -15,7 +15,7 @@ from getEnv import env
 from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
 #from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
-from fonctions import checkFastvsFull
+from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFull
 from Datasets_default import DataSetsFilter
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize
@@ -24,7 +24,8 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.8.0') # introducing the use of QTableWidget instead of QListWidget.
+        self.setWindowTitle('Validations gui v0.1.8.1') #  add self.okToPublishDatasets & self.okToPublishFvsFDatasets for DataSets for Publish action.
+
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -269,6 +270,7 @@ class ovalGui(QWidget):
             self.checkTaskCounter()
 
     def checkTaskCounter(self):
+        import re
         if self.tasks_counter == 0:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.bouton_Previous.setEnabled(False)
@@ -314,6 +316,7 @@ class ovalGui(QWidget):
             # what to do if len(self.QLW_rel(f)_datasets) = 0? -> solved before arriving here !
         elif self.tasks_counter == 3:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            changeFastvsFullSize(self)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(False)
             self.QGBox_rel0.setTitle("Selected")
@@ -331,37 +334,43 @@ class ovalGui(QWidget):
                 selectedText += "<br /><br /><strong>Fast vs Fast : </strong>"
             selectedText += "<tr>"
             if (self.selectedRelDatasets == self.selectedRefDatasets):
-                selectedText += "<td colspan=\"4\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
+                self.okToPublishDatasets = self.selectedRelDatasets
+                selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
             else: # need to extract common terms in blue and others in black (red?)
-                selectedText += "<td colspan=\"4\"><br /><strong>Datasets : " + self.selectedRelDatasets + "</strong><br /></td>"
+                (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
+                selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
+            selectedText += "<td>  </td>"
+            selectedText += "<td><font color = \"blue\">For Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong></td>"           
             selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
             selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
-            selectedText += "<td>  </td>"
+            selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
             selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
-            selectedText += "</tr>"
+            selectedText += "</tr></table>"
             
             if ( checkFastvsFull(self) ): # FastvsFull
                 selectedText += "<br /><br /><strong>Fast vs Full : </strong>"
-                selectedText += "<tr>"
+                selectedText += "<table><tr>"
                 if (self.selectedRelDatasets == self.selectedFvsFDatasets):
-                    selectedText += "<td colspan=\"4\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
+                    self.okToPublishFvsFDatasets = self.selectedRelDatasets
+                    selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
                 else:
-                    selectedText += "<td colspan=\"4\"><br /><strong>Selected Fast vs Full Datasets : " + self.selectedRelDatasets + "</strong><br /></td>"
+                    (self.okToPublishFvsFDatasets, self.okToDisplayFvsFDatasets) = extractDatasetsFastvsFull(self)
+                    selectedText += "<td colspan=\"2\"><br /><strong>Selected Fast vs Full Datasets : " + self.okToDisplayFvsFDatasets + "</strong><br /></td>"
+                selectedText += "<td>  </td>"
+                selectedText += "<td><font color = \"blue\">For Publish</font><br /><strong><font color = \"red\">" + self.okToPublishFvsFDatasets + "</font></strong></td>"           
                 selectedText += "</tr><tr><td><strong>GlobalTags : </td>"
                 selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag  + "</td>" 
-                selectedText += "<td>  </td>"
+                selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
                 selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedFvsFGlobalTag + "</strong></td>"
                 selectedText += "</tr>"
             selectedText += "</table>"
             self.labelResumeSelected.setText(self.trUtf8(selectedText))
-            print "self.selectedRelDatasets : %s " % self.selectedRelDatasets # temporaire
-            print "self.selectedRefDatasets : %s " % self.selectedRefDatasets # temporaire
-            print "self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag # temporaire
-            print "self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag # temporaire
-            if ( checkFastvsFull(self) ): # FastvsFull
-                print "self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets # temporaire
-                print "self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag # temporaire
-           
+            
+            print "self.okToPublishDatasets = %s" % self.okToPublishDatasets
+            print "self.okToPublishFvsFDatasets = %s" % self.okToPublishFvsFDatasets
+            print "self.okToPublishDatasets = %s" % self.okToDisplayDatasets
+            print "self.okToPublishFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
+          
         else:
             "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)
@@ -475,16 +484,6 @@ class ovalGui(QWidget):
                 print "len of selectedDataSets = %d" % len(self.selectedDataSets)
                 clearDataSetsLists(self)
 
-    def ItemSelectedClicked5(self):
-        print "Datasets Rel"
-        self.selectedFvsFDatasets = self.QLW_FastvsFull_dataset.currentItem().text()
-        print "ItemRelClicked5 : self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets
-        
-    def ItemSelectedClicked6(self):
-        print "Datasets Ref"
-        self.selectedFvsFGlobalTag = self.QLW_FastvsFull_dataset_list.currentItem().text()
-        print "ItemRefClicked46 : self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
-        
     def ItemSelectedTable_rel(self, nRow, nCol):
         print "(%d, %d)" % (nRow, nCol)
         if (nCol): # nCol=1, True
