@@ -54,7 +54,7 @@ def initVariables(self):
     # Reference : the reference release
     # Lists : list of globalTags for release/reference
     # Selected : the selected globalTag and associated DataSets
-    self.tasks_list = ['Release list', 'Reference list', 'Lists', 'Selected'] # 
+    self.tasks_list = ['Release list', 'Reference list', 'Lists', 'Selected', 'Web page'] # 
     self.tasks_counter = 0
     self.tasks_counterMax = len(self.tasks_list) -1
     print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE

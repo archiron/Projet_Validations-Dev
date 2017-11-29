@@ -24,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.0') #  new way to load datasets items into the menu. datasets are presented as [name, True/False] with True/False the default choice to be checked or not.
+        self.setWindowTitle('Validations gui v0.1.9.1') #  beginning with web page creation, electronCompare.py file to do this. Next button active for Web page.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -322,7 +322,7 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             changeFastvsFullSize(self)
             self.bouton_Previous.setEnabled(True)
-            self.bouton_Next.setEnabled(False)
+            self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Selected")
             self.QGBox_rel0.setVisible(False)
             self.QGBox_Lists.setVisible(False)
@@ -375,6 +375,16 @@ class ovalGui(QWidget):
             print "self.okToPublishDatasets = %s" % self.okToDisplayDatasets
             print "self.okToPublishFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
           
+        elif self.tasks_counter == 4:
+            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.bouton_Previous.setEnabled(True)
+            self.bouton_Next.setEnabled(False)
+            self.QGBox_rel0.setTitle("Web page")
+            self.QGBox_rel0.setVisible(False)
+            self.QGBox_Lists.setVisible(False)
+            self.QGBox_Selected.setVisible(False)
+            self.QGBoxListsUpdate()
+
         else:
             "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)
