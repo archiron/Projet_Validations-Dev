@@ -50,6 +50,11 @@ def initVariables(self):
     self.profondeur_rel = 0
     self.profondeur_ref = 0
     
+    try:
+        self.wp = open('report.txt', 'w') # report page
+    except IOError as ioe:
+        print "Could not open file! "
+        
     # Release : the release to be validated
     # Reference : the reference release
     # Lists : list of globalTags for release/reference
@@ -58,6 +63,7 @@ def initVariables(self):
     self.tasks_counter = 0
     self.tasks_counterMax = len(self.tasks_list) -1
     print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
+    self.wp.write("self.tasks_counterMax = %d\n" % self.tasks_counterMax)
     self.selectedDataSets = []
     
     self.allMenuListDatasetsChecked = False # default

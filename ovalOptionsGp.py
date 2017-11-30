@@ -6,6 +6,7 @@ from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
 from Datasets_default import DataSetsFilter
+from Paths_default import *
 
 def initGpCalcul(self):
     print "initGpCalcul"
@@ -116,6 +117,33 @@ def initGpDataSets(self):
         
     return
 
+def initGpLocation(self):
+    print "initGpLocation"
+
+    self.QGBoxLocation = QGroupBox("Location")
+    self.QGBoxLocation.setMaximumHeight(120)
+    self.QGBoxLocation.setMinimumHeight(120)
+    self.checkLocation1 = QPushButton("List")
+    self.checkLocation2 = QPushButton("Reload")
+    self.connect(self.checkLocation2, SIGNAL("clicked()"), self.checkLocation2Clicked)
+    self.menu_loc = QMenu()
+    self.loc = QActionGroup(self, exclusive=False)
+    self.LocationTable = LocationFilter(self)
+    print "###################################################", self.LocationTable # TEMPORAIRE
+    for item in self.LocationTable:
+        (item_name, item_checked) = item
+        a2 = self.loc.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
+        self.menu_loc.addAction(a2)
+        self.connect(a2, SIGNAL('triggered()'), self.PathUpdate)
+    self.checkLocation1.setMenu(self.menu_loc)
+    #self.selectedLocation = self.LocationTable # default, all datasets selected
+    vboxLocation = QVBoxLayout()
+    vboxLocation.addWidget(self.checkLocation1)
+    vboxLocation.addWidget(self.checkLocation2)
+    vboxLocation.addStretch(1)
+    self.QGBoxLocation.setLayout(vboxLocation)
+    return
+
 def initGpResume(self):
     print "initGpResume"
 
@@ -150,6 +178,9 @@ def initGpOptions(self):
     # creation du grpe All/None
     initGpAllNone(self)
 
+    # creation du grpe Location
+    initGpLocation(self)
+    
     # creation des Label pour release/reference resume
     initGpResume(self)    
     
@@ -161,6 +192,7 @@ def initGpOptions(self):
     self.layoutH_radio.addWidget(self.QGBoxAllNone)
     self.layoutH_radio.addWidget(self.QGBoxDataSets)
     self.layoutH_radio.addStretch(1)
+    self.layoutH_radio.addWidget(self.QGBoxLocation)
     self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
     return

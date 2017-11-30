@@ -24,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.1') #  beginning with web page creation, electronCompare.py file to do this. Next button active for Web page.
+        self.setWindowTitle('Validations gui v0.1.9.2') #  adding a report text file. add menu for save location.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -34,7 +34,8 @@ class ovalGui(QWidget):
         # FINAL PART : keeping all previous part into one
 
         initVariables(self)
-						
+        self.wp.write("initVariables OK\n")
+        
         ## PART 1 - Options Grp ##
         initGpOptions(self)
         
@@ -197,6 +198,7 @@ class ovalGui(QWidget):
         QtCore.QCoreApplication.processEvents() 
 
     def checkDataSets2Clicked(self):
+        self.wp.write("checkDataSets2Clicked")
         self.checkAllNone1.setChecked(True) # as all DataSets are checked, we need the radiobutton All to be checked
         from Datasets_default import DataSetsFilter
         self.DataSetTable = DataSetsFilter(self)
@@ -205,12 +207,30 @@ class ovalGui(QWidget):
         self.ag = QActionGroup(self, exclusive=False)
         for item in self.DataSetTable:
             (item_name, item_checked) = item
+            self.wp.write(item_name + "\n")
             a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
     
+    def checkLocation2Clicked(self):
+        print "checkLocation2Clicked"
+        self.wp.write("checkLocation2Clicked")
+        from Paths_default import LocationFilter
+        self.LocationTable = LocationFilter(self)
+        reload(sys.modules['Paths_default'])
+        self.menu_loc.clear()
+        self.loc = QActionGroup(self, exclusive=False)
+        for item in self.LocationTable:
+            (item_name, item_checked) = item
+            self.wp.write(item_name + "\n")
+            a2 = self.loc.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
+            self.menu_loc.addAction(a2)
+            self.connect(a2, SIGNAL('triggered()'), self.PathUpdate)
+        self.PathUpdate()
+        QtCore.QCoreApplication.processEvents() 
+
     def ItemRelRefClicked1(self):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
         self.QLW_rel2.clear()
@@ -277,6 +297,7 @@ class ovalGui(QWidget):
         import re
         if self.tasks_counter == 0:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(False)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
@@ -290,6 +311,7 @@ class ovalGui(QWidget):
                 self.QLW_rel1.addItem(item)
         elif self.tasks_counter == 1:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
@@ -303,6 +325,7 @@ class ovalGui(QWidget):
                 self.QLW_rel1.addItem(item)
         elif self.tasks_counter == 2:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             changeFastvsFullSize(self)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
@@ -320,6 +343,7 @@ class ovalGui(QWidget):
             # what to do if len(self.QLW_rel(f)_datasets) = 0? -> solved before arriving here !
         elif self.tasks_counter == 3:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             changeFastvsFullSize(self)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
@@ -377,6 +401,7 @@ class ovalGui(QWidget):
           
         elif self.tasks_counter == 4:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+            self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(False)
             self.QGBox_rel0.setTitle("Web page")
@@ -389,7 +414,21 @@ class ovalGui(QWidget):
             "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)
         self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
-    
+
+    def PathUpdate(self):
+        print "menu clicked !"
+        print "*-*-**--*-*-*-*-*-* Location"
+        self.wp.write("PathUpdate")
+        tt = self.loc.actions()
+        for it in tt:
+            print "self.ag.actions()", it.text()
+            if it.isChecked():
+                print "%s is checked" % it.text()
+                self.wp.write("%s is checked" % it.text())
+            else:
+                print "%s is unchecked" % it.text()
+                self.wp.write("%s is unchecked" % it.text())
+
     def QGBoxListsUpdate(self):
         print "menu clicked !"
         print "*-*-**--*-*-*-*-*-* DataSets"
