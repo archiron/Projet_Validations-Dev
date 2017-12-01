@@ -24,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.2') #  adding a report text file. add menu for save location.
+        self.setWindowTitle('Validations gui v0.1.9.3') #  use exclusive=True in self.loc = QActionGroup.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -221,7 +221,7 @@ class ovalGui(QWidget):
         self.LocationTable = LocationFilter(self)
         reload(sys.modules['Paths_default'])
         self.menu_loc.clear()
-        self.loc = QActionGroup(self, exclusive=False)
+        self.loc = QActionGroup(self, exclusive=True)
         for item in self.LocationTable:
             (item_name, item_checked) = item
             self.wp.write(item_name + "\n")

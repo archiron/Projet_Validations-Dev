@@ -127,7 +127,7 @@ def initGpLocation(self):
     self.checkLocation2 = QPushButton("Reload")
     self.connect(self.checkLocation2, SIGNAL("clicked()"), self.checkLocation2Clicked)
     self.menu_loc = QMenu()
-    self.loc = QActionGroup(self, exclusive=False)
+    self.loc = QActionGroup(self, exclusive=True)
     self.LocationTable = LocationFilter(self)
     print "###################################################", self.LocationTable # TEMPORAIRE
     for item in self.LocationTable:
