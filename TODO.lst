@@ -47,6 +47,7 @@ self.releasesList_rel_3b = [] : liste des caractéristiques in https://cmsweb.cer
 self.releasesList_ref_3b = [] : liste des caractéristiques in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie et pour les datasets selectionnés (CMSSW_9_0_0_pre6-90X_mcRun2_asymptotic_v4-v1)
 self.releasesList_rel_4 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés. utilisée dans le cas FastvsFull
 self.releasesList_rel_4b = [] : liste des caractéristiques in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés (CMSSW_9_0_0_pre6-90X_mcRun2_asymptotic_v4-v1). utilisée dans le cas FastvsFull
+self.releasesList_rel_5 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour les datasets choisis et les globaltags choisis
 
 self.my_choice_rel_0 = '' : une des valeurs au dessus choisie pour la release de travail : RELEASE
 self.my_choice_ref_0 = '' : une des valeurs au dessus choisie pour la release de reference : REFERENCE

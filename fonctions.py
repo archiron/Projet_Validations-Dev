@@ -988,56 +988,112 @@ def print_arrays(self):
 
     with open("array_list.txt", "w+") as f:
         f.write("self.releasesList_0" + "\n")
+        self.wp.write("\n" + "self.releasesList_0" + "\n")
         for line in self.releasesList_0:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
-        f.write( "\n" + "self.releasesList_rel_1" + "\n")
+        f.write("\n" + "self.releasesList_rel_1" + "\n")
+        self.wp.write("\n" + "self.releasesList_rel_1" + "\n")
         for line in self.releasesList_rel_1:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.releasesList_ref_1" + "\n")
+        self.wp.write("\n" + "self.releasesList_ref_1" + "\n")
         for line in self.releasesList_ref_1:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
-        f.write( "\n" + "self.releasesList_rel_2" + "\n")
+        f.write("\n" + "self.releasesList_rel_2" + "\n")
+        self.wp.write("\n" + "self.releasesList_rel_2" + "\n")
         for line in self.releasesList_rel_2:
+            self.wp.write(line + "\n") # write the line
             f.write(line + "\n") # write the line
 
         f.write("\n" + "self.releasesList_ref_2" + "\n")
+        self.wp.write("\n" + "self.releasesList_ref_2" + "\n")
         for line in self.releasesList_ref_2:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
-        f.write( "\n" + "self.releasesList_rel_3" + "\n")
+        f.write("\n" + "self.releasesList_rel_3" + "\n")
+        self.wp.write("\n" + "self.releasesList_rel_3" + "\n")
         for line in self.releasesList_rel_3:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.releasesList_ref_3" + "\n")
+        self.wp.write("\n" + "self.releasesList_ref_3" + "\n")
         for line in self.releasesList_ref_3:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.rel_list_0" + "\n")
+        self.wp.write("\n" + "self.rel_list_0" + "\n")
         for line in self.rel_list_0:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.ref_list_0" + "\n")
+        self.wp.write("\n" + "self.ref_list_0" + "\n")
         for line in self.ref_list_0:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.rel_list_1" + "\n")
+        self.wp.write("\n" + "self.rel_list_1" + "\n")
         for line in self.rel_list_1:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.ref_list_1" + "\n")
+        self.wp.write("\n" + "self.ref_list_1" + "\n")
         for line in self.ref_list_1:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.rel_list_2" + "\n")
+        self.wp.write("\n" + "self.rel_list_2" + "\n")
         for line in self.rel_list_2:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.write("\n" + "self.ref_list_2" + "\n")
+        self.wp.write("\n" + "self.ref_list_2" + "\n")
         for line in self.ref_list_2:
             f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_rel_3b" + "\n")
+        self.wp.write("\n" + "self.releasesList_rel_3b" + "\n")
+        for line in self.releasesList_rel_3b:
+            f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_ref_3b" + "\n")
+        self.wp.write("\n" + "self.releasesList_ref_3b" + "\n")
+        for line in self.releasesList_ref_3b:
+            f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_rel_4b" + "\n")
+        self.wp.write("\n" + "self.releasesList_rel_4b" + "\n")
+        for line in self.releasesList_rel_4b:
+            f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_rel_5" + "\n")
+        self.wp.write("\n" + "self.releasesList_rel_5" + "\n")
+        for line in self.releasesList_rel_5:
+            f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
+
+        f.write("\n" + "self.releasesList_ref_5" + "\n")
+        self.wp.write("\n" + "self.releasesList_ref_5" + "\n")
+        for line in self.releasesList_ref_5:
+            f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
 
         f.close()
     return

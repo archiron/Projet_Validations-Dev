@@ -24,7 +24,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.3') #  use exclusive=True in self.loc = QActionGroup.
+        self.setWindowTitle('Validations gui v0.1.9.4') # create list of root files for rel & ref
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -353,9 +353,6 @@ class ovalGui(QWidget):
             self.QGBox_Selected.setVisible(True)
             self.QGBoxListsUpdate()
             
-            print BaseURL(self) # temporaire
-            print_arrays(self) # temporaire
-            
             selectedText = "<strong>Selected :</strong>"
             selectedText += "<table>"
             if ( checkFastvsFull(self) ): # FastvsFast
@@ -396,8 +393,29 @@ class ovalGui(QWidget):
             
             print "self.okToPublishDatasets = %s" % self.okToPublishDatasets
             print "self.okToPublishFvsFDatasets = %s" % self.okToPublishFvsFDatasets
-            print "self.okToPublishDatasets = %s" % self.okToDisplayDatasets
-            print "self.okToPublishFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
+            print "self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
+            print "self.okToDisplayFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
+            
+            # create list of root files for rel & ref
+            print "0 " + self.selectedRelDatasets
+            self.releasesList_rel_3 = (self.selectedRelDatasets.replace(" ", "")).split(',')
+            self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',')
+            for it1 in self.releasesList_rel_2:
+                for it2 in self.releasesList_rel_3:
+                    #print str(it2)
+                    if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
+                        print it1 + " : OK"
+                        self.releasesList_rel_5.append(it1)
+            for it1 in self.releasesList_ref_2:
+                for it2 in self.releasesList_ref_3:
+                    #print it2
+                    if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
+                        print it1 + " : OK"
+                        self.releasesList_ref_5.append(it1)
+            
+            print BaseURL(self) # temporaire
+            print_arrays(self) # temporaire
+            self.wp.write("BaseUrl = %s\n" % BaseURL(self))
           
         elif self.tasks_counter == 4:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
@@ -553,6 +571,8 @@ class ovalGui(QWidget):
             self.selectedRelGlobalTag = self.QTable_rel.item(nRow, nCol+1).text()
         print "ItemSelectedTable_rel : self.selectedRelDatasets : %s " % self.selectedRelDatasets
         print "ItemSelectedTable_rel : self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
+        self.wp.write("ItemSelectedTable_rel : self.selectedRelDatasets : %s\n " % self.selectedRelDatasets)
+        self.wp.write("ItemSelectedTable_rel : self.selectedRelGlobalTag : %s\n " % self.selectedRelGlobalTag)
 
     def ItemSelectedTable_ref(self, nRow, nCol):
         print "(%d, %d)" % (nRow, nCol)
@@ -570,6 +590,8 @@ class ovalGui(QWidget):
             self.selectedRefGlobalTag = self.QTable_ref.item(nRow, nCol+1).text()
         print "ItemSelectedTable_ref : self.selectedRefDatasets : %s " % self.selectedRefDatasets
         print "ItemSelectedTable_ref : self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
+        self.wp.write("ItemSelectedTable_ref : self.selectedRefDatasets : %s\n " % self.selectedRefDatasets)
+        self.wp.write("ItemSelectedTable_ref : self.selectedRefGlobalTag : %s\n " % self.selectedRefGlobalTag)
 
     def ItemSelectedTable_FastvsFull(self, nRow, nCol):
         print "(%d, %d)" % (nRow, nCol)
@@ -587,4 +609,6 @@ class ovalGui(QWidget):
             self.selectedFvsFGlobalTag = self.QTable_FastvsFull.item(nRow, nCol+1).text()
         print "ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets
         print "ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
+        self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s\n " % self.selectedFvsFDatasets)
+        self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s\n " % self.selectedFvsFGlobalTag)
 
