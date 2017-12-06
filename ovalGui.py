@@ -16,6 +16,7 @@ from fonctions import list_search_1, list_search_3 # list_search_0, , list_searc
 #from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFull
+from fonctions import checkCalculValidation, checkFileName_rel
 from Datasets_default import DataSetsFilter
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize
@@ -24,7 +25,14 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.4') # create list of root files for rel & ref
+        self.setWindowTitle('Validations gui v0.1.9.5') # newriting list of root files to be loaded. Add checkCalculValidation function to check those root files. For Fast vs Full, test need to be completed.
+        #found a bug : when release name had an extension included (i.e. CMSSW_8_1_0_GEANT4 instead of CMSSW_8_1_0) I have more than one file to download. 
+        # idem       : some selected boxes need to be refreshed. Seems to be corrected.
+        # idem       : SingleElectronPt10 : ...__RelValSingleElectronPt10__...
+        #            : SingleElectronPt10 : ...__RelValSingleElectronPt1000__...
+        #            : SingleElectronPt1000 : ...__RelValSingleElectronPt1000__...
+        # need to check more effectively Pt10/Pt1000
+
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -400,19 +408,32 @@ class ovalGui(QWidget):
             print "0 " + self.selectedRelDatasets
             self.releasesList_rel_3 = (self.selectedRelDatasets.replace(" ", "")).split(',')
             self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',')
+            print "\nRelease :"
             for it1 in self.releasesList_rel_2:
-                for it2 in self.releasesList_rel_3:
-                    #print str(it2)
-                    if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
-                        print it1 + " : OK"
-                        self.releasesList_rel_5.append(it1)
+                if checkFileName_rel(self, it1):
+                    for it2 in self.releasesList_rel_3:
+                        #print str(it2)
+                        if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
+                            if checkCalculValidation(self, it1):
+                                print it2 + " : " + it1 + " : OK"
+                                self.releasesList_rel_5.append(it1)
+            print "\nReference :"
             for it1 in self.releasesList_ref_2:
                 for it2 in self.releasesList_ref_3:
                     #print it2
-                    if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
-                        print it1 + " : OK"
-                        self.releasesList_ref_5.append(it1)
-            
+                    if (re.search(str(it2), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
+                        if checkCalculValidation(self, it1):
+                            print it2 + " : " + it1 + " : OK"
+                            self.releasesList_ref_5.append(it1)
+            if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only sur Full, RECO
+                print "\nFastvsFull :"
+                self.wp.write("okToPublishFvsFDatasets FastvsFull = %s\n" % self.okToPublishFvsFDatasets)
+                for it1 in self.releasesList_rel_2:
+                    for it2 in self.releasesList_rel_3:
+                        if (re.search(str(it2), it1) and re.search(str(self.selectedFvsFGlobalTag), it1)):
+                            if checkCalculValidation(self, it1):
+                                print it2 + " : " + it1 + " : OK"
+                                self.releasesList_FvsF_5.append(it1)
             print BaseURL(self) # temporaire
             print_arrays(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
@@ -491,6 +512,7 @@ class ovalGui(QWidget):
                     datasetList += ', ' + self.selectedDataSets[it]
                 print datasetList # TEMPORAIRE
 
+                #clearDataSets(self)
                 clearDataSetsLists(self)
                 print "nb of datasets  : ", len(self.releasesList_rel_3) # TEMPORAIRE
                 print "nb of globaltags : ", len(self.releasesList_rel_3b) # TEMPORAIRE
@@ -553,6 +575,7 @@ class ovalGui(QWidget):
                     
             else: # NONE & none checked, or ALL & none checked
                 print "len of selectedDataSets = %d" % len(self.selectedDataSets)
+                clearDataSets(self)
                 clearDataSetsLists(self)
 
     def ItemSelectedTable_rel(self, nRow, nCol):

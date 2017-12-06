@@ -1095,6 +1095,11 @@ def print_arrays(self):
             f.write(line + "\n") # write the line
             self.wp.write(line + "\n") # write the line
 
+        f.write("\n" + "self.releasesList_FvsF_5" + "\n")
+        self.wp.write("\n" + "self.releasesList_FvsF_5" + "\n")
+        for line in self.releasesList_FvsF_5:
+            f.write(line + "\n") # write the line
+            self.wp.write(line + "\n") # write the line
         f.close()
     return
 
@@ -1106,6 +1111,35 @@ def checkFastvsFull(self):
     else:
         self.checkFastvsFull = False
     return self.checkFastvsFull
+
+def checkFileName_rel(self, fileName):
+    checkFileName = True
+#    print self.my_choice_rel_1 + " - " + self.my_choice_ref_1
+    newName = "__" + self.my_choice_rel_1 + "-"
+#    print "<<<<<< : " + newName + " - " + fileName
+    if ( re.search(str(newName), fileName) ):
+        checkFileName = True
+    else:
+        checkFileName = False
+    return checkFileName
+
+def checkCalculValidation(self, fileName):
+#Full, RECO    : (not PU) and (not Fast)
+#Full, PU      : PU and (not Fast)
+#Full, pmx     : pmx and (not Fast) for rel, PU and (not Fast) for rel
+#Full, miniAOD : idem Full, RECO
+
+#Fast, RECO    : Fast and (not PU)
+    
+    checkCalculValidation = True
+    if ( self.radio11.isChecked() and self.radio21.isChecked() ): #Full, RECO
+#        print ">>>>>>>> Full, RECO"
+        if ( re.search("PU", fileName) or re.search("Fast", fileName) ):
+#            print ">>>> PU, Fast : " + fileName
+            checkCalculValidation = False
+    if ( self.radio11.isChecked() and self.radio22.isChecked() ): #Full, PU
+        print ">>>>>>>> Full, PU"
+    return checkCalculValidation
 
 def extractDatasets(self):
     extraction = ""

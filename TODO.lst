@@ -23,7 +23,15 @@ dans la page web, afficher le nom des fichiers root
 
 self.validationType1 (anciennement choix_calcul) : Full, Fast
 self.validationType2 RECO, PU, pmx, miniAOD
-self.validationType3 specific, global
+self.validationType3 specific (pmx vs pmx), global (pmx vs PU, pmx, ...)
+
+Full, RECO    : (not PU) and (not Fast)
+Full, PU      : PU and (not Fast)
+Full, pmx     : pmx and (not Fast) for rel, PU and (not Fast) for rel
+Full, miniAOD : idem Full, RECO
+
+Fast, RECO    : Fast and (not PU)
+
 
 DataSets Type
     Classical : classical electron validation DataSets
