@@ -16,7 +16,7 @@ from fonctions import list_search_1, list_search_3 # list_search_0, , list_searc
 #from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFull
-from fonctions import checkCalculValidation, checkFileName_rel
+from fonctions import checkCalculValidation, checkFileName
 from Datasets_default import DataSetsFilter
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize
@@ -25,15 +25,9 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.5') # newriting list of root files to be loaded. Add checkCalculValidation function to check those root files. For Fast vs Full, test need to be completed.
-        #found a bug : when release name had an extension included (i.e. CMSSW_8_1_0_GEANT4 instead of CMSSW_8_1_0) I have more than one file to download. 
-        # idem       : some selected boxes need to be refreshed. Seems to be corrected.
-        # idem       : SingleElectronPt10 : ...__RelValSingleElectronPt10__...
-        #            : SingleElectronPt10 : ...__RelValSingleElectronPt1000__...
-        #            : SingleElectronPt1000 : ...__RelValSingleElectronPt1000__...
-        # need to check more effectively Pt10/Pt1000
-
-        
+        self.setWindowTitle('Validations gui v0.1.9.6') # add newName(prefix, fileName, suffix) to check correctly CMSSW_7_4_0_pre8 instead of CMSSW_7_4_0_pre8_GEANT4 or SingleElectronPt10 instead of SingleElectronPt1000
+        # found a little bug : when going back from list to reference, release value become reference value while reference value become empty
+    
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
         # PART 2 : Resume label for actions listing
@@ -309,6 +303,7 @@ class ovalGui(QWidget):
             self.bouton_Previous.setEnabled(False)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
+            #clearDataSetsLists(self)
             self.labelCombo1.setText("Release ") # label used for resuming the rel/ref.
             self.QGBox_rel0.setTitle("Release list")
             self.QGBox_rel0.setVisible(True)
@@ -323,6 +318,7 @@ class ovalGui(QWidget):
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
+            #clearDataSetsLists(self)
             self.labelCombo2.setText("Reference ") # label used for resuming the rel/ref.
             self.QGBox_rel0.setTitle("Reference list")
             self.QGBox_rel0.setVisible(True)
@@ -410,7 +406,7 @@ class ovalGui(QWidget):
             self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',')
             print "\nRelease :"
             for it1 in self.releasesList_rel_2:
-                if checkFileName_rel(self, it1):
+                if checkFileName(self, it1, "rel"):
                     for it2 in self.releasesList_rel_3:
                         #print str(it2)
                         if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
@@ -419,12 +415,13 @@ class ovalGui(QWidget):
                                 self.releasesList_rel_5.append(it1)
             print "\nReference :"
             for it1 in self.releasesList_ref_2:
-                for it2 in self.releasesList_ref_3:
-                    #print it2
-                    if (re.search(str(it2), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
-                        if checkCalculValidation(self, it1):
-                            print it2 + " : " + it1 + " : OK"
-                            self.releasesList_ref_5.append(it1)
+               if checkFileName(self, it1, "rel"):
+                    for it2 in self.releasesList_ref_3:
+                        #print it2
+                        if (re.search(str(it2), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
+                            if checkCalculValidation(self, it1):
+                                print it2 + " : " + it1 + " : OK"
+                                self.releasesList_ref_5.append(it1)
             if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only sur Full, RECO
                 print "\nFastvsFull :"
                 self.wp.write("okToPublishFvsFDatasets FastvsFull = %s\n" % self.okToPublishFvsFDatasets)
@@ -575,7 +572,7 @@ class ovalGui(QWidget):
                     
             else: # NONE & none checked, or ALL & none checked
                 print "len of selectedDataSets = %d" % len(self.selectedDataSets)
-                clearDataSets(self)
+                #clearDataSets(self)
                 clearDataSetsLists(self)
 
     def ItemSelectedTable_rel(self, nRow, nCol):

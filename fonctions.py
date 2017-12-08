@@ -1112,15 +1112,31 @@ def checkFastvsFull(self):
         self.checkFastvsFull = False
     return self.checkFastvsFull
 
-def checkFileName_rel(self, fileName):
+def newName(prefix, fileName, suffix):
+    newName = prefix + fileName + suffix
+    return newName
+
+def checkFileName(self, fileName, case):
     checkFileName = True
 #    print self.my_choice_rel_1 + " - " + self.my_choice_ref_1
-    newName = "__" + self.my_choice_rel_1 + "-"
-#    print "<<<<<< : " + newName + " - " + fileName
-    if ( re.search(str(newName), fileName) ):
+#    newName1 = "__" + self.my_choice_rel_1 + "-"
+#    nN = newName("__", self.my_choice_rel_1, "-")
+#    print "<<<<<< : " + newName1 + " - " + fileName + " - " + nN
+
+    if ( case == "rel" ):
+        name = self.my_choice_rel_1
+    elif ( case == "ref" ):
+        name = self.my_choice_ref_1
+    elif ( case == "FvsF" ):
+        name = self.my_choice_rel_1
+    else:
+        name = self.my_choice_rel_1
+
+    if ( re.search(str(newName("__", name, "-")), fileName) ):
         checkFileName = True
     else:
         checkFileName = False
+
     return checkFileName
 
 def checkCalculValidation(self, fileName):
