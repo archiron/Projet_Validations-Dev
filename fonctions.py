@@ -546,7 +546,7 @@ def list_search_2(collection, filtre):
 
     temp_1 = []  
     filtre = sorted(set(filtre), reverse=True)
-#    print "filtre : ", filtre
+    print "filtre : ", filtre
 #    print "collection : ", collection
     for item1 in collection:
         for item2 in filtre:

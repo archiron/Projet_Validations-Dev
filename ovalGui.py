@@ -16,7 +16,7 @@ from fonctions import list_search_1, list_search_3 # list_search_0, , list_searc
 #from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFull
-from fonctions import checkCalculValidation, checkFileName
+from fonctions import checkCalculValidation, checkFileName, newName
 from Datasets_default import DataSetsFilter
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize
@@ -25,7 +25,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.7') # in    def ItemRelRefClicked2(self): replacing if self.QGBox_rel0.title() == "Reference list": with        if ( self.tasks_counter == 1 ):
+        self.setWindowTitle('Validations gui v0.1.9.8') # test for datasets seems to be located in fontions.py/list_search_2(collection, filtre)
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -409,16 +409,18 @@ class ovalGui(QWidget):
                 if checkFileName(self, it1, "rel"):
                     for it2 in self.releasesList_rel_3:
                         #print str(it2)
-                        if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
-                            if checkCalculValidation(self, it1):
+                        #if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
+                        if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
+                             if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_rel_5.append(it1)
             print "\nReference :"
             for it1 in self.releasesList_ref_2:
-               if checkFileName(self, it1, "rel"):
+               if checkFileName(self, it1, "ref"):
                     for it2 in self.releasesList_ref_3:
-                        #print it2
-                        if (re.search(str(it2), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
+                        #print ">>>>> " + it2 + " _ " + newName("__RelVal", it2, "__")
+                        #if (re.search(str(it2), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
+                        if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
                             if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_ref_5.append(it1)
