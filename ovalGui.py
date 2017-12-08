@@ -25,9 +25,8 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.6') # add newName(prefix, fileName, suffix) to check correctly CMSSW_7_4_0_pre8 instead of CMSSW_7_4_0_pre8_GEANT4 or SingleElectronPt10 instead of SingleElectronPt1000
-        # found a little bug : when going back from list to reference, release value become reference value while reference value become empty
-    
+        self.setWindowTitle('Validations gui v0.1.9.7') # in    def ItemRelRefClicked2(self): replacing if self.QGBox_rel0.title() == "Reference list": with        if ( self.tasks_counter == 1 ):
+     
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
         # PART 2 : Resume label for actions listing
@@ -258,8 +257,9 @@ class ovalGui(QWidget):
         
     def ItemRelRefClicked2(self):
         rel_text = self.QLW_rel2.currentItem().text() + " DataSets"
-        if self.QGBox_rel0.title() == "Reference list":
-            print "reference"
+        #if self.QGBox_rel0.title() == "Reference list":
+        if ( self.tasks_counter == 1 ):
+            print "reference" + str(self.tasks_counter)
             self.my_choice_ref_1 = self.QLW_rel2.currentItem().text()
             print "ItemRefClicked2 : self.my_choice_ref_1 : %s " % self.my_choice_ref_1
             tmp = "Reference : " + self.my_choice_ref_1
@@ -267,7 +267,7 @@ class ovalGui(QWidget):
             self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
         else:
-            print "release"
+            print "release" + str(self.tasks_counter)
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
             print "ItemRelRefClicked2 : self.my_choice_rel_1 : %s " % self.my_choice_rel_1
             tmp = "Release : " + self.my_choice_rel_1
