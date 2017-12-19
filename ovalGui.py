@@ -11,9 +11,9 @@ from Variables import *
 from ovalOptionsGp import initGpOptions
 from ovalChoiceGp import initGpChoice
 from getEnv import env
-#from fonctions import cmd_folder_creation, get_collection_list, get_validationType1, clean_files, copy_files  
+from fonctions import folder_creation, finalFolder_creation, working_dirs_creation # , get_collection_list, get_validationType1, clean_files, copy_files
 from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
-#from fonctions import list_simplify, create_file_list, create_commonfile_list, cmd_working_dirs_creation 
+#from fonctions import list_simplify, create_file_list, create_commonfile_list, 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFull
 from fonctions import checkCalculValidation, checkFileName, newName
@@ -25,7 +25,10 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cha
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.8') # test for datasets seems to be located in fontions.py/list_search_2(collection, filtre)
+        self.setWindowTitle('Validations gui v0.1.9.9') # adding location folders of pictures.write folder path into report.txt 
+        # create the local folders in working directory. Create sub floder for Fast/Full computations.
+        # need to move report.txt into this folder.
+        # create final folder for histos & web page
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -224,7 +227,7 @@ class ovalGui(QWidget):
         self.menu_loc.clear()
         self.loc = QActionGroup(self, exclusive=True)
         for item in self.LocationTable:
-            (item_name, item_checked) = item
+            (item_name, item_checked, item_location) = item
             self.wp.write(item_name + "\n")
             a2 = self.loc.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
             self.menu_loc.addAction(a2)
@@ -446,6 +449,7 @@ class ovalGui(QWidget):
             self.QGBox_rel0.setVisible(False)
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(False)
+            self.PathUpdate()
             self.QGBoxListsUpdate()
 
         else:
@@ -456,17 +460,27 @@ class ovalGui(QWidget):
     def PathUpdate(self):
         print "menu clicked !"
         print "*-*-**--*-*-*-*-*-* Location"
-        self.wp.write("PathUpdate")
+        self.wp.write("PathUpdate\n")
+        self.LocationTable = LocationFilter(self)
         tt = self.loc.actions()
+        i_loc = 0
         for it in tt:
             print "self.ag.actions()", it.text()
             if it.isChecked():
                 print "%s is checked" % it.text()
-                self.wp.write("%s is checked" % it.text())
+                self.wp.write("%s is checked\n" % it.text())
+                print "folder path : %s" % self.LocationTable[i_loc][2]
+                self.wp.write("folder path : %s\n" % self.LocationTable[i_loc][2])
+                self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:]
+                self.wp.write("self.working_dir_base : %s\n" % self.working_dir_base)
+                working_dirs_creation(self)
+                folder_creation(self)
+                finalFolder_creation(self)
             else:
                 print "%s is unchecked" % it.text()
-                self.wp.write("%s is unchecked" % it.text())
-
+                self.wp.write("%s is unchecked\n" % it.text())
+            i_loc += 1
+            
     def QGBoxListsUpdate(self):
         print "menu clicked !"
         print "*-*-**--*-*-*-*-*-* DataSets"

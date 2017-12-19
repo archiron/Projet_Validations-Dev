@@ -25,6 +25,7 @@ def initVariables(self):
     self.working_dir_base = os.getcwd()
     self.working_dir_rel = os.getcwd()
     self.working_dir_ref = os.getcwd()
+    self.finalFolder = ""
         
     self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
     self.releasesList_rel_1 = []

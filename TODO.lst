@@ -32,6 +32,8 @@ Full, miniAOD : idem Full, RECO
 
 Fast, RECO    : Fast and (not PU)
 
+working dir are for resuming the computation.
+histos dir are for the computed histos.
 
 DataSets Type
     Classical : classical electron validation DataSets

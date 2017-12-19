@@ -7,34 +7,48 @@ import re
 from getEnv import env
 from Paths_default import *
 
-def cmd_folder_creation(validationType, working_dir):
+def folder_creation(self):
     import subprocess, os, datetime
     now = datetime.datetime.now()
     newDirName = now.strftime("%Y_%m_%d-%H%M%S")
-#    print "Making directory " + newDirName
-#    print "working dir : ", working_dir
+
     actual_dir = os.getcwd()
-#    print "cmd_folder_creation - actual dir : ", actual_dir
-    os.chdir(working_dir)
-#    print "cmd_folder_creation - je suis en : ", os.getcwd()
-    if ( ( validationType == 'Full' ) or ( validationType == 'gedvsgedFull'  )):
-        newDirName = '/GED_' + newDirName
-    elif ( validationType == 'Fast' ):
-        newDirName = '/FAST_' + newDirName
-    elif ( validationType == 'PileUp' ):
-        newDirName = '/PU_' + newDirName
+    fieldname = self.validationType1 + "_"
+    fieldname = fieldname + self.validationType2
+    fieldname = fieldname + "_" + now.strftime("%Y_%m_%d-%H%M%S")
+    print("fieldname : %s") % fieldname
+    self.wp.write("fieldname : %s\n" % fieldname)
     
-    m_dir = working_dir + newDirName
+    m_dir = self.working_dir_rel + "/" + fieldname
+    self.wp.write("m_dir : %s\n" % m_dir)
+    os.chdir(self.working_dir_rel)
     os.makedirs(m_dir)
-    tmp = m_dir
     
     os.chdir(actual_dir)
-    return tmp
+    return # m_dir
 
-def cmd_working_dirs_creation(self):
+def finalFolder_creation(self):
 #    print "cmd_working_dirs_creation"
-    self.working_dir_rel = self.working_dir_base + '/' + str(self.lineedit1.text()[6:])
-    self.working_dir_ref = self.working_dir_rel + '/' + str(self.lineedit3.text()[6:])
+    if not os.path.exists(self.finalFolder):
+        os.makedirs(str(self.finalFolder))
+    return
+    
+def working_dirs_creation(self): # working dir are for resuming the computation.
+#    print "cmd_working_dirs_creation"
+    self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1) # self.lineedit1.text()[6:]
+    self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1) # self.lineedit3.text()[6:]
+    self.wp.write("self.working_dir_rel : %s\n" % self.working_dir_rel)
+    self.wp.write("self.working_dir_ref : %s\n" % self.working_dir_ref)
+    
+    if not os.path.exists(self.working_dir_rel):
+        os.chdir(self.working_dir_base) # going to base folder
+        print "Creation of (%s) folder" % str(self.working_dir_rel)
+        os.makedirs(str(self.working_dir_rel))
+    os.chdir(self.working_dir_rel)   # Change current working directory
+    if not os.path.exists(self.working_dir_ref):
+        print "Creation of (%s) folder" % str(self.working_dir_ref)
+        os.makedirs(str(self.working_dir_ref))
+
     return
     
 def get_collection_list(self):

@@ -131,7 +131,7 @@ def initGpLocation(self):
     self.LocationTable = LocationFilter(self)
     print "###################################################", self.LocationTable # TEMPORAIRE
     for item in self.LocationTable:
-        (item_name, item_checked) = item
+        (item_name, item_checked, item_location) = item
         a2 = self.loc.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
         self.menu_loc.addAction(a2)
         self.connect(a2, SIGNAL('triggered()'), self.PathUpdate)
