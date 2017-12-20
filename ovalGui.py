@@ -20,15 +20,15 @@ from fonctions import checkCalculValidation, checkFileName, newName
 from Datasets_default import DataSetsFilter
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize
+#form networkFunctions import *
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.1.9.9') # adding location folders of pictures.write folder path into report.txt 
-        # create the local folders in working directory. Create sub floder for Fast/Full computations.
-        # need to move report.txt into this folder.
-        # create final folder for histos & web page
+        self.setWindowTitle('Validations gui v0.2.0.0') # add new file for network operations (cmd_fetch & auth_get).
+        # When we do Full, and load files, if we do Fast, arrays self.releasesList_rel_5, self.releasesList_ref_5, & self.releasesList_FvsF_5 are not cleaned
+        # idem those arrays do not seems to be correct for Fast (see Line 430).
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -427,7 +427,7 @@ class ovalGui(QWidget):
                             if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_ref_5.append(it1)
-            if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only sur Full, RECO
+            if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only on Full, RECO
                 print "\nFastvsFull :"
                 self.wp.write("okToPublishFvsFDatasets FastvsFull = %s\n" % self.okToPublishFvsFDatasets)
                 for it1 in self.releasesList_rel_2:
@@ -437,23 +437,25 @@ class ovalGui(QWidget):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_FvsF_5.append(it1)
             print BaseURL(self) # temporaire
-            print_arrays(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
+            print_arrays(self) # temporaire
           
         elif self.tasks_counter == 4:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(False)
-            self.QGBox_rel0.setTitle("Web page")
+            #self.QGBox_rel0.setTitle("Web page")
+            self.QGBox_Selected.setTitle("Web page")
             self.QGBox_rel0.setVisible(False)
             self.QGBox_Lists.setVisible(False)
-            self.QGBox_Selected.setVisible(False)
+            self.QGBox_Selected.setVisible(True)
+            self.labelResumeSelected.clear() # do not work
             self.PathUpdate()
             self.QGBoxListsUpdate()
-
+            self.filesUpdate()
         else:
-            "Hello Houston, we have a pbm !!"
+            print "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)
         self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
 
@@ -648,3 +650,18 @@ class ovalGui(QWidget):
         self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s\n " % self.selectedFvsFDatasets)
         self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s\n " % self.selectedFvsFGlobalTag)
 
+    def filesUpdate(self):
+        print "beginfiles loading !"
+        self.wp.write("begin files loading !\n")
+        #TEMPORAIRE
+        for line in self.releasesList_rel_5:
+            print line
+
+        for line in self.releasesList_ref_5:
+            print line
+
+        for line in self.releasesList_FvsF_5:
+            print line
+
+        #TEMPORAIRE
+        
