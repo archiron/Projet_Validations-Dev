@@ -31,6 +31,12 @@ def clearDataSetsLists(self):
     self.QTable_FastvsFull.clearContents()
     return
 
+def clearReleasesList(self):
+    self.releasesList_rel_5 = []
+    self.releasesList_ref_5 = []
+    self.releasesList_FvsF_5 = []
+    return
+    
 def writeLabelCombo3(self):
     if self.tasks_counter == len(self.tasks_list) - 1:
         txt = "(" + str(self.tasks_counter) + "," + str(self.tasks_counter) + ") Next : " 

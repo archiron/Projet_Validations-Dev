@@ -19,16 +19,14 @@ from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFul
 from fonctions import checkCalculValidation, checkFileName, newName
 from Datasets_default import DataSetsFilter
 from Paths_default import *
-from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize
+from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize, clearReleasesList
 #form networkFunctions import *
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.0') # add new file for network operations (cmd_fetch & auth_get).
-        # When we do Full, and load files, if we do Fast, arrays self.releasesList_rel_5, self.releasesList_ref_5, & self.releasesList_FvsF_5 are not cleaned
-        # idem those arrays do not seems to be correct for Fast (see Line 430).
+        self.setWindowTitle('Validations gui v0.2.0.1') # introduction of clearReleasesList function in step 3 to clean the arrays of the root files to be loaded.
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -358,6 +356,7 @@ class ovalGui(QWidget):
             self.QGBox_rel0.setVisible(False)
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(True)
+            clearReleasesList(self)
             self.QGBoxListsUpdate()
             
             selectedText = "<strong>Selected :</strong>"
