@@ -6,8 +6,9 @@ import urllib2
 import re
 from getEnv import env
 from Paths_default import *
+from fonctions import checkFastvsFull
 
-def auth_wget2(url, chunk_size=1048576):
+def auth_wget2(url, chunk_size=2097152):
     from os.path import basename, isfile
     from optparse import OptionParser
     from urllib2 import build_opener, Request
@@ -19,11 +20,13 @@ def auth_wget2(url, chunk_size=1048576):
     except ImportError:
         from authentication import X509CertOpen
 
+    print "auth_wget2 : url= ", url
+    
     opener = build_opener(X509CertOpen())
     url_file = opener.open(Request(url))
     size = int(url_file.headers["Content-Length"])
 
-    if size < 1048576:   # if File size < 1MB
+    if size < 2097152:   # if File size < 1MB
         filename = basename(url)    #still download
         readed = url_file.read()    ## and then check if its not an empty dir (parent directory)
         if filename != '':
@@ -340,3 +343,61 @@ def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthre
     
     return 
     
+def cmd_load_files(self):
+    import re
+    import sys
+    import os
+
+    from multiprocessing import Pool, Queue, Process
+    from Queue import Empty
+    from os.path import basename, isfile
+    from optparse import OptionParser
+    from urllib2 import build_opener, Request
+    
+    print "\n cmd_load_files : "
+    self.wp.write("cmd_load_files : \n")
+    cmsenv = env()
+   
+    ## Define options
+    option_is_from_data = "mc" # mc ou data
+    option_mthreads = 3
+#    option_dry_run = False # False telecharge , True liste
+        
+    try:
+        from Utilities.RelMon.authentication import X509CertOpen
+    except ImportError:
+        from authentication import X509CertOpen
+
+    ## Use options
+    relvaldir = "RelVal"
+    if option_is_from_data == 'data':
+        relvaldir = "RelValData"
+    
+    ## MUST TEST IF ARRAYS ARE NOT EMPTY
+    
+    #case 1 self.my_choice_rel_0 : RELEASE
+    print "case 1 self.my_choice_rel_0 : RELEASE"
+    filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_rel_0 + '/'
+#    for line in self.releasesList_rel_5:
+#        print filedir_url + line
+#        pool.map(auth_wget2, [str(filedir_url) + line])
+    os.chdir(self.working_dir_rel)   # Change current working directory to release directory
+    pool = Pool(option_mthreads)
+    pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_rel_5])
+
+    #case 2 self.my_choice_ref_0 : REFERENCE
+    print "case 2 self.my_choice_ref_0 : REFERENCE"
+    filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_ref_0 + '/'
+    os.chdir(self.working_dir_ref)   # Change current working directory to release directory
+    pool = Pool(option_mthreads) # need to be here. If not, download is made into previous folder (i.e. self.working_dir_rel).
+    pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_ref_5])
+    
+    #case 3 self.my_choice_rel_0 : RELEASE for Fast vs Full
+    if ( checkFastvsFull(self) ): # FastvsFull
+        print "case 3 self.my_choice_rel_0 : RELEASE for Fast vs Full"
+        filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_rel_0 + '/'
+        os.chdir(self.working_dir_rel)   # Change current working directory to release directory
+        pool = Pool(option_mthreads)
+        pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_FvsF_5])
+
+    return

@@ -20,13 +20,13 @@ from fonctions import checkCalculValidation, checkFileName, newName
 from Datasets_default import DataSetsFilter
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize, clearReleasesList
-#form networkFunctions import *
+from networkFunctions import cmd_load_files
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.1') # introduction of clearReleasesList function in step 3 to clean the arrays of the root files to be loaded.
+        self.setWindowTitle('Validations gui v0.2.0.2')  # write function cmd_load_files for loading root files.
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -650,7 +650,7 @@ class ovalGui(QWidget):
         self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s\n " % self.selectedFvsFGlobalTag)
 
     def filesUpdate(self):
-        print "beginfiles loading !"
+        print "begin files loading !"
         self.wp.write("begin files loading !\n")
         #TEMPORAIRE
         for line in self.releasesList_rel_5:
@@ -662,5 +662,6 @@ class ovalGui(QWidget):
         for line in self.releasesList_FvsF_5:
             print line
 
+        cmd_load_files(self)
         #TEMPORAIRE
         
