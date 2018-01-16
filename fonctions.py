@@ -28,8 +28,9 @@ def folder_creation(self):
     return # m_dir
 
 def finalFolder_creation(self):
-#    print "cmd_working_dirs_creation"
-    if not os.path.exists(self.finalFolder):
+    print "finalFolder_creation"
+    actual_dir = os.getcwd()
+    if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
         os.makedirs(str(self.finalFolder))
     return
     
@@ -822,6 +823,14 @@ def checkFileName(self, fileName, case):
         checkFileName = False
 
     return checkFileName
+
+def folderExtension_creation(self):
+    extension = '_DQM_'
+    if ( self.checkStdDev1.isChecked()  ):
+        extension += 'std'
+    else: # default suppose that self.checkStdDev2 is checked
+        extension += 'dev'
+    return extension
 
 def checkCalculValidation(self, fileName):
 #Full, RECO    : (not PU) and (not Fast)

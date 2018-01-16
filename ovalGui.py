@@ -13,7 +13,7 @@ from ovalChoiceGp import initGpChoice
 from getEnv import env
 from fonctions import folder_creation, finalFolder_creation, working_dirs_creation # , get_collection_list, get_validationType1, clean_files, copy_files
 from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
-#from fonctions import list_simplify, create_file_list, create_commonfile_list, 
+from fonctions import folderExtension_creation # list_simplify, create_file_list, create_commonfile_list, 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFull
 from fonctions import checkCalculValidation, checkFileName, newName
@@ -26,7 +26,11 @@ from networkFunctions import cmd_load_files
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.2')  # write function cmd_load_files for loading root files.
+        self.setWindowTitle('Validations gui v0.2.0.3')  # updating function finalFolder_creation for gif/html files. 
+        # Have a folderExtension_creation() function for _DQM_std/_DQM_dev extension.
+        # Need to finalize Fast vs Fast & Fast vs Full.
+        # Need to add pmx/miniAOD in the finalFolder name
+        # later, add a hand written completiion for the folder name such as in version 1.0.X
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -183,6 +187,14 @@ class ovalGui(QWidget):
                 self.menu.addAction(a)
                 self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
             self.QGBoxListsUpdate() # needed ?
+        QtCore.QCoreApplication.processEvents() 
+
+    def checkStdDev1_Clicked(self):
+#        print "std"
+        QtCore.QCoreApplication.processEvents() 
+
+    def checkStdDev2_Clicked(self):
+#        print "dev"
         QtCore.QCoreApplication.processEvents() 
 
     def checkSpecificGlobal1Clicked(self):
@@ -452,7 +464,26 @@ class ovalGui(QWidget):
             self.labelResumeSelected.clear() # do not work
             self.PathUpdate()
             self.QGBoxListsUpdate()
-            self.filesUpdate()
+            self.filesUpdate() # load files
+            
+            #### output of the webpage and gifs pictures
+            # step 1 : Full vs Full or Fast vs Fast
+            dirname = str(self.finalFolder) + '/' 
+            if (checkFastvsFull(self)): # Fast to be treated
+                dirname += 'FastvsFast_'
+            else:
+                dirname += 'FullvsFull_'
+            dirname += str(self.my_choice_ref_1[6:]) + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+            self.wp.write("self.finalFolder reference : %s\n" % dirname)
+            if not os.path.exists(dirname): # 
+                os.makedirs(str(dirname))
+            
+            # step 2 : Fast vs Full or Fast vs Fast
+            if (checkFastvsFull(self)): # Fast to be treated
+                dirname = str(self.finalFolder) + '/' + 'FastvsFull_'
+                # ....
+            ####
+            
         else:
             print "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)
@@ -472,11 +503,12 @@ class ovalGui(QWidget):
                 self.wp.write("%s is checked\n" % it.text())
                 print "folder path : %s" % self.LocationTable[i_loc][2]
                 self.wp.write("folder path : %s\n" % self.LocationTable[i_loc][2])
-                self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:]
+                self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+                self.wp.write("self.finalFolder : %s\n" % self.finalFolder)
                 self.wp.write("self.working_dir_base : %s\n" % self.working_dir_base)
                 working_dirs_creation(self)
-                folder_creation(self)
-                finalFolder_creation(self)
+                folder_creation(self) # create local folder for files loading and operation resuming
+                finalFolder_creation(self) # create the save folder for html and gifs files
             else:
                 print "%s is unchecked" % it.text()
                 self.wp.write("%s is unchecked\n" % it.text())
@@ -659,8 +691,9 @@ class ovalGui(QWidget):
         for line in self.releasesList_ref_5:
             print line
 
-        for line in self.releasesList_FvsF_5:
-            print line
+        if (checkFastvsFull(self)):
+            for line in self.releasesList_FvsF_5:
+                print line
 
         cmd_load_files(self)
         #TEMPORAIRE
