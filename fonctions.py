@@ -832,13 +832,28 @@ def folderExtension_creation(self):
         extension += 'dev'
     return extension
 
+def folderSuffixe_creation(self):
+    suffixe = ""
+    if ( self.radio21.isChecked() ):
+        suffixe = "RECO"
+    if ( self.radio22.isChecked() ):
+        suffixe = "PU"
+    if ( self.radio23.isChecked() ):
+        suffixe = "pmx"
+    if ( self.radio24.isChecked() ):
+        suffixe = "miniAOD"
+    return
+    
 def checkCalculValidation(self, fileName):
 #Full, RECO    : (not PU) and (not Fast)
 #Full, PU      : PU and (not Fast)
-#Full, pmx     : pmx and (not Fast) for rel, PU and (not Fast) for rel
+#Full, pmx     : pmx and (not Fast) for rel, PU and (not Fast) for ref
 #Full, miniAOD : idem Full, RECO
 
-#Fast, RECO    : Fast and (not PU)
+#Fast, RECO    : Fast and (not PU nor pmx)
+#Fast, PU      : PU and Fast
+#Fast, pmx     : pmx and Fast for rel, PU and Fast for ref
+#Fast, miniAOD : idem Fast, RECO
     
     checkCalculValidation = True
     if ( self.radio11.isChecked() and self.radio21.isChecked() ): #Full, RECO

@@ -26,11 +26,11 @@ from networkFunctions import cmd_load_files
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.3')  # updating function finalFolder_creation for gif/html files. 
-        # Have a folderExtension_creation() function for _DQM_std/_DQM_dev extension.
-        # Need to finalize Fast vs Fast & Fast vs Full.
-        # Need to add pmx/miniAOD in the finalFolder name
-        # later, add a hand written completiion for the folder name such as in version 1.0.X
+        self.setWindowTitle('Validations gui v0.2.0.4')  # move cmd_load_files into step 4 of checkTaskCounter and removing filesUpdate.
+        # need to create one folder per dataset.
+        # perhaps need to recreate dataset, rel/ref root files structure.
+        # need to fix the Fast list of root files and more generaly the checkCalculValidation function.
+        # need to re-see about comparison of datasets for FastvsFull. In some cases there can not be the same.
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -414,24 +414,33 @@ class ovalGui(QWidget):
             print "self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
             print "self.okToDisplayFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
             
+            ## here we have a common (rel & ref) dataset named as self.okToPublishDatasets for Full vs Full or Fast vs Fast. 
+            ## we also have a common dataset for Fast vs Full named as self.okToPublishFvsFDatasets
+            ## WARNING : we need to have self.okToPublishFvsFDatasets = self.okToPublishDatasets !! ##
+            
             # create list of root files for rel & ref
             print "0 " + self.selectedRelDatasets
-            self.releasesList_rel_3 = (self.selectedRelDatasets.replace(" ", "")).split(',')
-            self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',')
+            print "1 " + self.okToPublishDatasets
+            self.releasesList_rel_3 = (self.selectedRelDatasets.replace(" ", "")).split(',') # to be deleted
+            self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',') # to be deleted
+            self.releasesList_3 = (self.okToPublishDatasets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
             print "\nRelease :"
-            for it1 in self.releasesList_rel_2:
+            for it1 in self.releasesList_rel_2: # it1 = root file
                 if checkFileName(self, it1, "rel"):
-                    for it2 in self.releasesList_rel_3:
+                    #for it2 in self.releasesList_rel_3: # it2 = dataSet # to be deleted
+                    for it2 in self.releasesList_3: # it2 = dataSet
                         #print str(it2)
                         #if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
-                        if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
+                        if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRelGlobalTag), it1)): # at least one file here
                              if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_rel_5.append(it1)
+            # perhaps add a test to verify if there is at least one file and if not, remove the dataSet.
             print "\nReference :"
-            for it1 in self.releasesList_ref_2:
+            for it1 in self.releasesList_ref_2: # it1 = root file
                if checkFileName(self, it1, "ref"):
-                    for it2 in self.releasesList_ref_3:
+                    #for it2 in self.releasesList_ref_3: # it2 = dataSet # to be deleted
+                    for it2 in self.releasesList_3: # it2 = dataSet
                         #print ">>>>> " + it2 + " _ " + newName("__RelVal", it2, "__")
                         #if (re.search(str(it2), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
@@ -441,12 +450,22 @@ class ovalGui(QWidget):
             if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only on Full, RECO
                 print "\nFastvsFull :"
                 self.wp.write("okToPublishFvsFDatasets FastvsFull = %s\n" % self.okToPublishFvsFDatasets)
-                for it1 in self.releasesList_rel_2:
-                    for it2 in self.releasesList_rel_3:
+                for it1 in self.releasesList_rel_2: # it1 = root file
+                    #for it2 in self.releasesList_rel_3: # it2 = dataSet # to be deleted
+                    for it2 in self.releasesList_3: # it2 = dataSet
                         if (re.search(str(it2), it1) and re.search(str(self.selectedFvsFGlobalTag), it1)):
                             if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_FvsF_5.append(it1)
+            # print length of the arrays
+            print "self.releasesList_rel_3 : %d\n" % len(self.releasesList_rel_3) # to be deleted
+            print "self.releasesList_ref_3 : %d\n" % len(self.releasesList_ref_3) # to be deleted
+            print "self.releasesList_3 : %d\n" % len(self.releasesList_3)
+            print "self.releasesList_rel_2 : %d\n" % len(self.releasesList_rel_2)
+            print "self.releasesList_ref_2 : %d\n" % len(self.releasesList_ref_2)
+            print "self.releasesList_rel_5 : %d\n" % len(self.releasesList_rel_5)
+            print "self.releasesList_ref_5 : %d\n" % len(self.releasesList_ref_5)
+            print "self.releasesList_FvsF_5 : %d\n" % len(self.releasesList_FvsF_5)
             print BaseURL(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
             print_arrays(self) # temporaire
@@ -464,7 +483,21 @@ class ovalGui(QWidget):
             self.labelResumeSelected.clear() # do not work
             self.PathUpdate()
             self.QGBoxListsUpdate()
-            self.filesUpdate() # load files
+
+            print "begin files loading !"
+            self.wp.write("begin files loading !\n")
+            cmd_load_files(self)
+            #TEMPORAIRE display list of root files
+            for line in self.releasesList_rel_5:
+                print line
+
+            for line in self.releasesList_ref_5:
+                print line
+
+            if (checkFastvsFull(self)):
+                for line in self.releasesList_FvsF_5:
+                    print line
+            #TEMPORAIRE
             
             #### output of the webpage and gifs pictures
             # step 1 : Full vs Full or Fast vs Fast
@@ -474,6 +507,7 @@ class ovalGui(QWidget):
             else:
                 dirname += 'FullvsFull_'
             dirname += str(self.my_choice_ref_1[6:]) + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+            #dirname += '/gifs' # only for datasets
             self.wp.write("self.finalFolder reference : %s\n" % dirname)
             if not os.path.exists(dirname): # 
                 os.makedirs(str(dirname))
@@ -681,20 +715,3 @@ class ovalGui(QWidget):
         self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s\n " % self.selectedFvsFDatasets)
         self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s\n " % self.selectedFvsFGlobalTag)
 
-    def filesUpdate(self):
-        print "begin files loading !"
-        self.wp.write("begin files loading !\n")
-        #TEMPORAIRE
-        for line in self.releasesList_rel_5:
-            print line
-
-        for line in self.releasesList_ref_5:
-            print line
-
-        if (checkFastvsFull(self)):
-            for line in self.releasesList_FvsF_5:
-                print line
-
-        cmd_load_files(self)
-        #TEMPORAIRE
-        
