@@ -15,9 +15,9 @@ from fonctions import folder_creation, finalFolder_creation, working_dirs_creati
 from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
 from fonctions import folderExtension_creation # list_simplify, create_file_list, create_commonfile_list, 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
-from fonctions import checkFastvsFull, extractDatasets, extractDatasetsFastvsFull
-from fonctions import checkCalculValidation, checkFileName, newName
-from Datasets_default import DataSetsFilter
+from fonctions import checkFastvsFull
+from fonctions import checkFileName, newName
+from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize, clearReleasesList
 from networkFunctions import cmd_load_files
@@ -26,11 +26,12 @@ from networkFunctions import cmd_load_files
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.4')  # move cmd_load_files into step 4 of checkTaskCounter and removing filesUpdate.
+        self.setWindowTitle('Validations gui v0.2.0.5')  # move the function extractDatasets, extractDatasetsFastvsFull, checkCalculValidation from fonctions.py to Datasets_default.py because it concern datasets.
         # need to create one folder per dataset.
         # perhaps need to recreate dataset, rel/ref root files structure.
         # need to fix the Fast list of root files and more generaly the checkCalculValidation function.
         # need to re-see about comparison of datasets for FastvsFull. In some cases there can not be the same.
+        # for pmx vs pmx or pmx vs PU we need to reconsider the tests and the file list because pmx vs PU is with the same release.
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -421,8 +422,8 @@ class ovalGui(QWidget):
             # create list of root files for rel & ref
             print "0 " + self.selectedRelDatasets
             print "1 " + self.okToPublishDatasets
-            self.releasesList_rel_3 = (self.selectedRelDatasets.replace(" ", "")).split(',') # to be deleted
-            self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',') # to be deleted
+            #self.releasesList_rel_3 = (self.selectedRelDatasets.replace(" ", "")).split(',') # to be deleted
+            #self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',') # to be deleted
             self.releasesList_3 = (self.okToPublishDatasets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
             print "\nRelease :"
             for it1 in self.releasesList_rel_2: # it1 = root file
