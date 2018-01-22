@@ -19,19 +19,24 @@ from fonctions import checkFastvsFull
 from fonctions import checkFileName, newName
 from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
 from Paths_default import *
-from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, changeFastvsFullSize, clearReleasesList
+from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList # changeFastvsFullSize, 
 from networkFunctions import cmd_load_files
 		
 #############################################################################
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.5')  # move the function extractDatasets, extractDatasetsFastvsFull, checkCalculValidation from fonctions.py to Datasets_default.py because it concern datasets.
-        # need to create one folder per dataset.
-        # perhaps need to recreate dataset, rel/ref root files structure.
-        # need to fix the Fast list of root files and more generaly the checkCalculValidation function.
-        # need to re-see about comparison of datasets for FastvsFull. In some cases there can not be the same.
-        # for pmx vs pmx or pmx vs PU we need to reconsider the tests and the file list because pmx vs PU is with the same release.
+        self.setWindowTitle('Validations gui v0.2.0.6')  # add new button for Fast vs Full. Remove specific rzdio button and replace it with PU and pmx buttons.
+        # Need to rewrite lists for selection.
+        # Replace self.checkSpecificGlobal with self.checkSpecReference
+        # remove QTable_FastvsFull, ItemSelectedTable_FastvsFull function, changeFastvsFullSize function
+        # Add self.my_choice_tmp = "" to store reference when working with miniAOD, pmx vs pmx or Fast vs Full.
+        
+        # Need to create one folder per dataset.
+        # Perhaps need to recreate dataset, rel/ref root files structure.
+        # Need to fix the Fast list of root files and more generaly the checkCalculValidation function.
+        # Need to re-see about comparison of datasets for FastvsFull. In some cases there can not be the same.
+        # For pmx vs pmx or pmx vs PU we need to reconsider the tests and the file list because pmx vs PU is with the same release.
      
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -106,7 +111,7 @@ class ovalGui(QWidget):
 
     def radio11Clicked(self):
         if self.radio11.isChecked():
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.validationType1 = 'Full'
             self.checkDataSets2Clicked()
 #            print "self.validationType1 :", self.validationType1
@@ -115,49 +120,60 @@ class ovalGui(QWidget):
 
     def radio12Clicked(self):
         if self.radio12.isChecked():
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.validationType1 = 'Fast'
             self.checkDataSets2Clicked()
 #            print "self.validationType1 :", self.validationType1
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
+    def radio13Clicked(self):
+        if self.radio13.isChecked():
+#            changeFastvsFullSize(self)
+            self.validationType1 = 'Fast'
+            self.checkDataSets2Clicked()
+            if ( self.my_choice_rel_1 != "" ):
+                self.my_choice_tmp = self.my_choice_rel_1
+#            print "self.validationType1 :", self.validationType1
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents()
+        
     def radio21Clicked(self):
         if self.radio21.isChecked():
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.validationType2 = 'RECO'
             self.checkDataSets2Clicked()
-            self.checkSpecificGlobal1.setEnabled(False) #default
+            self.checkSpecReference1.setChecked(True) #default
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
 
     def radio22Clicked(self):
         if self.radio22.isChecked():
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.validationType2 = 'PU'
             self.checkDataSets2Clicked()
-            self.checkSpecificGlobal1.setEnabled(False) #default
+            self.checkSpecReference2.setChecked(True) #default
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
     def radio23Clicked(self):
         if self.radio23.isChecked():
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.validationType2 = 'pmx'
             self.checkDataSets2Clicked()
-            self.checkSpecificGlobal1.setEnabled(True)
+            self.checkSpecReference2.setChecked(True) #default
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
                         
     def radio24Clicked(self):
         if self.radio24.isChecked():
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.validationType2 = 'miniAOD'
             self.checkDataSets2Clicked()
-            self.checkSpecificGlobal1.setEnabled(False) #default
+            self.checkSpecReference4.setChecked(True) #default
             print "self.validationType2 :", self.validationType2
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
@@ -198,17 +214,31 @@ class ovalGui(QWidget):
 #        print "dev"
         QtCore.QCoreApplication.processEvents() 
 
-    def checkSpecificGlobal1Clicked(self):
-        if self.checkSpecificGlobal1.isChecked():
-            self.validationType3 = 'specific'
-#            print "Specific"
+    def checkSpecReference1_Clicked(self):
+        if self.checkSpecReference1.isChecked():
+            self.validationType3 = 'RECO'
+#            print "RECO"
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
 
-    def checkSpecificGlobal2Clicked(self):
-        if self.checkSpecificGlobal2.isChecked():
-            self.validationType3 = 'global'
-#            print "Global"
+    def checkSpecReference2_Clicked(self):
+        if self.checkSpecReference2.isChecked():
+            self.validationType3 = 'PU'
+#            print "PU"
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents() 
+
+    def checkSpecReference3_Clicked(self):
+        if self.checkSpecReference3.isChecked():
+            self.validationType3 = 'pmx'
+#            print "pmx"
+            self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents() 
+
+    def checkSpecReference4_Clicked(self):
+        if self.checkSpecReference4.isChecked():
+            self.validationType3 = 'miniAOD'
+#            print "miniAOD"
             self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
 
@@ -344,7 +374,7 @@ class ovalGui(QWidget):
         elif self.tasks_counter == 2:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Lists")
@@ -362,7 +392,7 @@ class ovalGui(QWidget):
         elif self.tasks_counter == 3:
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
-            changeFastvsFullSize(self)
+#            changeFastvsFullSize(self)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Selected")
@@ -637,22 +667,22 @@ class ovalGui(QWidget):
                 if ( checkFastvsFull(self) ): # FastvsFull
                     print "nb of datasets  : ", len(self.releasesList_rel_4) # TEMPORAIRE
                     print "nb of globaltags : ", len(self.releasesList_rel_4b) # TEMPORAIRE
-                    self.QTable_FastvsFull.setRowCount( len(self.releasesList_rel_4) )
-                    i_count = 0
-                    for it in self.releasesList_rel_4:
-                        item = QTableWidgetItem("%s" % it)
-                        if ( it == datasetList ):
-                            item.setTextColor(QColor("blue"))
-                        else:
-                            item.setTextColor(QColor("black"))
-                        self.QTable_FastvsFull.setItem(i_count, 0, item)
-                        i_count += 1
-                    i_count = 0
-                    for it in self.releasesList_rel_4b:
-                        item = QTableWidgetItem("%s" % it)
-                        self.QTable_FastvsFull.setItem(i_count, 1, item)
-                        i_count += 1
-                    self.connect(self.QTable_FastvsFull, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_FastvsFull)
+#                    self.QTable_FastvsFull.setRowCount( len(self.releasesList_rel_4) )
+#                    i_count = 0
+#                    for it in self.releasesList_rel_4:
+#                        item = QTableWidgetItem("%s" % it)
+#                        if ( it == datasetList ):
+#                            item.setTextColor(QColor("blue"))
+#                        else:
+#                            item.setTextColor(QColor("black"))
+#                        self.QTable_FastvsFull.setItem(i_count, 0, item)
+#                        i_count += 1
+#                    i_count = 0
+#                    for it in self.releasesList_rel_4b:
+#                        item = QTableWidgetItem("%s" % it)
+#                        self.QTable_FastvsFull.setItem(i_count, 1, item)
+#                        i_count += 1
+#                    self.connect(self.QTable_FastvsFull, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_FastvsFull)
                     
             else: # NONE & none checked, or ALL & none checked
                 print "len of selectedDataSets = %d" % len(self.selectedDataSets)
@@ -697,22 +727,22 @@ class ovalGui(QWidget):
         self.wp.write("ItemSelectedTable_ref : self.selectedRefDatasets : %s\n " % self.selectedRefDatasets)
         self.wp.write("ItemSelectedTable_ref : self.selectedRefGlobalTag : %s\n " % self.selectedRefGlobalTag)
 
-    def ItemSelectedTable_FastvsFull(self, nRow, nCol):
-        print "(%d, %d)" % (nRow, nCol)
-        if (nCol): # nCol=1, True
-            print self.QTable_FastvsFull.item(nRow, nCol-1).text()
-            self.QTable_FastvsFull.item(nRow, nCol-1).setSelected(True)
-            print self.QTable_FastvsFull.item(nRow, nCol).text()
-            self.selectedRefDatasets = self.QTable_FastvsFull.item(nRow, nCol-1).text()
-            self.selectedRefGlobalTag = self.QTable_FastvsFull.item(nRow, nCol).text()
-        else : # nCol=0, False
-            print self.QTable_FastvsFull.item(nRow, nCol).text()
-            print self.QTable_FastvsFull.item(nRow, nCol+1).text()
-            self.QTable_FastvsFull.item(nRow, nCol+1).setSelected(True)
-            self.selectedFvsFDatasets = self.QTable_FastvsFull.item(nRow, nCol).text()
-            self.selectedFvsFGlobalTag = self.QTable_FastvsFull.item(nRow, nCol+1).text()
-        print "ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets
-        print "ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
-        self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s\n " % self.selectedFvsFDatasets)
-        self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s\n " % self.selectedFvsFGlobalTag)
+#    def ItemSelectedTable_FastvsFull(self, nRow, nCol):
+#        print "(%d, %d)" % (nRow, nCol)
+#        if (nCol): # nCol=1, True
+#            print self.QTable_FastvsFull.item(nRow, nCol-1).text()
+#            self.QTable_FastvsFull.item(nRow, nCol-1).setSelected(True)
+#            print self.QTable_FastvsFull.item(nRow, nCol).text()
+#            self.selectedRefDatasets = self.QTable_FastvsFull.item(nRow, nCol-1).text()
+#            self.selectedRefGlobalTag = self.QTable_FastvsFull.item(nRow, nCol).text()
+#        else : # nCol=0, False
+#            print self.QTable_FastvsFull.item(nRow, nCol).text()
+#            print self.QTable_FastvsFull.item(nRow, nCol+1).text()
+#            self.QTable_FastvsFull.item(nRow, nCol+1).setSelected(True)
+#            self.selectedFvsFDatasets = self.QTable_FastvsFull.item(nRow, nCol).text()
+#            self.selectedFvsFGlobalTag = self.QTable_FastvsFull.item(nRow, nCol+1).text()
+#        print "ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s " % self.selectedFvsFDatasets
+#        print "ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s " % self.selectedFvsFGlobalTag
+#        self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFDatasets : %s\n " % self.selectedFvsFDatasets)
+#        self.wp.write("ItemSelectedTable_FastvsFull : self.selectedFvsFGlobalTag : %s\n " % self.selectedFvsFGlobalTag)
 

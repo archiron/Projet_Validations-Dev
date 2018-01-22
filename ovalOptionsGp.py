@@ -16,18 +16,21 @@ def initGpCalcul(self):
     self.QGBox1.setMaximumWidth(100)
     self.radio11 = QRadioButton("FULL") # par defaut
     self.radio12 = QRadioButton("FAST")
+    self.radio13 = QRadioButton("FAST vs Full")
     self.radio11.setChecked(True)
     self.connect(self.radio11, SIGNAL("clicked()"), self.radio11Clicked) 
     self.connect(self.radio12, SIGNAL("clicked()"), self.radio12Clicked) 
+    self.connect(self.radio13, SIGNAL("clicked()"), self.radio13Clicked) 
     vbox1 = QVBoxLayout()
     vbox1.addWidget(self.radio11)
     vbox1.addWidget(self.radio12)
+    vbox1.addWidget(self.radio13)
     vbox1.addStretch(1)
     self.QGBox1.setLayout(vbox1)
     return
     
-def initGpValidation(self):
-    print "initGpValidation"
+def initGpSpecTarget(self):
+    print "initGpSpecTarget"
 
     self.QGBox2 = QGroupBox("Validation")
     self.QGBox2.setMaximumHeight(120)
@@ -36,7 +39,7 @@ def initGpValidation(self):
     self.radio22 = QRadioButton("PU")
     self.radio23 = QRadioButton("pmx")
     self.radio24 = QRadioButton("miniAOD")
-    self.radio21.setChecked(True)
+    self.radio21.setChecked(True) #default
     self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked) 
     self.connect(self.radio22, SIGNAL("clicked()"), self.radio22Clicked) 
     self.connect(self.radio23, SIGNAL("clicked()"), self.radio23Clicked) 
@@ -50,23 +53,28 @@ def initGpValidation(self):
     self.QGBox2.setLayout(vbox2)
     return
 
-def initGpSpecific(self):
-    print "initGpSpecific"
+def initGpSpecReference(self):
+    print "initGpSpecReference"
 
-    self.QGBoxSpecificGlobal = QGroupBox("Specific / Global")
-    self.QGBoxSpecificGlobal.setMaximumHeight(120)
-    self.QGBoxSpecificGlobal.setMinimumHeight(120)
-    self.checkSpecificGlobal1 = QRadioButton("Specific")
-    self.checkSpecificGlobal2 = QRadioButton("Global")
-    self.checkSpecificGlobal2.setChecked(True)
-    self.checkSpecificGlobal1.setEnabled(False) #default
-    self.connect(self.checkSpecificGlobal1, SIGNAL("clicked()"), self.checkSpecificGlobal1Clicked)
-    self.connect(self.checkSpecificGlobal2, SIGNAL("clicked()"), self.checkSpecificGlobal2Clicked)
-    vboxSpecificGlobal = QVBoxLayout()
-    vboxSpecificGlobal.addWidget(self.checkSpecificGlobal1)
-    vboxSpecificGlobal.addWidget(self.checkSpecificGlobal2)
-    vboxSpecificGlobal.addStretch(1)
-    self.QGBoxSpecificGlobal.setLayout(vboxSpecificGlobal)
+    self.QGBoxSpecReference = QGroupBox("Spec/Ref")
+    self.QGBoxSpecReference.setMaximumHeight(120)
+    self.QGBoxSpecReference.setMinimumHeight(120)
+    self.checkSpecReference1 = QRadioButton("RECO") #default
+    self.checkSpecReference2 = QRadioButton("PU")
+    self.checkSpecReference3 = QRadioButton("pmx")
+    self.checkSpecReference4 = QRadioButton("miniAOD")
+    self.checkSpecReference1.setChecked(True) #default
+    self.connect(self.checkSpecReference1, SIGNAL("clicked()"), self.checkSpecReference1_Clicked)
+    self.connect(self.checkSpecReference2, SIGNAL("clicked()"), self.checkSpecReference2_Clicked)
+    self.connect(self.checkSpecReference3, SIGNAL("clicked()"), self.checkSpecReference3_Clicked)
+    self.connect(self.checkSpecReference4, SIGNAL("clicked()"), self.checkSpecReference4_Clicked)
+    vboxSpecReference = QVBoxLayout()
+    vboxSpecReference.addWidget(self.checkSpecReference1)
+    vboxSpecReference.addWidget(self.checkSpecReference2)
+    vboxSpecReference.addWidget(self.checkSpecReference3)
+    vboxSpecReference.addWidget(self.checkSpecReference4)
+    vboxSpecReference.addStretch(1)
+    self.QGBoxSpecReference.setLayout(vboxSpecReference)
         				
     return
 
@@ -185,10 +193,10 @@ def initGpOptions(self):
     initGpCalcul(self)
     
 	# creation du grpe Validation
-    initGpValidation(self)
+    initGpSpecTarget(self)
         				
 	# creation du grpe Specific/Global
-    initGpSpecific(self)
+    initGpSpecReference(self)
 
     # creation du grpe initGpDataSets
     initGpDataSets(self)
@@ -209,7 +217,7 @@ def initGpOptions(self):
     self.layoutH_radio = QHBoxLayout()
     self.layoutH_radio.addWidget(self.QGBox1)
     self.layoutH_radio.addWidget(self.QGBox2)
-    self.layoutH_radio.addWidget(self.QGBoxSpecificGlobal)
+    self.layoutH_radio.addWidget(self.QGBoxSpecReference)
     self.layoutH_radio.addWidget(self.QGBoxAllNone)
     self.layoutH_radio.addWidget(self.QGBoxDataSets)
     self.layoutH_radio.addStretch(1)

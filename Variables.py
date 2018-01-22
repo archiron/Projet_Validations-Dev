@@ -22,6 +22,7 @@ def initVariables(self):
     self.files_list = []
     self.my_choice_rel = "" # release to work on
     self.my_choice_ref = "" # reference for comparison
+    self.my_choice_tmp = "" # to store reference when working with miniAOD, pmx vs pmx or Fast vs Full.
     self.working_dir_base = os.getcwd()
     self.working_dir_rel = os.getcwd()
     self.working_dir_ref = os.getcwd()

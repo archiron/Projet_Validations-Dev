@@ -1,8 +1,8 @@
-@#! /usr/bin/env python
+#! /usr/bin/env python
 #-*-coding: utf-8 -*-
 
 # A new presentation/use is made in order to use very precisely the DataSets.
-# You can add a DataSet inside a given function and look what happened for only the considerated Datatsets.
+# You can add a DataSet inside a given function and look what happened for only the considered Datatsets.
 # This seems more efficient than use "hard coding" and complex search function for the separate cases.
 
 # new way to load datasets items into the menu. datasets are presented as [name, True/False] with True/False the default choice to be checked or not.
