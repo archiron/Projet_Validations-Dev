@@ -41,15 +41,7 @@ def DataSetsFilter_FastRECO(self):
     ]
     return table
 
-def DataSetsFilter_FullPU(self):
-    print "Full"
-    table=[
-    ["TTbar_13", 1],
-    ["ZEE_13", 1],
-    ]
-    return table
-
-def DataSetsFilter_FastPU(self):
+def DataSetsFilter_FastFullRECO(self):
     print "Fast"
     table=[
     ["TTbar_13", 1],
@@ -57,7 +49,7 @@ def DataSetsFilter_FastPU(self):
     ]
     return table
 
-def DataSetsFilter_Fullpmx(self):
+def DataSetsFilter_FullPU25(self):
     print "Full"
     table=[
     ["TTbar_13", 1],
@@ -65,7 +57,39 @@ def DataSetsFilter_Fullpmx(self):
     ]
     return table
 
-def DataSetsFilter_Fastpmx(self):
+def DataSetsFilter_FastPU25(self):
+    print "Fast"
+    table=[
+    ["TTbar_13", 1],
+    ["ZEE_13", 1],
+    ]
+    return table
+
+def DataSetsFilter_FastFullPU25(self):
+    print "Fast"
+    table=[
+    ["TTbar_13", 1],
+    ["ZEE_13", 1],
+    ]
+    return table
+
+def DataSetsFilter_FullPUpmx25(self):
+    print "Full"
+    table=[
+    ["TTbar_13", 1],
+    ["ZEE_13", 1],
+    ]
+    return table
+
+def DataSetsFilter_FastPUpmx25(self):
+    print "Fast"
+    table=[
+    ["TTbar_13", 1],
+    ["ZEE_13", 1],
+    ]
+    return table
+
+def DataSetsFilter_FastFullPUpmx25(self):
     print "Fast"
     table=[
     ["TTbar_13", 1],
@@ -83,6 +107,14 @@ def DataSetsFilter_FullminiAOD(self):
     return table
 
 def DataSetsFilter_FastminiAOD(self):
+    print "Fast"
+    table=[
+    ["TTbar_13", 1],
+    ["ZEE_13", 1],
+    ]
+    return table
+
+def DataSetsFilter_FastFullminiAOD(self):
     print "Fast"
     table=[
     ["TTbar_13", 1],
@@ -142,33 +174,33 @@ def extractDatasetsFastvsFull(self): # do not verify if checkFastvsFull(self) !!
 
 def checkCalculValidation(self, fileName):
 #Full, RECO    : (not PU) and (not Fast)
-#Full, PU      : PU and (not Fast)
-#Full, pmx     : pmx and (not Fast) for rel, PU and (not Fast) for ref
+#Full, PU25    : PU25 and (not Fast)
+#Full, PUpmx25 : PUpmx25 and (not Fast) for rel, PU and (not Fast) for ref
 #Full, miniAOD : idem Full, RECO
 
 #Fast, RECO    : Fast and (not PU nor pmx)
-#Fast, PU      : PU and Fast
-#Fast, pmx     : pmx and Fast for rel, PU and Fast for ref
+#Fast, PU25    : PU25 and Fast
+#Fast, PUpmx25 : PUpmx25 and Fast for rel, PU and Fast for ref
 #Fast, miniAOD : idem Fast, RECO
     
     checkCalculValidation = True
-    check_PU = False
-    check_pmx = False
+    check_PU25 = False
+    check_pmx25 = False
     check_Fast = False
-    if ( re.search("PU", fileName) ):
-        check_PU = True
-    if ( re.search("pmx", fileName) ):
-        check_pmx = True
+    if ( re.search("PU25", fileName) ):
+        check_PU25 = True
+    if ( re.search("PUpmx25", fileName) ):
+        check_pmx25 = True
     if ( re.search("Fast", fileName) ):
         check_Fast = True
     
     if ( self.radio11.isChecked() and self.radio21.isChecked() ): #Full, RECO
 #        print ">>>>>>>> Full, RECO"
-        if ( re.search("PU", fileName) or re.search("Fast", fileName) ):
+        if ( re.search("PU25", fileName) or re.search("Fast", fileName) ):
 #            print ">>>> PU, Fast : " + fileName
             checkCalculValidation = False
     
     if ( self.radio11.isChecked() and self.radio22.isChecked() ): #Full, PU
-        print ">>>>>>>> Full, PU"
+        print ">>>>>>>> Full, PU25"
     return checkCalculValidation
 

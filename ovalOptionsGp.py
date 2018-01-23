@@ -13,7 +13,7 @@ def initGpCalcul(self):
 
     self.QGBox1 = QGroupBox("Calcul")
     self.QGBox1.setMaximumHeight(120)
-    self.QGBox1.setMaximumWidth(100)
+    self.QGBox1.setMaximumWidth(120)
     self.radio11 = QRadioButton("FULL") # par defaut
     self.radio12 = QRadioButton("FAST")
     self.radio13 = QRadioButton("FAST vs Full")
@@ -36,8 +36,8 @@ def initGpSpecTarget(self):
     self.QGBox2.setMaximumHeight(120)
     self.QGBox2.setMaximumWidth(100)
     self.radio21 = QRadioButton("RECO") # par defaut
-    self.radio22 = QRadioButton("PU")
-    self.radio23 = QRadioButton("pmx")
+    self.radio22 = QRadioButton("PU25")
+    self.radio23 = QRadioButton("PUpmx25")
     self.radio24 = QRadioButton("miniAOD")
     self.radio21.setChecked(True) #default
     self.connect(self.radio21, SIGNAL("clicked()"), self.radio21Clicked) 
@@ -60,8 +60,8 @@ def initGpSpecReference(self):
     self.QGBoxSpecReference.setMaximumHeight(120)
     self.QGBoxSpecReference.setMinimumHeight(120)
     self.checkSpecReference1 = QRadioButton("RECO") #default
-    self.checkSpecReference2 = QRadioButton("PU")
-    self.checkSpecReference3 = QRadioButton("pmx")
+    self.checkSpecReference2 = QRadioButton("PU25")
+    self.checkSpecReference3 = QRadioButton("PUpmx25")
     self.checkSpecReference4 = QRadioButton("miniAOD")
     self.checkSpecReference1.setChecked(True) #default
     self.connect(self.checkSpecReference1, SIGNAL("clicked()"), self.checkSpecReference1_Clicked)

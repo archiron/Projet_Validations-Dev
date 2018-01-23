@@ -49,22 +49,18 @@ self.ref_list_mod : liste les releases, globaltags et datasets a partir des data
 self.releasesList_0 = [] : list_search_0(self) # liste des pre-releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
 self.releasesList_rel_1 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la release choisie ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
 self.releasesList_ref_1 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la reference choisie ( ['CMSSW_8_0_x/', ..., 'CMSSW_3_11_x/'])
-self.releasesList_rel_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie
-self.releasesList_ref_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie
+self.releasesList_rel_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie (ie GlobalTag)
+self.releasesList_ref_2 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie (ie GlobalTag)
 self.releasesList_rel_3 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés
 self.releasesList_ref_3 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie et pour les datasets selectionnés
 self.releasesList_3 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release ou reference choisie et pour les datasets selectionnés
 
 self.releasesList_rel_3b = [] : liste des caractéristiques in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés (CMSSW_9_0_0_pre6-90X_mcRun2_asymptotic_v4-v1)
 self.releasesList_ref_3b = [] : liste des caractéristiques in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous reference choisie et pour les datasets selectionnés (CMSSW_9_0_0_pre6-90X_mcRun2_asymptotic_v4-v1)
-self.releasesList_rel_4 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés. utilisée dans le cas FastvsFull
-self.releasesList_rel_4b = [] : liste des caractéristiques in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour la sous release choisie et pour les datasets selectionnés (CMSSW_9_0_0_pre6-90X_mcRun2_asymptotic_v4-v1). utilisée dans le cas FastvsFull
 self.releasesList_rel_5 = [] : liste des fichiers in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/ pour les datasets choisis et les globaltags choisis
 
 self.okToPublishDatasets : liste des datasets communs (release/reference) pour la creation des histos
 self.okToDisplayDatasets : liste des datasets (release/reference) pour affichage : en bleu, les communs et en noir, les differents.
-self.okToPublishFvsFDatasets : idem self.okToPublishDatasets mais pour FastvsFull. Normalement égal à self.okToPublishDatasets.
-self.okToDisplayFvsFDatasets : idem okToDisplayDatasets mais pour FastvsFull. 
 Les précédents avec Display au lieu de Publish sont la pour affichage.
 
 self.my_choice_rel_0 = '' : une des valeurs au dessus choisie pour la release de travail : RELEASE

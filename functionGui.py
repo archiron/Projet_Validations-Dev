@@ -28,7 +28,6 @@ def clearDataSets(self):
 def clearDataSetsLists(self):
     self.QTable_rel.clearContents()
     self.QTable_ref.clearContents()
-#    self.QTable_FastvsFull.clearContents()
     return
 
 def clearReleasesList(self):
@@ -45,13 +44,3 @@ def writeLabelCombo3(self):
     self.labelCombo3.setText(self.trUtf8(txt))
     return
 
-#def changeFastvsFullSize(self):
-#    print "self.tasks_counter = %d" % self.tasks_counter
-#    if ( self.tasks_counter == 2 and checkFastvsFull(self) ):
-#        print "self.checkFastvsFull = %s" % self.checkFastvsFull
-#        self.setFixedSize(1500, 700)
-#        self.QGBox_FastvsFull_0.setVisible(True)
-#    else:
-#        self.setFixedSize(1200, 700)
-#        self.QGBox_FastvsFull_0.setVisible(False)
-#    return

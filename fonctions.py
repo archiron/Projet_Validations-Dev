@@ -191,80 +191,75 @@ def clean_collections(collection, gccs):
 #        print "data ", i, " : ", items
         i += 1
         if ( gccs == 'Full' ):
-            if ( re.search('PU', items) ):
-                print " PU exist in Full", items # to be removed
+            if ( re.search('PU25', items) ):
+                print " PU25 exist in Full", items # to be removed
             elif ( re.search('Fast', items) ):
                 print " Fast exist in Full", items # to be removed
             else:
                 temp.append(items)
-        elif ( gccs == 'PU' ):
+        elif ( gccs == 'PU25' ):
             if ( re.search('Fast', items) ):
-                print " Fast exist in PU", items # to be removed
+                print " Fast exist in PU25", items # to be removed
                 temp.append(items) # TEMP. To be removed
             else:
                 temp.append(items)
         else: # gccs == 'FAST'
-            if ( re.search('PU', items) ):
+            if ( re.search('PU25', items) ):
                 print " PU exist in Fast", items # to be removed
             else:
                 temp.append(items)
     return temp
 
-def clean_collections2(collectionItem, validationType_1, validationType_2, validationType_3):
+def clean_collections2(collectionItem, validationType_1, validationType_2, validationType_3, relrefChoice):
     import re
     temp = True
-    if ( validationType_1 == 'Full' ): # does not take into account miniAOD
-        if ( re.search('Fast', collectionItem) ):
-            print " Fast exist in Full", collectionItem # to be removed
+    checkFvsF = ""
+    # relrefChoice == "ref" and validationType1 == "FastFull" ==> Full, validationType_3
+    # relrefChoice == "rel" and validationType1 == "FastFull" ==> Fast, validationType_2
+    if ( ( relrefChoice == "ref") and (validationType_1 == "FastFull") ):
+        checkFvsF = "Full"
+    if ( ( relrefChoice == "rel") and (validationType_1 == "FastFull") ):
+        checkFvsF = "Fast"
+    
+    valType = validationType_2 # default
+    if ( relrefChoice == "ref" ):
+        valType = validationType_3
+    #print "relrefChoice : %s, valType : %s" %(relrefChoice, valType)
+    
+    c_Fast = False
+    if ( re.search('Fast', collectionItem) ): #  match Fast 
+        c_Fast = True
+    c_PU25 = False
+    if ( re.search('PU25', collectionItem) ): #  match PU AND PUpmx
+        c_PU25 = True
+    c_pmx25 = False
+    if ( re.search('PUpmx25', collectionItem) ): #  match pmx
+        c_pmx25 = True
+    
+    if ( valType == "PU25" ): # PU test (PU and not pmx)
+        if ( not c_PU25 ):
             temp = False
-        else: # all Full + PU + pmx + miniAOD
-            temp= True # temporaire
-            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'miniAOD' ) ):
-                if ( re.search('PU', collectionItem) ):
-                    temp = False
-            elif ( ( validationType_2 == 'PU' )): 
-                if ( re.search('PU', collectionItem) ):
-                    print " PU ask for PU", collectionItem # to be removed
-                    if ( re.search('pmx', collectionItem) ):
-                        temp = False
-                    else:
-                        temp = True
-                else:
-                    temp = False
-            elif ( validationType_2 == 'pmx' ):
-                if ( re.search('pmx', collectionItem) ):
-                    print " pmx ask for pmx", collectionItem # to be removed
-                    temp = True
-                elif ( re.search('PU', collectionItem) and ( validationType_3 == 'global' ) ):
-                    temp = True
-                else:
-                    temp = False
-    else: # validationType_1 == 'FAST', does not take into account PU & Fast
-        if ( re.search('Fast', collectionItem) ): #  match Fast all Fast + PU + pmx + miniAOD
-            print " Fast added", collectionItem # to be removed
-            temp = True # Temporaire
-            if ( ( validationType_2 == 'RECO' ) or ( validationType_2 == 'miniAOD' ) ):
-                if ( re.search('PU', collectionItem) ):
-                    temp = False
-            elif ( validationType_2 == 'PU' ):
-                if ( re.search('PU', collectionItem) ):
-                    print " PU ask for PU", collectionItem # to be removed
-                    if ( re.search('pmx', collectionItem) ):
-                        temp = False
-                    else:
-                        temp = True
-                else:
-                    temp = False
-            elif ( validationType_2 == 'pmx' ):
-                if ( re.search('pmx', collectionItem) ):
-                    print " pmx ask for pmx", collectionItem # to be removed
-                    temp = True
-                elif ( re.search('PU', collectionItem) and ( validationType_3 == 'global' ) ):
-                    temp = True
-                else:
-                    temp = False
-        else:
+    else: # valType != "PU25"
+        if (c_PU25):
             temp = False
+    
+    if ( valType == "PUpmx25" ): # 
+        if (not c_pmx25): # pmx test
+            temp = False
+    else:
+        if (c_pmx25): # pmx test
+            temp = False
+
+    if ( (validationType_1 == "Fast") or ( checkFvsF == "Fast" )):
+        if (not c_Fast):
+            temp = False
+    else:
+        if (c_Fast): # Fast test
+            temp = False
+    
+    # RESUMING
+    #print "%s, c_Fast : %s, c_PU : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
+    
     return temp
 
 def list_search_0(self):
@@ -353,10 +348,9 @@ def list_search_3(collection, filtre):
 #            print "OK : ", filtre, item1
 #        else:
 #            print "KO : ", filtre, item1
-#    print "lg temp : ", len(temp_1)
     return temp_1
     
-def list_search_4(collection, filtre, validationType_1, validationType_2):
+def list_search_4(collection, filtre, validationType_1, validationType_2): # no more used
     import re
 
     temp_1 = []
@@ -382,6 +376,7 @@ def list_search_5(self):
 
     print " self.validationType1 = ",  self.validationType1
     print " self.validationType2 = ",  self.validationType2
+    print " self.validationType3 = ",  self.validationType3
     #print " self.selectedDataSets = ", self.selectedDataSets # OK
     #print " self.releasesList_rel_2 = ", self.releasesList_rel_2 # OK
     #print " self.releasesList_ref_2 = ", self.releasesList_ref_2 # OK
@@ -394,8 +389,7 @@ def list_search_5(self):
     temp_4 = []
     temp_34 = []
     temp_ref = []
-    temp_56 = []
-    temp_FastvsFull = []
+
     filtre = sorted(set(self.selectedDataSets), reverse=True)
     validationType_2 = self.validationType2
     validationType_3 = self.validationType3
@@ -409,7 +403,7 @@ def list_search_5(self):
     for item1 in self.releasesList_rel_2:
         for item2 in filtre:
             if re.search(item2, item1):
-                if clean_collections2(item1, self.validationType1, validationType_2, validationType_3):
+                if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "rel"):
                     temp_12.append([explode_item(item1)[2], item2])
                     print "len = %i" % len(temp_12)
                 break
@@ -433,17 +427,22 @@ def list_search_5(self):
         
     # PART REFERENCE
     filtre = sorted(set(self.ref_list_2), reverse=True)
-    if ( validationType_2 == 'miniAOD' ):
+    if (( validationType_3 == 'miniAOD' ) and ( validationType_2 == 'RECO' )): # case RECO vs miniAOD
         temp_3 = temp_1
         temp_4 = temp_2
     else:
-        for item1 in self.releasesList_ref_2:
+        releasesTemp = self.releasesList_ref_2
+        if ( checkFastvsFull(self) ): # Fast vs Full
+            releasesTemp = self.releasesList_rel_2
+        for item1 in releasesTemp:
             for item2 in filtre:
                 if re.search(item2, item1):
-                    if clean_collections2(item1, self.validationType1, validationType_2, validationType_3):
+                    if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "ref"):
                         temp_34.append([explode_item(item1)[2], item2])
+                        print "len = %i" % len(temp_34)
                     break
     
+    print "len of temp_34 = %i." % len(temp_34)
     if ( len(temp_34) > 0 ):
         temp_34.sort()
 
@@ -459,37 +458,6 @@ def list_search_5(self):
         temp_3.append(temp_ref[i][1])
         temp_4.append(temp_ref[i][0])
     
-    # FAST vs FULL TREATMENT
-#    if ( self.validationType1 == "Fast" and self.validationType2 == "RECO" ): # FAST vs FULL TREATMENT
-    self.releasesList_rel_4 = []
-    self.releasesList_rel_4b = []
-    if ( checkFastvsFull(self) ):
-        print "Fast vs Full treatment :"
-        for item1 in self.releasesList_rel_2:
-            for item2 in filtre:
-                if re.search(item2, item1):
-                    if clean_collections2(item1, "Full", validationType_2, validationType_3):
-                        temp_56.append([explode_item(item1)[2], item2])
-                        print "len = %i" % len(temp_56)
-                    break
-
-        print "len of temp_56 = %i." % len(temp_56)
-        if ( len(temp_56) > 0 ):
-            #print "temp_56 : ", temp_56
-            temp_56.sort()
-
-            temp_FastvsFull.append( [temp_56[0][0], temp_56[0][1]] )
-            k = 0
-            for i in range(1, len(temp_56)):
-                if ( temp_56[i][0] == temp_FastvsFull[k][0] ):
-                    temp_FastvsFull[k][1] += ', ' + temp_56[i][1]
-                else:
-                    k +=1
-                    temp_FastvsFull.append( [temp_56[i][0], temp_56[i][1]] )
-        
-        for i in range(0, len(temp_FastvsFull)):
-            self.releasesList_rel_4.append(temp_FastvsFull[i][1])
-            self.releasesList_rel_4b.append(temp_FastvsFull[i][0])
 
     return (temp_1, temp_2, temp_3, temp_4)
     
@@ -762,12 +730,6 @@ def print_arrays(self):
             f.write(line + "\n") # write the line
             self.wp.write(line + "\n") # write the line
 
-        f.write("\n" + "self.releasesList_rel_4b" + "\n")
-        self.wp.write("\n" + "self.releasesList_rel_4b" + "\n")
-        for line in self.releasesList_rel_4b:
-            f.write(line + "\n") # write the line
-            self.wp.write(line + "\n") # write the line
-
         f.write("\n" + "self.releasesList_rel_5" + "\n")
         self.wp.write("\n" + "self.releasesList_rel_5" + "\n")
         for line in self.releasesList_rel_5:
@@ -780,18 +742,12 @@ def print_arrays(self):
             f.write(line + "\n") # write the line
             self.wp.write(line + "\n") # write the line
 
-        f.write("\n" + "self.releasesList_FvsF_5" + "\n")
-        self.wp.write("\n" + "self.releasesList_FvsF_5" + "\n")
-        for line in self.releasesList_FvsF_5:
-            f.write(line + "\n") # write the line
-            self.wp.write(line + "\n") # write the line
         f.close()
     return
 
 def checkFastvsFull(self):
-    if ( self.radio12.isChecked() and self.radio21.isChecked() ):
-    # check for FastvsFull for Fast and RECO.
-    # if you want to use it also for PU you have to modify the previous test
+    if ( self.radio13.isChecked() ):
+    # check for FastvsFull for Fast.
         self.checkFastvsFull = True
     else:
         self.checkFastvsFull = False
@@ -837,10 +793,37 @@ def folderSuffixe_creation(self):
     if ( self.radio21.isChecked() ):
         suffixe = "RECO"
     if ( self.radio22.isChecked() ):
-        suffixe = "PU"
+        suffixe = "PU25"
     if ( self.radio23.isChecked() ):
-        suffixe = "pmx"
+        suffixe = "PUpmx25"
     if ( self.radio24.isChecked() ):
         suffixe = "miniAOD"
     return
     
+def getCheckedOptions(self):
+    if self.radio11.isChecked():
+        self.validationType1 = 'Full'
+    elif self.radio12.isChecked():
+        self.validationType1 = 'Fast'
+    elif self.radio13.isChecked():
+        self.validationType1 = 'FastFull'
+        
+    if self.radio21.isChecked():
+        self.validationType2 = 'RECO'
+    elif self.radio22.isChecked():
+        self.validationType2 = 'PU25'
+    elif self.radio23.isChecked():
+        self.validationType2 = 'PUpmx25'
+    elif self.radio24.isChecked():
+        self.validationType2 = 'miniAOD'
+    
+    if self.checkSpecReference1.isChecked():
+        self.validationType3 = 'RECO'
+    elif self.checkSpecReference2.isChecked():
+        self.validationType2 = 'PU25'
+    elif self.checkSpecReference3.isChecked():
+        self.validationType2 = 'PUpmx25'
+    elif self.checkSpecReference4.isChecked():
+        self.validationType2 = 'miniAOD'
+
+    return
