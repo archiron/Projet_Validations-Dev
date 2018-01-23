@@ -820,10 +820,11 @@ def getCheckedOptions(self):
     if self.checkSpecReference1.isChecked():
         self.validationType3 = 'RECO'
     elif self.checkSpecReference2.isChecked():
-        self.validationType2 = 'PU25'
+        self.validationType3 = 'PU25'
     elif self.checkSpecReference3.isChecked():
-        self.validationType2 = 'PUpmx25'
+        self.validationType3 = 'PUpmx25'
     elif self.checkSpecReference4.isChecked():
-        self.validationType2 = 'miniAOD'
+        self.validationType3 = 'miniAOD'
 
+    print "validationType1 : %s, validationType2 : %s, validationType3 : %s" % (self.validationType1, self.validationType2, self.validationType3)
     return

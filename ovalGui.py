@@ -26,10 +26,7 @@ from networkFunctions import cmd_load_files
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.7')  # Adaptation for the new architecture. Minor corrections.
-        # Add DataSetsFilter_FastFull for RECO,PU, pmx & miniAOD.
-        # A little pbm with refresh : when clicking on an option (rel pmx for example), refresh is not automatic for the opposite option (as ref pmx).
-        # Add getCheckedOptions function to resume all options clicked into QGBoxListsUpdate.
+        self.setWindowTitle('Validations gui v0.2.0.8')  # The little pbm with refresh seems OK.      
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -138,35 +135,42 @@ class ovalGui(QWidget):
         
     def radio21Clicked(self):
         self.radio21.setChecked(True)
-        self.checkSpecReference1.setChecked(True)
+        self.checkSpecReference1_Clicked()
         self.validationType2 = 'RECO'
+        getCheckedOptions(self)
+        print "Target, self.validationType2 : %s" % self.validationType2
+        print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
-        print "self.validationType2 :", self.validationType2
         QtCore.QCoreApplication.processEvents()
 
     def radio22Clicked(self):
         self.radio22.setChecked(True)
-        self.checkSpecReference2.setChecked(True)
+        self.checkSpecReference2_Clicked() #default
         self.validationType2 = 'PU25'
+        getCheckedOptions(self)
+        print "Target, self.validationType2 : %s" % self.validationType2
+        print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
-        self.checkSpecReference2.setChecked(True) #default
-        print "self.validationType2 :", self.validationType2
         QtCore.QCoreApplication.processEvents()
         
     def radio23Clicked(self):
         self.radio23.setChecked(True)
-        self.checkSpecReference2.setChecked(True) #default
+        self.checkSpecReference2_Clicked()
         self.validationType2 = 'PUpmx25'
+        getCheckedOptions(self)
+        print "Target, self.validationType2 : %s" % self.validationType2
+        print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
-        print "self.validationType2 :", self.validationType2
         QtCore.QCoreApplication.processEvents()
                         
     def radio24Clicked(self):
         self.radio24.setChecked(True)
         self.validationType2 = 'miniAOD'
+        self.checkSpecReference4_Clicked()
+        getCheckedOptions(self)
+        print "Target, self.validationType2 : %s" % self.validationType2
+        print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
-        self.checkSpecReference4.setChecked(True) #default
-        print "self.validationType2 :", self.validationType2
         QtCore.QCoreApplication.processEvents()
                         
     def checkAllNone1Clicked(self):
@@ -207,31 +211,37 @@ class ovalGui(QWidget):
 
     def checkSpecReference1_Clicked(self):
         self.checkSpecReference1.setChecked(True)
-        self.radio21.setChecked(True)
         self.validationType3 = 'RECO'
-#            print "RECO"
+        getCheckedOptions(self)
+        print "Reference, self.validationType2 : %s" % self.validationType2
+        print "Reference, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
     def checkSpecReference2_Clicked(self):
         self.checkSpecReference2.setChecked(True)
         self.validationType3 = 'PU25'
-#            print "PU25"
+        getCheckedOptions(self)
+        print "Reference, self.validationType2 : %s" % self.validationType2
+        print "Reference, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
     def checkSpecReference3_Clicked(self):
         self.checkSpecReference3.setChecked(True)
         self.validationType3 = 'PUpmx25'
-#            print "PUpmx25"
+        getCheckedOptions(self)
+        print "Reference, self.validationType2 : %s" % self.validationType2
+        print "Reference, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
     def checkSpecReference4_Clicked(self):
         self.checkSpecReference4.setChecked(True)
-        self.radio21.setChecked(True)
         self.validationType3 = 'miniAOD'
-#            print "miniAOD"
+        getCheckedOptions(self)
+        print "Reference, self.validationType2 : %s" % self.validationType2
+        print "Reference, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
@@ -249,6 +259,7 @@ class ovalGui(QWidget):
             a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
+        self.setFixedSize(1200, 700)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
     

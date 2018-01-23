@@ -33,7 +33,6 @@ def clearDataSetsLists(self):
 def clearReleasesList(self):
     self.releasesList_rel_5 = []
     self.releasesList_ref_5 = []
-    self.releasesList_FvsF_5 = []
     return
     
 def writeLabelCombo3(self):
