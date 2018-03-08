@@ -10,6 +10,7 @@ import os,sys,subprocess
 from Variables import *
 from ovalOptionsGp import initGpOptions
 from ovalChoiceGp import initGpChoice
+from ovalBottomGp import initGpBottom
 from getEnv import env
 from fonctions import folder_creation, finalFolder_creation, working_dirs_creation # , get_collection_list, get_validationType1, clean_files, copy_files
 from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
@@ -26,7 +27,12 @@ from networkFunctions import cmd_load_files
 class ovalGui(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setWindowTitle('Validations gui v0.2.0.8')  # The little pbm with refresh seems OK.      
+        
+        initVariables(self)
+        self.wp.write("initVariables OK\n")
+        
+        self.setWindowTitle(self.version)  # about & help windows. 
+        # Need to rename files in ovalOptions or ovalChoice as option or choice
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -41,9 +47,6 @@ class ovalGui(QWidget):
         # BOTTOM PART : buttons
         # FINAL PART : keeping all previous part into one
 
-        initVariables(self)
-        self.wp.write("initVariables OK\n")
-        
         ## PART 1 - Options Grp ##
         initGpOptions(self)
         
@@ -65,31 +68,32 @@ class ovalGui(QWidget):
         self.layoutH_resume.addWidget(self.QGBoxResume)
         
         ## BOTTOM PART ##
-        # créer un bouton
-        self.bouton_Next = QPushButton("Next", self)
-        self.bouton_Next.clicked.connect(self.Next_Choice) # 
-        self.bouton_Previous = QPushButton("Previous", self)
-        self.bouton_Previous.clicked.connect(self.Previous_Choice) # 
-        self.bouton_Previous.setEnabled(False) #default
-        self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
+        initGpBottom(self)
+        # créer un bouton Next/Previous
+        #self.bouton_Next = QPushButton("Next", self)
+        #self.bouton_Next.clicked.connect(self.Next_Choice) # 
+        #self.bouton_Previous = QPushButton("Previous", self)
+        #self.bouton_Previous.clicked.connect(self.Previous_Choice) # 
+        #self.bouton_Previous.setEnabled(False) #default
+        #self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
         
         #label button creation
-        txt = "(" + str(self.tasks_counter) + ",1) Next : " + self.tasks_list[1]
-        self.labelCombo3 = QLabel(self.trUtf8(txt), self)
+        #txt = "(" + str(self.tasks_counter) + ",1) Next : " + self.tasks_list[1]
+        #self.labelCombo3 = QLabel(self.trUtf8(txt), self)
 
         # Création du bouton quitter, ayant pour parent la "fenetre"
-        self.boutonQ = QPushButton(self.trUtf8("Quitter ?"),self)
-        self.boutonQ.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
-        self.boutonQ.setIcon(QIcon("../images/smile.png"))
-        self.connect(self.boutonQ, SIGNAL("clicked()"), qApp, SLOT("quit()"))
+        #self.bouton_Quit = QPushButton(self.trUtf8("Quitter ?"),self)
+        #self.bouton_Quit.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
+        #self.bouton_Quit.setIcon(QIcon("../images/smile.png"))
+        #self.connect(self.bouton_Quit, SIGNAL("clicked()"), qApp, SLOT("quit()"))
         
         #Layout intermédiaire : boutons
-        self.layoutH_boutons = QHBoxLayout()
-        self.layoutH_boutons.addWidget(self.bouton_Previous)
-        self.layoutH_boutons.addWidget(self.bouton_Next)
-        self.layoutH_boutons.addWidget(self.labelCombo3)
-        self.layoutH_boutons.addStretch(1)
-        self.layoutH_boutons.addWidget(self.boutonQ)
+        #self.layoutH_boutons = QHBoxLayout()
+        #self.layoutH_boutons.addWidget(self.bouton_Previous)
+        #self.layoutH_boutons.addWidget(self.bouton_Next)
+        #self.layoutH_boutons.addWidget(self.labelCombo3)
+        #self.layoutH_boutons.addStretch(1)
+        #self.layoutH_boutons.addWidget(self.bouton_Quit)
 
         ## PART 3 ##
         initGpChoice(self)
@@ -702,4 +706,44 @@ class ovalGui(QWidget):
         print "ItemSelectedTable_ref : self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
         self.wp.write("ItemSelectedTable_ref : self.selectedRefDatasets : %s\n " % self.selectedRefDatasets)
         self.wp.write("ItemSelectedTable_ref : self.selectedRefGlobalTag : %s\n " % self.selectedRefGlobalTag)
+
+    def showAbout(self):
+        print("About")
+        #msg = QMessageBox()
+        #pixmap = QPixmap(30,30)
+        #pixmap.load('GUI_00.bmp')
+        #msg.setIconPixmap(pixmap)
+        #msg.setText("About")
+        #msg.setInformativeText("This is additional information for about")
+        #msg.setWindowTitle("About")
+        #msg.setStandardButtons(QMessageBox.Ok)
+        #msg.exec_()
+        
+        pixmap2 = QPixmap('/afs/cern.ch/user/a/archiron/lbin/Projet_Validations-Dev/GUI_001.bmp')
+        dialog = QDialog()
+        layout = QVBoxLayout(dialog)
+        labell = QLabel()
+        labell.setText(self.version)
+        label3 = QLabel()
+        label3.setText('<br>All dev made by A. CHIRON<br>Laboratoire Leprince-Ringuet<br>')
+        label2 = QLabel()
+        label2.setPixmap(pixmap2)
+        label4 = QLabel()
+        label4.setText('<br>')
+        layout.addWidget(labell)
+        layout.addWidget(label3)
+        layout.addWidget(label2)
+        layout.addWidget(label4)
+        label2.show()
+        dialog.exec_()
+    
+    def showHelp(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("Help")
+        msg.setInformativeText("This is additional information for help")
+        msg.setWindowTitle("HELP")
+        msg.setDetailedText("The details are as follows:")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
 

@@ -11,6 +11,8 @@ from getEnv import env
 from fonctions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
+    self.version = 'Validations GUI v0.2.0.9'
+    
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
     self.validationType1 = 'Full'   # default
