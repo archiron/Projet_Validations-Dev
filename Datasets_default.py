@@ -24,10 +24,11 @@ def DataSetsFilter_FullRECO(self):
     print "Full"
     table=[
     ["SingleElectronPt10", 1], # 1 : displayed
-    ["SingleElectronPt10_UP15", 1], 
+    ["SingleElectronPt10_UP15", 0], 
     ["SingleElectronPt35", 1],
     ["SingleElectronPt35_UP15", 0], # 0 : not displayed
     ["SingleElectronPt1000", 1],
+    ["QCD_Pt_80_120_13", 1],
     ["TTbar_13", 1],
     ["ZEE_13", 1],
     ]

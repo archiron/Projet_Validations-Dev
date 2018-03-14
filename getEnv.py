@@ -26,4 +26,3 @@ class env:
         cmsAll+="<br /><strong>CMSSW_VERSION</strong> : " + self.getCMSSWBASECMSSWVERSION()
         return cmsAll
 
-

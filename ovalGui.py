@@ -31,7 +31,8 @@ class ovalGui(QWidget):
         initVariables(self)
         self.wp.write("initVariables OK\n")
         
-        self.setWindowTitle(self.version)  # about & help windows. 
+        self.setWindowTitle(self.version)  # Need to add RelValQCD_Pt_80_120_13 into datasets -> done.
+                                           # pmx loaded into RECO -> corrected with add of cleanCollection2() into cmd_load_files().
         # Need to rename files in ovalOptions or ovalChoice as option or choice
         
         # Need to create one folder per dataset.
@@ -69,31 +70,6 @@ class ovalGui(QWidget):
         
         ## BOTTOM PART ##
         initGpBottom(self)
-        # créer un bouton Next/Previous
-        #self.bouton_Next = QPushButton("Next", self)
-        #self.bouton_Next.clicked.connect(self.Next_Choice) # 
-        #self.bouton_Previous = QPushButton("Previous", self)
-        #self.bouton_Previous.clicked.connect(self.Previous_Choice) # 
-        #self.bouton_Previous.setEnabled(False) #default
-        #self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
-        
-        #label button creation
-        #txt = "(" + str(self.tasks_counter) + ",1) Next : " + self.tasks_list[1]
-        #self.labelCombo3 = QLabel(self.trUtf8(txt), self)
-
-        # Création du bouton quitter, ayant pour parent la "fenetre"
-        #self.bouton_Quit = QPushButton(self.trUtf8("Quitter ?"),self)
-        #self.bouton_Quit.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
-        #self.bouton_Quit.setIcon(QIcon("../images/smile.png"))
-        #self.connect(self.bouton_Quit, SIGNAL("clicked()"), qApp, SLOT("quit()"))
-        
-        #Layout intermédiaire : boutons
-        #self.layoutH_boutons = QHBoxLayout()
-        #self.layoutH_boutons.addWidget(self.bouton_Previous)
-        #self.layoutH_boutons.addWidget(self.bouton_Next)
-        #self.layoutH_boutons.addWidget(self.labelCombo3)
-        #self.layoutH_boutons.addStretch(1)
-        #self.layoutH_boutons.addWidget(self.bouton_Quit)
 
         ## PART 3 ##
         initGpChoice(self)
@@ -500,7 +476,7 @@ class ovalGui(QWidget):
             print "self.releasesList_ref_2 : %d\n" % len(self.releasesList_ref_2)
             print "self.releasesList_rel_5 : %d\n" % len(self.releasesList_rel_5)
             print "self.releasesList_ref_5 : %d\n" % len(self.releasesList_ref_5)
-            print "self.releasesList_FvsF_5 : %d\n" % len(self.releasesList_FvsF_5)
+            #print "self.releasesList_FvsF_5 : %d\n" % len(self.releasesList_FvsF_5)
             print BaseURL(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
             print_arrays(self) # temporaire

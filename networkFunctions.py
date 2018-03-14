@@ -6,7 +6,7 @@ import urllib2
 import re
 from getEnv import env
 from Paths_default import *
-from fonctions import checkFastvsFull
+from fonctions import checkFastvsFull, clean_collections2
 
 def auth_wget2(url, chunk_size=2097152):
     from os.path import basename, isfile
@@ -358,6 +358,13 @@ def cmd_load_files(self):
     self.wp.write("cmd_load_files : \n")
     cmsenv = env()
    
+    print " self.validationType1 = ",  self.validationType1 # temp
+    print " self.validationType2 = ",  self.validationType2 # temp
+    print " self.validationType3 = ",  self.validationType3 # temp
+    validationType_2 = self.validationType2
+    validationType_3 = self.validationType3
+    temp_toBeRemoved = []
+
     ## Define options
     option_is_from_data = "mc" # mc ou data
     option_mthreads = 3
@@ -378,16 +385,33 @@ def cmd_load_files(self):
     #case 1 self.my_choice_rel_0 : RELEASE
     print "case 1 self.my_choice_rel_0 : RELEASE"
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_rel_0 + '/'
+#    print "BEFORE" # temp
 #    for line in self.releasesList_rel_5:
-#        print filedir_url + line
+#        print line
+    for line in self.releasesList_rel_5:
+        if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
+            print filedir_url + line + " removed"
+            temp_toBeRemoved.append(line)
+    for line in temp_toBeRemoved:
+        self.releasesList_rel_5.remove(line)
+#    print "AFTER" # temp
+#    for line in self.releasesList_rel_5:
+#        print line
 #        pool.map(auth_wget2, [str(filedir_url) + line])
     os.chdir(self.working_dir_rel)   # Change current working directory to release directory
     pool = Pool(option_mthreads)
     pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_rel_5])
 
     #case 2 self.my_choice_ref_0 : REFERENCE
+    temp_toBeRemoved[:] = []# clear the temp array
     print "case 2 self.my_choice_ref_0 : REFERENCE"
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_ref_0 + '/'
+    for line in self.releasesList_ref_5:
+        if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
+            print filedir_url + line + " removed"
+            temp_toBeRemoved.append(line)
+    for line in temp_toBeRemoved:
+        self.releasesList_ref_5.remove(line)
     os.chdir(self.working_dir_ref)   # Change current working directory to release directory
     pool = Pool(option_mthreads) # need to be here. If not, download is made into previous folder (i.e. self.working_dir_rel).
     pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_ref_5])

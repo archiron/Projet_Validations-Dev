@@ -224,7 +224,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     valType = validationType_2 # default
     if ( relrefChoice == "ref" ):
         valType = validationType_3
-    #print "relrefChoice : %s, valType : %s" %(relrefChoice, valType)
+    print "relrefChoice : %s, valType : %s" %(relrefChoice, valType)
     
     c_Fast = False
     if ( re.search('Fast', collectionItem) ): #  match Fast 
@@ -258,7 +258,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
             temp = False
     
     # RESUMING
-    #print "%s, c_Fast : %s, c_PU : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
+    print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
     
     return temp
 
