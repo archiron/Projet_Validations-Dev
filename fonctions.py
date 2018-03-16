@@ -224,7 +224,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     valType = validationType_2 # default
     if ( relrefChoice == "ref" ):
         valType = validationType_3
-    print "relrefChoice : %s, valType : %s" %(relrefChoice, valType)
+    #print "relrefChoice : %s, valType : %s" %(relrefChoice, valType)
     
     c_Fast = False
     if ( re.search('Fast', collectionItem) ): #  match Fast 
@@ -258,7 +258,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
             temp = False
     
     # RESUMING
-    print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
+    #print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
     
     return temp
 
@@ -749,8 +749,10 @@ def checkFastvsFull(self):
     if ( self.radio13.isChecked() ):
     # check for FastvsFull for Fast.
         self.checkFastvsFull = True
+        print("checkFastvsFull = True")
     else:
         self.checkFastvsFull = False
+        print("checkFastvsFull = False")
     return self.checkFastvsFull
 
 def newName(prefix, fileName, suffix):
@@ -790,13 +792,13 @@ def folderExtension_creation(self):
 
 def folderSuffixe_creation(self):
     suffixe = ""
-    if ( self.radio21.isChecked() ):
+    if ( self.checkSpecTarget1.isChecked() ):
         suffixe = "RECO"
-    if ( self.radio22.isChecked() ):
+    if ( self.checkSpecTarget2.isChecked() ):
         suffixe = "PU25"
-    if ( self.radio23.isChecked() ):
+    if ( self.checkSpecTarget3.isChecked() ):
         suffixe = "PUpmx25"
-    if ( self.radio24.isChecked() ):
+    if ( self.checkSpecTarget4.isChecked() ):
         suffixe = "miniAOD"
     return
     
@@ -808,13 +810,13 @@ def getCheckedOptions(self):
     elif self.radio13.isChecked():
         self.validationType1 = 'FastFull'
         
-    if self.radio21.isChecked():
+    if self.checkSpecTarget1.isChecked():
         self.validationType2 = 'RECO'
-    elif self.radio22.isChecked():
+    elif self.checkSpecTarget2.isChecked():
         self.validationType2 = 'PU25'
-    elif self.radio23.isChecked():
+    elif self.checkSpecTarget3.isChecked():
         self.validationType2 = 'PUpmx25'
-    elif self.radio24.isChecked():
+    elif self.checkSpecTarget4.isChecked():
         self.validationType2 = 'miniAOD'
     
     if self.checkSpecReference1.isChecked():

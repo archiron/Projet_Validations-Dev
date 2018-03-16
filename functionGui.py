@@ -43,3 +43,56 @@ def writeLabelCombo3(self):
     self.labelCombo3.setText(self.trUtf8(txt))
     return
 
+def fillQLW_rel1(self):
+    self.QLW_rel1.clear()
+    for it in self.releasesList_0:
+        item = QListWidgetItem("%s" % it)
+        self.QLW_rel1.addItem(item)
+    return
+    
+def fillQLW_rel2_rel(self):
+    self.QLW_rel2.clear()
+    for it in self.rel_list_0:
+        item = QListWidgetItem("%s" % it)
+        self.QLW_rel2.addItem(item)
+    return
+    
+def fillQLW_rel2_ref(self):
+    self.QLW_rel2.clear()
+    for it in self.ref_list_0:
+        item = QListWidgetItem("%s" % it)
+        self.QLW_rel2.addItem(item)
+    return
+
+def disableRadioButtons(self):
+    self.radio11.setEnabled(False)
+    self.radio12.setEnabled(False)
+    self.radio13.setEnabled(False)
+    self.checkSpecTarget1.setEnabled(False)
+    self.checkSpecTarget2.setEnabled(False)
+    self.checkSpecTarget3.setEnabled(False)
+    self.checkSpecTarget4.setEnabled(False)
+    self.checkSpecReference1.setEnabled(False)
+    self.checkSpecReference2.setEnabled(False)
+    self.checkSpecReference3.setEnabled(False)
+    self.checkSpecReference4.setEnabled(False)
+
+    return
+
+def enableRadioButtons(self):
+    self.radio11.setEnabled(True)
+    self.radio12.setEnabled(True)
+    self.radio13.setEnabled(True)
+    self.checkSpecTarget1.setEnabled(True)
+    self.checkSpecTarget2.setEnabled(True)
+    self.checkSpecTarget3.setEnabled(True)
+    self.checkSpecTarget4.setEnabled(True)
+    self.checkSpecReference1.setEnabled(True)
+    self.checkSpecReference2.setEnabled(True)
+    self.checkSpecReference3.setEnabled(True)
+    self.checkSpecReference4.setEnabled(True)
+
+    return
+    
+    
+    

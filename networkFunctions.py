@@ -390,7 +390,7 @@ def cmd_load_files(self):
 #        print line
     for line in self.releasesList_rel_5:
         if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
-            print filedir_url + line + " removed"
+            #print filedir_url + line + " removed"
             temp_toBeRemoved.append(line)
     for line in temp_toBeRemoved:
         self.releasesList_rel_5.remove(line)
@@ -408,7 +408,7 @@ def cmd_load_files(self):
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_ref_0 + '/'
     for line in self.releasesList_ref_5:
         if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
-            print filedir_url + line + " removed"
+            #print filedir_url + line + " removed"
             temp_toBeRemoved.append(line)
     for line in temp_toBeRemoved:
         self.releasesList_ref_5.remove(line)
@@ -417,6 +417,7 @@ def cmd_load_files(self):
     pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_ref_5])
     
     #case 3 self.my_choice_rel_0 : RELEASE for Fast vs Full
+    # PERHAPS TO BE REMOVE
     if ( checkFastvsFull(self) ): # FastvsFull
         print "case 3 self.my_choice_rel_0 : RELEASE for Fast vs Full"
         filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_rel_0 + '/'

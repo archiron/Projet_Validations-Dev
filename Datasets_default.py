@@ -195,13 +195,13 @@ def checkCalculValidation(self, fileName):
     if ( re.search("Fast", fileName) ):
         check_Fast = True
     
-    if ( self.radio11.isChecked() and self.radio21.isChecked() ): #Full, RECO
+    if ( self.radio11.isChecked() and self.checkSpecTarget1.isChecked() ): #Full, RECO
 #        print ">>>>>>>> Full, RECO"
         if ( re.search("PU25", fileName) or re.search("Fast", fileName) ):
 #            print ">>>> PU, Fast : " + fileName
             checkCalculValidation = False
     
-    if ( self.radio11.isChecked() and self.radio22.isChecked() ): #Full, PU
+    if ( self.radio11.isChecked() and self.checkSpecTarget2.isChecked() ): #Full, PU
         print ">>>>>>>> Full, PU25"
     return checkCalculValidation
 

@@ -5,6 +5,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
+from functionGui import fillQLW_rel1
+
 def initGpRelRef(self):
     print "initGpRelRef"
 
@@ -18,9 +20,10 @@ def initGpRelRef(self):
     self.QGBox_rel1.setMaximumWidth(180)
     self.vbox_rel1 = QVBoxLayout()
     self.QLW_rel1 = QListWidget()
-    for it in self.releasesList_0:
-        item = QListWidgetItem("%s" % it)
-        self.QLW_rel1.addItem(item)
+#    for it in self.releasesList_0:
+#        item = QListWidgetItem("%s" % it)
+#        self.QLW_rel1.addItem(item)
+    fillQLW_rel1(self)
     self.connect(self.QLW_rel1, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked1)
     self.vbox_rel1.addWidget(self.QLW_rel1)        
     self.QGBox_rel1.setLayout(self.vbox_rel1)
