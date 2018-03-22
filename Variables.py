@@ -11,7 +11,7 @@ from getEnv import env
 from fonctions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
-    self.version = 'Validations GUI v0.3.0.0'
+    self.version = 'Validations GUI v0.3.0.1'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -25,8 +25,8 @@ def initVariables(self):
     self.my_choice_rel = "" # release to work on
     self.my_choice_ref = "" # reference for comparison
     self.my_choice_tmp = "" # to store reference when working with miniAOD, pmx vs pmx or Fast vs Full.
-    self.releasesList_ref_2_tmp = []
-    self.ref_list_1_tmp = []
+    self.releasesList_ref_2_tmp = [] # to store the reference root files list
+    self.ref_list_1_tmp = [] # to store the reference datasets
 
     self.working_dir_base = os.getcwd()
     self.working_dir_rel = os.getcwd()

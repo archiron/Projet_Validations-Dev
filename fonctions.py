@@ -98,7 +98,7 @@ def get_collection_list_search(self):
             collection_list.append('ZEE_13')
     return collection_list
    
-def get_validationType1(self):
+def get_validationType1(self): # no more used
     if self.radio11.isChecked(): # FULL
         self.validationType = 'Full'
         self.validationType = 'gedvsgedFull' # because radio04 is always checked
@@ -106,7 +106,7 @@ def get_validationType1(self):
         self.validationType = 'Fast'
     return
     
-def get_validationType1_search(self):
+def get_validationType1_search(self): # no more used
     if self.radio11.isChecked(): # FULL
         get_validationType1 = 'Full'
     if self.radio12.isChecked(): # FAST

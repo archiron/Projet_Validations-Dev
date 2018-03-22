@@ -14,9 +14,9 @@ def initGpCalcul(self):
     self.QGBox1 = QGroupBox("Calcul")
     self.QGBox1.setMaximumHeight(120)
     self.QGBox1.setMaximumWidth(120)
-    self.radio11 = QRadioButton("FULL") # par defaut
-    self.radio12 = QRadioButton("FAST")
-    self.radio13 = QRadioButton("FAST vs Full")
+    self.radio11 = QRadioButton("FULL vs FULL") # par defaut
+    self.radio12 = QRadioButton("FAST vs FAST")
+    self.radio13 = QRadioButton("FAST vs FULL")
     self.radio11.setChecked(True)
     self.radio11.setEnabled(False)
     self.radio12.setEnabled(False)

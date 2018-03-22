@@ -32,10 +32,10 @@ class ovalGui(QWidget):
         initVariables(self)
         self.wp.write("initVariables OK\n")
         
-        self.setWindowTitle(self.version)  # minor correction to have release up to the right window for release and reference choice.
-        # create fillQLW_rel1 for filling QLW list.
-        # new architecture ; the optionGrp is not enabled (greyed) and it is only enabled for tasks_counter == 2
-        # conditionnal Fast vs Full is corrected : we can go to Fast vs Full and back to RECO, keeping the old reference and the associated lists.
+        self.setWindowTitle(self.version)  # renaming label for selection into ovalOptionsGp.py : Now we have FULL vs FULL, FAST vs FAST & FAST vs FULL.
+        # add some comments for explanation
+        # we grayed the button when selected is done. Selection must occur only on step 2 (Lists).
+        # Fast vs Full is now as Full vs full or Fast vs Fast. No more additional test is needed.
         
         # Need to rename files in ovalOptions or ovalChoice as option or choice
         
@@ -93,10 +93,10 @@ class ovalGui(QWidget):
         self.radio11.setChecked(True)
         self.validationType1 = 'Full'
         self.checkDataSets2Clicked()
-        if ( self.my_choice_tmp != "" ):
-            self.my_choice_ref_1 = self.my_choice_tmp
-            self.ref_list_1 = self.ref_list_1_tmp
-            self.releasesList_ref_2 = self.releasesList_ref_2_tmp
+        if ( self.my_choice_tmp != "" ): # we have an old choice for reference
+            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
+            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
+            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
             self.my_choice_tmp = ""
             self.releasesList_ref_2_tmp = []
             self.ref_list_1_tmp = []
@@ -110,9 +110,9 @@ class ovalGui(QWidget):
         self.validationType1 = 'Fast'
         self.checkDataSets2Clicked()
         if ( self.my_choice_tmp != "" ):
-            self.my_choice_ref_1 = self.my_choice_tmp
-            self.ref_list_1 = self.ref_list_1_tmp
-            self.releasesList_ref_2 = self.releasesList_ref_2_tmp
+            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
+            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
+            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
             self.my_choice_tmp = ""
             self.releasesList_ref_2_tmp = []
             self.ref_list_1_tmp = []
@@ -127,9 +127,9 @@ class ovalGui(QWidget):
         self.checkSpecTarget1.setChecked(True)
         self.checkSpecReference1.setChecked(True) #default
         self.checkDataSets2Clicked()
-        self.my_choice_tmp = self.my_choice_ref_1
-        self.releasesList_ref_2_tmp = self.releasesList_ref_2
-        self.ref_list_1_tmp = self.ref_list_1
+        self.my_choice_tmp = self.my_choice_ref_1 # keep the chosen reference into memory
+        self.releasesList_ref_2_tmp = self.releasesList_ref_2 # keep the reference root files list into memory
+        self.ref_list_1_tmp = self.ref_list_1 # keep the reference datasets list into memory
 
         self.my_choice_ref_0 = self.my_choice_rel_0
         self.my_choice_ref_1 = self.my_choice_rel_1
@@ -391,7 +391,7 @@ class ovalGui(QWidget):
 
     def checkTaskCounter(self):
         import re
-        if self.tasks_counter == 0:
+        if self.tasks_counter == 0: # release selection
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(False)
@@ -408,7 +408,7 @@ class ovalGui(QWidget):
             #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
             fillQLW_rel1(self)
-        elif self.tasks_counter == 1:
+        elif self.tasks_counter == 1: # reference selection
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(True)
@@ -425,7 +425,7 @@ class ovalGui(QWidget):
             #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
             fillQLW_rel1(self)
-        elif self.tasks_counter == 2:
+        elif self.tasks_counter == 2: # GlobalTag selections
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             enableRadioButtons(self)
@@ -443,7 +443,7 @@ class ovalGui(QWidget):
             self.selectedFvsFDatasets = ""
             self.selectedFvsFGlobalTag = ""
             # what to do if len(self.QLW_rel(f)_datasets) = 0? -> solved before arriving here !
-        elif self.tasks_counter == 3:
+        elif self.tasks_counter == 3: # resuming selections
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(True)
@@ -452,13 +452,22 @@ class ovalGui(QWidget):
             self.QGBox_rel0.setVisible(False)
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(True)
+            disableRadioButtons(self)
             clearReleasesList(self)
             self.QGBoxListsUpdate()
             
-            selectedText = "<strong>Selected :</strong>"
+            selectedText = "<strong>"
+            if self.radio11.isChecked(): # FULL vs FULL
+                selectedText += "FULL vs FULL "
+            elif self.radio12.isChecked(): # FAST vs FAST
+                selectedText += "FAST vs FAST "
+            elif self.radio13.isChecked(): # FAST vs FULL
+                selectedText += "FAST vs FULL "
+            else:
+                print("Houston we have a pbm !!")
+            
+            selectedText += "Selected :</strong>"
             selectedText += "<table>"
-            if ( checkFastvsFull(self) ): # FastvsFast
-                selectedText += "<br /><br /><strong>Fast vs Fast : </strong>"
             selectedText += "<tr>"
             if (self.selectedRelDatasets == self.selectedRefDatasets):
                 self.okToPublishDatasets = self.selectedRelDatasets
@@ -474,29 +483,29 @@ class ovalGui(QWidget):
             selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
             selectedText += "</tr></table>"
             
-            if ( checkFastvsFull(self) ): # FastvsFull
-                selectedText += "<br /><br /><strong>Fast vs Full : </strong>"
-                selectedText += "<table><tr>"
-                if (self.selectedRelDatasets == self.selectedFvsFDatasets):
-                    self.okToPublishFvsFDatasets = self.selectedRelDatasets
-                    selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
-                else:
-                    (self.okToPublishFvsFDatasets, self.okToDisplayFvsFDatasets) = extractDatasetsFastvsFull(self)
-                    selectedText += "<td colspan=\"2\"><br /><strong>Selected Fast vs Full Datasets : " + self.okToDisplayFvsFDatasets + "</strong><br /><br /></td>"
-                selectedText += "<td>  </td>"
-                selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishFvsFDatasets + "</font></strong></td>"           
-                selectedText += "</tr><tr><td><strong>GlobalTags : </td>"
-                selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag  + "</td>" 
-                selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
-                selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedFvsFGlobalTag + "</strong></td>"
-                selectedText += "</tr>"
-            selectedText += "</table>"
+#            if ( checkFastvsFull(self) ): # FastvsFull
+#                selectedText += "<br /><br /><strong>Fast vs Full : </strong>"
+#                selectedText += "<table><tr>"
+#                if (self.selectedRelDatasets == self.selectedFvsFDatasets):
+#                    self.okToPublishFvsFDatasets = self.selectedRelDatasets
+#                    selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
+#                else:
+#                    (self.okToPublishFvsFDatasets, self.okToDisplayFvsFDatasets) = extractDatasetsFastvsFull(self)
+#                    selectedText += "<td colspan=\"2\"><br /><strong>Selected Fast vs Full Datasets : " + self.okToDisplayFvsFDatasets + "</strong><br /><br /></td>"
+#                selectedText += "<td>  </td>"
+#                selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishFvsFDatasets + "</font></strong></td>"           
+#                selectedText += "</tr><tr><td><strong>GlobalTags : </td>"
+#                selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag  + "</td>" 
+#                selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
+#                selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedFvsFGlobalTag + "</strong></td>"
+#                selectedText += "</tr>"
+#            selectedText += "</table>"
             self.labelResumeSelected.setText(self.trUtf8(selectedText))
             
             print "self.okToPublishDatasets = %s" % self.okToPublishDatasets
-            print "self.okToPublishFvsFDatasets = %s" % self.okToPublishFvsFDatasets
+            #print "self.okToPublishFvsFDatasets = %s" % self.okToPublishFvsFDatasets
             print "self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
-            print "self.okToDisplayFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
+            #print "self.okToDisplayFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
             
             ## here we have a common (rel & ref) dataset named as self.okToPublishDatasets for Full vs Full or Fast vs Fast. 
             ## we also have a common dataset for Fast vs Full named as self.okToPublishFvsFDatasets
@@ -531,16 +540,17 @@ class ovalGui(QWidget):
                             if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_ref_5.append(it1)
-            if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only on Full, RECO
-                print "\nFastvsFull :"
-                self.wp.write("okToPublishFvsFDatasets FastvsFull = %s\n" % self.okToPublishFvsFDatasets)
-                for it1 in self.releasesList_rel_2: # it1 = root file
+            #if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only on Full, RECO
+            #    print "\nFastvsFull :"
+            #    self.wp.write("okToPublishFvsFDatasets FastvsFull = %s\n" % self.okToPublishFvsFDatasets)
+            #    for it1 in self.releasesList_rel_2: # it1 = root file
                     #for it2 in self.releasesList_rel_3: # it2 = dataSet # to be deleted
-                    for it2 in self.releasesList_3: # it2 = dataSet
-                        if (re.search(str(it2), it1) and re.search(str(self.selectedFvsFGlobalTag), it1)):
-                            if checkCalculValidation(self, it1):
-                                print it2 + " : " + it1 + " : OK"
-                                self.releasesList_FvsF_5.append(it1)
+            #        for it2 in self.releasesList_3: # it2 = dataSet
+            #            if (re.search(str(it2), it1) and re.search(str(self.selectedFvsFGlobalTag), it1)):
+            #                if checkCalculValidation(self, it1):
+            #                    print it2 + " : " + it1 + " : OK"
+            #                    self.releasesList_FvsF_5.append(it1)
+
             # print length of the arrays
             print "self.releasesList_rel_3 : %d\n" % len(self.releasesList_rel_3) # to be deleted
             print "self.releasesList_ref_3 : %d\n" % len(self.releasesList_ref_3) # to be deleted
@@ -554,7 +564,7 @@ class ovalGui(QWidget):
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
             print_arrays(self) # temporaire
           
-        elif self.tasks_counter == 4:
+        elif self.tasks_counter == 4: # foldercreation & file loading
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.bouton_Previous.setEnabled(True)
@@ -564,6 +574,7 @@ class ovalGui(QWidget):
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(True)
             self.labelResumeSelected.clear() # do not work
+            disableRadioButtons(self)
             self.PathUpdate()
             self.QGBoxListsUpdate()
 
@@ -639,7 +650,7 @@ class ovalGui(QWidget):
         if (self.my_choice_rel_0 != ''): # print the list of the releases
             for index in xrange(self.QLW_rel1.count()):
                 print "self.QLW_rel1.item(%d) : %s" % ( index, self.QLW_rel1.item(index).text() )
-        if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been choosen
+        if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chosen
             self.selectedDataSets = []
             print "self.validationType1 :", self.validationType1
             print "self.validationType2 :", self.validationType2
