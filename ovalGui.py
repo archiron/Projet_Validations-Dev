@@ -11,6 +11,7 @@ from Variables import *
 from ovalOptionsGp import initGpOptions
 from ovalChoiceGp import initGpChoice
 from ovalBottomGp import initGpBottom
+from ovalMiddleGp import initGpMiddle
 from getEnv import env
 from fonctions import folder_creation, finalFolder_creation, working_dirs_creation # , get_collection_list, get_validationType1, clean_files, copy_files
 from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
@@ -21,7 +22,8 @@ from fonctions import checkFileName, newName
 from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList
-from functionGui import fillQLW_rel1, fillQLW_rel2_rel, fillQLW_rel2_ref, enableRadioButtons, disableRadioButtons
+from functionGui import fillQLW_rel1, fillQLW_rel2_rel, fillQLW_rel2_ref 
+from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevButtons, enableStdDevButtons
 from networkFunctions import cmd_load_files
 		
 #############################################################################
@@ -31,11 +33,14 @@ class ovalGui(QWidget):
         
         initVariables(self)
         self.wp.write("initVariables OK\n")
+        self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # renaming label for selection into ovalOptionsGp.py : Now we have FULL vs FULL, FAST vs FAST & FAST vs FULL.
-        # add some comments for explanation
-        # we grayed the button when selected is done. Selection must occur only on step 2 (Lists).
-        # Fast vs Full is now as Full vs full or Fast vs Fast. No more additional test is needed.
+        self.setWindowTitle(self.version)  # the StdDev buttons are also grayed and they are not for step 4 (resuming). 
+        # It will here that you can chose the path where saves are located.
+        # transfering PART2 (middle part with QtextEdit) into an ovalMiddleGp.py file.
+        # add a button for showing the list of operations.
+        # remove QTextEdit in the middle part & replacing it with Label. Note : When changing toward Fast vs Full, the releases are not modified.
+        # add textReport variable in order to have a permanent state of the operations.
         
         # Need to rename files in ovalOptions or ovalChoice as option or choice
         
@@ -56,21 +61,22 @@ class ovalGui(QWidget):
         initGpOptions(self)
         
         ## PART 2 ##
+        initGpMiddle(self)
         # Resume
-        self.QText_Resume = QTextEdit()
-        self.QText_Resume.setMinimumHeight(170)
-        self.QText_Resume.setMaximumHeight(170)
-        self.QText_Resume.setReadOnly(True)
-        self.QText_Resume.setText(self.trUtf8(self.texte))
-        vbox8 = QVBoxLayout()
-        vbox8.addWidget(self.QText_Resume)
-		# creation du grpe Folders paths
-        self.QGBoxResume = QGroupBox("Resume")
-        self.QGBoxResume.setMinimumHeight(250)
-        self.QGBoxResume.setMaximumHeight(250)
-        self.QGBoxResume.setLayout(vbox8)
-        self.layoutH_resume = QHBoxLayout()
-        self.layoutH_resume.addWidget(self.QGBoxResume)
+#        self.QText_Resume = QTextEdit()
+#        self.QText_Resume.setMinimumHeight(170)
+#        self.QText_Resume.setMaximumHeight(170)
+#        self.QText_Resume.setReadOnly(True)
+#        self.QText_Resume.setText(self.trUtf8(self.texte))
+#        vbox8 = QVBoxLayout()
+#        vbox8.addWidget(self.QText_Resume)
+		# creation du grpe Resume
+#        self.QGBoxResume = QGroupBox("Resume")
+#        self.QGBoxResume.setMinimumHeight(250)
+#        self.QGBoxResume.setMaximumHeight(250)
+#        self.QGBoxResume.setLayout(vbox8)
+#        self.layoutH_resume = QHBoxLayout()
+#        self.layoutH_resume.addWidget(self.QGBoxResume)
         
         ## BOTTOM PART ##
         initGpBottom(self)
@@ -371,7 +377,8 @@ class ovalGui(QWidget):
         resume_text = self.texte
         resume_text += "<br />Release   : " + self.my_choice_rel_1
         resume_text += "<br />Reference : " + self.my_choice_ref_1
-        self.QText_Resume.setText(self.trUtf8(resume_text))
+#        self.QText_Resume.setText(self.trUtf8(resume_text))
+        self.LabelResume.setText(self.trUtf8(resume_text))
         
     def Previous_Choice(self):
         print "Previous_Choice tmp: "
@@ -394,6 +401,7 @@ class ovalGui(QWidget):
         if self.tasks_counter == 0: # release selection
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
+            self.wp.write("release selection")
             self.bouton_Previous.setEnabled(False)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
@@ -407,10 +415,12 @@ class ovalGui(QWidget):
             #    item = QListWidgetItem("%s" % it)
             #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
+            disableStdDevButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 1: # reference selection
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
+            self.wp.write("reference selection")
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
@@ -424,11 +434,14 @@ class ovalGui(QWidget):
             #    item = QListWidgetItem("%s" % it)
             #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
+            disableStdDevButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 2: # GlobalTag selections
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
+            self.wp.write("GlobalTag selections")
             enableRadioButtons(self)
+            disableStdDevButtons(self)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Lists")
@@ -446,6 +459,7 @@ class ovalGui(QWidget):
         elif self.tasks_counter == 3: # resuming selections
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
+            self.wp.write("resuming selections")
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Selected")
@@ -453,6 +467,7 @@ class ovalGui(QWidget):
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(True)
             disableRadioButtons(self)
+            enableStdDevButtons(self)
             clearReleasesList(self)
             self.QGBoxListsUpdate()
             
@@ -567,6 +582,7 @@ class ovalGui(QWidget):
         elif self.tasks_counter == 4: # foldercreation & file loading
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
+            self.wp.write("foldercreation & file loading")
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(False)
             self.QGBox_Selected.setTitle("Web page")
@@ -575,6 +591,7 @@ class ovalGui(QWidget):
             self.QGBox_Selected.setVisible(True)
             self.labelResumeSelected.clear() # do not work
             disableRadioButtons(self)
+            disableStdDevButtons(self)
             self.PathUpdate()
             self.QGBoxListsUpdate()
 
@@ -618,12 +635,13 @@ class ovalGui(QWidget):
         self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
 
     def PathUpdate(self):
-        print "menu clicked !"
+        print "PathUpdate menu clicked !"
         print "*-*-**--*-*-*-*-*-* Location"
         self.wp.write("PathUpdate\n")
         self.LocationTable = LocationFilter(self)
         tt = self.loc.actions()
         i_loc = 0
+        # perhaps add a check on tasks_counter value
         for it in tt:
             print "self.ag.actions()", it.text()
             if it.isChecked():
@@ -803,7 +821,21 @@ class ovalGui(QWidget):
         msg.setText("Help")
         msg.setInformativeText("This is additional information for help")
         msg.setWindowTitle("HELP")
-        msg.setDetailedText("The details are as follows:")
+        detailedText = "The details are as follows:"
+        detailedText += "\n"
+        detailedText += "step 4 (web page) : you can chose the path for saves"
+        msg.setDetailedText(detailedText)
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
 
+    def showResume(self):
+        print "showResume"
+        dialogR = QDialog()
+        layoutR = QVBoxLayout(dialogR)
+        labelR = QLabel()
+        text = '<b>List of operations</b><br>'
+        text += '<br>'
+        text += self.textReport
+        labelR.setText(text)
+        layoutR.addWidget(labelR)
+        dialogR.exec_()

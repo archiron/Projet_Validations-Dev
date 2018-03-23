@@ -171,6 +171,8 @@ def initStdDev(self):
     self.checkStdDev1 = QRadioButton("std")
     self.checkStdDev2 = QRadioButton("dev") # par defaut
     self.checkStdDev2.setChecked(True)
+    self.checkStdDev1.setEnabled(False)
+    self.checkStdDev2.setEnabled(False)
     self.connect(self.checkStdDev1, SIGNAL("clicked()"), self.checkStdDev1_Clicked)
     self.connect(self.checkStdDev2, SIGNAL("clicked()"), self.checkStdDev2_Clicked)
     vboxStdDev = QVBoxLayout()

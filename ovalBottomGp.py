@@ -48,7 +48,7 @@ def initAbout(self):
     # Création du bouton About
     self.bouton_About = QPushButton(self.trUtf8("About"),self)
     self.bouton_About.setIcon(QIcon("GUI_00.png"))
-    self.connect(self.bouton_About, SIGNAL("clicked()"), self.showAbout) # to be done
+    self.connect(self.bouton_About, SIGNAL("clicked()"), self.showAbout) #
 
     return
 

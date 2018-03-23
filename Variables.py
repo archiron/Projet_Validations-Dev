@@ -11,7 +11,7 @@ from getEnv import env
 from fonctions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
-    self.version = 'Validations GUI v0.3.0.1'
+    self.version = 'Validations GUI v0.3.0.2'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -61,7 +61,9 @@ def initVariables(self):
         self.wp = open('report.txt', 'w') # report page
     except IOError as ioe:
         print "Could not open file! "
-        
+    
+    self.textReport = ""
+    
     # Release : the release to be validated
     # Reference : the reference release
     # Lists : list of globalTags for release/reference
@@ -71,6 +73,7 @@ def initVariables(self):
     self.tasks_counterMax = len(self.tasks_list) -1
     print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
     self.wp.write("self.tasks_counterMax = %d\n" % self.tasks_counterMax)
+    self.textReport += "self.tasks_counterMax = " + str(self.tasks_counterMax) + "<br>"
     self.selectedDataSets = []
     
     self.allMenuListDatasetsChecked = False # default
