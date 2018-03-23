@@ -11,7 +11,7 @@ from getEnv import env
 from fonctions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
-    self.version = 'Validations GUI v0.3.0.2'
+    self.version = 'Validations GUI v0.3.0.3'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -60,7 +60,13 @@ def initVariables(self):
     try:
         self.wp = open('report.txt', 'w') # report page
     except IOError as ioe:
-        print "Could not open file! "
+        print "Can not open file! "
+        BoiteMessage = QMessageBox()
+        BoiteMessage.setText("cannot open report.txt file !!")
+        BoiteMessage.setIcon(QMessageBox.Critical)
+        BoiteMessage.setWindowTitle("WARNING !")
+        BoiteMessage.exec_()
+
     
     self.textReport = ""
     
@@ -74,6 +80,9 @@ def initVariables(self):
     print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
     self.wp.write("self.tasks_counterMax = %d\n" % self.tasks_counterMax)
     self.textReport += "self.tasks_counterMax = " + str(self.tasks_counterMax) + "<br>"
+    self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'
+    self.textReport += '<b><font color=\'blue\'> release selection </font></b>' + '<br>'
+    
     self.selectedDataSets = []
     
     self.allMenuListDatasetsChecked = False # default

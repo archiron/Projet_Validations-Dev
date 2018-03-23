@@ -35,12 +35,7 @@ class ovalGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # the StdDev buttons are also grayed and they are not for step 4 (resuming). 
-        # It will here that you can chose the path where saves are located.
-        # transfering PART2 (middle part with QtextEdit) into an ovalMiddleGp.py file.
-        # add a button for showing the list of operations.
-        # remove QTextEdit in the middle part & replacing it with Label. Note : When changing toward Fast vs Full, the releases are not modified.
-        # add textReport variable in order to have a permanent state of the operations.
+        self.setWindowTitle(self.version)  # replacing Label with QTextEdit for textReport because of a long root files list.
         
         # Need to rename files in ovalOptions or ovalChoice as option or choice
         
@@ -62,21 +57,6 @@ class ovalGui(QWidget):
         
         ## PART 2 ##
         initGpMiddle(self)
-        # Resume
-#        self.QText_Resume = QTextEdit()
-#        self.QText_Resume.setMinimumHeight(170)
-#        self.QText_Resume.setMaximumHeight(170)
-#        self.QText_Resume.setReadOnly(True)
-#        self.QText_Resume.setText(self.trUtf8(self.texte))
-#        vbox8 = QVBoxLayout()
-#        vbox8.addWidget(self.QText_Resume)
-		# creation du grpe Resume
-#        self.QGBoxResume = QGroupBox("Resume")
-#        self.QGBoxResume.setMinimumHeight(250)
-#        self.QGBoxResume.setMaximumHeight(250)
-#        self.QGBoxResume.setLayout(vbox8)
-#        self.layoutH_resume = QHBoxLayout()
-#        self.layoutH_resume.addWidget(self.QGBoxResume)
         
         ## BOTTOM PART ##
         initGpBottom(self)
@@ -147,9 +127,12 @@ class ovalGui(QWidget):
         self.ref_list_1 = self.rel_list_1 # no need to recompute the list
         for item in self.releasesList_ref_2: # temp
             self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
+            self.textReport += "ItemRelRefClicked2" + item + "<br>"
         self.wp.write("\n") # temp
+        self.textReport += "<br>"
         for item in self.ref_list_1: # temp
             self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
+            self.textReport += "ItemRelRefClicked2" + item + "<br>"
         tmp = "Reference : " + self.my_choice_ref_1
         self.labelCombo2.setText(tmp)
         self.QGBoxListsUpdate()
@@ -269,6 +252,7 @@ class ovalGui(QWidget):
 
     def checkDataSets2Clicked(self):
         self.wp.write("checkDataSets2Clicked")
+        self.textReport += "checkDataSets2Clicked" + "<br>"
         self.checkAllNone1.setChecked(True) # as all DataSets are checked, we need the radiobutton All to be checked
         from Datasets_default import DataSetsFilter
         self.DataSetTable = DataSetsFilter(self)
@@ -278,6 +262,7 @@ class ovalGui(QWidget):
         for item in self.DataSetTable:
             (item_name, item_checked) = item
             self.wp.write(item_name + "\n")
+            self.textReport += "checkLocation2Clicked" + item_name + "<br>"
             a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
@@ -288,6 +273,7 @@ class ovalGui(QWidget):
     def checkLocation2Clicked(self):
         print "checkLocation2Clicked"
         self.wp.write("checkLocation2Clicked")
+        self.textReport += "checkLocation2Clicked" + "<br>"
         from Paths_default import LocationFilter
         self.LocationTable = LocationFilter(self)
         reload(sys.modules['Paths_default'])
@@ -313,9 +299,12 @@ class ovalGui(QWidget):
                 self.ref_list_0 = self.rel_list_0 # pas la peine de recalculer
                 for item in self.releasesList_ref_1: # temp
                     self.wp.write("ItemRelRefClicked1 : %s\n" % item)
+                    self.textReport += "ItemRelRefClicked1 : " + item + "<br>"
                 self.wp.write("\n")
+                self.textReport += "<br>"
                 for item in self.ref_list_0:
                     self.wp.write("ItemRelRefClicked1 : %s\n" % item)
+                    self.textReport += "ItemRelRefClicked1 : " + item + "<br>"
             else:
                 self.my_choice_ref_0 = self.QLW_rel1.currentItem().text()
                 self.releasesList_ref_1 = list_search_1(self.my_choice_ref_0)
@@ -402,6 +391,8 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("release selection")
+            self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'
+            self.textReport += '<b><font color=\'blue\'> release selection </font></b>' + '<br>'
             self.bouton_Previous.setEnabled(False)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
@@ -421,6 +412,8 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("reference selection")
+            self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'
+            self.textReport += '<b><font color=\'blue\'> reference selection </font></b>' + '<br>'
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             clearDataSets(self)
@@ -440,6 +433,8 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("GlobalTag selections")
+            self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
+            self.textReport += "GlobalTag selections" + "<br>"
             enableRadioButtons(self)
             disableStdDevButtons(self)
             self.bouton_Previous.setEnabled(True)
@@ -460,6 +455,8 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("resuming selections")
+            self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
+            self.textReport += "resuming selections" + "<br>"
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Selected")
@@ -583,6 +580,8 @@ class ovalGui(QWidget):
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("foldercreation & file loading")
+            self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
+            self.textReport += "<b><font color=\'blue\'>foldercreation & file loading</font></b>" + "<br>"
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(False)
             self.QGBox_Selected.setTitle("Web page")
@@ -605,9 +604,9 @@ class ovalGui(QWidget):
             for line in self.releasesList_ref_5:
                 print line
 
-            if (checkFastvsFull(self)):
-                for line in self.releasesList_FvsF_5:
-                    print line
+#            if (checkFastvsFull(self)):
+#                for line in self.releasesList_FvsF_5:
+#                    print line
             #TEMPORAIRE
             
             #### output of the webpage and gifs pictures
@@ -638,6 +637,7 @@ class ovalGui(QWidget):
         print "PathUpdate menu clicked !"
         print "*-*-**--*-*-*-*-*-* Location"
         self.wp.write("PathUpdate\n")
+        self.textReport += "PathUpdate" + "<br>"
         self.LocationTable = LocationFilter(self)
         tt = self.loc.actions()
         i_loc = 0
@@ -649,15 +649,19 @@ class ovalGui(QWidget):
                 self.wp.write("%s is checked\n" % it.text())
                 print "folder path : %s" % self.LocationTable[i_loc][2]
                 self.wp.write("folder path : %s\n" % self.LocationTable[i_loc][2])
+                self.textReport += "folder path : %s" + self.LocationTable[i_loc][2] + "<br>"
                 self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
                 self.wp.write("self.finalFolder : %s\n" % self.finalFolder)
                 self.wp.write("self.working_dir_base : %s\n" % self.working_dir_base)
+                self.textReport += "self.finalFolder : " + self.finalFolder + "<br>"
+                self.textReport += "self.working_dir_base : " + self.working_dir_base + "<br>"
                 working_dirs_creation(self)
                 folder_creation(self) # create local folder for files loading and operation resuming
                 finalFolder_creation(self) # create the save folder for html and gifs files
             else:
                 print "%s is unchecked" % it.text()
                 self.wp.write("%s is unchecked\n" % it.text())
+                self.textReport += "%s is unchecked\n" + it.text() + "<br>"
             i_loc += 1
             
     def QGBoxListsUpdate(self):
@@ -765,6 +769,8 @@ class ovalGui(QWidget):
         print "ItemSelectedTable_rel : self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
         self.wp.write("ItemSelectedTable_rel : self.selectedRelDatasets : %s\n " % self.selectedRelDatasets)
         self.wp.write("ItemSelectedTable_rel : self.selectedRelGlobalTag : %s\n " % self.selectedRelGlobalTag)
+        self.textReport += "ItemSelectedTable_rel : self.selectedRelDatasets : " + self.selectedRelDatasets + "<br>"
+        self.textReport += "ItemSelectedTable_rel : self.selectedRelGlobalTag : " + self.selectedRelGlobalTag + "<br>"
 
     def ItemSelectedTable_ref(self, nRow, nCol):
         print "(%d, %d)" % (nRow, nCol)
@@ -784,18 +790,11 @@ class ovalGui(QWidget):
         print "ItemSelectedTable_ref : self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
         self.wp.write("ItemSelectedTable_ref : self.selectedRefDatasets : %s\n " % self.selectedRefDatasets)
         self.wp.write("ItemSelectedTable_ref : self.selectedRefGlobalTag : %s\n " % self.selectedRefGlobalTag)
+        self.textReport += "ItemSelectedTable_ref : self.selectedRefDatasets : " + self.selectedRefDatasets + "<br>"
+        self.textReport += "ItemSelectedTable_ref : self.selectedRefGlobalTag : " + self.selectedRefGlobalTag + "<br>"
 
     def showAbout(self):
         print("About")
-        #msg = QMessageBox()
-        #pixmap = QPixmap(30,30)
-        #pixmap.load('GUI_00.bmp')
-        #msg.setIconPixmap(pixmap)
-        #msg.setText("About")
-        #msg.setInformativeText("This is additional information for about")
-        #msg.setWindowTitle("About")
-        #msg.setStandardButtons(QMessageBox.Ok)
-        #msg.exec_()
         
         pixmap2 = QPixmap('/afs/cern.ch/user/a/archiron/lbin/Projet_Validations-Dev/GUI_001.bmp')
         dialog = QDialog()
@@ -832,10 +831,13 @@ class ovalGui(QWidget):
         print "showResume"
         dialogR = QDialog()
         layoutR = QVBoxLayout(dialogR)
-        labelR = QLabel()
         text = '<b>List of operations</b><br>'
         text += '<br>'
         text += self.textReport
-        labelR.setText(text)
-        layoutR.addWidget(labelR)
+        
+        self.QTextR = QTextEdit()
+        self.QTextR.setReadOnly(True)
+        self.QTextR.setHtml(text)
+
+        layoutR.addWidget(self.QTextR)
         dialogR.exec_()
