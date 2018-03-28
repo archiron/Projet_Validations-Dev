@@ -416,13 +416,5 @@ def cmd_load_files(self):
     pool = Pool(option_mthreads) # need to be here. If not, download is made into previous folder (i.e. self.working_dir_rel).
     pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_ref_5])
     
-    #case 3 self.my_choice_rel_0 : RELEASE for Fast vs Full
-    # PERHAPS TO BE REMOVE
-#    if ( checkFastvsFull(self) ): # FastvsFull
-#        print "case 3 self.my_choice_rel_0 : RELEASE for Fast vs Full"
-#        filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_rel_0 + '/'
-#        os.chdir(self.working_dir_rel)   # Change current working directory to release directory
-#        pool = Pool(option_mthreads)
-#        pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_FvsF_5])
 
     return

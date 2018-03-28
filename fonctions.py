@@ -7,6 +7,39 @@ import re
 from getEnv import env
 from Paths_default import *
 
+def working_dirs_creation(self): # working dir are for resuming the computation.
+#    print "cmd_working_dirs_creation"
+    self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1) # self.lineedit1.text()[6:]
+    self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1) # self.lineedit3.text()[6:]
+    self.wp.write("self.working_dir_rel : %s\n" % self.working_dir_rel)
+    self.wp.write("self.working_dir_ref : %s\n" % self.working_dir_ref)
+    self.textReport += "self.working_dir_rel : " + self.working_dir_rel + "<br>"
+    self.textReport += "self.working_dir_ref : " + self.working_dir_ref + "<br>"
+    
+    if not os.path.exists(self.working_dir_rel):
+        os.chdir(self.working_dir_base) # going to base folder
+        print "Creation of %s release folder" % str(self.working_dir_rel)
+        os.makedirs(str(self.working_dir_rel))
+        self.wp.write("Creation of %s release folder\n" % str(self.working_dir_rel))
+        self.textReport += "Creation of " + str(self.working_dir_rel) + " folder" + "<br>"
+    else:
+        print "release folder %s already created" % str(self.working_dir_rel)
+        self.wp.write("release folder %s already created\n" % str(self.working_dir_rel))
+        self.textReport += "release folder " + str(self.working_dir_rel) + " already created" + "<br>"
+    os.chdir(self.working_dir_rel)   # Change current working directory
+    if not os.path.exists(self.working_dir_ref):
+        print "Creation of %s reference folder" % str(self.working_dir_ref)
+        os.makedirs(str(self.working_dir_ref))
+        self.wp.write("Creation of %s reference folder\n" % str(self.working_dir_ref))
+        self.textReport += "Creation of " + str(self.working_dir_ref) + " reference folder" + "<br>"
+    else:
+        print "reference folder %s already created" % str(self.working_dir_ref)
+        self.wp.write("reference folder %s already created\n" % str(self.working_dir_ref))
+        self.textReport += "reference folder " + str(self.working_dir_ref) + " already created" + "<br>"
+
+    updateLabelResume(self)
+    return
+    
 def folder_creation(self):
     import subprocess, os, datetime
     now = datetime.datetime.now()
@@ -18,12 +51,20 @@ def folder_creation(self):
     fieldname = fieldname + "_" + now.strftime("%Y_%m_%d-%H%M%S")
     print("fieldname : %s") % fieldname
     self.wp.write("fieldname : %s\n" % fieldname)
+    self.textReport += "fieldname : " + fieldname + "<br>"
     
     m_dir = self.working_dir_rel + "/" + fieldname
     self.wp.write("m_dir : %s\n" % m_dir)
-    os.chdir(self.working_dir_rel)
-    os.makedirs(m_dir)
-    
+    self.textReport += "m_dir : " + m_dir + "<br>"
+    os.chdir(self.working_dir_rel) # going into release dir
+    if not os.path.exists(m_dir): # 
+        os.makedirs(m_dir) # create reference folder
+        self.wp.write("creating : %s folder\n" % m_dir)
+        self.textReport += "creating : " + m_dir + " folder" + "<br>"
+    else:
+        print "%s already created" % m_dir
+        self.wp.write("%s already created\n" % m_dir)
+        self.textReport += m_dir + " already created" + "<br>"
     os.chdir(actual_dir)
     return # m_dir
 
@@ -32,24 +73,12 @@ def finalFolder_creation(self):
     actual_dir = os.getcwd()
     if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
         os.makedirs(str(self.finalFolder))
-    return
-    
-def working_dirs_creation(self): # working dir are for resuming the computation.
-#    print "cmd_working_dirs_creation"
-    self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1) # self.lineedit1.text()[6:]
-    self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1) # self.lineedit3.text()[6:]
-    self.wp.write("self.working_dir_rel : %s\n" % self.working_dir_rel)
-    self.wp.write("self.working_dir_ref : %s\n" % self.working_dir_ref)
-    
-    if not os.path.exists(self.working_dir_rel):
-        os.chdir(self.working_dir_base) # going to base folder
-        print "Creation of (%s) folder" % str(self.working_dir_rel)
-        os.makedirs(str(self.working_dir_rel))
-    os.chdir(self.working_dir_rel)   # Change current working directory
-    if not os.path.exists(self.working_dir_ref):
-        print "Creation of (%s) folder" % str(self.working_dir_ref)
-        os.makedirs(str(self.working_dir_ref))
-
+        self.wp.write("Creation of (%s) folder\n" % str(self.finalFolder))
+        self.textReport += "Creation of " + str(self.finalFolder) + " final folder" + "<br>"
+    else:
+        print "%s already created" % str(self.finalFolder)
+        self.wp.write("%s already created\n" % str(self.finalFolder))
+        self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
     return
     
 def get_collection_list(self):
@@ -830,3 +859,47 @@ def getCheckedOptions(self):
 
     print "validationType1 : %s, validationType2 : %s, validationType3 : %s" % (self.validationType1, self.validationType2, self.validationType3)
     return
+    
+def updateLabelResumeSelected(self):
+    selectedText = "<strong>"
+    if self.radio11.isChecked(): # FULL vs FULL
+        selectedText += "FULL vs FULL "
+    elif self.radio12.isChecked(): # FAST vs FAST
+        selectedText += "FAST vs FAST "
+    elif self.radio13.isChecked(): # FAST vs FULL
+        selectedText += "FAST vs FULL "
+    else:
+        print("Houston we have a pbm !!")
+            
+    selectedText += "Selected :</strong>"
+    selectedText += "<table>"
+    selectedText += "<tr>"
+    if (self.selectedRelDatasets == self.selectedRefDatasets):
+        self.okToPublishDatasets = self.selectedRelDatasets
+        selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
+    else: # need to extract common terms in blue and others in black (red?)
+        (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
+        selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
+    selectedText += "<td>  </td>"
+    selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
+    selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
+    selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
+    selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
+    selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
+    selectedText += "</tr></table>"
+            
+    self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            
+    return
+
+def updateLabelResume(self):
+    resume_text = self.texte
+    resume_text += "<br />Release   : " + self.my_choice_rel_1
+    resume_text += "<br />Reference : " + self.my_choice_ref_1
+    resume_text += "<br />working dir release : " + str(self.working_dir_rel)
+    resume_text += "<br />working dir reference : " + str(self.working_dir_ref)
+    resume_text += "<br />resume folder : " + str(self.finalFolder)
+    
+    self.LabelResume.setText(self.trUtf8(resume_text))
+    return
+

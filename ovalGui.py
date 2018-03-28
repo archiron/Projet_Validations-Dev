@@ -18,7 +18,7 @@ from fonctions import list_search_1, list_search_3 # list_search_0, , list_searc
 from fonctions import folderExtension_creation # list_simplify, create_file_list, create_commonfile_list, 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, getCheckedOptions
-from fonctions import checkFileName, newName
+from fonctions import checkFileName, newName, updateLabelResumeSelected, updateLabelResume
 from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList
@@ -35,7 +35,9 @@ class ovalGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # replacing Label with QTextEdit for textReport because of a long root files list.
+        self.setWindowTitle(self.version)  # creation of an image folder : Img
+        # create a function updateLabelResumeSelected() for updating the updateLabelResumeSelected label.
+        # same with updateLabelResume() for updating the updateLabelResume label.
         
         # Need to rename files in ovalOptions or ovalChoice as option or choice
         
@@ -363,11 +365,12 @@ class ovalGui(QWidget):
             self.labelCombo1.setText(tmp)
             self.releasesList_rel_2 = list_search_3(self.releasesList_rel_1, str(self.my_choice_rel_1))
             self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), self.releasesList_rel_2)
-        resume_text = self.texte
-        resume_text += "<br />Release   : " + self.my_choice_rel_1
-        resume_text += "<br />Reference : " + self.my_choice_ref_1
-#        self.QText_Resume.setText(self.trUtf8(resume_text))
-        self.LabelResume.setText(self.trUtf8(resume_text))
+        
+        updateLabelResume(self)
+#        resume_text = self.texte
+#        resume_text += "<br />Release   : " + self.my_choice_rel_1
+#        resume_text += "<br />Reference : " + self.my_choice_ref_1
+#        self.LabelResume.setText(self.trUtf8(resume_text))
         
     def Previous_Choice(self):
         print "Previous_Choice tmp: "
@@ -468,56 +471,38 @@ class ovalGui(QWidget):
             clearReleasesList(self)
             self.QGBoxListsUpdate()
             
-            selectedText = "<strong>"
-            if self.radio11.isChecked(): # FULL vs FULL
-                selectedText += "FULL vs FULL "
-            elif self.radio12.isChecked(): # FAST vs FAST
-                selectedText += "FAST vs FAST "
-            elif self.radio13.isChecked(): # FAST vs FULL
-                selectedText += "FAST vs FULL "
-            else:
-                print("Houston we have a pbm !!")
+            updateLabelResumeSelected(self)
+#            selectedText = "<strong>"
+#            if self.radio11.isChecked(): # FULL vs FULL
+#                selectedText += "FULL vs FULL "
+#            elif self.radio12.isChecked(): # FAST vs FAST
+#                selectedText += "FAST vs FAST "
+#            elif self.radio13.isChecked(): # FAST vs FULL
+#                selectedText += "FAST vs FULL "
+#            else:
+#                print("Houston we have a pbm !!")
             
-            selectedText += "Selected :</strong>"
-            selectedText += "<table>"
-            selectedText += "<tr>"
-            if (self.selectedRelDatasets == self.selectedRefDatasets):
-                self.okToPublishDatasets = self.selectedRelDatasets
-                selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
-            else: # need to extract common terms in blue and others in black (red?)
-                (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
-                selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
-            selectedText += "<td>  </td>"
-            selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
-            selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
-            selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
-            selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
-            selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
-            selectedText += "</tr></table>"
+#            selectedText += "Selected :</strong>"
+#            selectedText += "<table>"
+#            selectedText += "<tr>"
+#            if (self.selectedRelDatasets == self.selectedRefDatasets):
+#                self.okToPublishDatasets = self.selectedRelDatasets
+#                selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
+#            else: # need to extract common terms in blue and others in black (red?)
+#                (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
+#                selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
+#            selectedText += "<td>  </td>"
+#            selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
+#            selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
+#            selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
+#            selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
+#            selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
+#            selectedText += "</tr></table>"
             
-#            if ( checkFastvsFull(self) ): # FastvsFull
-#                selectedText += "<br /><br /><strong>Fast vs Full : </strong>"
-#                selectedText += "<table><tr>"
-#                if (self.selectedRelDatasets == self.selectedFvsFDatasets):
-#                    self.okToPublishFvsFDatasets = self.selectedRelDatasets
-#                    selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
-#                else:
-#                    (self.okToPublishFvsFDatasets, self.okToDisplayFvsFDatasets) = extractDatasetsFastvsFull(self)
-#                    selectedText += "<td colspan=\"2\"><br /><strong>Selected Fast vs Full Datasets : " + self.okToDisplayFvsFDatasets + "</strong><br /><br /></td>"
-#                selectedText += "<td>  </td>"
-#                selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishFvsFDatasets + "</font></strong></td>"           
-#                selectedText += "</tr><tr><td><strong>GlobalTags : </td>"
-#                selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag  + "</td>" 
-#                selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
-#                selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedFvsFGlobalTag + "</strong></td>"
-#                selectedText += "</tr>"
-#            selectedText += "</table>"
-            self.labelResumeSelected.setText(self.trUtf8(selectedText))
+#            self.labelResumeSelected.setText(self.trUtf8(selectedText))
             
             print "self.okToPublishDatasets = %s" % self.okToPublishDatasets
-            #print "self.okToPublishFvsFDatasets = %s" % self.okToPublishFvsFDatasets
             print "self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
-            #print "self.okToDisplayFvsFDatasets = %s" % self.okToDisplayFvsFDatasets
             
             ## here we have a common (rel & ref) dataset named as self.okToPublishDatasets for Full vs Full or Fast vs Fast. 
             ## we also have a common dataset for Fast vs Full named as self.okToPublishFvsFDatasets
@@ -526,16 +511,11 @@ class ovalGui(QWidget):
             # create list of root files for rel & ref
             print "0 " + self.selectedRelDatasets
             print "1 " + self.okToPublishDatasets
-            #self.releasesList_rel_3 = (self.selectedRelDatasets.replace(" ", "")).split(',') # to be deleted
-            #self.releasesList_ref_3 = (self.selectedRefDatasets.replace(" ", "")).split(',') # to be deleted
             self.releasesList_3 = (self.okToPublishDatasets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
             print "\nRelease :"
             for it1 in self.releasesList_rel_2: # it1 = root file
                 if checkFileName(self, it1, "rel"):
-                    #for it2 in self.releasesList_rel_3: # it2 = dataSet # to be deleted
                     for it2 in self.releasesList_3: # it2 = dataSet
-                        #print str(it2)
-                        #if (re.search(str(it2), it1) and re.search(str(self.selectedRelGlobalTag), it1)):
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRelGlobalTag), it1)): # at least one file here
                              if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
@@ -544,24 +524,11 @@ class ovalGui(QWidget):
             print "\nReference :"
             for it1 in self.releasesList_ref_2: # it1 = root file
                if checkFileName(self, it1, "ref"):
-                    #for it2 in self.releasesList_ref_3: # it2 = dataSet # to be deleted
                     for it2 in self.releasesList_3: # it2 = dataSet
-                        #print ">>>>> " + it2 + " _ " + newName("__RelVal", it2, "__")
-                        #if (re.search(str(it2), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
                             if checkCalculValidation(self, it1):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_ref_5.append(it1)
-            #if ( checkFastvsFull(self) ): # FastvsFull ## to be completed with another test only on Full, RECO
-            #    print "\nFastvsFull :"
-            #    self.wp.write("okToPublishFvsFDatasets FastvsFull = %s\n" % self.okToPublishFvsFDatasets)
-            #    for it1 in self.releasesList_rel_2: # it1 = root file
-                    #for it2 in self.releasesList_rel_3: # it2 = dataSet # to be deleted
-            #        for it2 in self.releasesList_3: # it2 = dataSet
-            #            if (re.search(str(it2), it1) and re.search(str(self.selectedFvsFGlobalTag), it1)):
-            #                if checkCalculValidation(self, it1):
-            #                    print it2 + " : " + it1 + " : OK"
-            #                    self.releasesList_FvsF_5.append(it1)
 
             # print length of the arrays
             print "self.releasesList_rel_3 : %d\n" % len(self.releasesList_rel_3) # to be deleted
@@ -571,12 +538,12 @@ class ovalGui(QWidget):
             print "self.releasesList_ref_2 : %d\n" % len(self.releasesList_ref_2)
             print "self.releasesList_rel_5 : %d\n" % len(self.releasesList_rel_5)
             print "self.releasesList_ref_5 : %d\n" % len(self.releasesList_ref_5)
-            #print "self.releasesList_FvsF_5 : %d\n" % len(self.releasesList_FvsF_5)
             print BaseURL(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
+            self.textReport += "BaseUrl = " + BaseURL(self) + "<br>"
             print_arrays(self) # temporaire
           
-        elif self.tasks_counter == 4: # foldercreation & file loading
+        elif self.tasks_counter == 4: # folder creation & file loading
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("foldercreation & file loading")
@@ -591,6 +558,7 @@ class ovalGui(QWidget):
             self.labelResumeSelected.clear() # do not work
             disableRadioButtons(self)
             disableStdDevButtons(self)
+            # defining/creating paths & folders
             self.PathUpdate()
             self.QGBoxListsUpdate()
 
@@ -647,21 +615,23 @@ class ovalGui(QWidget):
             if it.isChecked():
                 print "%s is checked" % it.text()
                 self.wp.write("%s is checked\n" % it.text())
+                self.textReport += it.text() + " is checked" + "<br>"
                 print "folder path : %s" % self.LocationTable[i_loc][2]
                 self.wp.write("folder path : %s\n" % self.LocationTable[i_loc][2])
-                self.textReport += "folder path : %s" + self.LocationTable[i_loc][2] + "<br>"
+                self.textReport += "folder path : " + self.LocationTable[i_loc][2] + "<br>"
                 self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
                 self.wp.write("self.finalFolder : %s\n" % self.finalFolder)
                 self.wp.write("self.working_dir_base : %s\n" % self.working_dir_base)
                 self.textReport += "self.finalFolder : " + self.finalFolder + "<br>"
                 self.textReport += "self.working_dir_base : " + self.working_dir_base + "<br>"
-                working_dirs_creation(self)
+                # call for folders creation
+                working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
                 folder_creation(self) # create local folder for files loading and operation resuming
                 finalFolder_creation(self) # create the save folder for html and gifs files
             else:
                 print "%s is unchecked" % it.text()
                 self.wp.write("%s is unchecked\n" % it.text())
-                self.textReport += "%s is unchecked\n" + it.text() + "<br>"
+                self.textReport += it.text() + " is unchecked\n" + "<br>"
             i_loc += 1
             
     def QGBoxListsUpdate(self):
@@ -796,7 +766,7 @@ class ovalGui(QWidget):
     def showAbout(self):
         print("About")
         
-        pixmap2 = QPixmap('/afs/cern.ch/user/a/archiron/lbin/Projet_Validations-Dev/GUI_001.bmp')
+        pixmap2 = QPixmap('/afs/cern.ch/user/a/archiron/lbin/Projet_Validations-Dev/Img/GUI_001.bmp')
         dialog = QDialog()
         layout = QVBoxLayout(dialog)
         labell = QLabel()
