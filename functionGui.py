@@ -78,6 +78,8 @@ def disableRadioButtons(self):
     self.checkSpecReference4.setEnabled(False)
     self.checkAllNone1.setEnabled(False)
     self.checkAllNone2.setEnabled(False)
+    self.checkDataSets1.setEnabled(False)
+    self.checkDataSets2.setEnabled(False)
 
     return
 
@@ -95,6 +97,8 @@ def enableRadioButtons(self):
     self.checkSpecReference4.setEnabled(True)
     self.checkAllNone1.setEnabled(True)
     self.checkAllNone2.setEnabled(True)
+    self.checkDataSets1.setEnabled(True)
+    self.checkDataSets2.setEnabled(True)
 
     return
 
@@ -110,5 +114,14 @@ def enableStdDevButtons(self):
 
     return
     
-   
-    
+def disableLocationButtons(self): 
+    self.checkLocation1.setEnabled(False)
+    self.checkLocation2.setEnabled(False)
+
+    return
+
+def enableLocationButtons(self):
+    self.checkLocation1.setEnabled(True)
+    self.checkLocation2.setEnabled(True)
+
+    return

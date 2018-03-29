@@ -23,7 +23,7 @@ from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFas
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList
 from functionGui import fillQLW_rel1, fillQLW_rel2_rel, fillQLW_rel2_ref 
-from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevButtons, enableStdDevButtons
+from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevButtons, enableStdDevButtons, disableLocationButtons, enableLocationButtons
 from networkFunctions import cmd_load_files
 		
 #############################################################################
@@ -35,9 +35,9 @@ class ovalGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # creation of an image folder : Img
-        # create a function updateLabelResumeSelected() for updating the updateLabelResumeSelected label.
-        # same with updateLabelResume() for updating the updateLabelResume label.
+        self.setWindowTitle(self.version)  # add somme grayed functions such as menus, self.checkAllNone1/2 & disableLocationButtons, enableLocationButtons functions
+        # added.
+        # add in red if folders already exist.
         
         # Need to rename files in ovalOptions or ovalChoice as option or choice
         
@@ -410,6 +410,7 @@ class ovalGui(QWidget):
             #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
             disableStdDevButtons(self)
+            disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 1: # reference selection
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
@@ -431,6 +432,7 @@ class ovalGui(QWidget):
             #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
             disableStdDevButtons(self)
+            disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 2: # GlobalTag selections
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
@@ -468,38 +470,11 @@ class ovalGui(QWidget):
             self.QGBox_Selected.setVisible(True)
             disableRadioButtons(self)
             enableStdDevButtons(self)
+            enableLocationButtons(self)
             clearReleasesList(self)
             self.QGBoxListsUpdate()
             
             updateLabelResumeSelected(self)
-#            selectedText = "<strong>"
-#            if self.radio11.isChecked(): # FULL vs FULL
-#                selectedText += "FULL vs FULL "
-#            elif self.radio12.isChecked(): # FAST vs FAST
-#                selectedText += "FAST vs FAST "
-#            elif self.radio13.isChecked(): # FAST vs FULL
-#                selectedText += "FAST vs FULL "
-#            else:
-#                print("Houston we have a pbm !!")
-            
-#            selectedText += "Selected :</strong>"
-#            selectedText += "<table>"
-#            selectedText += "<tr>"
-#            if (self.selectedRelDatasets == self.selectedRefDatasets):
-#                self.okToPublishDatasets = self.selectedRelDatasets
-#                selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
-#            else: # need to extract common terms in blue and others in black (red?)
-#                (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
-#                selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
-#            selectedText += "<td>  </td>"
-#            selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
-#            selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
-#            selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
-#            selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
-#            selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
-#            selectedText += "</tr></table>"
-            
-#            self.labelResumeSelected.setText(self.trUtf8(selectedText))
             
             print "self.okToPublishDatasets = %s" % self.okToPublishDatasets
             print "self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
@@ -558,6 +533,7 @@ class ovalGui(QWidget):
             self.labelResumeSelected.clear() # do not work
             disableRadioButtons(self)
             disableStdDevButtons(self)
+            disableLocationButtons(self)
             # defining/creating paths & folders
             self.PathUpdate()
             self.QGBoxListsUpdate()
@@ -628,6 +604,7 @@ class ovalGui(QWidget):
                 working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
                 folder_creation(self) # create local folder for files loading and operation resuming
                 finalFolder_creation(self) # create the save folder for html and gifs files
+                updateLabelResume(self)
             else:
                 print "%s is unchecked" % it.text()
                 self.wp.write("%s is unchecked\n" % it.text())

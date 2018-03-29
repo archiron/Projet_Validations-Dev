@@ -22,20 +22,24 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
         os.makedirs(str(self.working_dir_rel))
         self.wp.write("Creation of %s release folder\n" % str(self.working_dir_rel))
         self.textReport += "Creation of " + str(self.working_dir_rel) + " folder" + "<br>"
+        self.exist_working_dir_rel = False
     else:
         print "release folder %s already created" % str(self.working_dir_rel)
         self.wp.write("release folder %s already created\n" % str(self.working_dir_rel))
         self.textReport += "release folder " + str(self.working_dir_rel) + " already created" + "<br>"
+        self.exist_working_dir_rel = True
     os.chdir(self.working_dir_rel)   # Change current working directory
     if not os.path.exists(self.working_dir_ref):
         print "Creation of %s reference folder" % str(self.working_dir_ref)
         os.makedirs(str(self.working_dir_ref))
         self.wp.write("Creation of %s reference folder\n" % str(self.working_dir_ref))
         self.textReport += "Creation of " + str(self.working_dir_ref) + " reference folder" + "<br>"
+        self.exist_working_dir_ref = False
     else:
         print "reference folder %s already created" % str(self.working_dir_ref)
         self.wp.write("reference folder %s already created\n" % str(self.working_dir_ref))
         self.textReport += "reference folder " + str(self.working_dir_ref) + " already created" + "<br>"
+        self.exist_working_dir_ref = True
 
     updateLabelResume(self)
     return
@@ -75,10 +79,13 @@ def finalFolder_creation(self):
         os.makedirs(str(self.finalFolder))
         self.wp.write("Creation of (%s) folder\n" % str(self.finalFolder))
         self.textReport += "Creation of " + str(self.finalFolder) + " final folder" + "<br>"
+        self.exist_finalFolder = False
     else:
         print "%s already created" % str(self.finalFolder)
         self.wp.write("%s already created\n" % str(self.finalFolder))
         self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
+        self.exist_finalFolder = True
+    updateLabelResume(self)
     return
     
 def get_collection_list(self):
@@ -897,9 +904,15 @@ def updateLabelResume(self):
     resume_text += "<br />Release   : " + self.my_choice_rel_1
     resume_text += "<br />Reference : " + self.my_choice_ref_1
     resume_text += "<br />working dir release : " + str(self.working_dir_rel)
+    if  ( self.exist_working_dir_rel ):
+        resume_text += ' <b><font color=\'red\'>already created !</font></b>'
     resume_text += "<br />working dir reference : " + str(self.working_dir_ref)
-    resume_text += "<br />resume folder : " + str(self.finalFolder)
+    if  ( self.exist_working_dir_ref ):
+        resume_text += ' <b><font color=\'red\'>already created !</font></b>'
+    resume_text += '<br />resume folder : ' + str(self.finalFolder)
+    if ( self.exist_finalFolder ):
+        resume_text += ' <b><font color=\'blue\'>already created !</font></b>'
     
-    self.LabelResume.setText(self.trUtf8(resume_text))
+    self.LabelResume.setText(self.trUtf8(resume_text))   
     return
 
