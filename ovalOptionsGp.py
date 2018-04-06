@@ -58,6 +58,7 @@ def initGpSpecTarget(self):
     vbox2.addWidget(self.checkSpecTarget4)
     vbox2.addStretch(1)
     self.QGBox2.setLayout(vbox2)
+    #self.checkSpecTarget1_Clicked()
     return
 
 def initGpSpecReference(self):
@@ -140,6 +141,60 @@ def initGpDataSets(self):
         
     return
 
+def initGpFolderName(self): # can add modification on release name to obtain the folder name for the web page.
+    print "initGpDataSets"
+
+    self.QGBoxFolderName = QGroupBox("Web folder name customization : ")
+    self.QGBoxFolderName.setMaximumHeight(120)
+    self.QGBoxFolderName.setMinimumHeight(120)
+    self.label_rel = QLabel("Release : ", self) # Release customization
+    self.label_rel.setMaximumWidth(150)
+    self.label_rel.setMinimumWidth(150)
+    self.lineEdit_rel = QLineEdit(self)
+    self.lineEdit_rel.setMaximumWidth(300)
+    self.lineEdit_rel.setMinimumWidth(200)
+    self.lineEdit_rel.connect(self.lineEdit_rel, SIGNAL("textChanged(QString)"), self.changeText)
+    self.label_ref = QLabel("Reference  : ", self) # Reference customization
+    self.label_ref.setMaximumWidth(150)
+    self.label_ref.setMinimumWidth(150)
+    self.lineEdit_ref = QLineEdit(self)
+    self.lineEdit_ref.setMaximumWidth(300)
+    self.lineEdit_ref.setMinimumWidth(200)
+    self.lineEdit_ref.connect(self.lineEdit_ref, SIGNAL("textChanged(QString)"), self.changeText)
+    vbox_FolderName = QVBoxLayout()
+    hbox1 = QHBoxLayout()
+    hbox2 = QHBoxLayout()
+    hbox1.addWidget(self.label_rel)
+    hbox1.addWidget(self.lineEdit_rel)
+    hbox2.addWidget(self.label_ref)
+    hbox2.addWidget(self.lineEdit_ref)
+    vbox_FolderName.addLayout(hbox1)
+    vbox_FolderName.addLayout(hbox2)
+    vbox_FolderName.addStretch(1)
+    self.QGBoxFolderName.setLayout(vbox_FolderName)
+
+    return
+
+def initStdDev(self):
+    self.QGBoxStdDev = QGroupBox("std/dev")
+    self.QGBoxStdDev.setMaximumHeight(120)
+    self.QGBoxStdDev.setMinimumHeight(120)
+    self.QGBoxStdDev.setMaximumWidth(100)		
+    self.checkStdDev1 = QRadioButton("std")
+    self.checkStdDev2 = QRadioButton("dev") # par defaut
+    self.checkStdDev2.setChecked(True)
+    self.checkStdDev1.setEnabled(False)
+    self.checkStdDev2.setEnabled(False)
+    self.connect(self.checkStdDev1, SIGNAL("clicked()"), self.checkStdDev1_Clicked)
+    self.connect(self.checkStdDev2, SIGNAL("clicked()"), self.checkStdDev2_Clicked)
+    vboxStdDev = QVBoxLayout()
+    vboxStdDev.addWidget(self.checkStdDev1)
+    vboxStdDev.addWidget(self.checkStdDev2)
+    vboxStdDev.addStretch(1)
+    self.QGBoxStdDev.setLayout(vboxStdDev)
+
+    return
+
 def initGpLocation(self):
     print "initGpLocation"
 
@@ -167,26 +222,6 @@ def initGpLocation(self):
     vboxLocation.addWidget(self.checkLocation2)
     vboxLocation.addStretch(1)
     self.QGBoxLocation.setLayout(vboxLocation)
-    return
-
-def initStdDev(self):
-    self.QGBoxStdDev = QGroupBox("std/dev")
-    self.QGBoxStdDev.setMaximumHeight(120)
-    self.QGBoxStdDev.setMinimumHeight(120)
-    self.QGBoxStdDev.setMaximumWidth(100)		
-    self.checkStdDev1 = QRadioButton("std")
-    self.checkStdDev2 = QRadioButton("dev") # par defaut
-    self.checkStdDev2.setChecked(True)
-    self.checkStdDev1.setEnabled(False)
-    self.checkStdDev2.setEnabled(False)
-    self.connect(self.checkStdDev1, SIGNAL("clicked()"), self.checkStdDev1_Clicked)
-    self.connect(self.checkStdDev2, SIGNAL("clicked()"), self.checkStdDev2_Clicked)
-    vboxStdDev = QVBoxLayout()
-    vboxStdDev.addWidget(self.checkStdDev1)
-    vboxStdDev.addWidget(self.checkStdDev2)
-    vboxStdDev.addStretch(1)
-    self.QGBoxStdDev.setLayout(vboxStdDev)
-
     return
 
 def initGpResume(self):
@@ -220,14 +255,17 @@ def initGpOptions(self):
     # creation du grpe initGpDataSets
     initGpDataSets(self)
     
+    # creation du gpe initGpFolderName
+    initGpFolderName(self)
+    
     # creation du grpe All/None
     initGpAllNone(self)
 
-    # creation du grpe Location
-    initGpLocation(self)
-    
     # creation du grpe Std/Dev
     initStdDev(self)
+    
+    # creation du grpe Location
+    initGpLocation(self)
     
     # creation des Label pour release/reference resume
     initGpResume(self)    
@@ -239,6 +277,8 @@ def initGpOptions(self):
     self.layoutH_radio.addWidget(self.QGBoxSpecReference)
     self.layoutH_radio.addWidget(self.QGBoxAllNone)
     self.layoutH_radio.addWidget(self.QGBoxDataSets)
+    self.layoutH_radio.addStretch(1)
+    self.layoutH_radio.addWidget(self.QGBoxFolderName)
     self.layoutH_radio.addStretch(1)
     self.layoutH_radio.addWidget(self.QGBoxStdDev)
     self.layoutH_radio.addWidget(self.QGBoxLocation)

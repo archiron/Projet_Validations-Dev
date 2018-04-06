@@ -125,3 +125,37 @@ def enableLocationButtons(self):
     self.checkLocation2.setEnabled(True)
 
     return
+
+def comparisonRules(self): # to define which reference buttons are checked or not
+    if ( self.checkSpecTarget1.isChecked() ): # RECO
+        self.checkSpecReference1.setChecked(True) 
+        self.checkSpecReference1.setEnabled(True)
+        self.checkSpecReference2.setEnabled(False)
+        self.checkSpecReference3.setEnabled(False)
+        if ( self.radio13.isChecked() ): # Fast vs Full
+            self.checkSpecReference4.setEnabled(False)
+        else:
+            self.checkSpecReference4.setEnabled(True)
+    elif ( self.checkSpecTarget2.isChecked() ): # PU25
+        self.checkSpecReference2.setChecked(True) 
+        self.checkSpecReference1.setEnabled(False)
+        self.checkSpecReference2.setEnabled(True)
+        self.checkSpecReference3.setEnabled(False)
+        self.checkSpecReference4.setEnabled(False)
+    elif ( self.checkSpecTarget3.isChecked() ): # PUpmx25
+        self.checkSpecReference2.setChecked(True) # default = PU25
+        self.checkSpecReference1.setEnabled(False)
+        if ( self.radio13.isChecked() ): # Fast vs Full
+            self.checkSpecReference2.setEnabled(False) # PUpmx25
+            self.checkSpecReference3.setChecked(True) # when Fast vs Full, only pmx vs pmx is allowed
+        else:
+            self.checkSpecReference2.setEnabled(True) # PUpmx25
+        self.checkSpecReference3.setEnabled(True) # PU25
+        self.checkSpecReference4.setEnabled(False)
+    elif ( self.checkSpecTarget4.isChecked() ): # miniAOD
+        self.checkSpecReference4.setChecked(True) 
+        self.checkSpecReference1.setEnabled(False)
+        self.checkSpecReference2.setEnabled(False)
+        self.checkSpecReference3.setEnabled(False)
+        self.checkSpecReference4.setEnabled(True)
+    return

@@ -916,3 +916,54 @@ def updateLabelResume(self):
     self.LabelResume.setText(self.trUtf8(resume_text))   
     return
 
+def changeRef2Tmp(self): # put ref into memory, and put ref == rel
+    self.my_choice_tmp = self.my_choice_ref_1 # keep the chosen reference into memory
+    self.releasesList_ref_2_tmp = self.releasesList_ref_2 # keep the reference root files list into memory
+    self.ref_list_1_tmp = self.ref_list_1 # keep the reference datasets list into memory
+    self.my_choice_ref_1 = self.my_choice_rel_1
+    self.releasesList_ref_2 = self.releasesList_rel_2 # no need to recompute the list
+    self.ref_list_1 = self.rel_list_1 # no need to recompute the list
+    tmp = "Reference : " + self.my_choice_ref_1
+    self.labelCombo2.setText(tmp)
+    return
+    
+def changeTmp2Ref(self): # retrieve rel != ref
+    if ( self.my_choice_tmp != "" ): # we have an old choice for reference
+#        print "back to reference"
+#        print "actual : " + self.my_choice_ref_1
+#        print "native : " + self.my_choice_tmp
+        self.wp.write("back to reference\n")
+        self.wp.write("actual : %s\n" % self.my_choice_ref_1)
+        self.wp.write("native : %s\n" % self.my_choice_tmp)
+        self.textReport += "back to reference" + "<br>"
+        self.textReport += "actual : " + self.my_choice_ref_1 + "<br>"
+        self.textReport += "native : " + self.my_choice_tmp + "<br>"
+        self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
+        self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
+        self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
+        self.my_choice_tmp = ""
+        self.releasesList_ref_2_tmp = []
+        self.ref_list_1_tmp = []
+        tmp = "Reference : " + self.my_choice_ref_1
+        self.labelCombo2.setText(tmp)
+    return
+    
+    print "back to reference"
+    print "actual : " + self.my_choice_ref_1
+    print "native : " + self.my_choice_tmp
+    self.wp.write("back to reference\n")
+    self.wp.write("actual : %s\n" % self.my_choice_ref_1)
+    self.wp.write("native : %s\n" % self.my_choice_tmp)
+    self.textReport += "back to reference" + "<br>"
+    self.textReport += "actual : " + self.my_choice_ref_1 + "<br>"
+    self.textReport += "native : " + self.my_choice_tmp + "<br>"
+    self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
+    self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
+    self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
+    self.my_choice_tmp = ""
+    self.releasesList_ref_2_tmp = []
+    self.ref_list_1_tmp = []
+    tmp = "Reference : " + self.my_choice_ref_1
+    self.labelCombo2.setText(tmp)
+    return
+    

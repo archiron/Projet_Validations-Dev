@@ -19,11 +19,12 @@ from fonctions import folderExtension_creation # list_simplify, create_file_list
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
 from fonctions import checkFastvsFull, getCheckedOptions
 from fonctions import checkFileName, newName, updateLabelResumeSelected, updateLabelResume
+from fonctions import changeRef2Tmp, changeTmp2Ref
 from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList
 from functionGui import fillQLW_rel1, fillQLW_rel2_rel, fillQLW_rel2_ref 
-from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevButtons, enableStdDevButtons, disableLocationButtons, enableLocationButtons
+from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevButtons, enableStdDevButtons, disableLocationButtons, enableLocationButtons, comparisonRules
 from networkFunctions import cmd_load_files
 		
 #############################################################################
@@ -35,9 +36,16 @@ class ovalGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # add somme grayed functions such as menus, self.checkAllNone1/2 & disableLocationButtons, enableLocationButtons functions
-        # added.
-        # add in red if folders already exist.
+        self.setWindowTitle(self.version)  # add a comparisonRules() functions into functionGui in order to block some radio button and keep only authorized operations.
+        # operations :
+        # RECO vs RECO - 2 releases
+        # RECO vs miniAOD - same release
+        # PU25 vs PU25 - 2 releases
+        # PUpmx25 vs PU25 - same release
+        # PUpmx25 vs PUpmx25 - 2 releases
+        # miniAOD vs miniAOD  - 2 releases
+        
+        # also add changeRef2Tmp, changeTmp2Ref functions. Bug with FastvsFull : when pmx is used, we cannot return on chosen initial reference. 
         
         # Need to rename files in ovalOptions or ovalChoice as option or choice
         
@@ -81,15 +89,20 @@ class ovalGui(QWidget):
         self.radio11.setChecked(True)
         self.validationType1 = 'Full'
         self.checkDataSets2Clicked()
-        if ( self.my_choice_tmp != "" ): # we have an old choice for reference
-            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
-            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
-            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
-            self.my_choice_tmp = ""
-            self.releasesList_ref_2_tmp = []
-            self.ref_list_1_tmp = []
-            tmp = "Reference : " + self.my_choice_ref_1
-            self.labelCombo2.setText(tmp)
+        self.checkSpecTarget1_Clicked()
+        self.my_choice_ref_1 = self.reference
+        self.my_choice_rel_1 = self.target
+        self.releasesList_ref_2 = self.referenceList
+        self.ref_list_1  = self.refList
+#        if ( self.my_choice_tmp != "" ): # we have an old choice for reference
+#            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
+#            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
+#            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
+#            self.my_choice_tmp = ""
+#            self.releasesList_ref_2_tmp = []
+#            self.ref_list_1_tmp = []
+        tmp = "Reference : " + self.my_choice_ref_1
+        self.labelCombo2.setText(tmp)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
 
@@ -97,36 +110,41 @@ class ovalGui(QWidget):
         self.radio12.setChecked(True)
         self.validationType1 = 'Fast'
         self.checkDataSets2Clicked()
-        if ( self.my_choice_tmp != "" ):
-            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
-            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
-            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
-            self.my_choice_tmp = ""
-            self.releasesList_ref_2_tmp = []
-            self.ref_list_1_tmp = []
-            tmp = "Reference : " + self.my_choice_ref_1
-            self.labelCombo2.setText(tmp)
+        self.checkSpecTarget1_Clicked()
+        self.my_choice_ref_1 = self.reference
+        self.my_choice_rel_1 = self.target
+        self.releasesList_ref_2 = self.referenceList
+        self.ref_list_1  = self.refList
+#        if ( self.my_choice_tmp != "" ):
+#            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
+#            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
+#            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
+#            self.my_choice_tmp = ""
+#            self.releasesList_ref_2_tmp = []
+#            self.ref_list_1_tmp = []
+        tmp = "Reference : " + self.my_choice_ref_1
+        self.labelCombo2.setText(tmp)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
     def radio13Clicked(self):
         self.radio13.setChecked(True)
         self.validationType1 = 'FastFull'
-        self.checkSpecTarget1.setChecked(True)
-        self.checkSpecReference1.setChecked(True) #default
         self.checkDataSets2Clicked()
-        self.my_choice_tmp = self.my_choice_ref_1 # keep the chosen reference into memory
-        self.releasesList_ref_2_tmp = self.releasesList_ref_2 # keep the reference root files list into memory
-        self.ref_list_1_tmp = self.ref_list_1 # keep the reference datasets list into memory
+        self.checkSpecTarget1_Clicked()
+        changeRef2Tmp(self)
+#        self.my_choice_tmp = self.my_choice_ref_1 # keep the chosen reference into memory
+#        self.releasesList_ref_2_tmp = self.releasesList_ref_2 # keep the reference root files list into memory
+#        self.ref_list_1_tmp = self.ref_list_1 # keep the reference datasets list into memory
 
-        self.my_choice_ref_0 = self.my_choice_rel_0
-        self.my_choice_ref_1 = self.my_choice_rel_1
+        self.my_choice_ref_0 = self.my_choice_rel_0 # need to see if we have to keep it
+#        self.my_choice_ref_1 = self.my_choice_rel_1
         print ("my_choice_rel_0 = ") , self.my_choice_rel_0 # temp
         print ("my_choice_rel_1 = ") , self.my_choice_rel_1 # temp
         print ("my_choice_ref_0 = ") , self.my_choice_ref_0 # temp
         print ("my_choice_ref_1 = ") , self.my_choice_ref_1 # temp
-        self.releasesList_ref_2 = self.releasesList_rel_2 # no need to recompute the list
-        self.ref_list_1 = self.rel_list_1 # no need to recompute the list
+#        self.releasesList_ref_2 = self.releasesList_rel_2 # no need to recompute the list
+#        self.ref_list_1 = self.rel_list_1 # no need to recompute the list
         for item in self.releasesList_ref_2: # temp
             self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
             self.textReport += "ItemRelRefClicked2" + item + "<br>"
@@ -135,16 +153,19 @@ class ovalGui(QWidget):
         for item in self.ref_list_1: # temp
             self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
             self.textReport += "ItemRelRefClicked2" + item + "<br>"
-        tmp = "Reference : " + self.my_choice_ref_1
-        self.labelCombo2.setText(tmp)
+#        tmp = "Reference : " + self.my_choice_ref_1
+#        self.labelCombo2.setText(tmp)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
     def checkSpecTarget1_Clicked(self):
+        self.my_choice_ref_1 = self.reference
+        self.my_choice_rel_1 = self.target
         self.checkSpecTarget1.setChecked(True)
         self.checkSpecReference1_Clicked()
         self.validationType2 = 'RECO'
         getCheckedOptions(self)
+        comparisonRules(self)
         print "Target, self.validationType2 : %s" % self.validationType2
         print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
@@ -155,6 +176,7 @@ class ovalGui(QWidget):
         self.checkSpecReference2_Clicked() #default
         self.validationType2 = 'PU25'
         getCheckedOptions(self)
+        comparisonRules(self)
         print "Target, self.validationType2 : %s" % self.validationType2
         print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
@@ -165,6 +187,7 @@ class ovalGui(QWidget):
         self.checkSpecReference2_Clicked()
         self.validationType2 = 'PUpmx25'
         getCheckedOptions(self)
+        comparisonRules(self)
         print "Target, self.validationType2 : %s" % self.validationType2
         print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
@@ -175,6 +198,7 @@ class ovalGui(QWidget):
         self.validationType2 = 'miniAOD'
         self.checkSpecReference4_Clicked()
         getCheckedOptions(self)
+        comparisonRules(self)
         print "Target, self.validationType2 : %s" % self.validationType2
         print "Target, self.validationType3 : %s" % self.validationType3
         self.checkDataSets2Clicked()
@@ -220,8 +244,15 @@ class ovalGui(QWidget):
         self.checkSpecReference1.setChecked(True)
         self.validationType3 = 'RECO'
         getCheckedOptions(self)
-        print "Reference, self.validationType2 : %s" % self.validationType2
-        print "Reference, self.validationType3 : %s" % self.validationType3
+        if ( self.checkSpecTarget1.isChecked() ): # RECO vs RECO. If not checked, there must have a pbm !
+            if ( self.radio13.isChecked() ): # Fast vs Full
+                changeRef2Tmp(self)
+            else: # Full vs Full or Fast vs Fast
+                changeTmp2Ref(self)
+        print "----- Reference, self.validationType2 : %s" % self.validationType2
+        print "----- Reference, self.validationType3 : %s" % self.validationType3
+        print "----- Reference rel : " + self.my_choice_rel_1
+        print "----- Reference ref : " + self.my_choice_ref_1
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
@@ -229,8 +260,17 @@ class ovalGui(QWidget):
         self.checkSpecReference2.setChecked(True)
         self.validationType3 = 'PU25'
         getCheckedOptions(self)
+        if ( self.checkSpecTarget2.isChecked() ): # PU25 vs PU25
+            if ( self.radio13.isChecked() ): # Fast vs full same release
+                changeRef2Tmp(self)
+            else: # Full vs Full or Fast vs Fast
+                changeTmp2Ref(self)
+        elif ( self.checkSpecTarget3.isChecked() ): # PUpmx25 vs PUpmx25
+            changeRef2Tmp(self)
         print "Reference, self.validationType2 : %s" % self.validationType2
         print "Reference, self.validationType3 : %s" % self.validationType3
+        print "Reference rel : " + self.my_choice_rel_1
+        print "Reference ref : " + self.my_choice_ref_1
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
@@ -238,8 +278,15 @@ class ovalGui(QWidget):
         self.checkSpecReference3.setChecked(True)
         self.validationType3 = 'PUpmx25'
         getCheckedOptions(self)
+        if ( self.checkSpecTarget3.isChecked() ): # PUpmx25 vs PUpmx25
+            if ( self.radio13.isChecked() ): # Fast vs full same release
+                changeRef2Tmp(self)
+            else: # Full vs Full or Fast vs Fast
+                changeTmp2Ref(self)
         print "Reference, self.validationType2 : %s" % self.validationType2
         print "Reference, self.validationType3 : %s" % self.validationType3
+        print "Reference rel : " + self.my_choice_rel_1
+        print "Reference ref : " + self.my_choice_ref_1
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
@@ -247,8 +294,17 @@ class ovalGui(QWidget):
         self.checkSpecReference4.setChecked(True)
         self.validationType3 = 'miniAOD'
         getCheckedOptions(self)
+        if ( self.checkSpecTarget1.isChecked() ): # RECO vs miniAOD same release
+            changeRef2Tmp(self)
+        elif ( self.checkSpecTarget4.isChecked() ): # miniAOD vs miniAOD
+            if ( self.radio13.isChecked() ): # Fast vs full same release
+                changeRef2Tmp(self)
+            else: # Full vs Full or Fast vs Fast
+                changeTmp2Ref(self)
         print "Reference, self.validationType2 : %s" % self.validationType2
         print "Reference, self.validationType3 : %s" % self.validationType3
+        print "Reference rel : " + self.my_choice_rel_1
+        print "Reference ref : " + self.my_choice_ref_1
         self.checkDataSets2Clicked()
         QtCore.QCoreApplication.processEvents() 
 
@@ -268,7 +324,7 @@ class ovalGui(QWidget):
             a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
-        self.setFixedSize(1200, 700)
+        #self.setFixedSize(1200, 700)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
     
@@ -352,20 +408,23 @@ class ovalGui(QWidget):
         #        self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
             self.my_choice_ref_1 = self.QLW_rel2.currentItem().text()
+            self.reference = self.my_choice_ref_1
             self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
+            self.referenceList = self.releasesList_ref_2
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
+            self.refList = self.rel_list_1            
             print "ItemRefClicked2 : self.my_choice_ref_1 : %s " % self.my_choice_ref_1
             tmp = "Reference : " + self.my_choice_ref_1
             self.labelCombo2.setText(tmp)
         else: # self.tasks_counter == 0
             print "release" + str(self.tasks_counter)
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
+            self.target = self.my_choice_rel_1
             print "ItemRelRefClicked2 : self.my_choice_rel_1 : %s " % self.my_choice_rel_1
             tmp = "Release : " + self.my_choice_rel_1
             self.labelCombo1.setText(tmp)
             self.releasesList_rel_2 = list_search_3(self.releasesList_rel_1, str(self.my_choice_rel_1))
             self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), self.releasesList_rel_2)
-        
         updateLabelResume(self)
 #        resume_text = self.texte
 #        resume_text += "<br />Release   : " + self.my_choice_rel_1
@@ -441,6 +500,7 @@ class ovalGui(QWidget):
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
             self.textReport += "GlobalTag selections" + "<br>"
             enableRadioButtons(self)
+            comparisonRules(self)
             disableStdDevButtons(self)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
@@ -788,3 +848,10 @@ class ovalGui(QWidget):
 
         layoutR.addWidget(self.QTextR)
         dialogR.exec_()
+
+    def changeText(self):
+        self.temp_rl = '_' + unicode(self.lineEdit_rel.text())
+        self.temp_rf = '_' + unicode(self.lineEdit_ref.text())       
+        print "temp_rl : %s" % temp_rl
+        print "temp_rf : %s" % temp_rf
+    

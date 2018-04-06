@@ -11,7 +11,7 @@ from getEnv import env
 from fonctions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
-    self.version = 'Validations GUI v0.3.0.5'
+    self.version = 'Validations GUI v0.3.0.6'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -35,6 +35,9 @@ def initVariables(self):
     self.exist_working_dir_rel = False
     self.exist_working_dir_ref = False
     self.exist_finalFolder = False
+    
+    self.temp_rl = '' # for release web folder name modification
+    self.temp_rf = '' # for reference web folder name modification
         
     self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
     self.releasesList_rel_1 = []
@@ -59,6 +62,10 @@ def initVariables(self):
     self.ref_list_2 = []
     self.profondeur_rel = 0
     self.profondeur_ref = 0
+    self.target = ""
+    self.reference = ""
+    self.referenceList = []
+    self.refList = []
     
     try:
         self.wp = open('report.txt', 'w') # report page
