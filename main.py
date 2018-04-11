@@ -5,17 +5,16 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
 import os,sys
-import ovalGui
+import eveGui
 
 from getEnv import env
-#from fonctions import liste
 		
 def main(args):
     a=QApplication(args)
     # Creation d'un widget qui servira de fenetre
     a.setFont( QFont( "Latin", 11, QFont.Normal ) )
     
-    fenetre = ovalGui.ovalGui()
+    fenetre = eveGui.eveGui()
     fenetre.move(100, 100)
     fenetre.setFixedSize(1400, 700)
     fenetre.show()

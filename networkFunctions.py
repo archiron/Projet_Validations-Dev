@@ -6,7 +6,7 @@ import urllib2
 import re
 from getEnv import env
 from Paths_default import *
-from fonctions import checkFastvsFull, clean_collections2
+from functions import checkFastvsFull, clean_collections2
 
 def auth_wget2(url, chunk_size=2097152):
     from os.path import basename, isfile

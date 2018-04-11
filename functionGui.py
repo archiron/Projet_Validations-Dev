@@ -5,8 +5,6 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
-from fonctions import checkFastvsFull
-
 def initDataSets(self):
     print "initDataSets"
 
