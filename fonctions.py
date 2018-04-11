@@ -6,11 +6,12 @@ import urllib2
 import re
 from getEnv import env
 from Paths_default import *
+from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
 
 def working_dirs_creation(self): # working dir are for resuming the computation.
 #    print "cmd_working_dirs_creation"
-    self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1) # self.lineedit1.text()[6:]
-    self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1) # self.lineedit3.text()[6:]
+    self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1[6:]) # self.lineedit1.text()[6:]
+    self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1[6:]) # self.lineedit3.text()[6:]
     self.wp.write("self.working_dir_rel : %s\n" % self.working_dir_rel)
     self.wp.write("self.working_dir_ref : %s\n" % self.working_dir_ref)
     self.textReport += "self.working_dir_rel : " + self.working_dir_rel + "<br>"
@@ -837,6 +838,17 @@ def folderSuffixe_creation(self):
     if ( self.checkSpecTarget4.isChecked() ):
         suffixe = "miniAOD"
     return
+    
+def getCheckedRadioButton(self):
+    value = "FullvsFull"
+    if self.radio11.isChecked():
+        value = 'FullvsFull'
+    elif self.radio12.isChecked():
+        value = 'FastvsFast'
+    elif self.radio13.isChecked():
+        value = 'FastvsFull'
+        
+    return value
     
 def getCheckedOptions(self):
     if self.radio11.isChecked():

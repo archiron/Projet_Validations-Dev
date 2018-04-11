@@ -164,6 +164,8 @@ def initGpFolderName(self): # can add modification on release name to obtain the
     vbox_FolderName = QVBoxLayout()
     hbox1 = QHBoxLayout()
     hbox2 = QHBoxLayout()
+    self.lineEdit_ref.setEnabled(False)
+    self.lineEdit_rel.setEnabled(False)
     hbox1.addWidget(self.label_rel)
     hbox1.addWidget(self.lineEdit_rel)
     hbox2.addWidget(self.label_ref)

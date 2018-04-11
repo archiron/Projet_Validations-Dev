@@ -17,7 +17,7 @@ from fonctions import folder_creation, finalFolder_creation, working_dirs_creati
 from fonctions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
 from fonctions import folderExtension_creation # list_simplify, create_file_list, create_commonfile_list, 
 from fonctions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
-from fonctions import checkFastvsFull, getCheckedOptions
+from fonctions import checkFastvsFull, getCheckedOptions, getCheckedRadioButton
 from fonctions import checkFileName, newName, updateLabelResumeSelected, updateLabelResume
 from fonctions import changeRef2Tmp, changeTmp2Ref
 from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
@@ -36,18 +36,12 @@ class ovalGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # add a comparisonRules() functions into functionGui in order to block some radio button and keep only authorized operations.
-        # operations :
-        # RECO vs RECO - 2 releases
-        # RECO vs miniAOD - same release
-        # PU25 vs PU25 - 2 releases
-        # PUpmx25 vs PU25 - same release
-        # PUpmx25 vs PUpmx25 - 2 releases
-        # miniAOD vs miniAOD  - 2 releases
+        self.setWindowTitle(self.version)  # correct the folder creation when no release is selected.
+        # cmd_load_files(self) # no test if the folders are created
+        # add getCheckedRadioButton() function for folder case creation
+        # modification of finalFolder which now includes the reference and name modifications.
         
-        # also add changeRef2Tmp, changeTmp2Ref functions. Bug with FastvsFull : when pmx is used, we cannot return on chosen initial reference. 
-        
-        # Need to rename files in ovalOptions or ovalChoice as option or choice
+        # Need to rename files in ovalOptions or ovalChoice as options or choice or guiOptions & guiChoice
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -389,23 +383,6 @@ class ovalGui(QWidget):
         #if self.QGBox_rel0.title() == "Reference list":
         if ( self.tasks_counter == 1 ):
             print "reference" + str(self.tasks_counter)
-        #    if (checkFastvsFull(self)): # no more used here. To be moved in radio13Clicked
-        #        self.my_choice_ref_0 = self.my_choice_rel_0
-        #        self.my_choice_ref_1 = self.my_choice_rel_1
-        #        print ("my_choice_rel_0 = ") , self.my_choice_rel_0 # temp
-        #        print ("my_choice_rel_1 = ") , self.my_choice_rel_1 # temp
-        #        print ("my_choice_ref_0 = ") , self.my_choice_ref_0 # temp
-        #        print ("my_choice_ref_1 = ") , self.my_choice_ref_1 # temp
-        #        self.releasesList_ref_2 = self.releasesList_rel_2 # no need to recompute the list
-        #        self.ref_list_1 = self.rel_list_1 # no need to recompute the list
-        #        for item in self.releasesList_ref_2: # temp
-        #            self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
-        #        self.wp.write("\n") # temp
-        #        for item in self.ref_list_1: # temp
-        #            self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
-        #    else:
-        #        self.my_choice_ref_1 = self.QLW_rel2.currentItem().text()
-        #        self.releasesList_ref_2 = list_search_3(self.releasesList_ref_1, str(self.my_choice_ref_1))
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
             self.my_choice_ref_1 = self.QLW_rel2.currentItem().text()
             self.reference = self.my_choice_ref_1
@@ -426,10 +403,6 @@ class ovalGui(QWidget):
             self.releasesList_rel_2 = list_search_3(self.releasesList_rel_1, str(self.my_choice_rel_1))
             self.rel_list_1 = sub_releases2(str(self.my_choice_rel_1), self.releasesList_rel_2)
         updateLabelResume(self)
-#        resume_text = self.texte
-#        resume_text += "<br />Release   : " + self.my_choice_rel_1
-#        resume_text += "<br />Reference : " + self.my_choice_ref_1
-#        self.LabelResume.setText(self.trUtf8(resume_text))
         
     def Previous_Choice(self):
         print "Previous_Choice tmp: "
@@ -499,9 +472,12 @@ class ovalGui(QWidget):
             self.wp.write("GlobalTag selections")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
             self.textReport += "GlobalTag selections" + "<br>"
+            updateLabelResume(self)
             enableRadioButtons(self)
             comparisonRules(self)
             disableStdDevButtons(self)
+            self.lineEdit_ref.setEnabled(False)
+            self.lineEdit_rel.setEnabled(False)
             self.bouton_Previous.setEnabled(True)
             self.bouton_Next.setEnabled(True)
             self.QGBox_rel0.setTitle("Lists")
@@ -531,6 +507,8 @@ class ovalGui(QWidget):
             disableRadioButtons(self)
             enableStdDevButtons(self)
             enableLocationButtons(self)
+            self.lineEdit_ref.setEnabled(True)
+            self.lineEdit_rel.setEnabled(True)
             clearReleasesList(self)
             self.QGBoxListsUpdate()
             
@@ -590,17 +568,23 @@ class ovalGui(QWidget):
             self.QGBox_rel0.setVisible(False)
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(True)
+            os.chdir(self.working_dir_base) # going to base folder
             self.labelResumeSelected.clear() # do not work
             disableRadioButtons(self)
             disableStdDevButtons(self)
             disableLocationButtons(self)
+            self.lineEdit_ref.setEnabled(False)
+            self.lineEdit_rel.setEnabled(False)
+
             # defining/creating paths & folders
             self.PathUpdate()
             self.QGBoxListsUpdate()
-
+            # loading files
             print "begin files loading !"
             self.wp.write("begin files loading !\n")
-            cmd_load_files(self)
+            self.textReport += "begin files loading !" + "<br>"
+            cmd_load_files(self) # no test if the folders are created
+            
             #TEMPORAIRE display list of root files
             for line in self.releasesList_rel_5:
                 print line
@@ -608,27 +592,24 @@ class ovalGui(QWidget):
             for line in self.releasesList_ref_5:
                 print line
 
-#            if (checkFastvsFull(self)):
-#                for line in self.releasesList_FvsF_5:
-#                    print line
             #TEMPORAIRE
             
             #### output of the webpage and gifs pictures
             # step 1 : Full vs Full or Fast vs Fast
-            dirname = str(self.finalFolder) + '/' 
-            if (checkFastvsFull(self)): # Fast to be treated
-                dirname += 'FastvsFast_'
-            else:
-                dirname += 'FullvsFull_'
-            dirname += str(self.my_choice_ref_1[6:]) + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+#            dirname = str(self.finalFolder) + '/' 
+#            if (checkFastvsFull(self)): # Fast to be treated
+#                dirname += 'FastvsFast_'
+#            else:
+#                dirname += 'FullvsFull_'
+#            dirname += str(self.my_choice_ref_1[6:]) + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
             #dirname += '/gifs' # only for datasets
-            self.wp.write("self.finalFolder reference : %s\n" % dirname)
-            if not os.path.exists(dirname): # 
-                os.makedirs(str(dirname))
+#            self.wp.write("self.finalFolder reference : %s\n" % dirname)
+#            if not os.path.exists(dirname): # 
+#                os.makedirs(str(dirname))
             
             # step 2 : Fast vs Full or Fast vs Fast
-            if (checkFastvsFull(self)): # Fast to be treated
-                dirname = str(self.finalFolder) + '/' + 'FastvsFull_'
+#            if (checkFastvsFull(self)): # Fast to be treated
+#                dirname = str(self.finalFolder) + '/' + 'FastvsFull_'
                 # ....
             ####
             
@@ -637,7 +618,7 @@ class ovalGui(QWidget):
         writeLabelCombo3(self)
         self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
 
-    def PathUpdate(self):
+    def PathUpdate(self): # get paths & create folders
         print "PathUpdate menu clicked !"
         print "*-*-**--*-*-*-*-*-* Location"
         self.wp.write("PathUpdate\n")
@@ -655,16 +636,35 @@ class ovalGui(QWidget):
                 print "folder path : %s" % self.LocationTable[i_loc][2]
                 self.wp.write("folder path : %s\n" % self.LocationTable[i_loc][2])
                 self.textReport += "folder path : " + self.LocationTable[i_loc][2] + "<br>"
-                self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-                self.wp.write("self.finalFolder : %s\n" % self.finalFolder)
-                self.wp.write("self.working_dir_base : %s\n" % self.working_dir_base)
-                self.textReport += "self.finalFolder : " + self.finalFolder + "<br>"
-                self.textReport += "self.working_dir_base : " + self.working_dir_base + "<br>"
-                # call for folders creation
-                working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
-                folder_creation(self) # create local folder for files loading and operation resuming
-                finalFolder_creation(self) # create the save folder for html and gifs files
-                updateLabelResume(self)
+                if ( self.my_choice_rel_1[6:] == '' ):
+                    print "Can not create finalFolder ! "
+                    BoiteMessage = QMessageBox()
+                    BoiteMessage.setText("cannot create finalFolder !!")
+                    self.wp.write("cannot create finalFolder !!")
+                    self.textReport += "cannot create finalFolder !!" + "<br>"
+                    BoiteMessage.setIcon(QMessageBox.Critical)
+                    BoiteMessage.setWindowTitle("WARNING !")
+                    BoiteMessage.exec_()
+                else:
+                    self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+                    self.wp.write("self.finalFolder : %s\n" % self.finalFolder)
+                    self.wp.write("self.working_dir_base : %s\n" % self.working_dir_base)
+                    self.textReport += "self.finalFolder : " + self.finalFolder + "<br>"
+                    self.textReport += "self.working_dir_base : " + self.working_dir_base + "<br>"
+                    # output of the webpage and gifs pictures
+                    self.finalFolder += '/' + getCheckedRadioButton(self) + '_'
+                    #dirname += str(self.my_choice_ref_1[6:]) + self.temp_rf + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+                    self.finalFolder += str(self.my_choice_ref_1[6:]) + self.temp_rf #+ '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+                    #dirname += '/gifs' # only for datasets
+                    self.wp.write("self.finalFolder reference : %s\n" % self.finalFolder)
+                    #if not os.path.exists(dirname): # 
+                    #    os.makedirs(str(dirname))
+                    
+                    # call for folders creation
+                    working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
+                    folder_creation(self) # create local folder for files loading and operation resuming
+                    finalFolder_creation(self) # create the save folder for html and gifs files
+                    updateLabelResume(self)
             else:
                 print "%s is unchecked" % it.text()
                 self.wp.write("%s is unchecked\n" % it.text())
@@ -850,8 +850,12 @@ class ovalGui(QWidget):
         dialogR.exec_()
 
     def changeText(self):
-        self.temp_rl = '_' + unicode(self.lineEdit_rel.text())
-        self.temp_rf = '_' + unicode(self.lineEdit_ref.text())       
-        print "temp_rl : %s" % temp_rl
-        print "temp_rf : %s" % temp_rf
+        self.temp_rl = ''
+        if ( self.lineEdit_rel.text() != '' ):
+            self.temp_rl = '_' + unicode(self.lineEdit_rel.text())
+        self.temp_rf = ''
+        if ( self.lineEdit_ref.text() != '' ):
+            self.temp_rf = '_' + unicode(self.lineEdit_ref.text())       
+        print "temp_rl : %s" % self.temp_rl
+        print "temp_rf : %s" % self.temp_rf
     
