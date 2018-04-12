@@ -8,7 +8,8 @@ from getEnv import env
 from Paths_default import *
 from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
 
-def working_dirs_creation(self): # working dir are for resuming the computation.
+def working_dirs_creation(self): # working dir are for resuming the computation. Used for root files loading.
+    import errno
 #    print "cmd_working_dirs_creation"
     self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1[6:]) # self.lineedit1.text()[6:]
     self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1[6:]) # self.lineedit3.text()[6:]
@@ -20,7 +21,11 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
     if not os.path.exists(self.working_dir_rel):
         os.chdir(self.working_dir_base) # going to base folder
         print "Creation of %s release folder" % str(self.working_dir_rel)
-        os.makedirs(str(self.working_dir_rel))
+        try:
+            os.makedirs(str(self.working_dir_rel))
+        except OSError as e:
+            if e.errno != errno.EEXIST: # the folder did not exist
+                raise  # raises the error again
         self.wp.write("Creation of %s release folder\n" % str(self.working_dir_rel))
         self.textReport += "Creation of " + str(self.working_dir_rel) + " folder" + "<br>"
         self.exist_working_dir_rel = False
@@ -32,7 +37,11 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
     os.chdir(self.working_dir_rel)   # Change current working directory
     if not os.path.exists(self.working_dir_ref):
         print "Creation of %s reference folder" % str(self.working_dir_ref)
-        os.makedirs(str(self.working_dir_ref))
+        try:
+            os.makedirs(str(self.working_dir_ref))
+        except OSError as e:
+            if e.errno != errno.EEXIST: # the folder did not exist
+                raise  # raises the error again
         self.wp.write("Creation of %s reference folder\n" % str(self.working_dir_ref))
         self.textReport += "Creation of " + str(self.working_dir_ref) + " reference folder" + "<br>"
         self.exist_working_dir_ref = False
@@ -45,7 +54,7 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
     updateLabelResume(self)
     return
     
-def folder_creation(self):
+def folder_creation(self): # create the folders for the choice. the resuming text file will be put in.
     import subprocess, os, datetime
     now = datetime.datetime.now()
     newDirName = now.strftime("%Y_%m_%d-%H%M%S")
@@ -71,6 +80,7 @@ def folder_creation(self):
         self.wp.write("%s already created\n" % m_dir)
         self.textReport += m_dir + " already created" + "<br>"
     os.chdir(actual_dir)
+               
     return # m_dir
 
 def finalFolder_creation(self):

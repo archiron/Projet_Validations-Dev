@@ -36,8 +36,8 @@ class eveGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # rename files in ovalOptions or ovalChoice as options or choice or guiOptions & guiChoice
-        # guiOptionsGP.py, guiChoiceGp.py, guiBottomGp.py, guiMiddleGp.py, eveGUI.py & functions.py
+        self.setWindowTitle(self.version)  # found a bug : in cmd_load_files() the pgm only charge release root files and not reference root files in Fast vs Full !
+        # corrected in networkFunctions.py in cmd_load_files() in the case 2 at the call of clean_collections2(). Need the arg "ref" instead of "rel".
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -514,7 +514,7 @@ class eveGui(QWidget):
             print "self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
             
             ## here we have a common (rel & ref) dataset named as self.okToPublishDatasets for Full vs Full or Fast vs Fast. 
-            ## we also have a common dataset for Fast vs Full named as self.okToPublishFvsFDatasets
+            ## we also have a common dataset for Fast vs Full named as self.okToPublishFvsFDatasets -> no more used
             ## WARNING : we need to have self.okToPublishFvsFDatasets = self.okToPublishDatasets !! ##
             
             # create list of root files for rel & ref
@@ -579,36 +579,21 @@ class eveGui(QWidget):
             print "begin files loading !"
             self.wp.write("begin files loading !\n")
             self.textReport += "begin files loading !" + "<br>"
-            cmd_load_files(self) # no test if the folders are created
+            cmd_load_files(self) # no test if the folders are created. We have an error output in PathUpdate() if the was a pbm with the folder creation.
             
             #TEMPORAIRE display list of root files
+            print "releasesList_rel_5"
             for line in self.releasesList_rel_5:
                 print line
 
+            print "releasesList_ref_5"
             for line in self.releasesList_ref_5:
                 print line
-
-            #TEMPORAIRE
-            
-            #### output of the webpage and gifs pictures
-            # step 1 : Full vs Full or Fast vs Fast
-#            dirname = str(self.finalFolder) + '/' 
-#            if (checkFastvsFull(self)): # Fast to be treated
-#                dirname += 'FastvsFast_'
-#            else:
-#                dirname += 'FullvsFull_'
-#            dirname += str(self.my_choice_ref_1[6:]) + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-            #dirname += '/gifs' # only for datasets
-#            self.wp.write("self.finalFolder reference : %s\n" % dirname)
-#            if not os.path.exists(dirname): # 
-#                os.makedirs(str(dirname))
-            
-            # step 2 : Fast vs Full or Fast vs Fast
-#            if (checkFastvsFull(self)): # Fast to be treated
-#                dirname = str(self.finalFolder) + '/' + 'FastvsFull_'
-                # ....
-            ####
-            
+                
+            print "okToPublishDatasets"
+            print self.selectedRelDatasets
+            print self.okToPublishDatasets
+                
         else:
             print "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)

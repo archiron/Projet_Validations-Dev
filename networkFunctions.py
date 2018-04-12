@@ -406,12 +406,18 @@ def cmd_load_files(self):
     temp_toBeRemoved[:] = []# clear the temp array
     print "case 2 self.my_choice_ref_0 : REFERENCE"
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_ref_0 + '/'
+#    print "BEFORE" # temp
+#    for line in self.releasesList_ref_5: # temp
+#        print line # temp
     for line in self.releasesList_ref_5:
-        if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
+        if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "ref"):
             #print filedir_url + line + " removed"
             temp_toBeRemoved.append(line)
     for line in temp_toBeRemoved:
         self.releasesList_ref_5.remove(line)
+#    print "AFTER" # temp
+#    for line in self.releasesList_ref_5: # temp
+#        print line # temp
     os.chdir(self.working_dir_ref)   # Change current working directory to release directory
     pool = Pool(option_mthreads) # need to be here. If not, download is made into previous folder (i.e. self.working_dir_rel).
     pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_ref_5])
