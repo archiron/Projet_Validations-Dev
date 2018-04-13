@@ -28,7 +28,7 @@ from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevBu
 from networkFunctions import cmd_load_files
 		
 #############################################################################
-class eveGui(QWidget):
+class Gev(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         
@@ -36,7 +36,7 @@ class eveGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # add a dataSets_finalFolder_creation() function for dataset folder creation. In those folders wee will have the gifs floders
+        self.setWindowTitle(self.version)  # new name for GUI : Gev := GUI Electron Validation
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -589,30 +589,8 @@ class eveGui(QWidget):
             for line in self.releasesList_ref_5:
                 print line
                 
-            # going to finalFolder
+            # creating the datasets folders
             dataSets_finalFolder_creation(self)
-#            actual_dir = os.getcwd()
-#            print "actual dir : %s" % actual_dir
-#            os.chdir(self.finalFolder) # going into finalFolder
-#            print "here : %s" % os.getcwd()
-#            print "okToPublishDatasets"
-#            print self.selectedRelDatasets
-#            print self.okToPublishDatasets
-            # create datasets folders
-#            for dts in self.okToPublishDatasets.split(','):
-#                dataSetFolder = str(self.validationType2 + '_' + dts)
-#                print '%s : %s' % (dts, dataSetFolder)
-#                if not os.path.exists(dataSetFolder): # 
-#                    print "n'existe pas"
-#                    os.makedirs(dataSetFolder) # create reference folder
-#                    self.wp.write("creating : %s folder\n" % dataSetFolder)
-#                    self.textReport += "creating : " + dataSetFolder + " folder" + "<br>"
-#                    print "créé"
-#                else:
-#                    print "%s already created" % dataSetFolder
-#                    self.wp.write("%s already created\n" % dataSetFolder)
-#                    self.textReport += dataSetFolder + " already created" + "<br>"
-#            os.chdir(actual_dir) # going back
             
         else:
             print "Hello Houston, we have a pbm !!"
