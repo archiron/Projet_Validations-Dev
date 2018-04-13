@@ -36,7 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # new name for GUI : Gev := GUI Electron Validation
+        self.setWindowTitle(self.version) # creating gifs folders inside datasets folders
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -591,6 +591,8 @@ class Gev(QWidget):
                 
             # creating the datasets folders
             dataSets_finalFolder_creation(self)
+            
+            print "fin ..."
             
         else:
             print "Hello Houston, we have a pbm !!"

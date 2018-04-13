@@ -115,10 +115,24 @@ def dataSets_finalFolder_creation(self):
             os.makedirs(dataSetFolder) # create reference folder
             self.wp.write("creating : %s folder\n" % dataSetFolder)
             self.textReport += "creating : " + dataSetFolder + " folder" + "<br>"
+            os.chdir(dataSetFolder)
+            os.makedirs('gifs') # create gifs folder for pictures
+            self.wp.write("creating : gifs folder\n")
+            self.textReport += "creating gifs folder" + "<br>"
+            os.chdir('../')
         else:
             print "%s already created" % dataSetFolder
             self.wp.write("%s already created\n" % dataSetFolder)
             self.textReport += dataSetFolder + " already created" + "<br>"
+            os.chdir(dataSetFolder)
+            if not os.path.exists('gifs'): # 
+                os.makedirs('gifs') # create gifs folder for pictures
+                self.wp.write("creating : gifs folder\n")
+                self.textReport += "creating gifs folder" + "<br>"
+            else:
+                self.wp.write("gifs folder already created\n")
+                self.textReport += "gifs folder already created" + "<br>"
+            os.chdir('../')
     os.chdir(actual_dir) # going back
     return
     
