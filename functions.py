@@ -99,6 +99,29 @@ def finalFolder_creation(self):
     updateLabelResume(self)
     return
     
+def dataSets_finalFolder_creation(self):
+    actual_dir = os.getcwd()
+    print "actual dir : %s" % actual_dir
+    os.chdir(self.finalFolder) # going into finalFolder
+    print "here : %s" % os.getcwd()
+    print "okToPublishDatasets"
+    print self.selectedRelDatasets
+    print self.okToPublishDatasets
+    # create datasets folders
+    for dts in self.okToPublishDatasets.split(','):
+        dataSetFolder = str(self.validationType2 + '_' + dts)
+        print '%s : %s' % (dts, dataSetFolder)
+        if not os.path.exists(dataSetFolder): # 
+            os.makedirs(dataSetFolder) # create reference folder
+            self.wp.write("creating : %s folder\n" % dataSetFolder)
+            self.textReport += "creating : " + dataSetFolder + " folder" + "<br>"
+        else:
+            print "%s already created" % dataSetFolder
+            self.wp.write("%s already created\n" % dataSetFolder)
+            self.textReport += dataSetFolder + " already created" + "<br>"
+    os.chdir(actual_dir) # going back
+    return
+    
 def get_collection_list(self):
     import subprocess, os
     collection_list = []

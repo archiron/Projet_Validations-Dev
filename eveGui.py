@@ -13,7 +13,7 @@ from guiChoiceGp import initGpChoice
 from guiBottomGp import initGpBottom
 from guiMiddleGp import initGpMiddle
 from getEnv import env
-from functions import folder_creation, finalFolder_creation, working_dirs_creation # , get_collection_list, get_validationType1, clean_files, copy_files
+from functions import folder_creation, finalFolder_creation, working_dirs_creation, dataSets_finalFolder_creation # , get_collection_list, get_validationType1, clean_files, copy_files
 from functions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
 from functions import folderExtension_creation # list_simplify, create_file_list, create_commonfile_list, 
 from functions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
@@ -36,8 +36,7 @@ class eveGui(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version)  # found a bug : in cmd_load_files() the pgm only charge release root files and not reference root files in Fast vs Full !
-        # corrected in networkFunctions.py in cmd_load_files() in the case 2 at the call of clean_collections2(). Need the arg "ref" instead of "rel".
+        self.setWindowTitle(self.version)  # add a dataSets_finalFolder_creation() function for dataset folder creation. In those folders wee will have the gifs floders
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -417,7 +416,7 @@ class eveGui(QWidget):
             self.checkTaskCounter()
 
     def checkTaskCounter(self):
-        import re
+        import re#, os
         if self.tasks_counter == 0: # release selection
             print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
@@ -590,10 +589,31 @@ class eveGui(QWidget):
             for line in self.releasesList_ref_5:
                 print line
                 
-            print "okToPublishDatasets"
-            print self.selectedRelDatasets
-            print self.okToPublishDatasets
-                
+            # going to finalFolder
+            dataSets_finalFolder_creation(self)
+#            actual_dir = os.getcwd()
+#            print "actual dir : %s" % actual_dir
+#            os.chdir(self.finalFolder) # going into finalFolder
+#            print "here : %s" % os.getcwd()
+#            print "okToPublishDatasets"
+#            print self.selectedRelDatasets
+#            print self.okToPublishDatasets
+            # create datasets folders
+#            for dts in self.okToPublishDatasets.split(','):
+#                dataSetFolder = str(self.validationType2 + '_' + dts)
+#                print '%s : %s' % (dts, dataSetFolder)
+#                if not os.path.exists(dataSetFolder): # 
+#                    print "n'existe pas"
+#                    os.makedirs(dataSetFolder) # create reference folder
+#                    self.wp.write("creating : %s folder\n" % dataSetFolder)
+#                    self.textReport += "creating : " + dataSetFolder + " folder" + "<br>"
+#                    print "créé"
+#                else:
+#                    print "%s already created" % dataSetFolder
+#                    self.wp.write("%s already created\n" % dataSetFolder)
+#                    self.textReport += dataSetFolder + " already created" + "<br>"
+#            os.chdir(actual_dir) # going back
+            
         else:
             print "Hello Houston, we have a pbm !!"
         writeLabelCombo3(self)
