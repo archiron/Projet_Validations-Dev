@@ -205,3 +205,27 @@ def checkCalculValidation(self, fileName):
         print ">>>>>>>> Full, PU25"
     return checkCalculValidation
 
+def testForDataSetsFile(self, dataSetsName):
+    print "testForDataSetsFile : ", dataSetsName
+    
+    t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
+    t_ref = t_rel
+    if ( re.search('Pt1000', dataSetsName) ):
+        t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosPt1000.txt'
+        t_ref = t_rel
+    elif ( re.search('QCD', dataSetsName) ):
+        t_rel = self.working_dir_base + '/' + 'ElectronMcFakeHistos.txt'
+        t_ref = t_rel
+    else: # general
+        if self.checkSpecTarget1.isChecked(): # RECO
+            if self.checkSpecReference4.isChecked(): # RECO vs miniAOD
+                t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
+                t_ref = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
+            else: # RECO vs RECO
+                t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
+                t_ref = t_rel
+        elif self.checkSpecTarget4.isChecked(): # miniAOD vs miniAOD
+            t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
+            t_ref = t_rel
+    return [t_rel, t_ref]
+

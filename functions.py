@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 #-*-coding: utf-8 -*-
 
-import os,sys,subprocess
+import os,sys,subprocess, shutil
 import urllib2
 import re
 from getEnv import env
 from Paths_default import *
-from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
+from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation, testForDataSetsFile
 
 def working_dirs_creation(self): # working dir are for resuming the computation. Used for root files loading.
     import errno
@@ -111,21 +111,23 @@ def dataSets_finalFolder_creation(self):
     for dts in self.okToPublishDatasets.split(','):
         dataSetFolder = str(self.validationType2 + '_' + dts)
         print '%s : %s' % (dts, dataSetFolder)
-        if not os.path.exists(dataSetFolder): # 
+        if not os.path.exists(dataSetFolder): # create dataSetFolder
             os.makedirs(dataSetFolder) # create reference folder
             self.wp.write("creating : %s folder\n" % dataSetFolder)
             self.textReport += "creating : " + dataSetFolder + " folder" + "<br>"
             os.chdir(dataSetFolder)
+            # create gifs folders
             os.makedirs('gifs') # create gifs folder for pictures
             self.wp.write("creating : gifs folder\n")
             self.textReport += "creating gifs folder" + "<br>"
             os.chdir('../')
-        else:
+        else: # dataSetFolder already created
             print "%s already created" % dataSetFolder
             self.wp.write("%s already created\n" % dataSetFolder)
             self.textReport += dataSetFolder + " already created" + "<br>"
             os.chdir(dataSetFolder)
             if not os.path.exists('gifs'): # 
+                # create gifs folders
                 os.makedirs('gifs') # create gifs folder for pictures
                 self.wp.write("creating : gifs folder\n")
                 self.textReport += "creating gifs folder" + "<br>"
@@ -133,6 +135,28 @@ def dataSets_finalFolder_creation(self):
                 self.wp.write("gifs folder already created\n")
                 self.textReport += "gifs folder already created" + "<br>"
             os.chdir('../')
+        # get config files 
+        os.chdir(dataSetFolder) # going to dataSetFolder
+        [it1, it2] = testForDataSetsFile(self, dts)
+        self.wp.write("config file for target : %s \n" % it1)
+        self.wp.write("config file for reference : %s \n" % it2)
+        self.textReport += "config file for target : " + it1 + "<br>"
+        self.textReport += "config file for reference : " + it2 + "<br>"
+        print "config file for target : " + it1
+        print "config file for reference : " + it2
+        
+        shutil.copy2(it1, 'config_target.txt')
+        shutil.copy2(it2, 'config_reference.txt')
+        os.chdir('../') # back
+        # create gifs pictures 
+
+        #print self.filesHistos # TEMPORAIRE
+        #for file in self.filesHistos:
+        #    print "%s" % self.working_dir_base + '/' + file
+    
+    # create index.html file
+    
+    #back to initial dir
     os.chdir(actual_dir) # going back
     return
     

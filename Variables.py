@@ -11,7 +11,7 @@ from getEnv import env
 from functions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.3.1.5'
+    self.version = 'GUI Electron Validations v0.3.1.6'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -109,6 +109,9 @@ def initVariables(self):
     self.okToPublishFvsFDatasets = ""
     self.okToDisplayDatasets = "" # only for display
     self.okToDisplayFvsFDatasets = "" # only for display
+    
+    self.filesHistos = ['ElectronMcSignalHistosPt1000.txt', 'ElectronMcSignalHistosMiniAOD.txt', 'ElectronMcSignalHistos.txt', 'ElectronMcFakeHistos.txt']
+
     
     return
     

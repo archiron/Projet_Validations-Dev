@@ -36,7 +36,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # creating gifs folders inside datasets folders
+        self.setWindowTitle(self.version) # add code from graphic.py into electronCompare.py. This is the core of new gif pictures for web pages.
+        # create a testForDataSetsFile() function used in dataSets_finalFolder_creation() to get the config files for histos (i.e. the ElectronMcSignalHistos.txt files)
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
