@@ -36,7 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # there is still the bug Pt10/Pt1000 for dataSet extraction.
+        self.setWindowTitle(self.version) # first version for pictures and web page creation
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.

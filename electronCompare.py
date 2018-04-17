@@ -4,6 +4,7 @@
 import os,sys,subprocess
 import urllib2
 import re
+import ROOT
 from getEnv import env
 from Paths_default import *
 

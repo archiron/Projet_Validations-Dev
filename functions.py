@@ -7,6 +7,7 @@ import re
 from getEnv import env
 from Paths_default import *
 from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation, testForDataSetsFile
+from electronCompare import *
 
 def working_dirs_creation(self): # working dir are for resuming the computation. Used for root files loading.
     import errno
@@ -150,14 +151,55 @@ def dataSets_finalFolder_creation(self):
         
         shutil.copy2(it1, 'config_target.txt')
         shutil.copy2(it2, 'config_reference.txt')
-        # create gifs pictures 
+        # create gifs pictures & web page
         CMP_CONFIG = 'config_target.txt'
+        CMP_TITLE = 'gedGsfElectrons ' + dts
+        CMP_RED_FILE = self.my_choice_rel_1
+        CMP_BLUE_FILE = self.my_choice_ref_1
+        
         f = open(CMP_CONFIG, 'r')
         for line in f:
             print line
             #line_read = line.split()
+        input_rel_file = self.working_dir_rel + '/' + elt[1]
+        print("input_rel_file : %s" % input_rel_file )
+        f_rel = ROOT.TFile(input_rel_file)
+        f_rel.ls()
+        #h1 = getHisto(f_rel)
+
+        input_ref_file = self.working_dir_ref + '/' + elt[2]
+        print("input_ref_file : %s" % input_ref_file )
+        f_ref = ROOT.TFile(input_ref_file)
+        f_ref.ls()
+        #h2 = getHisto(f_ref)
+
+        wp = open('index.html', 'w') # web page
+        wp.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n")
+        wp.write("<html>\n")
+        wp.write("<head>\n")
+        wp.write("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n")
+        wp.write("<title> " + CMP_TITLE + " </title>\n") #option -t dans OvalFile
+        wp.write("</head>\n")
+        wp.write("<a NAME=\"TOP\"></a>")
+        wp.write("<h1><a href=\"../\"><img border=0 width=\"22\" height=\"22\" src=\"../../../../img/up.gif\" alt=\"Up\"/></a>&nbsp; " + CMP_TITLE + " </h1>\n" ) # option -t dans OvalFile
+        if (f_ref == 0):
+            wp.write("<p>In all plots below, there was no reference histograms to compare with")
+            wp.write(", and the " + CMP_RED_FILE + " histograms are in red.") # new release red in OvalFile
+        else:
+            wp.write("<p>In all plots below")
+            wp.write(", the <b><font color='red'> " + CMP_RED_FILE + " </font></b> histograms are in red") # new release red in OvalFile
+            wp.write(", and the <b><font color='blue'> " + CMP_BLUE_FILE + " </font></b> histograms are in blue.") # ref release blue in OvalFile
+
+        wp.write(" " + "red_comment" + " " + "blue_comment" + " Some more details") # comments from OvalFile
+        wp.write(": <a href=\"electronCompare.C\">script</a> used to make the plots")
+        wp.write(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms") # .txt file
+        wp.write(", <a href=\"GIF/\">images</a> of histograms" + "." ) # GIF to be rename into gifs
+        wp.write("</p>\n")
 
         f.close()
+        wp.close()
+        #f_rel.close()
+        #f_ref.close()
 
         os.chdir('../') # back to the final folder.
         #print self.filesHistos # TEMPORAIRE

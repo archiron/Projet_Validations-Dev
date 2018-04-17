@@ -213,10 +213,10 @@ else:
     wp.write(", the <b><font color='red'> CMP_RED_FILE </font></b> histograms are in red") # new release red in OvalFile
     wp.write(", and the <b><font color='blue'> CMP_BLUE_FILE </font></b> histograms are in blue.") # ref release blue in OvalFile
 
-wp.write(" " + "red_comment" + " " + "blue_comment" + " Some more details") # comments form OvalFile
+#wp.write(" " + "red_comment" + " " + "blue_comment" + " Some more details") # comments form OvalFile. No more used
 wp.write(": <a href=\"electronCompare.C\">script</a> used to make the plots")
 wp.write(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms") # .txt file
-wp.write(", <a href=\"GIF/\">images</a> of histograms" + "." ) # GIF to be rename into gifs
+wp.write(", <a href=\"gifs/\">images</a> of histograms" + "." ) # 
 wp.write("</p>\n")
 
 wp.write("<br><table border=\"1\" cellpadding=\"5\" width=\"100%\"><tr valign=\"top\">")
