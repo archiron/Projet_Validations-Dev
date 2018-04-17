@@ -205,7 +205,7 @@ def checkCalculValidation(self, fileName):
         print ">>>>>>>> Full, PU25"
     return checkCalculValidation
 
-def testForDataSetsFile(self, dataSetsName):
+def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
     print "testForDataSetsFile : ", dataSetsName
     
     t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'

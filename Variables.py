@@ -11,7 +11,7 @@ from getEnv import env
 from functions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.3.1.6'
+    self.version = 'GUI Electron Validations v0.3.1.7'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -35,7 +35,6 @@ def initVariables(self):
     self.exist_working_dir_rel = False
     self.exist_working_dir_ref = False
     self.exist_finalFolder = False
-    
     self.temp_rl = '' # for release web folder name modification
     self.temp_rf = '' # for reference web folder name modification
         
@@ -66,6 +65,7 @@ def initVariables(self):
     self.reference = ""
     self.referenceList = []
     self.refList = []
+    self.finalList = []
     
     try:
         self.wp = open('report.txt', 'w') # report page

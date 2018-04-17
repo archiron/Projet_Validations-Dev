@@ -108,7 +108,10 @@ def dataSets_finalFolder_creation(self):
     print self.selectedRelDatasets
     print self.okToPublishDatasets
     # create datasets folders
-    for dts in self.okToPublishDatasets.split(','):
+    for i, elt in enumerate(self.finalList):
+#        print elt[0]
+        dts = elt[0]
+#    for dts in self.okToPublishDatasets.split(','):
         dataSetFolder = str(self.validationType2 + '_' + dts)
         print '%s : %s' % (dts, dataSetFolder)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
@@ -147,9 +150,16 @@ def dataSets_finalFolder_creation(self):
         
         shutil.copy2(it1, 'config_target.txt')
         shutil.copy2(it2, 'config_reference.txt')
-        os.chdir('../') # back
         # create gifs pictures 
+        CMP_CONFIG = 'config_target.txt'
+        f = open(CMP_CONFIG, 'r')
+        for line in f:
+            print line
+            #line_read = line.split()
 
+        f.close()
+
+        os.chdir('../') # back to the final folder.
         #print self.filesHistos # TEMPORAIRE
         #for file in self.filesHistos:
         #    print "%s" % self.working_dir_base + '/' + file

@@ -36,8 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # add code from graphic.py into electronCompare.py. This is the core of new gif pictures for web pages.
-        # create a testForDataSetsFile() function used in dataSets_finalFolder_creation() to get the config files for histos (i.e. the ElectronMcSignalHistos.txt files)
+        self.setWindowTitle(self.version) # there is still the bug Pt10/Pt1000 for dataSet extraction.
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -547,7 +546,7 @@ class Gev(QWidget):
             print "self.releasesList_ref_2 : %d\n" % len(self.releasesList_ref_2)
             print "self.releasesList_rel_5 : %d\n" % len(self.releasesList_rel_5)
             print "self.releasesList_ref_5 : %d\n" % len(self.releasesList_ref_5)
-            print BaseURL(self) # temporaire
+            #print BaseURL(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
             self.textReport += "BaseUrl = " + BaseURL(self) + "<br>"
             print_arrays(self) # temporaire
@@ -571,6 +570,19 @@ class Gev(QWidget):
             disableLocationButtons(self)
             self.lineEdit_ref.setEnabled(False)
             self.lineEdit_rel.setEnabled(False)
+            
+            # collapsing self.releasesList_rel_5, self.releasesList_ref_5 & self.okToPublishDatasets into one list.
+            merged_1 = []
+            for dts in self.okToPublishDatasets.split(','):
+                print dts
+                merged_1.append(str(dts))
+            print "*****"
+            #print merged_1
+            #print reversed(merged_1)
+            merged_1b = list(reversed(merged_1)) # merged_1[::-1]
+            print merged_1b
+            self.finalList = map(list, zip(merged_1b, self.releasesList_rel_5, self.releasesList_ref_5))
+            print self.finalList[0][1]
 
             # defining/creating paths & folders
             self.PathUpdate()
