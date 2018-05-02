@@ -252,7 +252,8 @@ for ($i = 0; $i < count($clefs); $i++) {
             $short_histo_name = str_replace("bcl_", "", $short_histo_name);
         }
 
-        list ($after, $before, $common) = testExtension($short_histo_name, $histoPrevious);
+        list ($after, $before, $common) = testExtension($short_histo_name, $histoPrevious); #STOP ICI POUR PYTHON
+        print list
         
         if ( $elem == "endLine" ) {
             $otherTextToWrite .= "<br>";

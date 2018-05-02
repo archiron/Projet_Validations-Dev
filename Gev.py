@@ -36,7 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # first version for pictures and web page creation
+        self.setWindowTitle(self.version) # remove the call to electronCompare.C because it is no more used : i.e. no more oval & no more electronCompare.C
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.

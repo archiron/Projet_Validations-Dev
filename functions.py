@@ -156,11 +156,10 @@ def dataSets_finalFolder_creation(self):
         CMP_TITLE = 'gedGsfElectrons ' + dts
         CMP_RED_FILE = self.my_choice_rel_1
         CMP_BLUE_FILE = self.my_choice_ref_1
-        
+        image_up = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/up.gif"
+        image_point = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/point.gif"
+       
         f = open(CMP_CONFIG, 'r')
-        for line in f:
-            print line
-            #line_read = line.split()
         input_rel_file = self.working_dir_rel + '/' + elt[1]
         print("input_rel_file : %s" % input_rel_file )
         f_rel = ROOT.TFile(input_rel_file)
@@ -191,12 +190,148 @@ def dataSets_finalFolder_creation(self):
             wp.write(", and the <b><font color='blue'> " + CMP_BLUE_FILE + " </font></b> histograms are in blue.") # ref release blue in OvalFile
 
         wp.write(" " + "red_comment" + " " + "blue_comment" + " Some more details") # comments from OvalFile
-        wp.write(": <a href=\"electronCompare.C\">script</a> used to make the plots")
+#        wp.write(": <a href=\"electronCompare.C\">script</a> used to make the plots") # no more used : i.e. no more oval & no more electronCompare.C
         wp.write(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms") # .txt file
-        wp.write(", <a href=\"GIF/\">images</a> of histograms" + "." ) # GIF to be rename into gifs
+        wp.write(", <a href=\"gifs/\">images</a> of histograms" + "." ) # GIF to be rename into gifs
         wp.write("</p>\n")
 
+        # remplissage tableau titres et dict
+        histoArray_0 = {}
+        titlesList = [] # need with python < 3.7. dict does not keep the corrrect order of the datasets histograms
+        key = ""
+        tmp = []
+        for line in f:
+            if ( len(line) == 1 ): # len == 0, empty line
+                #print "empty"
+                if ( ( len(key) != 0 ) and ( len(tmp) != 0) ): 
+                    histoArray_0[key] = tmp
+                    key = ""
+                    tmp = []
+            else: # len <> 0
+                #print line + " : " + str(len(line))
+                if ( len(key) == 0 ):
+                    key = line # get title
+                    print ("title : %s" % key)
+                    titlesList.append(line)
+                else:
+                    tmp.append(line) # histo name
+                    t1 = line.split("/")
+                    t2 = str(t1[1])
+                    short_positions = t2.split()
+                    #print short_positions[3]
+                    if ( short_positions[3] == '1' ): # be careful it is '1' and not 1 (without quote)
+                        tmp.append("endLine")
+                        #print "tmp : "
+                        #print tmp
+                        #print short_positions[3]
+                    #print tmp
+
+        print "***"
+        #print titlesList
+        print histoArray_0
+        # fin remplissage tableau titres et dict
         f.close()
+        #print len(titlesList)
+        wp.write( "<table border=\"1\" cellpadding=\"5\" width=\"100%\">" )
+        
+        for i in range(0, len(titlesList)):
+            if ( i % 5  == 0 ):
+                wp.write( "\n<tr valign=\"top\">" )
+            textToWrite = ""
+            wp.write( "\n<td width=\"10\">\n<b> " + titlesList[i] + "</b>" )
+            titles = titlesList[i].split() # explode(" ", $clefs[$i])
+            if len(titles) > 1 :
+                titleShortName = titles[0] + "_" + titles[1]
+                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
+            else:
+                titleShortName = titles[0]
+                #print i, ' ', titlesList[i], ' : ', titles, titles[0]
+            #titleShortName = substr($titleShortName, 0, -1) # keep out the last character. not used.
+            wp.write( "&nbsp;&nbsp;" + "<a href=\"#" + titleShortName + "\">" ) # write group title
+            wp.write( "<img width=\"18\" height=\"15\" border=\"0\" align=\"center\" src=" + image_point + " alt=\"Top\"/>" + "<br><br>" )
+            textToWrite += "</a>"
+            histoPrevious = ""
+            numLine = 0
+            
+            for elem in histoArray_0[titlesList[i]]:
+                print elem
+                print numLine
+                otherTextToWrite = ""
+                
+                if ( elem == "endLine" ): 
+                    #print "==> endLine"
+                    otherTextToWrite += "<br>"
+                else: # no endLine
+                    histo_names = elem.split("/")
+                    #print "histo_names : ", histo_names
+                    #print "histo_names[0] : ", histo_names[0]
+                    #print "histo_names[1] : ", histo_names[1]
+                    histo_name = histo_names[0]
+                    histoShortNames = histo_names[1]
+                    histo_pos = histoShortNames
+                    histo_positions = histo_pos.split()
+                    #print "histo_positions : ", histo_positions
+                    short_histo_names = histoShortNames.split(" ")
+                    short_histo_name = short_histo_names[0].replace("h_", "")
+                    if "ele_" in short_histo_name:
+                        short_histo_name = short_histo_name.replace("ele_", "")
+                    if "scl_" in short_histo_name:
+                        short_histo_name = short_histo_name.replace("scl_", "")
+                    if "bcl_" in short_histo_name:
+                        short_histo_name = short_histo_name.replace("bcl_", "")
+                    #print "short_histo_name : %s" % short_histo_name
+                    [after, before, common] = testExtension(short_histo_name, histoPrevious, self)
+                    print("after = %s" % after)
+                    print("before = %s" % before)
+                    print("common = %s" % common)
+                    
+                    if ( histo_positions[3] == "0" ):
+                        #print 'histo_positions[3] = 0 : ', histo_positions[3]
+                        if ( numLine == 0 ):
+                            otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=\'green\'>" + short_histo_name + "</font></a>" + "&nbsp;\n"
+                            common = short_histo_name
+                            numLine += 1
+                        else: # $numLine > 0
+                            if ( after == "" ):
+                                otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=green>" + before + "</font></a>" + "&nbsp;\n"
+                            else: # $after != ""
+                                otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=green>" + after + "</font></a>" + "&nbsp;\n"
+                            common = before
+                    else: # histo_positions[3] == "1"
+                        #print 'histo_positions[3] = 1 : ', histo_positions[3]
+                        if ( numLine == 0 ):
+                            otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=grey>" + short_histo_name + "</font></a>" + "&nbsp;\n"
+                            common = short_histo_name
+                        else: # $numLine > 0
+                            if ( after == "" ):
+                                otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=blue>" + before + "</font></a>" + "&nbsp;\n"
+                            else: # after != ""
+                                otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=blue>" + after + "</font></a>" + "&nbsp;\n"
+                        numLine = 0
+                    
+                    histoPrevious = common
+                    if ( histo_positions[4] == "1" ):
+                        otherTextToWrite += "<br>"
+                    otherTextToWrite = otherTextToWrite.replace("<br><br>", "<br>")
+                textToWrite += otherTextToWrite
+            textReplace = True
+            while textReplace :
+                textToWrite = textToWrite.replace("<br><br>", "<br>")
+                if ( textToWrite.count('<br><br>') >= 1 ):
+                    textReplace = True
+                else:
+                    textReplace = False
+            if ( textToWrite.count("</a><br><a") >= 1 ):
+                    textToWrite = textToWrite.replace("</a><br><a", "</a><a")
+            wp.write( textToWrite )
+                    
+            wp.write( "</td>" )
+            if ( i % 5 == 4 ):
+                wp.write( "</tr>" )
+        
+        wp.write( "</table>\n" )
+        wp.write( "<br>" )
+
         wp.close()
         #f_rel.close()
         #f_ref.close()
@@ -211,7 +346,53 @@ def dataSets_finalFolder_creation(self):
     #back to initial dir
     os.chdir(actual_dir) # going back
     return
+
+def testExtension(histoName, histoPrevious, self):
+    after = "" # $histoName
+    common = ""
     
+    if '_' in histoName:
+        afters = histoName.split('_')
+        before = afters[0]
+        nMax = len(afters)
+        
+        if ( afters[nMax - 1] == "endcaps" ):
+            after = "endcaps"
+            for i in range(1, nMax-1):
+                before += "_" + afters[i]
+        elif ( afters[nMax - 1] == "barrel" ):
+            after = "barrel"
+            for i in range(1, nMax-1):
+                before += "_" + afters[i]
+        else:
+#            print "general"
+            if ( histoPrevious == "" ):
+#                print "empty"
+                before = histoName
+                after = "" 
+                common = histoName
+            else:
+#                print "not empty"
+                avant =  afters[0]
+                after = ""
+                for i in range(1, nMax-1):
+                    avant += "_" + afters[i]
+                    if avant == histoPrevious:
+                        before = avant
+                        common = histoPrevious
+                        break
+                for j in range(nMax-1, nMax):
+                    after += "_" + afters[j]
+                after = after[1:]
+                
+    else: # no _ in histoName
+#        print "no _ in histo name"
+        before = histoName
+        common = histoName
+    
+    print after, before, commpon
+    return [after, before, common]
+        
 def get_collection_list(self):
     import subprocess, os
     collection_list = []
