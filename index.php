@@ -348,7 +348,7 @@ for ($i = 0; $i < count($clefs); $i++) {
             if ( stristr($short_histo_name, 'scl_') !== FALSE) {
                 $short_histo_name = str_replace("scl_", "", $short_histo_name);
             }
-            $gif_name = $escaped_url . "/gifs/" . $short_histo_names[0] . ".gif";
+            $gif_name = $escaped_url . "/gifs/" . $short_histo_names[0] . ".gif"; # ARRET
             if ( $lineFlag ) {
                 echo "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" . $image_up . " alt=\"Top\"/></a></td>\n";
             }

@@ -158,19 +158,25 @@ def dataSets_finalFolder_creation(self):
         CMP_BLUE_FILE = self.my_choice_ref_1
         image_up = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/up.gif"
         image_point = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/point.gif"
+        tree_path = "/DQMData/Run 1/EgammaV/Run summary/ElectronMcSignalValidator/" # WARNING : must be different for miniAOD
+        # ElectronMcSignalValidator
+        # ElectronMcSignalValidatorMiniAOD
+        # ElectronMcSignalValidatorPt1000
+        # ElectronMcFakeValidator
        
         f = open(CMP_CONFIG, 'r')
         input_rel_file = self.working_dir_rel + '/' + elt[1]
         print("input_rel_file : %s" % input_rel_file )
         f_rel = ROOT.TFile(input_rel_file)
         f_rel.ls()
-        #h1 = getHisto(f_rel)
+        h1 = getHisto(f_rel)
+        h1.ls()
 
         input_ref_file = self.working_dir_ref + '/' + elt[2]
         print("input_ref_file : %s" % input_ref_file )
         f_ref = ROOT.TFile(input_ref_file)
         f_ref.ls()
-        #h2 = getHisto(f_ref)
+        h2 = getHisto(f_ref)
 
         wp = open('index.html', 'w') # web page
         wp.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n")
@@ -221,14 +227,10 @@ def dataSets_finalFolder_creation(self):
                     #print short_positions[3]
                     if ( short_positions[3] == '1' ): # be careful it is '1' and not 1 (without quote)
                         tmp.append("endLine")
-                        #print "tmp : "
-                        #print tmp
-                        #print short_positions[3]
-                    #print tmp
 
         print "***"
         #print titlesList
-        print histoArray_0
+        #print histoArray_0
         # fin remplissage tableau titres et dict
         f.close()
         #print len(titlesList)
@@ -254,8 +256,8 @@ def dataSets_finalFolder_creation(self):
             numLine = 0
             
             for elem in histoArray_0[titlesList[i]]:
-                print elem
-                print numLine
+                #print elem
+#                print numLine
                 otherTextToWrite = ""
                 
                 if ( elem == "endLine" ): 
@@ -281,9 +283,9 @@ def dataSets_finalFolder_creation(self):
                         short_histo_name = short_histo_name.replace("bcl_", "")
                     #print "short_histo_name : %s" % short_histo_name
                     [after, before, common] = testExtension(short_histo_name, histoPrevious, self)
-                    print("after = %s" % after)
-                    print("before = %s" % before)
-                    print("common = %s" % common)
+                    #print("after = %s" % after)
+                    #print("before = %s" % before)
+                    #print("common = %s" % common)
                     
                     if ( histo_positions[3] == "0" ):
                         #print 'histo_positions[3] = 0 : ', histo_positions[3]
@@ -331,6 +333,61 @@ def dataSets_finalFolder_creation(self):
         
         wp.write( "</table>\n" )
         wp.write( "<br>" )
+        
+        lineFlag = True
+        wp.write( "<table border=\"1\" cellpadding=\"5\" width=\"100%\">" )
+        for i in range(0, len(titlesList)):
+            wp.write( "\n<tr valign=\"top\">" )
+            wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
+            titles = titlesList[i].split()
+            if len(titles) > 1 :
+                titleShortName = titles[0] + "_" + titles[1]
+                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
+            else:
+                titleShortName = titles[0]
+            wp.write( "\n<td>\n<b> " )
+            wp.write( "<a id=\"" + titleShortName + "\" name=\"" + titleShortName + "\"></a>" )
+            wp.write( titlesList[i] + "</b></td>" )
+            wp.write( "</tr><tr valign=\"top\">" )
+            for elem in histoArray_0[titlesList[i]]:
+                #print elem
+                if ( elem != "endLine" ): 
+                    histo_names = elem.split("/")
+                    histo_name = histo_names[0]
+                    histoShortNames = histo_names[1]
+                    histo_pos = histoShortNames
+                    histo_positions = histo_pos.split()
+                    short_histo_names = histoShortNames.split(" ")
+                    short_histo_name = short_histo_names[0].replace("h_", "")
+                    if "ele_" in short_histo_name:
+                        short_histo_name = short_histo_name.replace("ele_", "")
+                    if "scl_" in short_histo_name:
+                        short_histo_name = short_histo_name.replace("scl_", "")
+                    if "bcl_" in short_histo_name:
+                        short_histo_name = short_histo_name.replace("bcl_", "") # ARRET
+                    gif_name = "gifs/" + short_histo_names[0] + ".gif"
+                    print gif_name
+                    print "####### : " + tree_path + short_histo_names[0] # to have the h_ for the name
+                    histo_1 = h1.Get(short_histo_names[0]) # tree_path + 
+                    histo_2 = h2.Get(short_histo_names[0])
+                    PictureChoice(histo_1, histo_2, "gifs/" + short_histo_names[0] + ".gif")
+                    
+                    if ( lineFlag ):
+                        wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
+                    if (  histo_positions[3] == "0" ):
+                        wp.write( "<td>" )
+                        wp.write( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>" )
+                        wp.write( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>" )
+                        wp.write( " </td>\n" )
+                        lineFlag = False
+                    else: # line_sp[3]=="1"
+                        wp.write( "<td>" )
+                        wp.write( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>" )
+                        wp.write( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>" )
+                        wp.write( "</td></tr><tr valign=\"top\">" )
+                        lineFlag = True
+
+        wp.write( "</tr></table>\n" )
 
         wp.close()
         #f_rel.close()
@@ -390,7 +447,7 @@ def testExtension(histoName, histoPrevious, self):
         before = histoName
         common = histoName
     
-    print after, before, commpon
+    #print after, before, common
     return [after, before, common]
         
 def get_collection_list(self):

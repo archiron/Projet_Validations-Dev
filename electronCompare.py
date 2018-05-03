@@ -13,6 +13,15 @@ from Paths_default import *
 
 from ROOT import TFile, TH2F, TCanvas, gStyle, gPad, TRatioPlot
 
+def getHisto(file):
+    file.ls()
+    t1 = file.Get("DQMData")
+    t2 = t1.Get("Run 1")
+    t3 = t2.Get("EgammaV")
+    t4 = t3.Get("Run summary")
+    t5 = t4.Get("ElectronMcSignalValidator")
+    return t5
+
 def RenderHisto(histo, canvas):
     if ("ELE_LOGY" in histo.GetOption() and histo.GetMaximum() > 0):
         canvas.SetLogy(1)
@@ -28,6 +37,15 @@ def RenderHisto(histo, canvas):
         gStyle.SetOptStat(111110+histo_name_flag)
         print "histo : TH1"
 
+def PictureChoice(histo1, histo2, filename):
+    #print filename
+    if(histo1.InheritsFrom("TH1F")):
+#        print "TH1F : 2 pads"
+        createPicture3(histo1, histo2, filename)
+    else:
+#        print "no TH1F, 1 pad"   
+        createPicture(histo1, histo2, filename)
+        
 def createPicture(histo1, histo2, filename):
     print "Hello, I will create an histo in createPicture !!"
     
@@ -65,10 +83,11 @@ def createPicture(histo1, histo2, filename):
 
     cnv.Draw()
     cnv.Update()
-    cnv.Print(filename)
-    #cnv.Closed()
-    print "Hello, I created an histo with createPicture !!"
-    return cnv
+    #cnv.Print(filename, "")
+    cnv.SaveAs(filename)
+    cnv.Draw()
+
+    return
     
 def createPicture2(histo1, histo2, filename):
     print "Hello, I will create an histo in createPicture2 !!"
@@ -111,14 +130,15 @@ def createPicture2(histo1, histo2, filename):
     print "ratio plot OK"
     rp2.Draw()
     cnv2.Update()
-    cnv2.Print(filename)
+    #cnv2.Print(filename, "")
     #cnv2.Closed()
     return cnv2
     
-def createPicture3(histo1, histo2):
+def createPicture3(histo1, histo2, filename):
     print "Hello, I will create an histo in createPicture3 !!"
+    print filename
     
-    cnv3 = TCanvas("","",600,800)
+    cnv3 = TCanvas("canvas","",600,800)
     histo1.Draw()
     histo1.SetStats(1)
     RenderHisto(histo1, cnv3)
@@ -151,13 +171,18 @@ def createPicture3(histo1, histo2):
     histo1.Draw("histsames")
 
     cnv3.Draw()
-    print "creating ratio plot"
+    #print "creating ratio plot"
     rp3 = TRatioPlot(histo1, histo2, "divsym")
-    print "ratio plot OK"
+    #print "ratio plot OK"
     rp3.Draw()
-    print "drawing OK"
+    #print "drawing OK"
     cnv3.Update()
+    cnv3.SaveAs(filename, "")
     cnv3.Draw()
     
     return
+    
+def createWebPage(self):
+    return
+    
     
