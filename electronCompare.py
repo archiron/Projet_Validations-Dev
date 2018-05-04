@@ -4,7 +4,13 @@
 import os,sys,subprocess
 import urllib2
 import re
+
+from sys import argv
+argv.append( '-b-' )
 import ROOT
+ROOT.gROOT.SetBatch(True)
+argv.remove( '-b-' )
+
 from getEnv import env
 from Paths_default import *
 
@@ -29,19 +35,19 @@ def RenderHisto(histo, canvas):
     if ( histo.InheritsFrom("TH2") ):
         gStyle.SetPalette(1)
         gStyle.SetOptStat(110+histo_name_flag)
-        print "histo : TH2"
+#        print "histo : TH2"
     elif ( histo.InheritsFrom("TProfile") ):
         gStyle.SetOptStat(110+histo_name_flag)
-        print "histo : TProfile"
+#        print "histo : TProfile"
     else: # TH1
         gStyle.SetOptStat(111110+histo_name_flag)
-        print "histo : TH1"
+#        print "histo : TH1"
 
 def PictureChoice(histo1, histo2, filename):
     #print filename
     if(histo1.InheritsFrom("TH1F")):
 #        print "TH1F : 2 pads"
-        createPicture3(histo1, histo2, filename)
+        createPicture2(histo1, histo2, filename)
     else:
 #        print "no TH1F, 1 pad"   
         createPicture(histo1, histo2, filename)
@@ -58,7 +64,7 @@ def createPicture(histo1, histo2, filename):
     histo1.SetLineColor(4)
     histo1.SetMarkerColor(4)
     statBox1.SetTextColor(4)
-    print "histo1 OK"
+#    print "histo1 OK"
     
     gPad.Update()
     histo2.Draw()
@@ -69,30 +75,30 @@ def createPicture(histo1, histo2, filename):
     histo2.SetLineColor(2)
     histo2.SetMarkerColor(2)
     statBox2.SetTextColor(2)
-    print "histo2 OK"
+#    print "histo2 OK"
 
     y1 = statBox1.GetY1NDC()
     y2 = statBox1.GetY2NDC()
-    print "y1=", y1, ", y2=", y2
+#    print "y1=", y1, ", y2=", y2
     statBox1.SetY1NDC(2*y1-y2)
     statBox1.SetY2NDC(y1)
-    print "statboxes OK"
+#    print "statboxes OK"
     histo2.Draw()
     histo1.SetLineWidth(3) 
     histo1.Draw("histsames")
 
     cnv.Draw()
     cnv.Update()
-    #cnv.Print(filename, "")
     cnv.SaveAs(filename)
-    cnv.Draw()
+#    cnv.Draw()
 
     return
     
 def createPicture2(histo1, histo2, filename):
-    print "Hello, I will create an histo in createPicture2 !!"
+#    print "Hello, I will create an histo in createPicture2 !!"
+    print filename
     
-    cnv2 = TCanvas("canvas","",600,860)
+    cnv2 = TCanvas("canvas","",600,800)
     histo1.Draw()
     histo1.SetStats(1)
     RenderHisto(histo1, cnv2)
@@ -101,7 +107,7 @@ def createPicture2(histo1, histo2, filename):
     histo1.SetLineColor(4)
     histo1.SetMarkerColor(4)
     statBox1.SetTextColor(4)
-    print "histo1 OK"
+#    print "histo1 OK"
     
     gPad.Update()
     histo2.Draw()
@@ -112,73 +118,25 @@ def createPicture2(histo1, histo2, filename):
     histo2.SetLineColor(2)
     histo2.SetMarkerColor(2)
     statBox2.SetTextColor(2)
-    print "histo2 OK"
+#    print "histo2 OK"
 
     y1 = statBox1.GetY1NDC()
     y2 = statBox1.GetY2NDC()
-    print "y1=", y1, ", y2=", y2
+#    print "y1=", y1, ", y2=", y2
     statBox1.SetY1NDC(2*y1-y2)
     statBox1.SetY2NDC(y1)
-    print "statboxes OK"
+#    print "statboxes OK"
     histo2.Draw()
     histo1.SetLineWidth(3) 
     histo1.Draw("histsames")
 
     cnv2.Draw()
-    print "creating ratio plot"
     rp2 = TRatioPlot(histo1, histo2, "divsym")
-    print "ratio plot OK"
     rp2.Draw()
     cnv2.Update()
-    #cnv2.Print(filename, "")
-    #cnv2.Closed()
-    return cnv2
-    
-def createPicture3(histo1, histo2, filename):
-    print "Hello, I will create an histo in createPicture3 !!"
-    print filename
-    
-    cnv3 = TCanvas("canvas","",600,800)
-    histo1.Draw()
-    histo1.SetStats(1)
-    RenderHisto(histo1, cnv3)
-    gPad.Update()
-    statBox1 = histo1.GetListOfFunctions().FindObject("stats")
-    histo1.SetLineColor(4)
-    histo1.SetMarkerColor(4)
-    statBox1.SetTextColor(4)
-    print "histo1 OK"
-    
-    gPad.Update()
-    histo2.Draw()
-    histo2.SetStats(1)
-    RenderHisto(histo2, cnv3)
-    cnv3.Update()
-    statBox2 = histo2.GetListOfFunctions().FindObject("stats")
-    histo2.SetLineColor(2)
-    histo2.SetMarkerColor(2)
-    statBox2.SetTextColor(2)
-    print "histo2 OK"
-
-    y1 = statBox1.GetY1NDC()
-    y2 = statBox1.GetY2NDC()
-    print "y1=", y1, ", y2=", y2
-    statBox1.SetY1NDC(2*y1-y2)
-    statBox1.SetY2NDC(y1)
-    print "statboxes OK"
-    histo2.Draw()
-    histo1.SetLineWidth(3) 
-    histo1.Draw("histsames")
-
-    cnv3.Draw()
-    #print "creating ratio plot"
-    rp3 = TRatioPlot(histo1, histo2, "divsym")
-    #print "ratio plot OK"
-    rp3.Draw()
-    #print "drawing OK"
-    cnv3.Update()
-    cnv3.SaveAs(filename, "")
-    cnv3.Draw()
+    #cnv2.SaveAs(filename, "")
+    cnv2.SaveAs(filename)
+#    cnv2.Draw()
     
     return
     

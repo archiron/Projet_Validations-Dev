@@ -36,12 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # # WARNING : must be different for miniAOD or others. Must be linked with getHisto
-        # ElectronMcSignalValidator
-        # ElectronMcSignalValidatorMiniAOD
-        # ElectronMcSignalValidatorPt1000
-        # ElectronMcFakeValidator
-        # need to correct some save and scale pbms.
+        self.setWindowTitle(self.version) # Pictures creation is OK and fast !
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.

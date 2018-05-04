@@ -1,6 +1,12 @@
 #! /usr/bin/env python
 #-*-coding: utf-8 -*-
 
+from sys import argv
+argv.append( '-b-' )
+import ROOT
+ROOT.gROOT.SetBatch(True)
+argv.remove( '-b-' )
+
 import os,sys,subprocess, shutil
 import urllib2
 import re
@@ -366,8 +372,8 @@ def dataSets_finalFolder_creation(self):
                     if "bcl_" in short_histo_name:
                         short_histo_name = short_histo_name.replace("bcl_", "") # ARRET
                     gif_name = "gifs/" + short_histo_names[0] + ".gif"
-                    print gif_name
-                    print "####### : " + tree_path + short_histo_names[0] # to have the h_ for the name
+                    #print gif_name
+                    #print "####### : " + tree_path + short_histo_names[0] # to have the h_ for the name
                     histo_1 = h1.Get(short_histo_names[0]) # tree_path + 
                     histo_2 = h2.Get(short_histo_names[0])
                     PictureChoice(histo_1, histo_2, "gifs/" + short_histo_names[0] + ".gif")
