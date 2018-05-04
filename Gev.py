@@ -36,7 +36,9 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # Pictures creation is OK and fast !
+        self.setWindowTitle(self.version) # Add comments in the head of the web page.
+        # minor corrections.
+        # add some improvment for tree path part and others cases (Pt1000, miniAOD, Fake, ...). To be tested.
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.

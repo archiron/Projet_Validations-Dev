@@ -147,7 +147,7 @@ def dataSets_finalFolder_creation(self):
             os.chdir('../')
         # get config files 
         os.chdir(dataSetFolder) # going to dataSetFolder
-        [it1, it2] = testForDataSetsFile(self, dts)
+        [it1, it2, tp_1, tp_2] = testForDataSetsFile(self, dts)
         self.wp.write("config file for target : %s \n" % it1)
         self.wp.write("config file for reference : %s \n" % it2)
         self.textReport += "config file for target : " + it1 + "<br>"
@@ -174,15 +174,15 @@ def dataSets_finalFolder_creation(self):
         input_rel_file = self.working_dir_rel + '/' + elt[1]
         print("input_rel_file : %s" % input_rel_file )
         f_rel = ROOT.TFile(input_rel_file)
-        f_rel.ls()
-        h1 = getHisto(f_rel)
-        h1.ls()
+        #f_rel.ls()
+        h1 = getHisto(f_rel, tp_1)
+        #h1.ls()
 
         input_ref_file = self.working_dir_ref + '/' + elt[2]
         print("input_ref_file : %s" % input_ref_file )
         f_ref = ROOT.TFile(input_ref_file)
-        f_ref.ls()
-        h2 = getHisto(f_ref)
+        #f_ref.ls()
+        h2 = getHisto(f_ref, tp_2)
 
         wp = open('index.html', 'w') # web page
         wp.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n")
@@ -193,6 +193,16 @@ def dataSets_finalFolder_creation(self):
         wp.write("</head>\n")
         wp.write("<a NAME=\"TOP\"></a>")
         wp.write("<h1><a href=\"../\"><img border=0 width=\"22\" height=\"22\" src=\"../../../../img/up.gif\" alt=\"Up\"/></a>&nbsp; " + CMP_TITLE + " </h1>\n" ) # option -t dans OvalFile
+        
+        wp.write("<b><font color='red'> " + self.validationType2 + " " + self.my_choice_rel_1 + " </font></b>")
+        wp.write(" : " + self.selectedRelGlobalTag )
+        wp.write(" : " + elt[1] )
+        wp.write("<br>\n")
+        wp.write("<b><font color='blue'> " + self.validationType3 + " " + self.my_choice_ref_1 + " </font></b>")
+        wp.write(" : " + self.selectedRefGlobalTag )
+        wp.write(" : " + elt[2] )
+        wp.write("<br>\n")
+        
         if (f_ref == 0):
             wp.write("<p>In all plots below, there was no reference histograms to compare with")
             wp.write(", and the " + CMP_RED_FILE + " histograms are in red.") # new release red in OvalFile
@@ -200,11 +210,11 @@ def dataSets_finalFolder_creation(self):
             wp.write("<p>In all plots below")
             wp.write(", the <b><font color='red'> " + CMP_RED_FILE + " </font></b> histograms are in red") # new release red in OvalFile
             wp.write(", and the <b><font color='blue'> " + CMP_BLUE_FILE + " </font></b> histograms are in blue.") # ref release blue in OvalFile
-
-        wp.write(" " + "red_comment" + " " + "blue_comment" + " Some more details") # comments from OvalFile
+#        wp.write(" " + "red_comment" + " " + "blue_comment") # comments from OvalFile
+        wp.write(" Some more details") # 
 #        wp.write(": <a href=\"electronCompare.C\">script</a> used to make the plots") # no more used : i.e. no more oval & no more electronCompare.C
         wp.write(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms") # .txt file
-        wp.write(", <a href=\"gifs/\">images</a> of histograms" + "." ) # GIF to be rename into gifs
+        wp.write(", <a href=\"gifs/\">images</a> of histograms" + "." ) # 
         wp.write("</p>\n")
 
         # remplissage tableau titres et dict

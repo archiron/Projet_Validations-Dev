@@ -206,26 +206,44 @@ def checkCalculValidation(self, fileName):
     return checkCalculValidation
 
 def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
+    # also get the tree path part (tp_rel, tp_ref) for root files :
+    # ElectronMcSignalValidator
+    # ElectronMcSignalValidatorMiniAOD
+    # ElectronMcSignalValidatorPt1000
+    # ElectronMcFakeValidator
+
     print "testForDataSetsFile : ", dataSetsName
     
     t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
     t_ref = t_rel
+    tp_rel = 'ElectronMcSignalValidator'
+    tp_ref = tp_rel
     if ( re.search('Pt1000', dataSetsName) ):
         t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosPt1000.txt'
         t_ref = t_rel
+        tp_rel = 'ElectronMcSignalValidatorPt1000'
+        tp_ref = tp_rel
     elif ( re.search('QCD', dataSetsName) ):
         t_rel = self.working_dir_base + '/' + 'ElectronMcFakeHistos.txt'
         t_ref = t_rel
+        tp_rel = 'ElectronMcFakeValidator'
+        tp_ref = tp_rel
     else: # general
         if self.checkSpecTarget1.isChecked(): # RECO
             if self.checkSpecReference4.isChecked(): # RECO vs miniAOD
                 t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
                 t_ref = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
+                tp_rel = 'ElectronMcSignalValidator'
+                tp_ref = 'ElectronMcSignalValidatorMiniAOD'
             else: # RECO vs RECO
                 t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
                 t_ref = t_rel
+                tp_rel = 'ElectronMcSignalValidator'
+                tp_ref = 'ElectronMcSignalValidator'
         elif self.checkSpecTarget4.isChecked(): # miniAOD vs miniAOD
             t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
             t_ref = t_rel
-    return [t_rel, t_ref]
+            tp_rel = 'ElectronMcSignalValidator'
+            tp_rel = tp_ref
+    return [t_rel, t_ref, tp_rel, tp_ref]
 

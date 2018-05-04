@@ -19,13 +19,15 @@ from Paths_default import *
 
 from ROOT import TFile, TH2F, TCanvas, gStyle, gPad, TRatioPlot
 
-def getHisto(file):
-    file.ls()
+def getHisto(file, tp):
+    #file.ls()
+    print ("tree path part = %s" % tp)
     t1 = file.Get("DQMData")
     t2 = t1.Get("Run 1")
     t3 = t2.Get("EgammaV")
     t4 = t3.Get("Run summary")
     t5 = t4.Get("ElectronMcSignalValidator")
+    t5 = t4.Get(tp)
     return t5
 
 def RenderHisto(histo, canvas):
@@ -35,13 +37,10 @@ def RenderHisto(histo, canvas):
     if ( histo.InheritsFrom("TH2") ):
         gStyle.SetPalette(1)
         gStyle.SetOptStat(110+histo_name_flag)
-#        print "histo : TH2"
     elif ( histo.InheritsFrom("TProfile") ):
         gStyle.SetOptStat(110+histo_name_flag)
-#        print "histo : TProfile"
     else: # TH1
         gStyle.SetOptStat(111110+histo_name_flag)
-#        print "histo : TH1"
 
 def PictureChoice(histo1, histo2, filename):
     #print filename
@@ -53,7 +52,7 @@ def PictureChoice(histo1, histo2, filename):
         createPicture(histo1, histo2, filename)
         
 def createPicture(histo1, histo2, filename):
-    print "Hello, I will create an histo in createPicture !!"
+    #print "Hello, I will create an histo in createPicture !!"
     
     cnv = TCanvas("canvas","",600,600)
     histo1.Draw()
@@ -96,7 +95,7 @@ def createPicture(histo1, histo2, filename):
     
 def createPicture2(histo1, histo2, filename):
 #    print "Hello, I will create an histo in createPicture2 !!"
-    print filename
+    #print filename
     
     cnv2 = TCanvas("canvas","",600,800)
     histo1.Draw()
