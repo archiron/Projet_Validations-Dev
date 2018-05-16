@@ -47,6 +47,9 @@ def PictureChoice(histo1, histo2, filename):
     if(histo1.InheritsFrom("TH1F")):
 #        print "TH1F : 2 pads"
         createPicture2(histo1, histo2, filename)
+    elif ( histo1.InheritsFrom("TProfile") ):
+#        print "TProfile : 2 pads"
+        createPicture2(histo1, histo2, filename)
     else:
 #        print "no TH1F, 1 pad"   
         createPicture(histo1, histo2, filename)
@@ -54,7 +57,7 @@ def PictureChoice(histo1, histo2, filename):
 def createPicture(histo1, histo2, filename):
     #print "Hello, I will create an histo in createPicture !!"
     
-    cnv = TCanvas("canvas","",600,600)
+    cnv = TCanvas("canvas","",960,600)
     histo1.Draw()
     histo1.SetStats(1)
     RenderHisto(histo1, cnv)
@@ -97,7 +100,7 @@ def createPicture2(histo1, histo2, filename):
 #    print "Hello, I will create an histo in createPicture2 !!"
     #print filename
     
-    cnv2 = TCanvas("canvas","",600,800)
+    cnv2 = TCanvas("canvas","",960,800)
     histo1.Draw()
     histo1.SetStats(1)
     RenderHisto(histo1, cnv2)
@@ -131,6 +134,10 @@ def createPicture2(histo1, histo2, filename):
 
     cnv2.Draw()
     rp2 = TRatioPlot(histo1, histo2, "divsym")
+    rp2.Draw()
+    rp2.GetLowerRefGraph().SetMaximum(2) # 
+    #rp2.GetLowerRefGraph().SetNDivisions(510) #
+    rp2.GetLowerRefGraph().GetYaxis().SetNdivisions(505)    
     rp2.Draw()
     cnv2.Update()
     #cnv2.SaveAs(filename, "")

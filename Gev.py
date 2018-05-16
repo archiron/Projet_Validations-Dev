@@ -36,9 +36,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # Add comments in the head of the web page.
-        # minor corrections.
-        # add some improvment for tree path part and others cases (Pt1000, miniAOD, Fake, ...). To be tested.
+        self.setWindowTitle(self.version) # change size of canvas 600x800 -> 960x800
+        # Set Maximum of Y axis in rratio Plot to 2.
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
