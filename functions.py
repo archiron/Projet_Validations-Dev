@@ -158,6 +158,9 @@ def dataSets_finalFolder_creation(self):
         shutil.copy2(it1, 'config_target.txt')
         shutil.copy2(it2, 'config_reference.txt')
         # create gifs pictures & web page
+        
+        initRootStyle()
+        
         CMP_CONFIG = 'config_target.txt'
         CMP_TITLE = 'gedGsfElectrons ' + dts
         CMP_RED_FILE = self.my_choice_rel_1
@@ -386,7 +389,7 @@ def dataSets_finalFolder_creation(self):
                     #print "####### : " + tree_path + short_histo_names[0] # to have the h_ for the name
                     histo_1 = h1.Get(short_histo_names[0]) # tree_path + 
                     histo_2 = h2.Get(short_histo_names[0])
-                    PictureChoice(histo_1, histo_2, "gifs/" + short_histo_names[0] + ".gif")
+                    PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], "gifs/" + short_histo_names[0] + ".gif")
                     
                     if ( lineFlag ):
                         wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )

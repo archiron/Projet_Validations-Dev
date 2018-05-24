@@ -36,8 +36,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # change size of canvas 600x800 -> 960x800
-        # Set Maximum of Y axis in rratio Plot to 2.
+        self.setWindowTitle(self.version) # change the createPicture function().
+        # need to take recomp histos into account
         
         # Need to create one folder per dataset.
         # Perhaps need to recreate dataset, rel/ref root files structure.
@@ -808,7 +808,7 @@ class Gev(QWidget):
         label2 = QLabel()
         label2.setPixmap(pixmap2)
         label4 = QLabel()
-        label4.setText('<br>Special thanks to <font color=\'blue\'>Emilia</font> for her help<br>')
+        label4.setText('<br>Special thanks to <font color=\'blue\'>Emilia</font> and <font color=\'blue\'>Jean-Baptiste</font> for their help<br>')
         layout.addWidget(labell)
         layout.addWidget(label3)
         layout.addWidget(label2)
