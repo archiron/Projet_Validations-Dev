@@ -36,11 +36,11 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # change the createPicture function().
-        # need to take recomp histos into account
+        self.setWindowTitle(self.version) # new version of checkCalculValidation(). It takes into account Fast, PUpmx, PU, ...
+        # mini bug : no log axis for histos -> corrected.
         
-        # Need to create one folder per dataset.
-        # Perhaps need to recreate dataset, rel/ref root files structure.
+        # bug found : for miniAOD, the list of the files is not correct ; steel have some pmx root files into the list.
+        # it seems that the self.finalList has the bug.
         # Need to fix the Fast list of root files and more generaly the checkCalculValidation function.
         # Need to re-see about comparison of datasets for FastvsFull. In some cases there can not be the same.
         # For pmx vs pmx or pmx vs PU we need to reconsider the tests and the file list because pmx vs PU is with the same release.
@@ -526,7 +526,7 @@ class Gev(QWidget):
                 if checkFileName(self, it1, "rel"):
                     for it2 in self.releasesList_3: # it2 = dataSet
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRelGlobalTag), it1)): # at least one file here
-                             if checkCalculValidation(self, it1):
+                             if checkCalculValidation(self, it1, "rel"):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_rel_5.append(it1)
             # perhaps add a test to verify if there is at least one file and if not, remove the dataSet.
@@ -535,7 +535,7 @@ class Gev(QWidget):
                if checkFileName(self, it1, "ref"):
                     for it2 in self.releasesList_3: # it2 = dataSet
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
-                            if checkCalculValidation(self, it1):
+                            if checkCalculValidation(self, it1, "ref"):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_ref_5.append(it1)
 
@@ -577,13 +577,15 @@ class Gev(QWidget):
             for dts in self.okToPublishDatasets.split(','):
                 print dts
                 merged_1.append(str(dts))
-            print "*****"
+            print "***** self.FinalList*****"
             #print merged_1
             #print reversed(merged_1)
             merged_1b = list(reversed(merged_1)) # merged_1[::-1]
             print merged_1b
             self.finalList = map(list, zip(merged_1b, self.releasesList_rel_5, self.releasesList_ref_5))
             print self.finalList[0][1]
+            print self.finalList
+            print "***** self.FinalList*****"
 
             # defining/creating paths & folders
             self.PathUpdate()

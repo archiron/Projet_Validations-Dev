@@ -14,9 +14,6 @@ argv.remove( '-b-' )
 from getEnv import env
 from Paths_default import *
 
-#! /usr/bin/env python
-#-*-coding: utf-8 -*-
-
 from ROOT import * # TFile, TH2F, TCanvas, gStyle, gPad, TRatioPlot
 from math import log10
 
@@ -188,6 +185,8 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     histo1.SetStats(1)
     histo1.Draw(newDrawOptions) # 
     RenderHisto(histo1, cnv2)
+    if ("ELE_LOGY" in histo1.GetOption() and histo1.GetMaximum() > 0):
+        pad1.SetLogy(1)
     gPad.Update()
     statBox1 = histo1.GetListOfFunctions().FindObject("stats")
     statBox1.SetTextColor(kRed)    
@@ -195,6 +194,8 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     histo2.Draw("sames hist") # ""  same  
     histo2.SetStats(1)
     RenderHisto(histo2, cnv2)
+    if ("ELE_LOGY" in histo2.GetOption() and histo2.GetMaximum() > 0):
+        pad1.SetLogy(1)
     cnv2.Update()
     statBox2 = histo2.GetListOfFunctions().FindObject("stats")
     statBox2.SetTextColor(kBlue)

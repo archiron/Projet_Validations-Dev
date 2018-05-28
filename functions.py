@@ -387,6 +387,9 @@ def dataSets_finalFolder_creation(self):
                     gif_name = "gifs/" + short_histo_names[0] + ".gif"
                     #print gif_name
                     #print "####### : " + tree_path + short_histo_names[0] # to have the h_ for the name
+                    histo_name_recomp = short_histo_names[0]
+                    if checkRecompInName(histo_name_recomp): # TO BE ENDED
+                        print("RECOMP")
                     histo_1 = h1.Get(short_histo_names[0]) # tree_path + 
                     histo_2 = h2.Get(short_histo_names[0])
                     PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], "gifs/" + short_histo_names[0] + ".gif")
@@ -1359,3 +1362,9 @@ def changeTmp2Ref(self): # retrieve rel != ref
     self.labelCombo2.setText(tmp)
     return
     
+def checkRecompInName(name):
+    if re.search('recomp', name):
+        return True
+    else:
+        return False
+
