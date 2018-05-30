@@ -13,10 +13,10 @@ from guiChoiceGp import initGpChoice
 from guiBottomGp import initGpBottom
 from guiMiddleGp import initGpMiddle
 from getEnv import env
-from functions import folder_creation, finalFolder_creation, working_dirs_creation, dataSets_finalFolder_creation # , get_collection_list, get_validationType1, clean_files, copy_files
-from functions import list_search_1, list_search_3 # list_search_0, , list_search_2, list_search, explode_item
-from functions import folderExtension_creation # list_simplify, create_file_list, create_commonfile_list, 
-from functions import sub_releases, sub_releases2, print_arrays, list_search_5 #, list_search_4
+from functions import folder_creation, finalFolder_creation, working_dirs_creation, dataSets_finalFolder_creation 
+from functions import list_search_1, list_search_3 
+from functions import folderExtension_creation 
+from functions import sub_releases, sub_releases2, list_search_5 
 from functions import checkFastvsFull, getCheckedOptions, getCheckedRadioButton
 from functions import checkFileName, newName, updateLabelResumeSelected, updateLabelResume
 from functions import changeRef2Tmp, changeTmp2Ref
@@ -36,13 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # put table border at 0 for web page.
-        #setGridx removed for upper (&lower) graph(es) & setGridy added for lower.
-        #change lower graph height from 0.3 to 0.25 (and consequently the upper graph height from 0.7 to 0.75).
-        #change'(.,.)' to '(./.)' in bottom step display.
-        #replace ce Help msgbox with a QDialog with a link to https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_x with x=1,..,4
-        #rewrite some part for self.tasks_counter display.
-        # add an information of waht web page is done in LabelResumeSelected
+        self.setWindowTitle(self.version) # dev std is not defined -> it is in folderExtension_creation. some unused functions have been removed.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -83,13 +77,6 @@ class Gev(QWidget):
         self.my_choice_rel_1 = self.target
         self.releasesList_ref_2 = self.referenceList
         self.ref_list_1  = self.refList
-#        if ( self.my_choice_tmp != "" ): # we have an old choice for reference
-#            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
-#            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
-#            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
-#            self.my_choice_tmp = ""
-#            self.releasesList_ref_2_tmp = []
-#            self.ref_list_1_tmp = []
         tmp = "Reference : " + self.my_choice_ref_1
         self.labelCombo2.setText(tmp)
         self.QGBoxListsUpdate()
@@ -104,13 +91,6 @@ class Gev(QWidget):
         self.my_choice_rel_1 = self.target
         self.releasesList_ref_2 = self.referenceList
         self.ref_list_1  = self.refList
-#        if ( self.my_choice_tmp != "" ):
-#            self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
-#            self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
-#            self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
-#            self.my_choice_tmp = ""
-#            self.releasesList_ref_2_tmp = []
-#            self.ref_list_1_tmp = []
         tmp = "Reference : " + self.my_choice_ref_1
         self.labelCombo2.setText(tmp)
         self.QGBoxListsUpdate()
@@ -122,18 +102,12 @@ class Gev(QWidget):
         self.checkDataSets2Clicked()
         self.checkSpecTarget1_Clicked()
         changeRef2Tmp(self)
-#        self.my_choice_tmp = self.my_choice_ref_1 # keep the chosen reference into memory
-#        self.releasesList_ref_2_tmp = self.releasesList_ref_2 # keep the reference root files list into memory
-#        self.ref_list_1_tmp = self.ref_list_1 # keep the reference datasets list into memory
 
         self.my_choice_ref_0 = self.my_choice_rel_0 # need to see if we have to keep it
-#        self.my_choice_ref_1 = self.my_choice_rel_1
         print ("my_choice_rel_0 = ") , self.my_choice_rel_0 # temp
         print ("my_choice_rel_1 = ") , self.my_choice_rel_1 # temp
         print ("my_choice_ref_0 = ") , self.my_choice_ref_0 # temp
         print ("my_choice_ref_1 = ") , self.my_choice_ref_1 # temp
-#        self.releasesList_ref_2 = self.releasesList_rel_2 # no need to recompute the list
-#        self.ref_list_1 = self.rel_list_1 # no need to recompute the list
         for item in self.releasesList_ref_2: # temp
             self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
             self.textReport += "ItemRelRefClicked2" + item + "<br>"
@@ -142,8 +116,6 @@ class Gev(QWidget):
         for item in self.ref_list_1: # temp
             self.wp.write("ItemRelRefClicked2 : %s\n" % item) # temp
             self.textReport += "ItemRelRefClicked2" + item + "<br>"
-#        tmp = "Reference : " + self.my_choice_ref_1
-#        self.labelCombo2.setText(tmp)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
@@ -357,9 +329,6 @@ class Gev(QWidget):
                 self.releasesList_ref_1 = list_search_1(self.my_choice_ref_0)
                 self.ref_list_0 = sub_releases(self.releasesList_ref_1) #list_search_1(self.my_choice_ref_0))
             print "ItemRefClicked1 : self.my_choice_ref_0 : %s " % self.my_choice_ref_0
-            #for it in self.ref_list_0:
-            #    item = QListWidgetItem("%s" % it)
-            #    self.QLW_rel2.addItem(item)
             fillQLW_rel2_ref(self)
         else:
             print "release"
@@ -563,7 +532,6 @@ class Gev(QWidget):
             #print BaseURL(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
             self.textReport += "BaseUrl = " + BaseURL(self) + "<br>"
-            print_arrays(self) # temporaire
           
         elif self.tasks_counter == 4: # folder creation & file loading
 #            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
@@ -633,8 +601,6 @@ class Gev(QWidget):
             
         else:
             print "Hello Houston, we have a pbm !!"
-        #writeLabelCombo3(self)
-        #self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
 
     def PathUpdate(self): # get paths & create folders
         print "PathUpdate menu clicked !"
