@@ -36,15 +36,14 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # new version of checkCalculValidation(). It takes into account Fast, PUpmx, PU, ...
-        # mini bug : no log axis for histos -> corrected.
+        self.setWindowTitle(self.version) # put table border at 0 for web page.
+        #setGridx removed for upper (&lower) graph(es) & setGridy added for lower.
+        #change lower graph height from 0.3 to 0.25 (and consequently the upper graph height from 0.7 to 0.75).
+        #change'(.,.)' to '(./.)' in bottom step display.
+        #replace ce Help msgbox with a QDialog with a link to https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_x with x=1,..,4
+        #rewrite some part for self.tasks_counter display.
+        # add an information of waht web page is done in LabelResumeSelected
         
-        # bug found : for miniAOD, the list of the files is not correct ; steel have some pmx root files into the list.
-        # it seems that the self.finalList has the bug.
-        # Need to fix the Fast list of root files and more generaly the checkCalculValidation function.
-        # Need to re-see about comparison of datasets for FastvsFull. In some cases there can not be the same.
-        # For pmx vs pmx or pmx vs PU we need to reconsider the tests and the file list because pmx vs PU is with the same release.
-     
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
         # PART 2 : Resume label for actions listing
@@ -407,19 +406,26 @@ class Gev(QWidget):
         else:
             self.tasks_counter -= 1
             self.checkTaskCounter()
-
+        print self.tasks_counter
+        
     def Next_Choice(self):
         print "Next_Choice tmp: "
-        if self.tasks_counter == self.tasks_counterMax:
+        if self.tasks_counter > self.tasks_counterMax:
             print "no way !, self.tasks_counter = %d" % self.tasks_counterMax
         else:
             self.tasks_counter += 1
             self.checkTaskCounter()
-
+        print self.tasks_counter
+        
     def checkTaskCounter(self):
         import re#, os
+        writeLabelCombo3(self)
+        self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
+        
         if self.tasks_counter == 0: # release selection
-            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
+#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("release selection")
             self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'
@@ -441,7 +447,9 @@ class Gev(QWidget):
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 1: # reference selection
-            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
+#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("reference selection")
             self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'
@@ -463,7 +471,9 @@ class Gev(QWidget):
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 2: # GlobalTag selections
-            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
+#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("GlobalTag selections")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
@@ -489,7 +499,9 @@ class Gev(QWidget):
             self.selectedFvsFGlobalTag = ""
             # what to do if len(self.QLW_rel(f)_datasets) = 0? -> solved before arriving here !
         elif self.tasks_counter == 3: # resuming selections
-            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
+#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("resuming selections")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
@@ -499,6 +511,7 @@ class Gev(QWidget):
             self.QGBox_rel0.setTitle("Selected")
             self.QGBox_rel0.setVisible(False)
             self.QGBox_Lists.setVisible(False)
+            self.QGBox_Selected.setTitle("Selected")
             self.QGBox_Selected.setVisible(True)
             disableRadioButtons(self)
             enableStdDevButtons(self)
@@ -553,7 +566,8 @@ class Gev(QWidget):
             print_arrays(self) # temporaire
           
         elif self.tasks_counter == 4: # folder creation & file loading
-            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
+#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("foldercreation & file loading")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
@@ -565,12 +579,13 @@ class Gev(QWidget):
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(True)
             os.chdir(self.working_dir_base) # going to base folder
-            self.labelResumeSelected.clear() # do not work
+            self.labelResumeSelected.clear() # 
             disableRadioButtons(self)
             disableStdDevButtons(self)
             disableLocationButtons(self)
             self.lineEdit_ref.setEnabled(False)
             self.lineEdit_rel.setEnabled(False)
+            selectedText = ""
             
             # collapsing self.releasesList_rel_5, self.releasesList_ref_5 & self.okToPublishDatasets into one list.
             merged_1 = []
@@ -578,8 +593,6 @@ class Gev(QWidget):
                 print dts
                 merged_1.append(str(dts))
             print "***** self.FinalList*****"
-            #print merged_1
-            #print reversed(merged_1)
             merged_1b = list(reversed(merged_1)) # merged_1[::-1]
             print merged_1b
             self.finalList = map(list, zip(merged_1b, self.releasesList_rel_5, self.releasesList_ref_5))
@@ -591,10 +604,16 @@ class Gev(QWidget):
             self.PathUpdate()
             self.QGBoxListsUpdate()
             # loading files
+            selectedText += "begin files loading ! <br>"
             print "begin files loading !"
             self.wp.write("begin files loading !\n")
             self.textReport += "begin files loading !" + "<br>"
+
             cmd_load_files(self) # no test if the folders are created. We have an error output in PathUpdate() if the was a pbm with the folder creation.
+            # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            selectedText += "All files loaded <br>"
+            self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            QtCore.QCoreApplication.processEvents() 
             
             #TEMPORAIRE display list of root files
             print "releasesList_rel_5"
@@ -608,12 +627,14 @@ class Gev(QWidget):
             # creating the datasets folders
             dataSets_finalFolder_creation(self)
             
+            # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            
             print "fin ..."
             
         else:
             print "Hello Houston, we have a pbm !!"
-        writeLabelCombo3(self)
-        self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
+        #writeLabelCombo3(self)
+        #self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
 
     def PathUpdate(self): # get paths & create folders
         print "PathUpdate menu clicked !"
@@ -819,17 +840,35 @@ class Gev(QWidget):
         dialog.exec_()
     
     def showHelp(self):
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
-        msg.setText("Help")
-        msg.setInformativeText("This is additional information for help")
-        msg.setWindowTitle("HELP")
-        detailedText = "The details are as follows:"
-        detailedText += "\n"
-        detailedText += "step 4 (web page) : you can chose the path for saves"
-        msg.setDetailedText(detailedText)
-        msg.setStandardButtons(QMessageBox.Ok)
-        msg.exec_()
+#        msg = QMessageBox()
+#        msg.setIcon(QMessageBox.Information)
+#        msg.setText("Help")
+#        msg.setInformativeText("This is additional information for help")
+#        msg.setWindowTitle("HELP")
+#        detailedText = "The details are as follows:"
+#        detailedText += "\n"
+#        detailedText += "step 4 (web page) : you can chose the path for saves"
+#        detailedText += "\n"
+#        detailedText += "<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_1\">Step 1</a>"
+#        msg.setDetailedText(detailedText)
+#        msg.setStandardButtons(QMessageBox.Ok)
+#        msg.exec_()
+        
+        print("Help")
+        
+        dialogHelp = QDialog()
+        layoutHelp = QVBoxLayout(dialogHelp)
+        labellHelp = QLabel()
+        labellHelp.setText(self.version)
+        label2Help = QLabel()
+        label2Help.setText('\n')
+        label3Help = QLabel()
+        label3Help.setText('<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_1\">Step 1</a>')
+        label3Help.setOpenExternalLinks(True)
+        layoutHelp.addWidget(labellHelp)
+        layoutHelp.addWidget(label2Help)
+        layoutHelp.addWidget(label3Help)
+        dialogHelp.exec_()
 
     def showResume(self):
         print "showResume"

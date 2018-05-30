@@ -11,7 +11,7 @@ from getEnv import env
 from functions import list_search_0#, list_search_1, list_search_2, list_search_3, list_search, explode_item
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.4.1.4'
+    self.version = 'GUI Electron Validations v0.4.1.5'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -86,7 +86,7 @@ def initVariables(self):
     # Selected : the selected globalTag and associated DataSets
     self.tasks_list = ['Release list', 'Reference list', 'Lists', 'Selected', 'Web page'] # 
     self.tasks_counter = 0
-    self.tasks_counterMax = len(self.tasks_list) -1
+    self.tasks_counterMax = len(self.tasks_list) - 1
     print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
     self.wp.write("self.tasks_counterMax = %d\n" % self.tasks_counterMax)
     self.textReport += "self.tasks_counterMax = " + str(self.tasks_counterMax) + "<br>"

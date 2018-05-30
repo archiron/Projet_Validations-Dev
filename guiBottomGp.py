@@ -18,7 +18,7 @@ def initGpNextPrevious(self):
     
          
     #label button creation
-    txt = "(" + str(self.tasks_counter) + ",1) Next : " + self.tasks_list[1]
+    txt = "(" + str(self.tasks_counter) + "/1) Next : " + self.tasks_list[1]
     self.labelCombo3 = QLabel(self.trUtf8(txt), self)
 
     return
@@ -26,8 +26,8 @@ def initGpNextPrevious(self):
 def initQuit(self):
     print("initQuit")
         
-    # Création du bouton quitter, ayant pour parent la "fenetre"
-    self.bouton_Quit = QPushButton(self.trUtf8("Quitter ?"),self)
+    # Creation of the Exit button
+    self.bouton_Quit = QPushButton(self.trUtf8("Exit ?"),self)
     self.bouton_Quit.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
     #self.bouton_Quit.setIcon(QIcon("../images/smile.png"))
     self.connect(self.bouton_Quit, SIGNAL("clicked()"), qApp, SLOT("quit()"))

@@ -171,9 +171,9 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     cnv2 = ROOT.TCanvas("canvas", "", 960, 900)    
     cnv2.SetFillColor(10)
     
-    pad1 = ROOT.TPad("pad1", "pad1", 0, 0.3, 1, 1.0) # ,0,0,0
+    pad1 = ROOT.TPad("pad1", "pad1", 0, 0.25, 1, 1.0) # ,0,0,0
     pad1.SetBottomMargin(0.05)
-    pad1.SetGridx()
+    #pad1.SetGridx()
     pad1.Draw()
     pad1.cd()
     
@@ -212,10 +212,11 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     histo2.Draw("sames hist")
 
     cnv2.cd()
-    pad2 = ROOT.TPad("pad2", "pad2", 0, 0.05, 1, 0.3) # ,0,0,0
+    pad2 = ROOT.TPad("pad2", "pad2", 0, 0.05, 1, 0.25) # ,0,0,0
     pad2.SetTopMargin(0.025)
     pad2.SetBottomMargin(0.2)
-    pad2.SetGridx()
+    #pad2.SetGridx()
+    pad2.SetGridy()
     pad2.Draw()
     pad2.cd()
     

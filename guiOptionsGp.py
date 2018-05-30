@@ -13,7 +13,8 @@ def initGpCalcul(self):
 
     self.QGBox1 = QGroupBox("Calcul")
     self.QGBox1.setMaximumHeight(120)
-    self.QGBox1.setMaximumWidth(120)
+#    self.QGBox1.setMaximumWidth(120)
+    self.QGBox1.setMinimumWidth(120)
     self.radio11 = QRadioButton("FULL vs FULL") # par defaut
     self.radio12 = QRadioButton("FAST vs FAST")
     self.radio13 = QRadioButton("FAST vs FULL")
@@ -37,7 +38,8 @@ def initGpSpecTarget(self):
 
     self.QGBox2 = QGroupBox("Validation")
     self.QGBox2.setMaximumHeight(120)
-    self.QGBox2.setMaximumWidth(100)
+    #self.QGBox2.setMaximumWidth(100)
+    self.QGBox2.setMinimumWidth(100)
     self.checkSpecTarget1 = QRadioButton("RECO") # par defaut
     self.checkSpecTarget2 = QRadioButton("PU25")
     self.checkSpecTarget3 = QRadioButton("PUpmx25")

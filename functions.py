@@ -115,9 +115,15 @@ def dataSets_finalFolder_creation(self):
     print self.selectedRelDatasets
     print self.okToPublishDatasets
     # create datasets folders
+    selectedText = ""
     for i, elt in enumerate(self.finalList):
 #        print elt[0]
         dts = elt[0]
+        # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
+        selectedText += "<strong>" + dts
+        self.labelResumeSelected.setText(self.trUtf8(selectedText))
+        QtCore.QCoreApplication.processEvents() 
+        
 #    for dts in self.okToPublishDatasets.split(','):
         dataSetFolder = str(self.validationType2 + '_' + dts)
         print '%s : %s' % (dts, dataSetFolder)
@@ -284,9 +290,6 @@ def dataSets_finalFolder_creation(self):
                     otherTextToWrite += "<br>"
                 else: # no endLine
                     histo_names = elem.split("/")
-                    #print "histo_names : ", histo_names
-                    #print "histo_names[0] : ", histo_names[0]
-                    #print "histo_names[1] : ", histo_names[1]
                     histo_name = histo_names[0]
                     histoShortNames = histo_names[1]
                     histo_pos = histoShortNames
@@ -302,9 +305,6 @@ def dataSets_finalFolder_creation(self):
                         short_histo_name = short_histo_name.replace("bcl_", "")
                     #print "short_histo_name : %s" % short_histo_name
                     [after, before, common] = testExtension(short_histo_name, histoPrevious, self)
-                    #print("after = %s" % after)
-                    #print("before = %s" % before)
-                    #print("common = %s" % common)
                     
                     if ( histo_positions[3] == "0" ):
                         #print 'histo_positions[3] = 0 : ', histo_positions[3]
@@ -354,7 +354,7 @@ def dataSets_finalFolder_creation(self):
         wp.write( "<br>" )
         
         lineFlag = True
-        wp.write( "<table border=\"1\" cellpadding=\"5\" width=\"100%\">" )
+        wp.write( "<table border=\"0\" cellpadding=\"5\" width=\"100%\">" )
         for i in range(0, len(titlesList)):
             wp.write( "\n<tr valign=\"top\">" )
             wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
@@ -410,18 +410,14 @@ def dataSets_finalFolder_creation(self):
                         lineFlag = True
 
         wp.write( "</tr></table>\n" )
-
         wp.close()
-        #f_rel.close()
-        #f_ref.close()
-
         os.chdir('../') # back to the final folder.
-        #print self.filesHistos # TEMPORAIRE
-        #for file in self.filesHistos:
-        #    print "%s" % self.working_dir_base + '/' + file
+        
+        selectedText += " : done </strong><br>"
+        self.labelResumeSelected.setText(self.trUtf8(selectedText))
+        #QtCore.QCoreApplication.processEvents() 
     
-    # create index.html file
-    
+    self.labelResumeSelected.setText(self.trUtf8(selectedText))
     #back to initial dir
     os.chdir(actual_dir) # going back
     return
@@ -1290,6 +1286,7 @@ def updateLabelResumeSelected(self):
     selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
     selectedText += "</tr></table>"
             
+    self.labelResumeSelected.clear() # 
     self.labelResumeSelected.setText(self.trUtf8(selectedText))
             
     return

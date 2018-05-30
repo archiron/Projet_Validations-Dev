@@ -20,9 +20,6 @@ def initGpRelRef(self):
     self.QGBox_rel1.setMaximumWidth(180)
     self.vbox_rel1 = QVBoxLayout()
     self.QLW_rel1 = QListWidget()
-#    for it in self.releasesList_0:
-#        item = QListWidgetItem("%s" % it)
-#        self.QLW_rel1.addItem(item)
     fillQLW_rel1(self)
     self.connect(self.QLW_rel1, SIGNAL("itemSelectionChanged()"),self.ItemRelRefClicked1)
     self.vbox_rel1.addWidget(self.QLW_rel1)        

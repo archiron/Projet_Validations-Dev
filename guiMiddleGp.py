@@ -18,7 +18,6 @@ def initButtonResume(self):
     return
 
 def initGpMiddle(self):
-#    initGpTextResume(self)
     initGpLabelResume(self)
     
     initButtonResume(self)
@@ -28,7 +27,6 @@ def initGpMiddle(self):
     self.QGBoxResume.setMinimumHeight(200)
     self.QGBoxResume.setMaximumHeight(200)
     vbox8 = QHBoxLayout()
-#    vbox8.addWidget(self.QText_Resume)
     vbox8.addWidget(self.LabelResume)
     vbox8.addWidget(self.buttonResume)
     self.QGBoxResume.setLayout(vbox8)
