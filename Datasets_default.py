@@ -204,8 +204,6 @@ def checkCalculValidation(self, fileName, side):
             testFast =False
         else:
             print "BIG PBM !!"
-#    print("FULL : %s" % testFull)
-#    print("FAST : %s" % testFast)
     
     if ( re.search("PU25", fileName) ):
         check_PU25 = True
@@ -213,13 +211,6 @@ def checkCalculValidation(self, fileName, side):
         check_pmx25 = True
     if ( re.search("Fast", fileName) ):
         check_Fast = True
-    
-#    if ( self.radio11.isChecked() and self.checkSpecTarget1.isChecked() ): #Full, RECO
-#        if ( re.search("PU25", fileName) or re.search("Fast", fileName) ):
-#            checkCalculValidation = False
-    
-#    if ( self.radio11.isChecked() and self.checkSpecTarget2.isChecked() ): #Full, PU
-#        print ">>>>>>>> Full, PU25"
     
     if self.checkSpecTarget1.isChecked(): # RECO or miniAOD
         if check_PU25 or check_pmx25:
@@ -257,6 +248,17 @@ def checkCalculValidation(self, fileName, side):
                 else:
                     checkCalculValidation = False
             else: # Full, PUpmx25ns
+                if check_Fast:
+                    checkCalculValidation = False
+                else:
+                    checkCalculValidation = True
+        elif check_PU25:
+            if testFast: # Fast, PU25ns
+                if check_Fast:
+                    checkCalculValidation = True
+                else:
+                    checkCalculValidation = False
+            else: # Full, PU25ns
                 if check_Fast:
                     checkCalculValidation = False
                 else:

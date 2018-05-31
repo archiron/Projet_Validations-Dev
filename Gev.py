@@ -37,6 +37,7 @@ class Gev(QWidget):
         self.textReport += "initVariables OK<br>"
         
         self.setWindowTitle(self.version) # dev std is not defined -> it is in folderExtension_creation. some unused functions have been removed.
+        # corrected a bug in pmx vs PU : the ref root files were not loaded -> corrected in checkCalculValidation() in Datasets_default.py
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -492,35 +493,43 @@ class Gev(QWidget):
             
             updateLabelResumeSelected(self)
             
-            print "self.okToPublishDatasets = %s" % self.okToPublishDatasets
-            print "self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
+            print "checkTaskCounter 3 : self.okToPublishDatasets = %s" % self.okToPublishDatasets
+            print "checkTaskCounter 3 : self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
             
             ## here we have a common (rel & ref) dataset named as self.okToPublishDatasets for Full vs Full or Fast vs Fast. 
             ## we also have a common dataset for Fast vs Full named as self.okToPublishFvsFDatasets -> no more used
             ## WARNING : we need to have self.okToPublishFvsFDatasets = self.okToPublishDatasets !! ##
             
             # create list of root files for rel & ref
-            print "0 " + self.selectedRelDatasets
-            print "1 " + self.okToPublishDatasets
+            print "checkTaskCounter 3 : 0 " + self.selectedRelDatasets
+            print "checkTaskCounter 3 : 1 " + self.okToPublishDatasets
             self.releasesList_3 = (self.okToPublishDatasets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
             print "\nRelease :"
             for it1 in self.releasesList_rel_2: # it1 = root file
+                #print "checkTaskCounter 3 : %s" % it1
                 if checkFileName(self, it1, "rel"):
                     for it2 in self.releasesList_3: # it2 = dataSet
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRelGlobalTag), it1)): # at least one file here
+                             print "checkTaskCounter 3 : %s" % it1
                              if checkCalculValidation(self, it1, "rel"):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_rel_5.append(it1)
             # perhaps add a test to verify if there is at least one file and if not, remove the dataSet.
             print "\nReference :"
             for it1 in self.releasesList_ref_2: # it1 = root file
+               #print "checkTaskCounter 3 : %s" % it1
                if checkFileName(self, it1, "ref"):
                     for it2 in self.releasesList_3: # it2 = dataSet
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
+                            print "checkTaskCounter 3 : %s" % it1
                             if checkCalculValidation(self, it1, "ref"):
                                 print it2 + " : " + it1 + " : OK"
                                 self.releasesList_ref_5.append(it1)
-
+            
+            # print the used GlobalTags
+            print "checkTaskCounter 3 : self.selectedRelGlobalTag = %s" % self.selectedRelGlobalTag
+            print "checkTaskCounter 3 : self.selectedRefGlobalTag = %s" % self.selectedRefGlobalTag
+            
             # print length of the arrays
             print "self.releasesList_rel_3 : %d\n" % len(self.releasesList_rel_3) # to be deleted
             print "self.releasesList_ref_3 : %d\n" % len(self.releasesList_ref_3) # to be deleted
@@ -656,30 +665,29 @@ class Gev(QWidget):
             i_loc += 1
             
     def QGBoxListsUpdate(self):
-        print "menu clicked !"
-        print "*-*-**--*-*-*-*-*-* DataSets"
+        print "QGBoxListsUpdate"
         getCheckedOptions(self)
         
-        if (self.my_choice_rel_0 != ''): # print the list of the releases
-            for index in xrange(self.QLW_rel1.count()):
-                print "self.QLW_rel1.item(%d) : %s" % ( index, self.QLW_rel1.item(index).text() )
+#        if (self.my_choice_rel_0 != ''): # print the list of the releases
+#            for index in xrange(self.QLW_rel1.count()):
+#                print "QGBoxListsUpdate : self.QLW_rel1.item(%d) : %s" % ( index, self.QLW_rel1.item(index).text() )
         if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chosen
             self.selectedDataSets = []
-            print "self.validationType1 :", self.validationType1
-            print "self.validationType2 :", self.validationType2
-            print "self.validationType3 :", self.validationType3
+            print "QGBoxListsUpdate : self.validationType1 :", self.validationType1
+            print "QGBoxListsUpdate : self.validationType2 :", self.validationType2
+            print "QGBoxListsUpdate : self.validationType3 :", self.validationType3
             tt = self.ag.actions()
             self.allMenuListDatasetsChecked = False # default
             for it in tt:
-                print "self.ag.actions()", it.text()
+#                print "QGBoxListsUpdate : self.ag.actions()", it.text()
                 if it.isChecked():
-                    print "%s is checked" % it.text()
+                    print "QGBoxListsUpdate : %s is checked" % it.text()
                     self.selectedDataSets.append(str(it.text()))
                     self.allMenuListDatasetsChecked = True # we need only one Dataset selected
                 else:
-                    print "%s is unchecked" % it.text()
-            print "////// selectedDataSets : ", self.selectedDataSets
-            print "////// allMenuListDatasetsChecked : ", self.allMenuListDatasetsChecked
+                    print "QGBoxListsUpdate : %s is unchecked" % it.text()
+            print "QGBoxListsUpdate : selectedDataSets : ", self.selectedDataSets
+            print "QGBoxListsUpdate : allMenuListDatasetsChecked : ", self.allMenuListDatasetsChecked
 
             #if (self.checkAllNone1.isChecked() and self.allMenuListDatasetsChecked): # ALL and at least one selected
             if (self.allMenuListDatasetsChecked):
@@ -693,12 +701,12 @@ class Gev(QWidget):
                 datasetList = self.selectedDataSets[0]
                 for it in range(1, len(tempDataset)):
                     datasetList += ', ' + self.selectedDataSets[it]
-                print datasetList # TEMPORAIRE
+                print "QGBoxListsUpdate : " + datasetList # TEMPORAIRE
 
                 #clearDataSets(self)
                 clearDataSetsLists(self)
-                print "nb of datasets rel   : ", len(self.releasesList_rel_3) # TEMPORAIRE
-                print "nb of globaltags rel : ", len(self.releasesList_rel_3b) # TEMPORAIRE
+                print "QGBoxListsUpdate : nb of datasets rel   : ", len(self.releasesList_rel_3) # TEMPORAIRE
+                print "QGBoxListsUpdate : nb of globaltags rel : ", len(self.releasesList_rel_3b) # TEMPORAIRE
                 self.QTable_rel.setRowCount( len(self.releasesList_rel_3) )
                 i_count = 0
                 for it in self.releasesList_rel_3:
@@ -716,8 +724,8 @@ class Gev(QWidget):
                     i_count += 1
                 self.connect(self.QTable_rel, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_rel)
                 
-                print "nb of datasets ref   : ", len(self.releasesList_ref_3) # TEMPORAIRE
-                print "nb of globaltags ref : ", len(self.releasesList_ref_3b) # TEMPORAIRE
+                print "QGBoxListsUpdate : nb of datasets ref   : ", len(self.releasesList_ref_3) # TEMPORAIRE
+                print "QGBoxListsUpdate : nb of globaltags ref : ", len(self.releasesList_ref_3b) # TEMPORAIRE
                 self.QTable_ref.setRowCount( len(self.releasesList_ref_3) )
                 i_count = 0
                 for it in self.releasesList_ref_3:
@@ -736,11 +744,12 @@ class Gev(QWidget):
                 self.connect(self.QTable_ref, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_ref)
                                     
             else: # NONE & none checked, or ALL & none checked
-                print "len of selectedDataSets = %d" % len(self.selectedDataSets)
+                print "QGBoxListsUpdate : len of selectedDataSets = %d" % len(self.selectedDataSets)
                 #clearDataSets(self)
                 clearDataSetsLists(self)
 
         QtCore.QCoreApplication.processEvents() 
+        print "QGBoxListsUpdate end OK"
         
     def ItemSelectedTable_rel(self, nRow, nCol):
         print "(%d, %d)" % (nRow, nCol)

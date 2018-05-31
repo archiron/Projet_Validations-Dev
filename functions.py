@@ -122,7 +122,7 @@ def dataSets_finalFolder_creation(self):
         # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
         selectedText += "<strong>" + dts
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
-        QtCore.QCoreApplication.processEvents() 
+        #QtCore.QCoreApplication.processEvents() 
         
 #    for dts in self.okToPublishDatasets.split(','):
         dataSetFolder = str(self.validationType2 + '_' + dts)
@@ -579,19 +579,19 @@ def list_search_1(my_choice_0):
 def list_search_2(collection, filtre):
     import re
 
+    print "list_search_2"
     temp_1 = []  
     filtre = sorted(set(filtre), reverse=True)
-    print "filtre : ", filtre
-#    print "collection : ", collection
+    print "list_search_2 : filtre : ", filtre
+#    print "list_search_2 : collection : ", collection
     for item1 in collection:
         for item2 in filtre:
             if (item2 == item1):
                 temp_1.append(item1)
-#                print "OK : ", item2, item1
+#                print "list_search_2 : OK : ", item2, item1
                 break
-#            else:
-#                print "KO : ", item2, item1
     temp_1 = sorted(set(temp_1), reverse=True)
+    print "list_search_2 end OK"
     return temp_1
     
 def list_search_3(collection, filtre):
@@ -611,12 +611,13 @@ def list_search_3(collection, filtre):
 def list_search_5(self):
     import re
 
-    print " self.validationType1 = ",  self.validationType1
-    print " self.validationType2 = ",  self.validationType2
-    print " self.validationType3 = ",  self.validationType3
-    #print " self.selectedDataSets = ", self.selectedDataSets # OK
-    #print " self.releasesList_rel_2 = ", self.releasesList_rel_2 # OK
-    #print " self.releasesList_ref_2 = ", self.releasesList_ref_2 # OK
+    print "list_search_5"
+    print "list_search_5 : self.validationType1 = ",  self.validationType1
+    print "list_search_5 : self.validationType2 = ",  self.validationType2
+    print "list_search_5 : self.validationType3 = ",  self.validationType3
+    #print "list_search_5 : self.selectedDataSets = ", self.selectedDataSets # OK
+    #print "list_search_5 : self.releasesList_rel_2 = ", self.releasesList_rel_2 # OK
+    #print "list_search_5 : self.releasesList_ref_2 = ", self.releasesList_ref_2 # OK
     
     temp_1 = [] # DQM_V0001_R00000000X__Dataset__CMSSW_9_1_0_pre3-91X_upgrade2017_realistic_v3-v1__DQMIO.root files
     temp_2 = [] # 91X_upgrade2017_realistic_v3-v1 Global tags
@@ -642,12 +643,12 @@ def list_search_5(self):
             if re.search(item2, item1):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "rel"):
                     temp_12.append([explode_item(item1)[2], item2])
-                    print "len = %i" % len(temp_12)
+#                    print "list_search_5 : len = %i" % len(temp_12)
                 break
 
-    print "len of temp_12 = %i." % len(temp_12)
+    print "list_search_5 : len of temp_12 = %i." % len(temp_12)
     if ( len(temp_12) > 0 ):
-#        print temp_12
+#        print "list_search_5 : " + temp_12
         temp_12.sort()
 
         temp_rel.append( [temp_12[0][0], temp_12[0][1]] )
@@ -676,10 +677,10 @@ def list_search_5(self):
                 if re.search(item2, item1):
                     if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "ref"):
                         temp_34.append([explode_item(item1)[2], item2])
-                        print "len = %i" % len(temp_34)
+#                        print "list_search_5 : len = %i" % len(temp_34)
                     break
     
-    print "len of temp_34 = %i." % len(temp_34)
+    print "list_search_5 : len of temp_34 = %i." % len(temp_34)
     if ( len(temp_34) > 0 ):
         temp_34.sort()
 
@@ -695,7 +696,7 @@ def list_search_5(self):
         temp_3.append(temp_ref[i][1])
         temp_4.append(temp_ref[i][0])
     
-
+    print "list_search_5 end OK"
     return (temp_1, temp_2, temp_3, temp_4)
     
 def sub_releases(tab_files):
@@ -749,13 +750,15 @@ def explode_item(item):
     return temp_item
 
 def checkFastvsFull(self):
+    print "checkFastvsFull"
     if ( self.radio13.isChecked() ):
     # check for FastvsFull for Fast.
         self.checkFastvsFull = True
-        print("checkFastvsFull = True")
+        print("checkFastvsFull : checkFastvsFull = True")
     else:
         self.checkFastvsFull = False
-        print("checkFastvsFull = False")
+        print("checkFastvsFull : checkFastvsFull = False")
+    print "checkFastvsFull end OK"
     return self.checkFastvsFull
 
 def newName(prefix, fileName, suffix):
@@ -849,6 +852,7 @@ def updateLabelResumeSelected(self):
     selectedText += "<tr>"
     if (self.selectedRelDatasets == self.selectedRefDatasets):
         self.okToPublishDatasets = self.selectedRelDatasets
+        self.okToDisplayDatasets = self.selectedRelDatasets
         selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
     else: # need to extract common terms in blue and others in black (red?)
         (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
