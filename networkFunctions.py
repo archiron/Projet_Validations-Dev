@@ -235,13 +235,13 @@ def cmd_load_files(self):
     from optparse import OptionParser
     from urllib2 import build_opener, Request
     
-    print "\n cmd_load_files : "
+    print "cmd_load_files"
     self.wp.write("cmd_load_files : \n")
     cmsenv = env()
    
-#    print " self.validationType1 = ",  self.validationType1 # temp
-#    print " self.validationType2 = ",  self.validationType2 # temp
-#    print " self.validationType3 = ",  self.validationType3 # temp
+#    print "cmd_load_files : self.validationType1 = ",  self.validationType1 # temp
+#    print "cmd_load_files : self.validationType2 = ",  self.validationType2 # temp
+#    print "cmd_load_files : self.validationType3 = ",  self.validationType3 # temp
     validationType_2 = self.validationType2
     validationType_3 = self.validationType3
     temp_toBeRemoved = []
@@ -264,11 +264,11 @@ def cmd_load_files(self):
     ## MUST TEST IF ARRAYS ARE NOT EMPTY
     
     #case 1 self.my_choice_rel_0 : RELEASE
-    print "case 1 self.my_choice_rel_0 : RELEASE"
+    print "cmd_load_files : case 1 self.my_choice_rel_0 : RELEASE"
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_rel_0 + '/'
     for line in self.releasesList_rel_5:
         if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
-            #print filedir_url + line + " removed"
+            #print "cmd_load_files : " + filedir_url + line + " removed"
             temp_toBeRemoved.append(line)
     for line in temp_toBeRemoved:
         self.releasesList_rel_5.remove(line)
@@ -278,11 +278,11 @@ def cmd_load_files(self):
 
     #case 2 self.my_choice_ref_0 : REFERENCE
     temp_toBeRemoved[:] = []# clear the temp array
-    print "case 2 self.my_choice_ref_0 : REFERENCE"
+    print "cmd_load_files : case 2 self.my_choice_ref_0 : REFERENCE"
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_ref_0 + '/'
     for line in self.releasesList_ref_5:
         if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "ref"):
-            #print filedir_url + line + " removed"
+            #print "cmd_load_files : " + filedir_url + line + " removed"
             temp_toBeRemoved.append(line)
     for line in temp_toBeRemoved:
         self.releasesList_ref_5.remove(line)
@@ -290,5 +290,5 @@ def cmd_load_files(self):
     pool = Pool(option_mthreads) # need to be here. If not, download is made into previous folder (i.e. self.working_dir_rel).
     pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_ref_5])
     
-
+    print "cmd_load_files end OK"
     return

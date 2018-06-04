@@ -629,26 +629,33 @@ def list_search_5(self):
     temp_ref = []
 
     filtre = sorted(set(self.selectedDataSets), reverse=True)
+    print "list_search_5 : self.selectedDataSets = %s." % str(self.selectedDataSets)
+    print "list_search_5 : filtre = %s." % str(filtre)
     validationType_2 = self.validationType2
     validationType_3 = self.validationType3
     
     # DATASET
     self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets) # get dataset list used in rel_list_1
     self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets) # get dataset list used in ref_list_1
-
+    print "list_search_5 : self.rel_list_2 = %s." % self.rel_list_2
+    print "list_search_5 : self.ref_list_2 = %s." % self.ref_list_2 # => OK, 1 dataset
+    
     # PART RELEASE
     filtre = sorted(set(self.rel_list_2), reverse=True)
+    print "list_search_5 : filtre rel = %s." % str(filtre)
     for item1 in self.releasesList_rel_2:
         for item2 in filtre:
-            if re.search(item2, item1):
+            #print("item1 : %s - item2 : %s") % (item1, item2)
+            if re.search(item2 + '__', item1):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "rel"):
+                    print("item1 : %s - item2 : %s") % (item1, item2)
                     temp_12.append([explode_item(item1)[2], item2])
 #                    print "list_search_5 : len = %i" % len(temp_12)
                 break
 
     print "list_search_5 : len of temp_12 = %i." % len(temp_12)
     if ( len(temp_12) > 0 ):
-#        print "list_search_5 : " + temp_12
+        print "list_search_5 : " + str(temp_12)
         temp_12.sort()
 
         temp_rel.append( [temp_12[0][0], temp_12[0][1]] )
@@ -665,6 +672,7 @@ def list_search_5(self):
         
     # PART REFERENCE
     filtre = sorted(set(self.ref_list_2), reverse=True)
+    print "list_search_5 : filtre ref = %s." % str(filtre)
     if (( validationType_3 == 'miniAOD' ) and ( validationType_2 == 'RECO' )): # case RECO vs miniAOD
         temp_3 = temp_1
         temp_4 = temp_2
@@ -674,14 +682,17 @@ def list_search_5(self):
             releasesTemp = self.releasesList_rel_2
         for item1 in releasesTemp:
             for item2 in filtre:
-                if re.search(item2, item1):
+                if re.search(item2 + '__', item1):
+                    #print("item1 : %s - item2 : %s") % (item1, item2)
                     if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "ref"):
+                        print("item1 : %s - item2 : %s") % (item1, item2)
                         temp_34.append([explode_item(item1)[2], item2])
 #                        print "list_search_5 : len = %i" % len(temp_34)
                     break
     
     print "list_search_5 : len of temp_34 = %i." % len(temp_34)
     if ( len(temp_34) > 0 ):
+        print "list_search_5 : " + str(temp_34)
         temp_34.sort()
 
         temp_ref.append( [temp_34[0][0], temp_34[0][1]] )

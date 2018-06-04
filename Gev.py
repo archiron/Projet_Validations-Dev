@@ -36,8 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # dev std is not defined -> it is in folderExtension_creation. some unused functions have been removed.
-        # corrected a bug in pmx vs PU : the ref root files were not loaded -> corrected in checkCalculValidation() in Datasets_default.py
+        self.setWindowTitle(self.version) # have corrected the Pt10/Pt1000 bug for the list of the root files.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -491,8 +490,9 @@ class Gev(QWidget):
             clearReleasesList(self)
             self.QGBoxListsUpdate()
             
-            updateLabelResumeSelected(self)
+            updateLabelResumeSelected(self) # perhaps need to be redone
             
+            print "checkTaskCounter 3 : self.selectedDataSets = %s" % self.selectedDataSets
             print "checkTaskCounter 3 : self.okToPublishDatasets = %s" % self.okToPublishDatasets
             print "checkTaskCounter 3 : self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
             
@@ -504,6 +504,7 @@ class Gev(QWidget):
             print "checkTaskCounter 3 : 0 " + self.selectedRelDatasets
             print "checkTaskCounter 3 : 1 " + self.okToPublishDatasets
             self.releasesList_3 = (self.okToPublishDatasets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
+            #self.releasesList_3 = (self.selectedDataSets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
             print "\nRelease :"
             for it1 in self.releasesList_rel_2: # it1 = root file
                 #print "checkTaskCounter 3 : %s" % it1
@@ -679,7 +680,7 @@ class Gev(QWidget):
             tt = self.ag.actions()
             self.allMenuListDatasetsChecked = False # default
             for it in tt:
-#                print "QGBoxListsUpdate : self.ag.actions()", it.text()
+                print "QGBoxListsUpdate : self.ag.actions()", it.text()
                 if it.isChecked():
                     print "QGBoxListsUpdate : %s is checked" % it.text()
                     self.selectedDataSets.append(str(it.text()))
@@ -701,12 +702,16 @@ class Gev(QWidget):
                 datasetList = self.selectedDataSets[0]
                 for it in range(1, len(tempDataset)):
                     datasetList += ', ' + self.selectedDataSets[it]
-                print "QGBoxListsUpdate : " + datasetList # TEMPORAIRE
+                print "QGBoxListsUpdate : datasetList = " + datasetList # TEMPORAIRE
 
                 #clearDataSets(self)
-                clearDataSetsLists(self)
+                clearDataSetsLists(self) # empty the tables
                 print "QGBoxListsUpdate : nb of datasets rel   : ", len(self.releasesList_rel_3) # TEMPORAIRE
                 print "QGBoxListsUpdate : nb of globaltags rel : ", len(self.releasesList_rel_3b) # TEMPORAIRE
+                print "QGBoxListsUpdate : self.releasesList_rel_3  : " + str(self.releasesList_rel_3)
+                print "QGBoxListsUpdate : self.releasesList_rel_3b : " + str(self.releasesList_rel_3b)
+                print "QGBoxListsUpdate : self.releasesList_ref_3  : " + str(self.releasesList_ref_3)
+                print "QGBoxListsUpdate : self.releasesList_ref_3b : " + str(self.releasesList_ref_3b)
                 self.QTable_rel.setRowCount( len(self.releasesList_rel_3) )
                 i_count = 0
                 for it in self.releasesList_rel_3:
@@ -765,7 +770,7 @@ class Gev(QWidget):
             self.QTable_rel.item(nRow, nCol+1).setSelected(True)
             self.selectedRelDatasets = self.QTable_rel.item(nRow, nCol).text()
             self.selectedRelGlobalTag = self.QTable_rel.item(nRow, nCol+1).text()
-        print "ItemSelectedTable_rel : self.selectedRelDatasets : %s " % self.selectedRelDatasets
+        print "ItemSelectedTable_rel : self.selectedRelDatasets : %s - %s " % (self.selectedRelDatasets, self.QTable_rel.item(nRow, nCol).text())
         print "ItemSelectedTable_rel : self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
         self.wp.write("ItemSelectedTable_rel : self.selectedRelDatasets : %s\n " % self.selectedRelDatasets)
         self.wp.write("ItemSelectedTable_rel : self.selectedRelGlobalTag : %s\n " % self.selectedRelGlobalTag)
