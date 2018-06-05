@@ -181,17 +181,20 @@ def dataSets_finalFolder_creation(self):
        
         f = open(CMP_CONFIG, 'r')
         input_rel_file = self.working_dir_rel + '/' + elt[1]
-        print("input_rel_file : %s" % input_rel_file )
+        #print("finalFolder_creation : input_rel_file : %s" % input_rel_file )
         f_rel = ROOT.TFile(input_rel_file)
         #f_rel.ls()
+        #print("finalFolder_creation : tp_1 : %s" % tp_1 )
         h1 = getHisto(f_rel, tp_1)
-        #h1.ls()
+        h1.ls()
 
         input_ref_file = self.working_dir_ref + '/' + elt[2]
-        print("input_ref_file : %s" % input_ref_file )
+        #print("finalFolder_creation : input_ref_file : %s" % input_ref_file )
         f_ref = ROOT.TFile(input_ref_file)
         #f_ref.ls()
+        #print("finalFolder_creation : tp_2 : %s" % tp_2 )
         h2 = getHisto(f_ref, tp_2)
+        h2.ls()
 
         wp = open('index.html', 'w') # web page
         wp.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n")
@@ -385,14 +388,21 @@ def dataSets_finalFolder_creation(self):
                     if "bcl_" in short_histo_name:
                         short_histo_name = short_histo_name.replace("bcl_", "") # ARRET
                     gif_name = "gifs/" + short_histo_names[0] + ".gif"
-                    #print gif_name
-                    #print "####### : " + tree_path + short_histo_names[0] # to have the h_ for the name
                     histo_name_recomp = short_histo_names[0]
-                    if checkRecompInName(histo_name_recomp): # TO BE ENDED
-                        print("RECOMP")
-                    histo_1 = h1.Get(short_histo_names[0]) # tree_path + 
-                    histo_2 = h2.Get(short_histo_names[0])
-                    PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], "gifs/" + short_histo_names[0] + ".gif")
+                    #print "dataSets_finalFolder_creation : histo2 name = %s" % short_histo_names[0]
+                    histo_2 = h2.Get(short_histo_names[0]) #  
+                    if checkRecompInName(histo_name_recomp): # 
+                        #print("RECOMP")
+                        short_histo_names[0] = histo_name_recomp.replace("_recomp", "")
+                        gif_name = "gifs/" + short_histo_names[0] + "_recomp.gif"
+                    
+                    #print "dataSets_finalFolder_creation : histo1 name = %s" % short_histo_names[0]
+                    histo_1 = h1.Get(short_histo_names[0]) #  
+                    if checkRecompInName(histo_name_recomp): #
+                        # we inverse histo1 & histo2 in order to keep the term "recomputed" into the title.
+                        PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name)
+                    else:
+                        PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name)
                     
                     if ( lineFlag ):
                         wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
@@ -863,17 +873,18 @@ def updateLabelResumeSelected(self):
     selectedText += "<tr>"
     if (self.selectedRelDatasets == self.selectedRefDatasets):
         self.okToPublishDatasets = self.selectedRelDatasets
-        self.okToDisplayDatasets = self.selectedRelDatasets
+#        self.okToDisplayDatasets = self.selectedRelDatasets
         selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
     else: # need to extract common terms in blue and others in black (red?)
-        (self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
-        selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
+        #(self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
+        self.okToPublishDatasets = extractDatasets(self)
+        #selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
     selectedText += "<td>  </td>"
-    selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
+    #selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
     selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
     selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
     selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
-    selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
+    #selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
     selectedText += "</tr></table>"
             
     self.labelResumeSelected.clear() # 

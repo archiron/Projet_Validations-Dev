@@ -25,12 +25,12 @@ def DataSetsFilter_FullRECO(self):
     table=[
     ["SingleElectronPt10", 1], # 1 : displayed
     ["SingleElectronPt10_UP15", 0], 
-    ["SingleElectronPt35", 1],
+    ["SingleElectronPt35", 0],
     ["SingleElectronPt35_UP15", 0], # 0 : not displayed
     ["SingleElectronPt1000", 1],
-    ["QCD_Pt_80_120_13", 1],
-    ["TTbar_13", 1],
-    ["ZEE_13", 1],
+    ["QCD_Pt_80_120_13", 0],
+    ["TTbar_13", 0],
+    ["ZEE_13", 0],
     ]
     return table
 
@@ -146,7 +146,7 @@ def extractDatasets(self):
     extraction = extraction[2:]
     extractionDisplay = extractionDisplay[2:]
     
-    return extraction, extractionDisplay
+    return extraction #, extractionDisplay
     
 def extractDatasetsFastvsFull(self): # do not verify if checkFastvsFull(self) !! MUST be called inside a if(checkFastvsFull(self)): !!
     extractionFastvsFull = ""
@@ -295,7 +295,8 @@ def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
     else: # general
         if self.checkSpecTarget1.isChecked(): # RECO
             if self.checkSpecReference4.isChecked(): # RECO vs miniAOD
-                t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
+                #t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
+                t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt' # we have only miniAOD histos to compare.
                 t_ref = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
                 tp_rel = 'ElectronMcSignalValidator'
                 tp_ref = 'ElectronMcSignalValidatorMiniAOD'

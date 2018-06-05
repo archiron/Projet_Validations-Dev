@@ -156,9 +156,13 @@ def createPicture(histo1, histo2, scaled, err, filename):
     return
     
 def createPicture2(histo1, histo2, scaled, err, filename):
+    print "createPicture2"
+    print "createPicture2 : %s" % filename
+    #print "histo1 : %s" % histo1
+    #print "histo2 : %s" % histo2
     new_entries = histo1.GetEntries()
     ref_entries = histo2.GetEntries()
-    #print("new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
+    print("createPicture2 : new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
        
     if ((scaled =="1") and (new_entries != 0) and (ref_entries != 0)):
         rescale_factor = new_entries / ref_entries
@@ -168,8 +172,8 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     if (filename == "h_ele_charge"):
        n_ele_charge = histo1.GetEntries()
        
-    cnv2 = ROOT.TCanvas("canvas", "", 960, 900)    
-    cnv2.SetFillColor(10)
+    cnv = ROOT.TCanvas("canvas", "", 960, 900)    
+    cnv.SetFillColor(10)
     
     pad1 = ROOT.TPad("pad1", "pad1", 0, 0.25, 1, 1.0) # ,0,0,0
     pad1.SetBottomMargin(0.05)
@@ -184,7 +188,7 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     
     histo1.SetStats(1)
     histo1.Draw(newDrawOptions) # 
-    RenderHisto(histo1, cnv2)
+    RenderHisto(histo1, cnv)
     if ("ELE_LOGY" in histo1.GetOption() and histo1.GetMaximum() > 0):
         pad1.SetLogy(1)
     gPad.Update()
@@ -193,10 +197,10 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     gPad.Update()
     histo2.Draw("sames hist") # ""  same  
     histo2.SetStats(1)
-    RenderHisto(histo2, cnv2)
+    RenderHisto(histo2, cnv)
     if ("ELE_LOGY" in histo2.GetOption() and histo2.GetMaximum() > 0):
         pad1.SetLogy(1)
-    cnv2.Update()
+    cnv.Update()
     statBox2 = histo2.GetListOfFunctions().FindObject("stats")
     statBox2.SetTextColor(kBlue)
     y1 = statBox1.GetY1NDC()
@@ -211,7 +215,7 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     histo1.Draw(newDrawOptions)
     histo2.Draw("sames hist")
 
-    cnv2.cd()
+    cnv.cd()
     pad2 = ROOT.TPad("pad2", "pad2", 0, 0.05, 1, 0.25) # ,0,0,0
     pad2.SetTopMargin(0.025)
     pad2.SetBottomMargin(0.2)
@@ -255,12 +259,13 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     histo3.GetXaxis().SetLabelFont(43) # Absolute font size in pixel (precision 3)
     histo3.GetXaxis().SetLabelSize(15)
    
-    cnv2.Draw()
-    cnv2.Update()
+    cnv.Draw()
+    cnv.Update()
 
-    cnv2.SaveAs(filename)
-#    cnv2.Closed()
-        
+    cnv.SaveAs(filename)
+#    cnv.Closed()
+    print "createPicture2 end OK"
+    
     return
         
 def createWebPage(self):

@@ -20,7 +20,7 @@ from functions import sub_releases, sub_releases2, list_search_5
 from functions import checkFastvsFull, getCheckedOptions, getCheckedRadioButton
 from functions import checkFileName, newName, updateLabelResumeSelected, updateLabelResume
 from functions import changeRef2Tmp, changeTmp2Ref
-from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation
+from Datasets_default import DataSetsFilter, checkCalculValidation # extractDatasets, extractDatasetsFastvsFull, 
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList
 from functionGui import fillQLW_rel1, fillQLW_rel2_rel, fillQLW_rel2_ref 
@@ -36,7 +36,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # have corrected the Pt10/Pt1000 bug for the list of the root files.
+        self.setWindowTitle(self.version) # correction for recomp picture name. removed okToDisplayDatasets
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -494,7 +494,7 @@ class Gev(QWidget):
             
             print "checkTaskCounter 3 : self.selectedDataSets = %s" % self.selectedDataSets
             print "checkTaskCounter 3 : self.okToPublishDatasets = %s" % self.okToPublishDatasets
-            print "checkTaskCounter 3 : self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
+            #print "checkTaskCounter 3 : self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
             
             ## here we have a common (rel & ref) dataset named as self.okToPublishDatasets for Full vs Full or Fast vs Fast. 
             ## we also have a common dataset for Fast vs Full named as self.okToPublishFvsFDatasets -> no more used
