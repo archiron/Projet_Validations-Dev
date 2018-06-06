@@ -12,8 +12,10 @@ import urllib2
 import re
 from getEnv import env
 from Paths_default import *
-from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, checkCalculValidation, testForDataSetsFile
+from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, testForDataSetsFile # checkCalculValidation, 
 from electronCompare import *
+
+from ROOT import TCanvas
 
 def working_dirs_creation(self): # working dir are for resuming the computation. Used for root files loading.
     import errno
@@ -158,14 +160,21 @@ def dataSets_finalFolder_creation(self):
         self.wp.write("config file for reference : %s \n" % it2)
         self.textReport += "config file for target : " + it1 + "<br>"
         self.textReport += "config file for reference : " + it2 + "<br>"
-        print "config file for target : " + it1
-        print "config file for reference : " + it2
+        print "finalFolder_creation : config file for target : " + it1
+        print "finalFolder_creation : config file for reference : " + it2
+        self.wp.write("tree path for target : %s \n" % tp_1)
+        self.wp.write("tree path for reference : %s \n" % tp_2)
+        self.textReport += "tree path for target : " + tp_1 + "<br>"
+        self.textReport += "tree path for reference : " + tp_2 + "<br>"
+        print "finalFolder_creation : tree path for target : " + tp_1
+        print "finalFolder_creation : tree path for reference : " + tp_2
         
         shutil.copy2(it1, 'config_target.txt')
         shutil.copy2(it2, 'config_reference.txt')
         # create gifs pictures & web page
         
         initRootStyle()
+        cnv = TCanvas("canvas")
         
         CMP_CONFIG = 'config_target.txt'
         CMP_TITLE = 'gedGsfElectrons ' + dts
@@ -186,7 +195,7 @@ def dataSets_finalFolder_creation(self):
         #f_rel.ls()
         #print("finalFolder_creation : tp_1 : %s" % tp_1 )
         h1 = getHisto(f_rel, tp_1)
-        h1.ls()
+        #h1.ls()
 
         input_ref_file = self.working_dir_ref + '/' + elt[2]
         #print("finalFolder_creation : input_ref_file : %s" % input_ref_file )
@@ -194,7 +203,7 @@ def dataSets_finalFolder_creation(self):
         #f_ref.ls()
         #print("finalFolder_creation : tp_2 : %s" % tp_2 )
         h2 = getHisto(f_ref, tp_2)
-        h2.ls()
+        #h2.ls()
 
         wp = open('index.html', 'w') # web page
         wp.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n")
@@ -398,11 +407,13 @@ def dataSets_finalFolder_creation(self):
                     
                     #print "dataSets_finalFolder_creation : histo1 name = %s" % short_histo_names[0]
                     histo_1 = h1.Get(short_histo_names[0]) #  
-                    if checkRecompInName(histo_name_recomp): #
+                    if checkRecompInName(histo_name_recomp) and self.checkSpecTarget1.isChecked(): # RECO vs miniAOD. For miniAOD vs miniAOD, we do not do this.
                         # we inverse histo1 & histo2 in order to keep the term "recomputed" into the title.
-                        PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name)
+                        PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name, cnv)
+                        print ("finalFolder_creation : recomp" )
                     else:
-                        PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name)
+                        PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, cnv)
+                        print ("finalFolder_creation : no recomp" )
                     
                     if ( lineFlag ):
                         wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
@@ -526,7 +537,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
             temp = False
     
     # RESUMING
-    #print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
+    print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
     
     return temp
 

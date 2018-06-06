@@ -294,21 +294,27 @@ def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
         tp_ref = tp_rel
     else: # general
         if self.checkSpecTarget1.isChecked(): # RECO
+            #print "testForDataSetsFile : RECO"
             if self.checkSpecReference4.isChecked(): # RECO vs miniAOD
+                #print "testForDataSetsFile : RECO vs miniAOD"
                 #t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
                 t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt' # we have only miniAOD histos to compare.
                 t_ref = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
                 tp_rel = 'ElectronMcSignalValidator'
                 tp_ref = 'ElectronMcSignalValidatorMiniAOD'
             else: # RECO vs RECO
+                #print "testForDataSetsFile : RECO vs RECO"
                 t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
                 t_ref = t_rel
                 tp_rel = 'ElectronMcSignalValidator'
                 tp_ref = 'ElectronMcSignalValidator'
         elif self.checkSpecTarget4.isChecked(): # miniAOD vs miniAOD
+            #print "testForDataSetsFile : miniAOD vs miniAOD"
             t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
             t_ref = t_rel
-            tp_rel = 'ElectronMcSignalValidator'
-            tp_rel = tp_ref
+            tp_rel = 'ElectronMcSignalValidatorMiniAOD'
+            tp_ref = tp_rel
+            print("testForDataSetsFile : tp_rel %s") % tp_rel
+    #print "testForDataSetsFile end OK "
     return [t_rel, t_ref, tp_rel, tp_ref]
 

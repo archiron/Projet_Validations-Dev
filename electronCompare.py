@@ -84,15 +84,15 @@ def initRootStyle():
     eleStyle.cd()
     ROOT.gROOT.ForceStyle()
 
-def PictureChoice(histo1, histo2, scaled, err, filename):
+def PictureChoice(histo1, histo2, scaled, err, filename, cnv):
     if(histo1.InheritsFrom("TH1F")):
-        createPicture2(histo1, histo2, scaled, err, filename)
+        createPicture2(histo1, histo2, scaled, err, filename, cnv)
     elif ( histo1.InheritsFrom("TProfile") ):
-        createPicture2(histo1, histo2, scaled, err, filename)
+        createPicture2(histo1, histo2, scaled, err, filename, cnv)
     else:
-        createPicture(histo1, histo2, scaled, err, filename)
+        createPicture(histo1, histo2, scaled, err, filename, cnv)
         
-def createPicture(histo1, histo2, scaled, err, filename):
+def createPicture(histo1, histo2, scaled, err, filename, cnv):
     new_entries = histo1.GetEntries()
     ref_entries = histo2.GetEntries()
     #print("new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
@@ -104,7 +104,8 @@ def createPicture(histo1, histo2, scaled, err, filename):
     if (filename == "h_ele_charge"):
        n_ele_charge = histo1.GetEntries()
        
-    cnv = TCanvas("canvas","",960,600)    
+    #cnv = TCanvas("canvas","",960,600)    
+    cnv.SetCanvasSize(960, 600)
     cnv.Clear()
     histo2.Draw()
     cnv.Update()
@@ -155,14 +156,14 @@ def createPicture(histo1, histo2, scaled, err, filename):
 
     return
     
-def createPicture2(histo1, histo2, scaled, err, filename):
-    print "createPicture2"
-    print "createPicture2 : %s" % filename
+def createPicture2(histo1, histo2, scaled, err, filename, cnv):
+    #print "createPicture2"
+    #print "createPicture2 : %s" % filename
     #print "histo1 : %s" % histo1
     #print "histo2 : %s" % histo2
     new_entries = histo1.GetEntries()
     ref_entries = histo2.GetEntries()
-    print("createPicture2 : new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
+    #print("createPicture2 : new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
        
     if ((scaled =="1") and (new_entries != 0) and (ref_entries != 0)):
         rescale_factor = new_entries / ref_entries
@@ -172,7 +173,9 @@ def createPicture2(histo1, histo2, scaled, err, filename):
     if (filename == "h_ele_charge"):
        n_ele_charge = histo1.GetEntries()
        
-    cnv = ROOT.TCanvas("canvas", "", 960, 900)    
+    #cnv = ROOT.TCanvas("canvas", "", 960, 900)
+    cnv.SetCanvasSize(960, 900)
+    cnv.Clear()
     cnv.SetFillColor(10)
     
     pad1 = ROOT.TPad("pad1", "pad1", 0, 0.25, 1, 1.0) # ,0,0,0
@@ -264,7 +267,7 @@ def createPicture2(histo1, histo2, scaled, err, filename):
 
     cnv.SaveAs(filename)
 #    cnv.Closed()
-    print "createPicture2 end OK"
+    #print "createPicture2 end OK"
     
     return
         
