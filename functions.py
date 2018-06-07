@@ -410,10 +410,10 @@ def dataSets_finalFolder_creation(self):
                     if checkRecompInName(histo_name_recomp) and self.checkSpecTarget1.isChecked(): # RECO vs miniAOD. For miniAOD vs miniAOD, we do not do this.
                         # we inverse histo1 & histo2 in order to keep the term "recomputed" into the title.
                         PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name, cnv)
-                        print ("finalFolder_creation : recomp" )
+                        #print ("finalFolder_creation : recomp" )
                     else:
                         PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, cnv)
-                        print ("finalFolder_creation : no recomp" )
+                        #print ("finalFolder_creation : no recomp" )
                     
                     if ( lineFlag ):
                         wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
@@ -537,7 +537,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
             temp = False
     
     # RESUMING
-    print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
+    #print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
     
     return temp
 

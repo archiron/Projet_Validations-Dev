@@ -9,6 +9,7 @@ from sys import argv
 argv.append( '-b-' )
 import ROOT
 ROOT.gROOT.SetBatch(True)
+ROOT.gErrorIgnoreLevel = ROOT.kWarning # remove info like : Info in <TCanvas::Print>: gif file gifs/h_ele_vertexPhi.gif has been created
 argv.remove( '-b-' )
 
 from getEnv import env
@@ -230,7 +231,7 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv):
     histo3 = histo1.Clone("histo3")
     histo3.SetLineColor(kBlack)
     histo3.SetMaximum(2.)
-    histo3.Sumw2()
+    #histo3.Sumw2()
     histo3.SetStats(0)
     histo3.Divide(histo2)
     histo3.SetMarkerStyle(21)

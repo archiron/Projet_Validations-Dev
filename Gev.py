@@ -36,11 +36,9 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # transpose canvas into dataSets_finalFolder_creation() in order to avoid a lot of warnings.
-        # only rremain :
-        #Info in <TCanvas::Print>: gif file gifs/h_ele_outerP_mode.gif has been created
-        #TH1F::Sumw2:0: RuntimeWarning: Sum of squares of weights structure already created
-        # miniBug for miniAOD vs miniAOD & recomp has been corrected (included a buf for tree path).
+        self.setWindowTitle(self.version) # on panel 3, when selecting DataSet, GT for release & DataSet, GT for reference we cannot select on numbers right to the form.
+        # remove info like : Info in <TCanvas::Print>: gif file gifs/h_ele_vertexPhi.gif has been created for in pictures creations.
+        # also remove : TH1F::Sumw2:0: RuntimeWarning: Sum of squares of weights structure already created by commenting #histo3.Sumw2() in electronComapre.py
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice

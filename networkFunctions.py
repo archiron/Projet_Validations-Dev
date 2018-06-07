@@ -8,47 +8,6 @@ from getEnv import env
 from Paths_default import *
 from functions import clean_collections2 # 
 
-def auth_wget2(url, chunk_size=2097152):
-    from os.path import basename, isfile
-    from optparse import OptionParser
-    from urllib2 import build_opener, Request
-    """Returns the content of specified URL, which requires authentication.
-    If the content is bigger than 1MB, then save it to file.
-    """
-    try:
-        from Utilities.RelMon.authentication import X509CertOpen
-    except ImportError:
-        from authentication import X509CertOpen
-
-#    print "auth_wget2 : url= ", url
-    
-    opener = build_opener(X509CertOpen())
-    url_file = opener.open(Request(url))
-    size = int(url_file.headers["Content-Length"])
-
-    if size < 2097152:   # if File size < 1MB
-        filename = basename(url)    #still download
-        readed = url_file.read()    ## and then check if its not an empty dir (parent directory)
-        if filename != '':
-            outfile = open(filename, 'wb')  #then write File to local system
-            outfile.write(readed)
-        return readed
-
-    filename = basename(url)
-
-    if isfile("./%s" % filename):
-        print '%s. Exists on disk. Skipping.' % (filename)
-        return
-
-    print ' Downloading... %s' % (filename)
-    file = open(filename, 'wb')
-    chunk = url_file.read(chunk_size)
-    while chunk:
-        file.write(chunk)
-        chunk = url_file.read(chunk_size)
-    print '%s.  Done.' % (filename)
-    file.close()
-
 def cmd_fetch_0(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
     # fetchall_from_DQM_v2.py -r CMSSW_7_0_0 -e='TTbar,PU,25' --mc --dry
     import re
@@ -224,7 +183,57 @@ def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthre
     
     return 
     
-def cmd_load_files(self):
+def auth_wget2(url, chunk_size=2097152):
+    from os.path import basename, isfile
+    from optparse import OptionParser
+    from urllib2 import build_opener, Request
+    """Returns the content of specified URL, which requires authentication.
+    If the content is bigger than 1MB, then save it to file.
+    """
+    
+    print "auth_wget2"
+    
+    try:
+        from Utilities.RelMon.authentication import X509CertOpen
+    except ImportError:
+        from authentication import X509CertOpen
+
+    print "auth_wget2 : url= ", url
+    
+    opener = build_opener(X509CertOpen())
+    url_file = opener.open(Request(url))
+    size = int(url_file.headers["Content-Length"])
+    print "auth_wget2_fetch_2 : size= ", size
+    
+#   NOT USED
+#    print("auth_wget2 : test size")
+#    if size < 2097152:   # if File size < 1MB
+#        filename = basename(url)    #still download
+#        readed = url_file.read()    ## and then check if its not an empty dir (parent directory)
+#        if filename != '':
+#            outfile = open(filename, 'wb')  #then write File to local system
+#            outfile.write(readed)
+#        return readed
+
+    filename = basename(url)
+    print("auth_wget2 : filename = %s" % filename)
+
+    print("auth_wget2 : test if exist")
+    if isfile("./%s" % filename):
+        print '%s. Exists on disk. Skipping.' % (filename)
+        return
+
+    print 'auth_wget2 : Downloading... %s' % (filename)
+    file = open(filename, 'wb')
+    chunk = url_file.read(chunk_size)
+    while chunk:
+        file.write(chunk)
+        chunk = url_file.read(chunk_size)
+    print 'auth_wget2 : %s.  Done.' % (filename)
+    file.close()
+    print "auth_wget2 end OK"
+
+def cmd_fetch_2(option_is_from_data, option_release, option_mthreads, filedir_url, selectedFilesList):
     import re
     import sys
     import os
@@ -235,6 +244,35 @@ def cmd_load_files(self):
     from optparse import OptionParser
     from urllib2 import build_opener, Request
     
+    print "cmd_fetch_2"
+
+    try:
+        from Utilities.RelMon.authentication import X509CertOpen
+    except ImportError:
+        from authentication import X509CertOpen
+
+    print("cmd_fetch_2 : filedir_url = %s" % filedir_url)
+
+    print("cmd_fetch_2 : using Pool(%d)" % option_mthreads)
+    pool = Pool(option_mthreads)
+    print("cmd_fetch_2 : using map")
+    pool.map(auth_wget2, [str(filedir_url) + name for name in selectedFilesList])
+    #for name in self.selectedFilesList:
+    #    name_temp = str(filedir_url) + name
+    #    print("cmd_fetch_2 : name_temp : %s" % name_temp)
+    #    pool.map(auth_wget2, [name_temp])
+
+    pool.close()
+    pool.join()
+    
+    print "cmd_fetch_2 end OK"
+    return
+    
+def cmd_load_files(self):
+    import re
+    import sys
+    import os
+
     print "cmd_load_files"
     self.wp.write("cmd_load_files : \n")
     cmsenv = env()
@@ -249,46 +287,56 @@ def cmd_load_files(self):
     ## Define options
     option_is_from_data = "mc" # mc ou data
     option_mthreads = 3
-#    option_dry_run = False # False telecharge , True liste
         
-    try:
-        from Utilities.RelMon.authentication import X509CertOpen
-    except ImportError:
-        from authentication import X509CertOpen
-
     ## Use options
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
     
-    ## MUST TEST IF ARRAYS ARE NOT EMPTY
-    
     #case 1 self.my_choice_rel_0 : RELEASE
     print "cmd_load_files : case 1 self.my_choice_rel_0 : RELEASE"
+    option_release_rel = str(self.my_choice_rel_0)
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_rel_0 + '/'
     for line in self.releasesList_rel_5:
+        print("cmd_load_files : self.releasesList_rel_5 : %s" % line)
         if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
-            #print "cmd_load_files : " + filedir_url + line + " removed"
+            print "cmd_load_files : " + filedir_url + line + " removed"
             temp_toBeRemoved.append(line)
+    print("cmd_load_files : self.releasesList_rel_5 : remove lines")
     for line in temp_toBeRemoved:
         self.releasesList_rel_5.remove(line)
+    #print("cmd_load_files : copy self.releasesList_rel_5 to selected_files_rel")
+    selected_files_rel = self.releasesList_rel_5
+    print("cmd_load_files : selected_files_rel = %s" % str(selected_files_rel))
+    
+    #print("cmd_load_files : change directory")
     os.chdir(self.working_dir_rel)   # Change current working directory to release directory
-    pool = Pool(option_mthreads)
-    pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_rel_5])
+    
+    print("cmd_load_files : cmd_fetch_2")
+    cmd_fetch_2(option_is_from_data, option_release_rel, option_mthreads, filedir_url, selected_files_rel)
 
     #case 2 self.my_choice_ref_0 : REFERENCE
     temp_toBeRemoved[:] = []# clear the temp array
     print "cmd_load_files : case 2 self.my_choice_ref_0 : REFERENCE"
+    option_release_ref = str(self.my_choice_ref_0) 
     filedir_url = BaseURL(self) + relvaldir + '/' + self.my_choice_ref_0 + '/'
     for line in self.releasesList_ref_5:
+        print("cmd_load_files : self.releasesList_ref_5 : %s" % line)
         if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "ref"):
-            #print "cmd_load_files : " + filedir_url + line + " removed"
+            print "cmd_load_files : " + filedir_url + line + " removed"
             temp_toBeRemoved.append(line)
+    print("cmd_load_files : self.releasesList_ref_5 : remove lines")
     for line in temp_toBeRemoved:
         self.releasesList_ref_5.remove(line)
+    #print("cmd_load_files : copy self.releasesList_ref_5 to selected_files_ref")
+    selected_files_ref = self.releasesList_ref_5
+    print("cmd_load_files : selected_files_ref = %s" % str(selected_files_ref))
+    
+    #print("cmd_load_files : change directory")
     os.chdir(self.working_dir_ref)   # Change current working directory to release directory
-    pool = Pool(option_mthreads) # need to be here. If not, download is made into previous folder (i.e. self.working_dir_rel).
-    pool.map(auth_wget2, [str(filedir_url) + name for name in self.releasesList_ref_5])
+    
+    print("cmd_load_files : cmd_fetch_2")
+    cmd_fetch_2(option_is_from_data, option_release_ref, option_mthreads, filedir_url, selected_files_ref)
     
     print "cmd_load_files end OK"
     return
