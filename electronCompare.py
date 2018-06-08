@@ -29,10 +29,10 @@ def getHisto(file, tp):
     t5 = t4.Get(tp)
     return t5
 
-def RenderHisto(histo, canvas):
+def RenderHisto(histo, self):
     
     if ("ELE_LOGY" in histo.GetOption() and histo.GetMaximum() > 0):
-        canvas.SetLogy(1)
+        self.cnv.SetLogy(1)
     histo_name_flag = 1 ; # use 0 to switch off
     if ( histo.InheritsFrom("TH2") ):
         gStyle.SetPalette(1)
@@ -41,6 +41,10 @@ def RenderHisto(histo, canvas):
         gStyle.SetOptStat(110+histo_name_flag)
     else: # TH1
         gStyle.SetOptStat(111110+histo_name_flag)
+
+def initRoot(self):
+    initRootStyle()
+    self.cnv = TCanvas("canvas")    
 
 def initRootStyle():
     #eleStyle = gStyle
@@ -85,15 +89,15 @@ def initRootStyle():
     eleStyle.cd()
     ROOT.gROOT.ForceStyle()
 
-def PictureChoice(histo1, histo2, scaled, err, filename, cnv):
+def PictureChoice(histo1, histo2, scaled, err, filename, self):
     if(histo1.InheritsFrom("TH1F")):
-        createPicture2(histo1, histo2, scaled, err, filename, cnv)
+        createPicture2(histo1, histo2, scaled, err, filename, self)
     elif ( histo1.InheritsFrom("TProfile") ):
-        createPicture2(histo1, histo2, scaled, err, filename, cnv)
+        createPicture2(histo1, histo2, scaled, err, filename, self)
     else:
-        createPicture(histo1, histo2, scaled, err, filename, cnv)
+        createPicture(histo1, histo2, scaled, err, filename, self)
         
-def createPicture(histo1, histo2, scaled, err, filename, cnv):
+def createPicture(histo1, histo2, scaled, err, filename, self):
     new_entries = histo1.GetEntries()
     ref_entries = histo2.GetEntries()
     #print("new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
@@ -105,17 +109,17 @@ def createPicture(histo1, histo2, scaled, err, filename, cnv):
     if (filename == "h_ele_charge"):
        n_ele_charge = histo1.GetEntries()
        
-    #cnv = TCanvas("canvas","",960,600)    
-    cnv.SetCanvasSize(960, 600)
-    cnv.Clear()
+    #self.cnv = TCanvas("canvas","",960,600)    
+    self.cnv.SetCanvasSize(960, 600)
+    self.cnv.Clear()
     histo2.Draw()
-    cnv.Update()
+    self.cnv.Update()
     gMax2 = ROOT.gPad.GetUymax()
     #print "    histo 2 max : ", ROOT.gPad.GetUymax(), gMax2
 
-    cnv.Clear()
+    self.cnv.Clear()
     histo1.Draw()
-    cnv.Update()
+    self.cnv.Update()
     gMax1 = ROOT.gPad.GetUymax()
     #print "    histo 1 max : ", ROOT.gPad.GetUymax(), gMax1
 
@@ -123,12 +127,12 @@ def createPicture(histo1, histo2, scaled, err, filename, cnv):
         var_1 = log10( abs(gMax1 - gMax2) )
         #print "log = %8.2f" % var_1
 
-    cnv.Clear()
+    self.cnv.Clear()
     histo1.Draw()
     histo1.SetMarkerColor(kRed)
     histo1.SetLineWidth(3)
     histo1.SetStats(1)
-    RenderHisto(histo1, cnv)
+    RenderHisto(histo1, self)
     gPad.Update()
     statBox1 = histo1.GetListOfFunctions().FindObject("stats")
     histo1.SetLineColor(kRed)
@@ -138,8 +142,8 @@ def createPicture(histo1, histo2, scaled, err, filename, cnv):
     histo2.Draw()
     histo2.SetLineWidth(3) 
     histo2.SetStats(1)
-    RenderHisto(histo2, cnv)
-    cnv.Update()
+    RenderHisto(histo2, self)
+    self.cnv.Update()
     statBox2 = histo2.GetListOfFunctions().FindObject("stats")
     histo2.SetLineColor(kBlue)
     histo2.SetMarkerColor(kBlue)
@@ -150,14 +154,14 @@ def createPicture(histo1, histo2, scaled, err, filename, cnv):
     statBox2.SetY2NDC(y1)
     histo1.Draw()
     histo2.Draw("histsames")
-    cnv.Draw()
-    cnv.Update()
+    self.cnv.Draw()
+    self.cnv.Update()
     
-    cnv.SaveAs(filename)
+    self.cnv.SaveAs(filename)
 
     return
     
-def createPicture2(histo1, histo2, scaled, err, filename, cnv):
+def createPicture2(histo1, histo2, scaled, err, filename, self):
     #print "createPicture2"
     #print "createPicture2 : %s" % filename
     #print "histo1 : %s" % histo1
@@ -174,10 +178,10 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv):
     if (filename == "h_ele_charge"):
        n_ele_charge = histo1.GetEntries()
        
-    #cnv = ROOT.TCanvas("canvas", "", 960, 900)
-    cnv.SetCanvasSize(960, 900)
-    cnv.Clear()
-    cnv.SetFillColor(10)
+    #self.cnv = ROOT.TCanvas("canvas", "", 960, 900)
+    self.cnv.SetCanvasSize(960, 900)
+    self.cnv.Clear()
+    self.cnv.SetFillColor(10)
     
     pad1 = ROOT.TPad("pad1", "pad1", 0, 0.25, 1, 1.0) # ,0,0,0
     pad1.SetBottomMargin(0.05)
@@ -192,7 +196,7 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv):
     
     histo1.SetStats(1)
     histo1.Draw(newDrawOptions) # 
-    RenderHisto(histo1, cnv)
+    RenderHisto(histo1, self)
     if ("ELE_LOGY" in histo1.GetOption() and histo1.GetMaximum() > 0):
         pad1.SetLogy(1)
     gPad.Update()
@@ -201,10 +205,10 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv):
     gPad.Update()
     histo2.Draw("sames hist") # ""  same  
     histo2.SetStats(1)
-    RenderHisto(histo2, cnv)
+    RenderHisto(histo2, self)
     if ("ELE_LOGY" in histo2.GetOption() and histo2.GetMaximum() > 0):
         pad1.SetLogy(1)
-    cnv.Update()
+    self.cnv.Update()
     statBox2 = histo2.GetListOfFunctions().FindObject("stats")
     statBox2.SetTextColor(kBlue)
     y1 = statBox1.GetY1NDC()
@@ -219,7 +223,7 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv):
     histo1.Draw(newDrawOptions)
     histo2.Draw("sames hist")
 
-    cnv.cd()
+    self.cnv.cd()
     pad2 = ROOT.TPad("pad2", "pad2", 0, 0.05, 1, 0.25) # ,0,0,0
     pad2.SetTopMargin(0.025)
     pad2.SetBottomMargin(0.2)
@@ -263,11 +267,11 @@ def createPicture2(histo1, histo2, scaled, err, filename, cnv):
     histo3.GetXaxis().SetLabelFont(43) # Absolute font size in pixel (precision 3)
     histo3.GetXaxis().SetLabelSize(15)
    
-    cnv.Draw()
-    cnv.Update()
+    self.cnv.Draw()
+    self.cnv.Update()
 
-    cnv.SaveAs(filename)
-#    cnv.Closed()
+    self.cnv.SaveAs(filename)
+#    self.cnv.Closed()
     #print "createPicture2 end OK"
     
     return

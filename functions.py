@@ -160,21 +160,22 @@ def dataSets_finalFolder_creation(self):
         self.wp.write("config file for reference : %s \n" % it2)
         self.textReport += "config file for target : " + it1 + "<br>"
         self.textReport += "config file for reference : " + it2 + "<br>"
-        print "finalFolder_creation : config file for target : " + it1
-        print "finalFolder_creation : config file for reference : " + it2
+        #print "finalFolder_creation : config file for target : " + it1
+        #print "finalFolder_creation : config file for reference : " + it2
         self.wp.write("tree path for target : %s \n" % tp_1)
         self.wp.write("tree path for reference : %s \n" % tp_2)
         self.textReport += "tree path for target : " + tp_1 + "<br>"
         self.textReport += "tree path for reference : " + tp_2 + "<br>"
-        print "finalFolder_creation : tree path for target : " + tp_1
-        print "finalFolder_creation : tree path for reference : " + tp_2
+        #print "finalFolder_creation : tree path for target : " + tp_1
+        #print "finalFolder_creation : tree path for reference : " + tp_2
         
         shutil.copy2(it1, 'config_target.txt')
         shutil.copy2(it2, 'config_reference.txt')
         # create gifs pictures & web page
         
-        initRootStyle()
-        cnv = TCanvas("canvas")
+        #initRoot() # trafered to Gev.py init part
+        #initRootStyle()
+        #cnv = TCanvas("canvas")
         
         CMP_CONFIG = 'config_target.txt'
         CMP_TITLE = 'gedGsfElectrons ' + dts
@@ -409,11 +410,11 @@ def dataSets_finalFolder_creation(self):
                     histo_1 = h1.Get(short_histo_names[0]) #  
                     if checkRecompInName(histo_name_recomp) and self.checkSpecTarget1.isChecked(): # RECO vs miniAOD. For miniAOD vs miniAOD, we do not do this.
                         # we inverse histo1 & histo2 in order to keep the term "recomputed" into the title.
-                        PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name, cnv)
-                        #print ("finalFolder_creation : recomp" )
+                        PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name, self)
+                        print ("finalFolder_creation : recomp" )
                     else:
-                        PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, cnv)
-                        #print ("finalFolder_creation : no recomp" )
+                        PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, self)
+                        print ("finalFolder_creation : no recomp" )
                     
                     if ( lineFlag ):
                         wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )

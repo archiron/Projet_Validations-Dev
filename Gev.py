@@ -26,6 +26,7 @@ from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, cle
 from functionGui import fillQLW_rel1, fillQLW_rel2_rel, fillQLW_rel2_ref 
 from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevButtons, enableStdDevButtons, disableLocationButtons, enableLocationButtons, comparisonRules
 from networkFunctions import cmd_load_files
+from electronCompare import initRoot
 		
 #############################################################################
 class Gev(QWidget):
@@ -36,9 +37,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # on panel 3, when selecting DataSet, GT for release & DataSet, GT for reference we cannot select on numbers right to the form.
-        # remove info like : Info in <TCanvas::Print>: gif file gifs/h_ele_vertexPhi.gif has been created for in pictures creations.
-        # also remove : TH1F::Sumw2:0: RuntimeWarning: Sum of squares of weights structure already created by commenting #histo3.Sumw2() in electronComapre.py
+        self.setWindowTitle(self.version) # found that the seg fault bug is due to ROOT ! create and move an initRoot() function in the initGpBottom
+        # part of the Gev class. This not recreate a canvas each time we launch the createPicture() function.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -69,6 +69,8 @@ class Gev(QWidget):
         self.layout_general.addLayout(self.layout_Selected)
         self.layout_general.addLayout(self.layoutH_boutons)
         self.setLayout(self.layout_general)
+        
+        initRoot(self)
 
     def radio11Clicked(self):
         self.radio11.setChecked(True)
@@ -589,7 +591,8 @@ class Gev(QWidget):
             self.wp.write("begin files loading !\n")
             self.textReport += "begin files loading !" + "<br>"
 
-            cmd_load_files(self) # no test if the folders are created. We have an error output in PathUpdate() if the was a pbm with the folder creation.
+            #cmd_load_files(self) # no test if the folders are created. We have an error output in PathUpdate() if the was a pbm with the folder creation.
+            self.cmd_load_files_2()
             # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
             selectedText += "All files loaded <br>"
             self.labelResumeSelected.setText(self.trUtf8(selectedText))
@@ -877,3 +880,76 @@ class Gev(QWidget):
         print "temp_rl : %s" % self.temp_rl
         print "temp_rf : %s" % self.temp_rf
     
+    def cmd_load_files_2(self):
+        import re
+        import sys
+        import os
+        from functions import clean_collections2
+        from networkFunctions import cmd_fetch_2
+        
+        print "cmd_load_files 2"
+        self.wp.write("cmd_load_files 2 : \n")
+   
+#    print "cmd_load_files : self.validationType1 = ",  self.validationType1 # temp
+#    print "cmd_load_files : self.validationType2 = ",  self.validationType2 # temp
+#    print "cmd_load_files : self.validationType3 = ",  self.validationType3 # temp
+        validationType_2 = self.validationType2
+        validationType_3 = self.validationType3
+        temp_toBeRemoved = []
+
+    ## Define options
+        option_is_from_data = "mc" # mc ou data
+        option_mthreads = 3
+        
+    ## Use options
+        relvaldir = 'RelVal'
+        if option_is_from_data == 'data':
+            relvaldir = 'RelValData'
+    
+    #case 1 self.my_choice_rel_0 : RELEASE
+        print("cmd_load_files 2 : case 1 %s : RELEASE" % self.my_choice_rel_0)
+        option_release_rel = str(self.my_choice_rel_0)
+        filedir_url = BaseURL(self) + relvaldir + '/' + str(self.my_choice_rel_0) + '/'
+        for line in self.releasesList_rel_5:
+            print("cmd_load_files : self.releasesList_rel_5 : %s" % line)
+            if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
+                print "cmd_load_files : " + filedir_url + line + " removed"
+                temp_toBeRemoved.append(line)
+    #print("cmd_load_files : self.releasesList_rel_5 : remove lines")
+        for line in temp_toBeRemoved:
+            self.releasesList_rel_5.remove(line)
+    #print("cmd_load_files : copy self.releasesList_rel_5 to selected_files_rel")
+        selected_files_rel = self.releasesList_rel_5
+    #print("cmd_load_files : selected_files_rel = %s" % str(selected_files_rel))
+    
+    #print("cmd_load_files : change directory")
+        os.chdir(self.working_dir_rel)   # Change current working directory to release directory
+    
+        print("cmd_load_files : cmd_fetch_2")
+        cmd_fetch_2(option_is_from_data, option_release_rel, option_mthreads, filedir_url, selected_files_rel)
+
+    #case 2 self.my_choice_ref_0 : REFERENCE
+        temp_toBeRemoved[:] = []# clear the temp array
+        print("cmd_load_files : case 2 %s : REFERENCE" % self.my_choice_ref_0)
+        option_release_ref = str(self.my_choice_ref_0) 
+        filedir_url = BaseURL(self) + relvaldir + '/' + str(self.my_choice_ref_0) + '/'
+        for line in self.releasesList_ref_5:
+            print("cmd_load_files : self.releasesList_ref_5 : %s" % line)
+            if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "ref"):
+                print "cmd_load_files : " + filedir_url + line + " removed"
+                temp_toBeRemoved.append(line)
+    #print("cmd_load_files : self.releasesList_ref_5 : remove lines")
+        for line in temp_toBeRemoved:
+            self.releasesList_ref_5.remove(line)
+    #print("cmd_load_files : copy self.releasesList_ref_5 to selected_files_ref")
+        selected_files_ref = self.releasesList_ref_5
+    #print("cmd_load_files : selected_files_ref = %s" % str(selected_files_ref))
+    
+    #print("cmd_load_files : change directory")
+        os.chdir(self.working_dir_ref)   # Change current working directory to release directory
+    
+        print("cmd_load_files : cmd_fetch_2")
+        cmd_fetch_2(option_is_from_data, option_release_ref, option_mthreads, filedir_url, selected_files_ref)
+    
+        print "cmd_load_files end OK"
+        return
