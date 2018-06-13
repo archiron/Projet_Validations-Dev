@@ -37,8 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # found that the seg fault bug is due to ROOT ! create and move an initRoot() function in the initGpBottom
-        # part of the Gev class. This not recreate a canvas each time we launch the createPicture() function.
+        self.setWindowTitle(self.version) # get the correct number of self.tasks_counter in showHelp.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -848,7 +847,10 @@ class Gev(QWidget):
         label2Help = QLabel()
         label2Help.setText('\n')
         label3Help = QLabel()
-        label3Help.setText('<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_1\">Step 1</a>')
+        wikiText = '<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_' + str(self.tasks_counter + 1) + '\">Step_' + str(self.tasks_counter + 1) + '</a>'
+        #print(wikiText)
+        #label3Help.setText('<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_1\">Step 1</a>')
+        label3Help.setText(wikiText)
         label3Help.setOpenExternalLinks(True)
         layoutHelp.addWidget(labellHelp)
         layoutHelp.addWidget(label2Help)
