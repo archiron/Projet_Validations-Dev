@@ -37,7 +37,10 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # get the correct number of self.tasks_counter in showHelp.
+        self.setWindowTitle(self.version) # Add a correction for dataset name folders : moving from self.validationType2 + '_' + dataset name 
+        # to self.validationType2 + '-' + self.validationType3 + '_' + dataset name) where self.validationType2 & self.validationType3 can be 
+        # RECO, PU25, PUpmx25, miniAOD. This can be more clear to see what have been done.
+.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice

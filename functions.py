@@ -127,7 +127,8 @@ def dataSets_finalFolder_creation(self):
         #QtCore.QCoreApplication.processEvents() 
         
 #    for dts in self.okToPublishDatasets.split(','):
-        dataSetFolder = str(self.validationType2 + '_' + dts)
+        #dataSetFolder = str(self.validationType2 + '_' + dts)
+        dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
         print '%s : %s' % (dts, dataSetFolder)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
             os.makedirs(dataSetFolder) # create reference folder
@@ -411,7 +412,7 @@ def dataSets_finalFolder_creation(self):
                     if checkRecompInName(histo_name_recomp) and self.checkSpecTarget1.isChecked(): # RECO vs miniAOD. For miniAOD vs miniAOD, we do not do this.
                         # we inverse histo1 & histo2 in order to keep the term "recomputed" into the title.
                         PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name, self)
-                        print ("finalFolder_creation : recomp" )
+                        #print ("finalFolder_creation : recomp" )
                     else:
                         PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, self)
                         print ("finalFolder_creation : no recomp" )
