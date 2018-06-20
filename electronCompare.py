@@ -20,7 +20,7 @@ from math import log10
 
 def getHisto(file, tp):
     #file.ls()
-    print ("tree path part = %s" % tp)
+    #print ("tree path part = %s" % tp)
     t1 = file.Get("DQMData")
     t2 = t1.Get("Run 1")
     t3 = t2.Get("EgammaV")

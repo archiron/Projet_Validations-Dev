@@ -37,10 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # Add a correction for dataset name folders : moving from self.validationType2 + '_' + dataset name 
-        # to self.validationType2 + '-' + self.validationType3 + '_' + dataset name) where self.validationType2 & self.validationType3 can be 
-        # RECO, PU25, PUpmx25, miniAOD. This can be more clear to see what have been done.
-.
+        self.setWindowTitle(self.version) # correction of a bug between Pt10/Pt1000 root files for web pages creation.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -576,13 +573,40 @@ class Gev(QWidget):
             for dts in self.okToPublishDatasets.split(','):
                 print dts
                 merged_1.append(str(dts))
-            print "***** self.FinalList*****"
-            merged_1b = list(reversed(merged_1)) # merged_1[::-1]
-            print merged_1b
-            self.finalList = map(list, zip(merged_1b, self.releasesList_rel_5, self.releasesList_ref_5))
-            print self.finalList[0][1]
+            #print merged_1
+            print "***** self.FinalList *****"
+            merged_1 = sorted(set(merged_1), reverse=True)
+            #print merged_1
+            #print "-----"
+            #merged_1b = list(reversed(merged_1)) # merged_1[::-1]
+            merged_1b = list(merged_1) # merged_1[::-1]
+            #print merged_1b
+            
+            #####
+            tmp_rel = []
+            tmp_ref = []
+            for it in merged_1b:
+                #print "merged_1b : %s" % it
+                for val in self.releasesList_rel_5:
+                    if ( re.search(str(it + "__"), val) ):
+                        #print "OK %s" % val
+                        tmp_rel.append(val)
+                    #else:
+                    #    print "KO %s" % val
+                for val in self.releasesList_ref_5:
+                    if ( re.search(str(it + "__"), val) ):
+                        #print "OK %s" % val
+                        tmp_ref.append(val)
+                    #else:
+                    #    print "KO %s" % val
+            #####
+            #print "tmp_rel : ", tmp_rel
+            #print "tmp_ref : ", tmp_ref
+            self.finalList = map(list, zip(merged_1b, tmp_rel, tmp_ref))
+            #print "-----"
+            #print self.finalList[0][1]
             print self.finalList
-            print "***** self.FinalList*****"
+            print "***** self.FinalList *****"
 
             # defining/creating paths & folders
             self.PathUpdate()
@@ -689,11 +713,11 @@ class Gev(QWidget):
             for it in tt:
                 print "QGBoxListsUpdate : self.ag.actions()", it.text()
                 if it.isChecked():
-                    print "QGBoxListsUpdate : %s is checked" % it.text()
+                    #print "QGBoxListsUpdate : %s is checked" % it.text()
                     self.selectedDataSets.append(str(it.text()))
                     self.allMenuListDatasetsChecked = True # we need only one Dataset selected
-                else:
-                    print "QGBoxListsUpdate : %s is unchecked" % it.text()
+                #else:
+                    #print "QGBoxListsUpdate : %s is unchecked" % it.text()
             print "QGBoxListsUpdate : selectedDataSets : ", self.selectedDataSets
             print "QGBoxListsUpdate : allMenuListDatasetsChecked : ", self.allMenuListDatasetsChecked
 

@@ -119,7 +119,8 @@ def dataSets_finalFolder_creation(self):
     # create datasets folders
     selectedText = ""
     for i, elt in enumerate(self.finalList):
-#        print elt[0]
+        print("finalFolder_creation : dataset=%s" % elt[0])
+        print("finalFolder_creation : root file=%s" % elt[1])
         dts = elt[0]
         # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
         selectedText += "<strong>" + dts
@@ -184,7 +185,7 @@ def dataSets_finalFolder_creation(self):
         CMP_BLUE_FILE = self.my_choice_ref_1
         image_up = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/up.gif"
         image_point = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/point.gif"
-        tree_path = "/DQMData/Run 1/EgammaV/Run summary/ElectronMcSignalValidator/" # WARNING : must be different for miniAOD
+        #tree_path = "/DQMData/Run 1/EgammaV/Run summary/ElectronMcSignalValidator/" # WARNING : must be different for miniAOD, not used
         # ElectronMcSignalValidator
         # ElectronMcSignalValidatorMiniAOD
         # ElectronMcSignalValidatorPt1000
@@ -415,7 +416,7 @@ def dataSets_finalFolder_creation(self):
                         #print ("finalFolder_creation : recomp" )
                     else:
                         PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, self)
-                        print ("finalFolder_creation : no recomp" )
+                        #print ("finalFolder_creation : no recomp" )
                     
                     if ( lineFlag ):
                         wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
