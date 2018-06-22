@@ -5,13 +5,13 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
-import os,sys,subprocess
+import os,sys,subprocess, datetime
 
 from getEnv import env
 from functions import list_search_0
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.4.3.0'
+    self.version = 'GUI Electron Validations v0.4.3.1'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -68,8 +68,10 @@ def initVariables(self):
     self.refList = []
     self.finalList = []
     
+    now = datetime.datetime.now()
+    globalReportName = self.working_dir_rel + '/report_' + now.strftime("%Y_%m_%d-%H%M%S") + '.txt'
     try:
-        self.wp = open('report.txt', 'w') # report page
+        self.wp = open(globalReportName, 'w') # report page
     except IOError as ioe:
         print "Can not open file! "
         BoiteMessage = QMessageBox()
@@ -77,7 +79,6 @@ def initVariables(self):
         BoiteMessage.setIcon(QMessageBox.Critical)
         BoiteMessage.setWindowTitle("WARNING !")
         BoiteMessage.exec_()
-
     
     self.textReport = ""
     
