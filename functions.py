@@ -79,6 +79,7 @@ def folder_creation(self): # create the folders for the choice. the resuming tex
     m_dir = self.working_dir_rel + "/" + fieldname
     self.wp.write("m_dir : %s\n" % m_dir)
     self.textReport += "m_dir : " + m_dir + "<br>"
+    self.working_dir_report = self.working_dir_rel + "/" + fieldname
     os.chdir(self.working_dir_rel) # going into release dir
     if not os.path.exists(m_dir): # 
         os.makedirs(m_dir) # create reference folder
@@ -118,20 +119,23 @@ def dataSets_finalFolder_creation(self):
     print self.okToPublishDatasets
     # create datasets folders
     selectedText = ""
+    report_name = self.working_dir_report + '/report.olog'
+    wr = open(report_name, 'w') # report page
+    wr.write("Validation report : \n")
+    
     for i, elt in enumerate(self.finalList):
         print("finalFolder_creation : dataset=%s" % elt[0])
         print("finalFolder_creation : root file=%s" % elt[1])
+        wr.write("\ndataset=%s\n" % elt[0])
         dts = elt[0]
         # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
         selectedText += "<strong>" + dts
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
-        #QtCore.QCoreApplication.processEvents() 
         
-#    for dts in self.okToPublishDatasets.split(','):
-        #dataSetFolder = str(self.validationType2 + '_' + dts)
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
         print '%s : %s' % (dts, dataSetFolder)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
+            wr.write("%s does not exist. Creating it\n" % dataSetFolder)
             os.makedirs(dataSetFolder) # create reference folder
             self.wp.write("creating : %s folder\n" % dataSetFolder)
             self.textReport += "creating : " + dataSetFolder + " folder" + "<br>"
@@ -143,6 +147,7 @@ def dataSets_finalFolder_creation(self):
             os.chdir('../')
         else: # dataSetFolder already created
             print "%s already created" % dataSetFolder
+            wr.write("%s already created\n" % dataSetFolder)
             self.wp.write("%s already created\n" % dataSetFolder)
             self.textReport += dataSetFolder + " already created" + "<br>"
             os.chdir(dataSetFolder)
@@ -160,12 +165,16 @@ def dataSets_finalFolder_creation(self):
         [it1, it2, tp_1, tp_2] = testForDataSetsFile(self, dts)
         self.wp.write("config file for target : %s \n" % it1)
         self.wp.write("config file for reference : %s \n" % it2)
+        wr.write("config file for target : %s \n" % it1)
+        wr.write("config file for reference : %s \n" % it2)
         self.textReport += "config file for target : " + it1 + "<br>"
         self.textReport += "config file for reference : " + it2 + "<br>"
         #print "finalFolder_creation : config file for target : " + it1
         #print "finalFolder_creation : config file for reference : " + it2
         self.wp.write("tree path for target : %s \n" % tp_1)
         self.wp.write("tree path for reference : %s \n" % tp_2)
+        wr.write("tree path for target : %s \n" % tp_1)
+        wr.write("tree path for reference : %s \n" % tp_2)
         self.textReport += "tree path for target : " + tp_1 + "<br>"
         self.textReport += "tree path for reference : " + tp_2 + "<br>"
         #print "finalFolder_creation : tree path for target : " + tp_1
@@ -207,6 +216,9 @@ def dataSets_finalFolder_creation(self):
         #print("finalFolder_creation : tp_2 : %s" % tp_2 )
         h2 = getHisto(f_ref, tp_2)
         #h2.ls()
+        wr.write("CMP_CONFIG = %s\n" % CMP_CONFIG)
+        wr.write("input_rel_file = %s\n" % input_rel_file)
+        wr.write("input_ref_file = %s\n" % input_ref_file)
 
         wp = open('index.html', 'w') # web page
         wp.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n")
@@ -439,9 +451,9 @@ def dataSets_finalFolder_creation(self):
         
         selectedText += " : done </strong><br>"
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
-        #QtCore.QCoreApplication.processEvents() 
     
     self.labelResumeSelected.setText(self.trUtf8(selectedText))
+    wr.close() # close the report file for the bottom operations.
     #back to initial dir
     os.chdir(actual_dir) # going back
     return

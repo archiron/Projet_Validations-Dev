@@ -37,7 +37,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # correction of a bug between Pt10/Pt1000 root files for web pages creation.
+        self.setWindowTitle(self.version) # Add self.working_dir_report variable and a report.olog file to get the list of operations for the validations. 
+        # We have one report.olog file for one comparison type (FULL RECO vs RECO for example).
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice

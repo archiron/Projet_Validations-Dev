@@ -11,7 +11,7 @@ from getEnv import env
 from functions import list_search_0
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.4.2.5'
+    self.version = 'GUI Electron Validations v0.4.3.0'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -31,6 +31,7 @@ def initVariables(self):
     self.working_dir_base = os.getcwd()
     self.working_dir_rel = os.getcwd()
     self.working_dir_ref = os.getcwd()
+    self.working_dir_report = ""
     self.finalFolder = ""
     self.exist_working_dir_rel = False
     self.exist_working_dir_ref = False
