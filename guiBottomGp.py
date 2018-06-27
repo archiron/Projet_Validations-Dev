@@ -15,7 +15,8 @@ def initGpNextPrevious(self):
     self.bouton_Previous.clicked.connect(self.Previous_Choice) # 
     self.bouton_Previous.setEnabled(False) #default
     self.bouton_Previous.setText(self.trUtf8(self.tasks_list[0]))
-    
+    self.bouton_Next.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
+    self.bouton_Previous.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
          
     #label button creation
     txt = "(" + str(self.tasks_counter) + "/1) Next : " + self.tasks_list[1]
@@ -29,7 +30,6 @@ def initQuit(self):
     # Creation of the Exit button
     self.bouton_Quit = QPushButton(self.trUtf8("Exit ?"),self)
     self.bouton_Quit.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
-    #self.bouton_Quit.setIcon(QIcon("../images/smile.png"))
     self.connect(self.bouton_Quit, SIGNAL("clicked()"), qApp, SLOT("quit()"))
     
     return
@@ -39,6 +39,8 @@ def initHelp(self):
     
     # Création du bouton Help
     self.bouton_Help = QPushButton(self.trUtf8("Help"),self)
+    self.bouton_Help.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
+    self.bouton_Help.setToolTip('Wait that the browser will be launched') 
     self.connect(self.bouton_Help, SIGNAL("clicked()"), self.showHelp) # to be done
     return
 
@@ -47,6 +49,7 @@ def initAbout(self):
     
     # Création du bouton About
     self.bouton_About = QPushButton(self.trUtf8("About"),self)
+    self.bouton_About.setFont(QFont("Comic Sans MS", 14,QFont.Bold,True))
     self.bouton_About.setIcon(QIcon("GUI_00.png"))
     self.connect(self.bouton_About, SIGNAL("clicked()"), self.showAbout) #
 

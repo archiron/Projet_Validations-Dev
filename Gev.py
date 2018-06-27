@@ -37,7 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # Add globalReportName variable with date/hour reference.
+        self.setWindowTitle(self.version) # change for Help function. No more dialog box. only an hint and a direct launch of the browser.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -851,38 +851,27 @@ class Gev(QWidget):
         dialog.exec_()
     
     def showHelp(self):
-#        msg = QMessageBox()
-#        msg.setIcon(QMessageBox.Information)
-#        msg.setText("Help")
-#        msg.setInformativeText("This is additional information for help")
-#        msg.setWindowTitle("HELP")
-#        detailedText = "The details are as follows:"
-#        detailedText += "\n"
-#        detailedText += "step 4 (web page) : you can chose the path for saves"
-#        detailedText += "\n"
-#        detailedText += "<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_1\">Step 1</a>"
-#        msg.setDetailedText(detailedText)
-#        msg.setStandardButtons(QMessageBox.Ok)
-#        msg.exec_()
-        
         print("Help")
         
-        dialogHelp = QDialog()
-        layoutHelp = QVBoxLayout(dialogHelp)
-        labellHelp = QLabel()
-        labellHelp.setText(self.version)
-        label2Help = QLabel()
-        label2Help.setText('\n')
-        label3Help = QLabel()
-        wikiText = '<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_' + str(self.tasks_counter + 1) + '\">Step_' + str(self.tasks_counter + 1) + '</a>'
+        #dialogHelp = QDialog()
+        #layoutHelp = QVBoxLayout(dialogHelp)
+        #labellHelp = QLabel()
+        #labellHelp.setText(self.version)
+        #label2Help = QLabel()
+        #label2Help.setText('\n')
+        #label3Help = QLabel()
+        #wikiText = '<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_' + str(self.tasks_counter + 1) + '\">Step_' + str(self.tasks_counter + 1) + '</a>'
         #print(wikiText)
         #label3Help.setText('<a href=\"https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_1\">Step 1</a>')
-        label3Help.setText(wikiText)
-        label3Help.setOpenExternalLinks(True)
-        layoutHelp.addWidget(labellHelp)
-        layoutHelp.addWidget(label2Help)
-        layoutHelp.addWidget(label3Help)
-        dialogHelp.exec_()
+        #label3Help.setText(wikiText)
+        #label3Help.setOpenExternalLinks(True)
+        link = 'https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_' + str(self.tasks_counter + 1)
+        QDesktopServices.openUrl(QUrl(link))
+
+        #layoutHelp.addWidget(labellHelp)
+        #layoutHelp.addWidget(label2Help)
+        #layoutHelp.addWidget(label3Help)
+        #dialogHelp.exec_()
 
     def showResume(self):
         print "showResume"
