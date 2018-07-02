@@ -95,17 +95,22 @@ def folder_creation(self): # create the folders for the choice. the resuming tex
 
 def finalFolder_creation(self):
     print "finalFolder_creation"
-    actual_dir = os.getcwd()
-    if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
-        os.makedirs(str(self.finalFolder))
-        self.wp.write("Creation of (%s) folder\n" % str(self.finalFolder))
-        self.textReport += "Creation of " + str(self.finalFolder) + " final folder" + "<br>"
-        self.exist_finalFolder = False
-    else:
+    #actual_dir = os.getcwd()
+#    if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
+#        os.makedirs(str(self.finalFolder))
+#        self.wp.write("Creation of (%s) folder\n" % str(self.finalFolder))
+#        self.textReport += "Creation of " + str(self.finalFolder) + " final folder" + "<br>"
+#        self.exist_finalFolder = False
+#    else:
+#        print "%s already created" % str(self.finalFolder)
+#        self.wp.write("%s already created\n" % str(self.finalFolder))
+#        self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
+#        self.exist_finalFolder = True
+    check_finalFolder(self)
+    if self.exist_finalFolder: # True
         print "%s already created" % str(self.finalFolder)
-        self.wp.write("%s already created\n" % str(self.finalFolder))
-        self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
-        self.exist_finalFolder = True
+    else: # False
+        os.makedirs(str(self.finalFolder))
     updateLabelResume(self)
     return
     
@@ -919,6 +924,8 @@ def updateLabelResumeSelected(self):
     return
 
 def updateLabelResume(self):
+    check_working_dirs(self)
+    check_finalFolder(self)
     resume_text = self.texte
     resume_text += "<br />Release   : " + self.my_choice_rel_1
     resume_text += "<br />Reference : " + self.my_choice_ref_1
@@ -992,3 +999,58 @@ def checkRecompInName(name):
     else:
         return False
 
+def set_finalFolder(self, i_loc):
+    self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+    print("set_finalFolder : %s" % self.finalFolder)
+    self.finalFolder += '/' + getCheckedRadioButton(self) + '_'
+    print("set_finalFolder : %s" % self.finalFolder)
+    self.finalFolder += str(self.my_choice_ref_1[6:]) + self.temp_rf # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+    print("set_finalFolder : %s" % self.finalFolder)
+
+def check_finalFolder(self):
+    if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
+        self.wp.write("testExist_finalFolder ; (%s) folder not exist\n" % str(self.finalFolder))
+        self.textReport += "testExist_finalFolder : " + str(self.finalFolder) + " final folder not exist" + "<br>"
+        self.exist_finalFolder = False
+        print "testExist_finalFolder : False"
+    else:
+        print "testExist_finalFolder : %s already created" % str(self.finalFolder)
+        self.wp.write("%s already created\n" % str(self.finalFolder))
+        self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
+        self.exist_finalFolder = True
+        print "testExist_finalFolder : True"
+    return
+
+def check_working_dirs(self): # 
+    import errno
+    self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1[6:]) # self.lineedit1.text()[6:]
+    self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1[6:]) # self.lineedit3.text()[6:]
+    self.wp.write("self.working_dir_rel : %s\n" % self.working_dir_rel)
+    self.wp.write("self.working_dir_ref : %s\n" % self.working_dir_ref)
+    self.textReport += "self.working_dir_rel : " + self.working_dir_rel + "<br>"
+    self.textReport += "self.working_dir_ref : " + self.working_dir_ref + "<br>"
+    
+    if not os.path.exists(self.working_dir_rel):
+        print "%s release folder not exist" % str(self.working_dir_rel)
+        self.wp.write("%s release folder not exist\n" % str(self.working_dir_rel))
+        self.textReport += str(self.working_dir_rel) + " folder not exist" + "<br>"
+        self.exist_working_dir_rel = False
+    else:
+        print "release folder %s already created" % str(self.working_dir_rel)
+        self.wp.write("release folder %s already created\n" % str(self.working_dir_rel))
+        self.textReport += "release folder " + str(self.working_dir_rel) + " already created" + "<br>"
+        self.exist_working_dir_rel = True
+
+    if not os.path.exists(self.working_dir_ref):
+        print "%s reference folder not exist" % str(self.working_dir_ref)
+        self.wp.write("%s reference folder not exist\n" % str(self.working_dir_ref))
+        self.textReport += str(self.working_dir_ref) + " reference folder not exist" + "<br>"
+        self.exist_working_dir_ref = False
+    else:
+        print "reference folder %s already created" % str(self.working_dir_ref)
+        self.wp.write("reference folder %s already created\n" % str(self.working_dir_ref))
+        self.textReport += "reference folder " + str(self.working_dir_ref) + " already created" + "<br>"
+        self.exist_working_dir_ref = True
+    return
+
+    

@@ -19,7 +19,7 @@ from functions import folderExtension_creation
 from functions import sub_releases, sub_releases2, list_search_5 
 from functions import checkFastvsFull, getCheckedOptions, getCheckedRadioButton
 from functions import checkFileName, newName, updateLabelResumeSelected, updateLabelResume
-from functions import changeRef2Tmp, changeTmp2Ref
+from functions import changeRef2Tmp, changeTmp2Ref, set_finalFolder, check_finalFolder
 from Datasets_default import DataSetsFilter, checkCalculValidation # extractDatasets, extractDatasetsFastvsFull, 
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList
@@ -37,7 +37,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # change for Help function. No more dialog box. only an hint and a direct launch of the browser.
+        self.setWindowTitle(self.version) # Modification of the finalFolder setting. It is created at step 3 instead of step 4 and can prevent from overwritting files.
+        # also add working_dirs prevent from step 1.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -491,8 +492,10 @@ class Gev(QWidget):
             self.lineEdit_ref.setEnabled(True)
             self.lineEdit_rel.setEnabled(True)
             clearReleasesList(self)
+            self.PathUpdate()
+            #check_finalFolder(self)
+            updateLabelResume(self)
             self.QGBoxListsUpdate()
-            
             updateLabelResumeSelected(self) # perhaps need to be redone
             
             print "checkTaskCounter 3 : self.selectedDataSets = %s" % self.selectedDataSets
@@ -610,6 +613,11 @@ class Gev(QWidget):
 
             # defining/creating paths & folders
             self.PathUpdate()
+            # call for folders creation
+            working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
+            folder_creation(self) # create local folder for files loading and operation resuming
+            finalFolder_creation(self) # create the save folder for html and gifs files
+            updateLabelResume(self)
             self.QGBoxListsUpdate()
             # loading files
             selectedText += "begin files loading ! <br>"
@@ -648,6 +656,7 @@ class Gev(QWidget):
         print "*-*-**--*-*-*-*-*-* Location"
         self.wp.write("PathUpdate\n")
         self.textReport += "PathUpdate" + "<br>"
+        os.chdir(self.working_dir_base) # going into base dir
         self.LocationTable = LocationFilter(self)
         tt = self.loc.actions()
         i_loc = 0
@@ -671,25 +680,24 @@ class Gev(QWidget):
                     BoiteMessage.setWindowTitle("WARNING !")
                     BoiteMessage.exec_()
                 else:
-                    self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-                    self.wp.write("self.finalFolder : %s\n" % self.finalFolder)
+                    set_finalFolder(self, i_loc)
+                    #self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+                    #self.finalFolder += '/' + getCheckedRadioButton(self) + '_'
+                    #self.finalFolder += str(self.my_choice_ref_1[6:]) + self.temp_rf #+ '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+                    #self.wp.write("self.finalFolder : %s\n" % self.finalFolder)
+                    #self.textReport += "self.finalFolder : " + self.finalFolder + "<br>"
                     self.wp.write("self.working_dir_base : %s\n" % self.working_dir_base)
-                    self.textReport += "self.finalFolder : " + self.finalFolder + "<br>"
                     self.textReport += "self.working_dir_base : " + self.working_dir_base + "<br>"
-                    # output of the webpage and gifs pictures
-                    self.finalFolder += '/' + getCheckedRadioButton(self) + '_'
-                    #dirname += str(self.my_choice_ref_1[6:]) + self.temp_rf + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-                    self.finalFolder += str(self.my_choice_ref_1[6:]) + self.temp_rf #+ '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-                    #dirname += '/gifs' # only for datasets
                     self.wp.write("self.finalFolder reference : %s\n" % self.finalFolder)
-                    #if not os.path.exists(dirname): # 
-                    #    os.makedirs(str(dirname))
+                    self.wp.write("set_finalFolder : %s\n" % set_finalFolder(self, i_loc))
+                    #print("set_finalFolder() : %s\n" % set_finalFolder(self, i_loc))
+                    #print("set_finalFolder() : %s\n" % self.finalFolder)
                     
                     # call for folders creation
-                    working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
-                    folder_creation(self) # create local folder for files loading and operation resuming
-                    finalFolder_creation(self) # create the save folder for html and gifs files
-                    updateLabelResume(self)
+                    #working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
+                    #folder_creation(self) # create local folder for files loading and operation resuming
+                    #finalFolder_creation(self) # create the save folder for html and gifs files
+                    #updateLabelResume(self)
             else:
                 print "%s is unchecked" % it.text()
                 self.wp.write("%s is unchecked\n" % it.text())
@@ -868,11 +876,6 @@ class Gev(QWidget):
         link = 'https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_' + str(self.tasks_counter + 1)
         QDesktopServices.openUrl(QUrl(link))
 
-        #layoutHelp.addWidget(labellHelp)
-        #layoutHelp.addWidget(label2Help)
-        #layoutHelp.addWidget(label3Help)
-        #dialogHelp.exec_()
-
     def showResume(self):
         print "showResume"
         dialogR = QDialog()
@@ -897,6 +900,8 @@ class Gev(QWidget):
             self.temp_rf = '_' + unicode(self.lineEdit_ref.text())       
         print "temp_rl : %s" % self.temp_rl
         print "temp_rf : %s" % self.temp_rf
+        self.PathUpdate()
+        updateLabelResume(self)
     
     def cmd_load_files_2(self):
         import re
