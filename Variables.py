@@ -11,7 +11,7 @@ from getEnv import env
 from functions import list_search_0
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.4.5.0'
+    self.version = 'GUI Electron Validations v0.4.6.0'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
@@ -38,6 +38,8 @@ def initVariables(self):
     self.exist_finalFolder = False
     self.temp_rl = '' # for release web folder name modification
     self.temp_rf = '' # for reference web folder name modification
+    self.selected_files_rel = []
+    self.selected_files_ref = []
         
     self.releasesList_0 = list_search_0(self) # list of releases in https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/
     self.releasesList_rel_1 = []
@@ -73,7 +75,7 @@ def initVariables(self):
     try:
         self.wp = open(globalReportName, 'w') # report page
     except IOError as ioe:
-        print "Can not open file! "
+        print("Can not open %s file! " % globalReportName)
         BoiteMessage = QMessageBox()
         BoiteMessage.setText("cannot open report.txt file !!")
         BoiteMessage.setIcon(QMessageBox.Critical)
@@ -89,7 +91,7 @@ def initVariables(self):
     self.tasks_list = ['Release list', 'Reference list', 'Lists', 'Selected', 'Web page'] # 
     self.tasks_counter = 0
     self.tasks_counterMax = len(self.tasks_list) - 1
-    print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
+#    print "self.tasks_counterMax = %d" % self.tasks_counterMax # TEMPORAIRE
     self.wp.write("self.tasks_counterMax = %d\n" % self.tasks_counterMax)
     self.textReport += "self.tasks_counterMax = " + str(self.tasks_counterMax) + "<br>"
     self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'

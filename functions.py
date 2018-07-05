@@ -12,7 +12,7 @@ import urllib2
 import re
 from getEnv import env
 from Paths_default import *
-from Datasets_default import DataSetsFilter, extractDatasets, extractDatasetsFastvsFull, testForDataSetsFile # checkCalculValidation, 
+from Datasets_default import extractDatasets, extractDatasetsFastvsFull, testForDataSetsFile # DataSetsFilter, checkCalculValidation, 
 from electronCompare import *
 
 from ROOT import TCanvas
@@ -29,7 +29,7 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
     
     if not os.path.exists(self.working_dir_rel):
         os.chdir(self.working_dir_base) # going to base folder
-        print "Creation of %s release folder" % str(self.working_dir_rel)
+#        print "Creation of %s release folder" % str(self.working_dir_rel)
         try:
             os.makedirs(str(self.working_dir_rel))
         except OSError as e:
@@ -39,13 +39,13 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
         self.textReport += "Creation of " + str(self.working_dir_rel) + " folder" + "<br>"
         self.exist_working_dir_rel = False
     else:
-        print "release folder %s already created" % str(self.working_dir_rel)
+#        print "release folder %s already created" % str(self.working_dir_rel)
         self.wp.write("release folder %s already created\n" % str(self.working_dir_rel))
         self.textReport += "release folder " + str(self.working_dir_rel) + " already created" + "<br>"
         self.exist_working_dir_rel = True
     os.chdir(self.working_dir_rel)   # Change current working directory
     if not os.path.exists(self.working_dir_ref):
-        print "Creation of %s reference folder" % str(self.working_dir_ref)
+#        print "Creation of %s reference folder" % str(self.working_dir_ref)
         try:
             os.makedirs(str(self.working_dir_ref))
         except OSError as e:
@@ -55,7 +55,7 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
         self.textReport += "Creation of " + str(self.working_dir_ref) + " reference folder" + "<br>"
         self.exist_working_dir_ref = False
     else:
-        print "reference folder %s already created" % str(self.working_dir_ref)
+#        print "reference folder %s already created" % str(self.working_dir_ref)
         self.wp.write("reference folder %s already created\n" % str(self.working_dir_ref))
         self.textReport += "reference folder " + str(self.working_dir_ref) + " already created" + "<br>"
         self.exist_working_dir_ref = True
@@ -72,7 +72,7 @@ def folder_creation(self): # create the folders for the choice. the resuming tex
     fieldname = self.validationType1 + "_"
     fieldname = fieldname + self.validationType2
     fieldname = fieldname + "_" + now.strftime("%Y_%m_%d-%H%M%S")
-    print("fieldname : %s") % fieldname
+#    print("fieldname : %s") % fieldname
     self.wp.write("fieldname : %s\n" % fieldname)
     self.textReport += "fieldname : " + fieldname + "<br>"
     
@@ -86,7 +86,7 @@ def folder_creation(self): # create the folders for the choice. the resuming tex
         self.wp.write("creating : %s folder\n" % m_dir)
         self.textReport += "creating : " + m_dir + " folder" + "<br>"
     else:
-        print "%s already created" % m_dir
+#        print "%s already created" % m_dir
         self.wp.write("%s already created\n" % m_dir)
         self.textReport += m_dir + " already created" + "<br>"
     os.chdir(actual_dir)
@@ -94,7 +94,7 @@ def folder_creation(self): # create the folders for the choice. the resuming tex
     return # m_dir
 
 def finalFolder_creation(self):
-    print "finalFolder_creation"
+#    print "finalFolder_creation"
     #actual_dir = os.getcwd()
 #    if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
 #        os.makedirs(str(self.finalFolder))
@@ -108,7 +108,9 @@ def finalFolder_creation(self):
 #        self.exist_finalFolder = True
     check_finalFolder(self)
     if self.exist_finalFolder: # True
-        print "%s already created" % str(self.finalFolder)
+#        print "%s already created" % str(self.finalFolder)
+        self.wp.write("%s already created\n" % str(self.finalFolder))
+        self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
     else: # False
         os.makedirs(str(self.finalFolder))
     updateLabelResume(self)
@@ -116,12 +118,12 @@ def finalFolder_creation(self):
     
 def dataSets_finalFolder_creation(self):
     actual_dir = os.getcwd()
-    print "actual dir : %s" % actual_dir
+#    print "actual dir : %s" % actual_dir
     os.chdir(self.finalFolder) # going into finalFolder
-    print "here : %s" % os.getcwd()
-    print "okToPublishDatasets"
-    print self.selectedRelDatasets
-    print self.okToPublishDatasets
+#    print "here : %s" % os.getcwd()
+#    print "okToPublishDatasets"
+#    print self.selectedRelDatasets
+#    print self.okToPublishDatasets
     # create datasets folders
     selectedText = ""
     report_name = self.working_dir_report + '/report.olog'
@@ -129,8 +131,8 @@ def dataSets_finalFolder_creation(self):
     wr.write("Validation report : \n")
     
     for i, elt in enumerate(self.finalList):
-        print("finalFolder_creation : dataset=%s" % elt[0])
-        print("finalFolder_creation : root file=%s" % elt[1])
+#        print("finalFolder_creation : dataset=%s" % elt[0])
+#        print("finalFolder_creation : root file=%s" % elt[1])
         wr.write("\ndataset=%s\n" % elt[0])
         dts = elt[0]
         # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
@@ -138,7 +140,7 @@ def dataSets_finalFolder_creation(self):
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
         
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
-        print '%s : %s' % (dts, dataSetFolder)
+#        print '%s : %s' % (dts, dataSetFolder)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
             wr.write("%s does not exist. Creating it\n" % dataSetFolder)
             os.makedirs(dataSetFolder) # create reference folder
@@ -151,7 +153,7 @@ def dataSets_finalFolder_creation(self):
             self.textReport += "creating gifs folder" + "<br>"
             os.chdir('../')
         else: # dataSetFolder already created
-            print "%s already created" % dataSetFolder
+#            print "%s already created" % dataSetFolder
             wr.write("%s already created\n" % dataSetFolder)
             self.wp.write("%s already created\n" % dataSetFolder)
             self.textReport += dataSetFolder + " already created" + "<br>"
@@ -274,7 +276,7 @@ def dataSets_finalFolder_creation(self):
                 #print line + " : " + str(len(line))
                 if ( len(key) == 0 ):
                     key = line # get title
-                    print ("title : %s" % key)
+#                    print ("title : %s" % key)
                     titlesList.append(line)
                 else:
                     tmp.append(line) # histo name
@@ -285,7 +287,7 @@ def dataSets_finalFolder_creation(self):
                     if ( short_positions[3] == '1' ): # be careful it is '1' and not 1 (without quote)
                         tmp.append("endLine")
 
-        print "***"
+#        print "***"
         #print titlesList
         #print histoArray_0
         # fin remplissage tableau titres et dict
@@ -301,7 +303,7 @@ def dataSets_finalFolder_creation(self):
             titles = titlesList[i].split() # explode(" ", $clefs[$i])
             if len(titles) > 1 :
                 titleShortName = titles[0] + "_" + titles[1]
-                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
+#                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
             else:
                 titleShortName = titles[0]
                 #print i, ' ', titlesList[i], ' : ', titles, titles[0]
@@ -393,7 +395,7 @@ def dataSets_finalFolder_creation(self):
             titles = titlesList[i].split()
             if len(titles) > 1 :
                 titleShortName = titles[0] + "_" + titles[1]
-                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
+#                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
             else:
                 titleShortName = titles[0]
             wp.write( "\n<td>\n<b> " )
@@ -454,8 +456,10 @@ def dataSets_finalFolder_creation(self):
         wp.close()
         os.chdir('../') # back to the final folder.
         
-        selectedText += " : done </strong><br>"
+        selectedText += " : <b><font color='blue'> DONE ! </font></b></strong><br>"
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
+        wr.write("Dataset %s DONE\n" % elt[0])
+        self.textReport += "Dataset " + elt[0] + "DONE" + "<br>"
     
     self.labelResumeSelected.setText(self.trUtf8(selectedText))
     wr.close() # close the report file for the bottom operations.
@@ -620,10 +624,10 @@ def list_search_1(my_choice_0):
 def list_search_2(collection, filtre):
     import re
 
-    print "list_search_2"
+#    print "list_search_2"
     temp_1 = []  
     filtre = sorted(set(filtre), reverse=True)
-    print "list_search_2 : filtre : ", filtre
+#    print "list_search_2 : filtre : ", filtre
 #    print "list_search_2 : collection : ", collection
     for item1 in collection:
         for item2 in filtre:
@@ -632,7 +636,7 @@ def list_search_2(collection, filtre):
 #                print "list_search_2 : OK : ", item2, item1
                 break
     temp_1 = sorted(set(temp_1), reverse=True)
-    print "list_search_2 end OK"
+#    print "list_search_2 end OK"
     return temp_1
     
 def list_search_3(collection, filtre):
@@ -652,13 +656,16 @@ def list_search_3(collection, filtre):
 def list_search_5(self):
     import re
 
-    print "list_search_5"
-    print "list_search_5 : self.validationType1 = ",  self.validationType1
-    print "list_search_5 : self.validationType2 = ",  self.validationType2
-    print "list_search_5 : self.validationType3 = ",  self.validationType3
-    #print "list_search_5 : self.selectedDataSets = ", self.selectedDataSets # OK
-    #print "list_search_5 : self.releasesList_rel_2 = ", self.releasesList_rel_2 # OK
-    #print "list_search_5 : self.releasesList_ref_2 = ", self.releasesList_ref_2 # OK
+#    print "list_search_5"
+#    print "list_search_5 : self.validationType1 = ",  self.validationType1
+#    print "list_search_5 : self.validationType2 = ",  self.validationType2
+#    print "list_search_5 : self.validationType3 = ",  self.validationType3
+    self.wp.write("list_search_5 : self.validationType1 = %s\n " % self.validationType1)
+    self.wp.write("list_search_5 : self.validationType2 = %s\n " % self.validationType2)
+    self.wp.write("list_search_5 : self.validationType3 = %s\n " % self.validationType3)
+    self.textReport += "list_search_5 : self.validationType1 = " + self.validationType1 + "<br>"
+    self.textReport += "list_search_5 : self.validationType2 = " + self.validationType2 + "<br>"
+    self.textReport += "list_search_5 : self.validationType3 = " + self.validationType3 + "<br>"
     
     temp_1 = [] # DQM_V0001_R00000000X__Dataset__CMSSW_9_1_0_pre3-91X_upgrade2017_realistic_v3-v1__DQMIO.root files
     temp_2 = [] # 91X_upgrade2017_realistic_v3-v1 Global tags
@@ -670,33 +677,39 @@ def list_search_5(self):
     temp_ref = []
 
     filtre = sorted(set(self.selectedDataSets), reverse=True)
-    print "list_search_5 : self.selectedDataSets = %s." % str(self.selectedDataSets)
-    print "list_search_5 : filtre = %s." % str(filtre)
+#    print "list_search_5 : self.selectedDataSets = %s." % str(self.selectedDataSets)
+#    print "list_search_5 : filtre = %s." % str(filtre)
+    self.wp.write("list_search_5 : self.selectedDataSets = %s\n " % str(self.selectedDataSets))
+    self.wp.write("list_search_5 : filtre = %s\n " % str(filtre))
+    self.textReport += "list_search_5 : self.selectedDataSets = " + str(self.selectedDataSets) + "<br>"
+    self.textReport += "list_search_5 : filtre = " + str(filtre) + "<br>"
     validationType_2 = self.validationType2
     validationType_3 = self.validationType3
     
     # DATASET
     self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets) # get dataset list used in rel_list_1
     self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets) # get dataset list used in ref_list_1
-    print "list_search_5 : self.rel_list_2 = %s." % self.rel_list_2
-    print "list_search_5 : self.ref_list_2 = %s." % self.ref_list_2 # => OK, 1 dataset
+#    print "list_search_5 : self.rel_list_2 = %s." % self.rel_list_2
+#    print "list_search_5 : self.ref_list_2 = %s." % self.ref_list_2 # => OK, 1 dataset
     
     # PART RELEASE
     filtre = sorted(set(self.rel_list_2), reverse=True)
-    print "list_search_5 : filtre rel = %s." % str(filtre)
+#    print "list_search_5 : filtre rel = %s." % str(filtre)
+    self.wp.write("list_search_5 : filtre = %s\n " % str(filtre))
+    self.textReport += "list_search_5 : filtre = " + str(filtre) + "<br>"
     for item1 in self.releasesList_rel_2:
         for item2 in filtre:
             #print("item1 : %s - item2 : %s") % (item1, item2)
             if re.search(item2 + '__', item1):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "rel"):
-                    print("item1 : %s - item2 : %s") % (item1, item2)
+#                    print("item1 : %s - item2 : %s") % (item1, item2)
                     temp_12.append([explode_item(item1)[2], item2])
 #                    print "list_search_5 : len = %i" % len(temp_12)
                 break
 
-    print "list_search_5 : len of temp_12 = %i." % len(temp_12)
+#    print "list_search_5 : len of temp_12 = %i." % len(temp_12)
     if ( len(temp_12) > 0 ):
-        print "list_search_5 : " + str(temp_12)
+#        print "list_search_5 : " + str(temp_12)
         temp_12.sort()
 
         temp_rel.append( [temp_12[0][0], temp_12[0][1]] )
@@ -713,7 +726,9 @@ def list_search_5(self):
         
     # PART REFERENCE
     filtre = sorted(set(self.ref_list_2), reverse=True)
-    print "list_search_5 : filtre ref = %s." % str(filtre)
+#    print "list_search_5 : filtre ref = %s." % str(filtre)
+    self.wp.write("list_search_5 : filtre = %s\n " % str(filtre))
+    self.textReport += "list_search_5 : filtre = " + str(filtre) + "<br>"
     if (( validationType_3 == 'miniAOD' ) and ( validationType_2 == 'RECO' )): # case RECO vs miniAOD
         temp_3 = temp_1
         temp_4 = temp_2
@@ -726,14 +741,14 @@ def list_search_5(self):
                 if re.search(item2 + '__', item1):
                     #print("item1 : %s - item2 : %s") % (item1, item2)
                     if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "ref"):
-                        print("item1 : %s - item2 : %s") % (item1, item2)
+#                        print("item1 : %s - item2 : %s") % (item1, item2)
                         temp_34.append([explode_item(item1)[2], item2])
 #                        print "list_search_5 : len = %i" % len(temp_34)
                     break
     
-    print "list_search_5 : len of temp_34 = %i." % len(temp_34)
+#    print "list_search_5 : len of temp_34 = %i." % len(temp_34)
     if ( len(temp_34) > 0 ):
-        print "list_search_5 : " + str(temp_34)
+#        print "list_search_5 : " + str(temp_34)
         temp_34.sort()
 
         temp_ref.append( [temp_34[0][0], temp_34[0][1]] )
@@ -748,11 +763,11 @@ def list_search_5(self):
         temp_3.append(temp_ref[i][1])
         temp_4.append(temp_ref[i][0])
     
-    print "list_search_5 end OK"
+#    print "list_search_5 end OK"
     return (temp_1, temp_2, temp_3, temp_4)
     
 def sub_releases(tab_files):
-    print "sub_releases", len(tab_files)
+#    print "sub_releases", len(tab_files)
     i = 0
     temp = []
     for t in tab_files:
@@ -765,8 +780,8 @@ def sub_releases(tab_files):
     
 def sub_releases2(release, tab_files):
     import re
-    print "sub_releases2 : ", len(tab_files)
-    print "release : ", release
+#    print "sub_releases2 : ", len(tab_files)
+#    print "release : ", release
     i = 0
     temp = []
     for t in tab_files:
@@ -802,15 +817,15 @@ def explode_item(item):
     return temp_item
 
 def checkFastvsFull(self):
-    print "checkFastvsFull"
+#    print "checkFastvsFull"
     if ( self.radio13.isChecked() ):
     # check for FastvsFull for Fast.
         self.checkFastvsFull = True
-        print("checkFastvsFull : checkFastvsFull = True")
+#        print("checkFastvsFull : checkFastvsFull = True")
     else:
         self.checkFastvsFull = False
-        print("checkFastvsFull : checkFastvsFull = False")
-    print "checkFastvsFull end OK"
+#        print("checkFastvsFull : checkFastvsFull = False")
+#    print "checkFastvsFull end OK"
     return self.checkFastvsFull
 
 def newName(prefix, fileName, suffix):
@@ -885,7 +900,9 @@ def getCheckedOptions(self):
     elif self.checkSpecReference4.isChecked():
         self.validationType3 = 'miniAOD'
 
-    print "validationType1 : %s, validationType2 : %s, validationType3 : %s" % (self.validationType1, self.validationType2, self.validationType3)
+#    print "validationType1 : %s, validationType2 : %s, validationType3 : %s" % (self.validationType1, self.validationType2, self.validationType3)
+    self.wp.write("validationType1 : %s, validationType2 : %s, validationType3 : %s\n " % (str(self.validationType1), str(self.validationType2), str(self.validationType3)))
+    self.textReport += "validationType1 : " + str(self.validationType1) + "validationType2 : " + str(self.validationType2) + "validationType3 : " + str(self.validationType3) + "<br>"
     return
     
 def updateLabelResumeSelected(self):
@@ -974,9 +991,9 @@ def changeTmp2Ref(self): # retrieve rel != ref
         self.labelCombo2.setText(tmp)
     return
     
-    print "back to reference"
-    print "actual : " + self.my_choice_ref_1
-    print "native : " + self.my_choice_tmp
+#    print "back to reference"
+#    print "actual : " + self.my_choice_ref_1
+#    print "native : " + self.my_choice_tmp
     self.wp.write("back to reference\n")
     self.wp.write("actual : %s\n" % self.my_choice_ref_1)
     self.wp.write("native : %s\n" % self.my_choice_tmp)
@@ -1001,24 +1018,24 @@ def checkRecompInName(name):
 
 def set_finalFolder(self, i_loc):
     self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-    print("set_finalFolder : %s" % self.finalFolder)
+#    print("set_finalFolder : %s" % self.finalFolder)
     self.finalFolder += '/' + getCheckedRadioButton(self) + '_'
-    print("set_finalFolder : %s" % self.finalFolder)
+#    print("set_finalFolder : %s" % self.finalFolder)
     self.finalFolder += str(self.my_choice_ref_1[6:]) + self.temp_rf # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-    print("set_finalFolder : %s" % self.finalFolder)
+#    print("set_finalFolder : %s" % self.finalFolder)
 
 def check_finalFolder(self):
     if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
         self.wp.write("testExist_finalFolder ; (%s) folder not exist\n" % str(self.finalFolder))
         self.textReport += "testExist_finalFolder : " + str(self.finalFolder) + " final folder not exist" + "<br>"
         self.exist_finalFolder = False
-        print "testExist_finalFolder : False"
+#        print "testExist_finalFolder : False"
     else:
-        print "testExist_finalFolder : %s already created" % str(self.finalFolder)
+#        print "testExist_finalFolder : %s already created" % str(self.finalFolder)
         self.wp.write("%s already created\n" % str(self.finalFolder))
         self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
         self.exist_finalFolder = True
-        print "testExist_finalFolder : True"
+#        print "testExist_finalFolder : True"
     return
 
 def check_working_dirs(self): # 
@@ -1031,23 +1048,23 @@ def check_working_dirs(self): #
     self.textReport += "self.working_dir_ref : " + self.working_dir_ref + "<br>"
     
     if not os.path.exists(self.working_dir_rel):
-        print "%s release folder not exist" % str(self.working_dir_rel)
+#        print "%s release folder not exist" % str(self.working_dir_rel)
         self.wp.write("%s release folder not exist\n" % str(self.working_dir_rel))
         self.textReport += str(self.working_dir_rel) + " folder not exist" + "<br>"
         self.exist_working_dir_rel = False
     else:
-        print "release folder %s already created" % str(self.working_dir_rel)
+#        print "release folder %s already created" % str(self.working_dir_rel)
         self.wp.write("release folder %s already created\n" % str(self.working_dir_rel))
         self.textReport += "release folder " + str(self.working_dir_rel) + " already created" + "<br>"
         self.exist_working_dir_rel = True
 
     if not os.path.exists(self.working_dir_ref):
-        print "%s reference folder not exist" % str(self.working_dir_ref)
+#        print "%s reference folder not exist" % str(self.working_dir_ref)
         self.wp.write("%s reference folder not exist\n" % str(self.working_dir_ref))
         self.textReport += str(self.working_dir_ref) + " reference folder not exist" + "<br>"
         self.exist_working_dir_ref = False
     else:
-        print "reference folder %s already created" % str(self.working_dir_ref)
+#        print "reference folder %s already created" % str(self.working_dir_ref)
         self.wp.write("reference folder %s already created\n" % str(self.working_dir_ref))
         self.textReport += "reference folder " + str(self.working_dir_ref) + " already created" + "<br>"
         self.exist_working_dir_ref = True

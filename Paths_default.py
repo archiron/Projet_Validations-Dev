@@ -13,7 +13,6 @@ def LocationFilter(self):
     return table
 
 def DataLocation(self):
-    print "Location"
     table=[
     ["Local", 1, str(localLocation(self))],
     ["Remote afs", 0, '/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev/'],

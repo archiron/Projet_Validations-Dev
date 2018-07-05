@@ -8,7 +8,7 @@ from PyQt4 import QtCore
 from functionGui import fillQLW_rel1
 
 def initGpRelRef(self):
-    print "initGpRelRef"
+#    print "initGpRelRef"
 
     self.QGBox_rel0 = QGroupBox("Release list") # default
     self.QGBox_rel0.setMinimumHeight(250)
@@ -44,7 +44,7 @@ def initGpRelRef(self):
     return
 
 def initGpLists(self):
-    print "initGpLists"
+#    print "initGpLists"
 
     self.QGBox_Lists = QGroupBox("Lists") # default
     self.QGBox_Lists.setMinimumHeight(250)
@@ -83,7 +83,7 @@ def initGpLists(self):
     return
 
 def initGpSelected(self):
-    print "initGpSelected"
+#    print "initGpSelected"
 
     self.QGBox_Selected = QGroupBox("Selected")
     self.QGBox_Selected.setMinimumHeight(250)

@@ -13,15 +13,18 @@ from Paths_default import *
 
 def DataSetsFilter(self):
     import sys
-    fieldname=self.validationType1
-    fieldname = fieldname + self.validationType2
-    print("fieldname=%s") % fieldname
+    fieldname = self.validationType1
+    if ( self.validationType3 == 'miniAOD' ):
+        fieldname = fieldname + self.validationType3
+    else:
+        fieldname = fieldname + self.validationType2
+#    print("fieldname=%s") % fieldname
     table=getattr(sys.modules[__name__], "DataSetsFilter_%s" % fieldname)(self)
     
     return table
 
 def DataSetsFilter_FullRECO(self):
-    print "Full"
+#    print "Full"
     table=[
     ["SingleElectronPt10", 1], # 1 : displayed
     ["SingleElectronPt10_UP15", 0], 
@@ -29,13 +32,13 @@ def DataSetsFilter_FullRECO(self):
     ["SingleElectronPt35_UP15", 0], # 0 : not displayed
     ["SingleElectronPt1000", 1],
     ["QCD_Pt_80_120_13", 1],
-    ["TTbar_13", 0],
-    ["ZEE_13", 0],
+    ["TTbar_13", 1],
+    ["ZEE_13", 1],
     ]
     return table
 
 def DataSetsFilter_FastRECO(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -43,7 +46,7 @@ def DataSetsFilter_FastRECO(self):
     return table
 
 def DataSetsFilter_FastFullRECO(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -51,15 +54,15 @@ def DataSetsFilter_FastFullRECO(self):
     return table
 
 def DataSetsFilter_FullPU25(self):
-    print "Full"
+#    print "Full"
     table=[
-    ["TTbar_13", 0],
+    ["TTbar_13", 1],
     ["ZEE_13", 1],
     ]
     return table
 
 def DataSetsFilter_FastPU25(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -67,7 +70,7 @@ def DataSetsFilter_FastPU25(self):
     return table
 
 def DataSetsFilter_FastFullPU25(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -75,7 +78,7 @@ def DataSetsFilter_FastFullPU25(self):
     return table
 
 def DataSetsFilter_FullPUpmx25(self):
-    print "Full"
+#    print "Full"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -83,7 +86,7 @@ def DataSetsFilter_FullPUpmx25(self):
     return table
 
 def DataSetsFilter_FastPUpmx25(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -91,7 +94,7 @@ def DataSetsFilter_FastPUpmx25(self):
     return table
 
 def DataSetsFilter_FastFullPUpmx25(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -99,7 +102,7 @@ def DataSetsFilter_FastFullPUpmx25(self):
     return table
 
 def DataSetsFilter_FullminiAOD(self):
-    print "Full"
+#    print "Full"
     table=[
     ["SingleElectronPt10", 1],
     ["TTbar_13", 1],
@@ -108,7 +111,7 @@ def DataSetsFilter_FullminiAOD(self):
     return table
 
 def DataSetsFilter_FastminiAOD(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -116,7 +119,7 @@ def DataSetsFilter_FastminiAOD(self):
     return table
 
 def DataSetsFilter_FastFullminiAOD(self):
-    print "Fast"
+#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -127,20 +130,26 @@ def extractDatasets(self):
     extraction = ""
     extractionDisplay = ""
     # display of the datasets strings
-    print "datasets release   : ", self.selectedRelDatasets
-    print "datasets reference : ", self.selectedRefDatasets
+#    print "datasets release   : ", self.selectedRelDatasets
+#    print "datasets reference : ", self.selectedRefDatasets
+    self.wp.write("datasets release   : %s\n" % self.selectedRelDatasets)
+    self.wp.write("datasets reference : %s\n" % self.selectedRefDatasets)
+    self.textReport += "datasets release   : " + self.selectedRelDatasets + "<br>"
+    self.textReport += "datasets reference : " + self.selectedRefDatasets + "<br>"
     # cutting self.selectedRelDatasets
     cuttedRelease = str(self.selectedRelDatasets).split(',')
     print "cuttedRelease : ", cuttedRelease
+    self.wp.write("cuttedRelease : %s\n" % cuttedRelease)
+    self.textReport += "cuttedRelease   : " + cuttedRelease + "<br>"
     # searching in self.selectedRefDatasets
     for elem in cuttedRelease:
-        print elem
+#        print elem
         if re.search(elem, self.selectedRefDatasets):
-            print "OK"
+#            print "OK"
             extraction += ', ' + elem
             extractionDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
         else:
-            print "KO"
+#            print "KO"
             extractionDisplay += ', ' + elem
 
     extraction = extraction[2:]
@@ -152,20 +161,26 @@ def extractDatasetsFastvsFull(self): # do not verify if checkFastvsFull(self) !!
     extractionFastvsFull = ""
     extractionFastvsFullDisplay = ""
     # display of the datasets strings
-    print "datasets release   : ", self.selectedRelDatasets
-    print "datasets reference : ", self.selectedFvsFDatasets
+#    print "datasets release   : ", self.selectedRelDatasets
+#    print "datasets reference : ", self.selectedFvsFDatasets
+    self.wp.write("datasets release   : %s\n" % self.selectedRelDatasets)
+    self.wp.write("datasets reference : %s\n" % self.selectedFvsFDatasets)
+    self.textReport += "datasets release   : " + self.selectedRelDatasets + "<br>"
+    self.textReport += "datasets reference : " + self.selectedFvsFDatasets + "<br>"
     # cutting self.selectedRelDatasets
     cuttedRelease = str(self.selectedRelDatasets).split(',')
-    print "cuttedRelease : ", cuttedRelease
+#    print "cuttedRelease : ", cuttedRelease
+    self.wp.write("cuttedRelease : %s\n" % str(cuttedRelease))
+    self.textReport += "cuttedRelease   : " + str(cuttedRelease) + "<br>"
     # searching in self.selectedFvsFDatasets
     for elem in cuttedRelease:
-        print elem
+#        print elem
         if re.search(elem, self.selectedFvsFDatasets):
-            print "OK"
+#            print "OK"
             extractionFastvsFull += ', ' + elem
             extractionFastvsFullDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
         else:
-            print "KO"
+#            print "KO"
             extractionFastvsFullDisplay += ', ' + elem
     
     extractionFastvsFull = extractionFastvsFull[2:]
@@ -276,7 +291,7 @@ def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
     # ElectronMcSignalValidatorPt1000
     # ElectronMcFakeValidator
 
-    print "testForDataSetsFile : ", dataSetsName
+#    print "testForDataSetsFile : ", dataSetsName
     
     t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
     t_ref = t_rel
@@ -314,7 +329,7 @@ def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
             t_ref = t_rel
             tp_rel = 'ElectronMcSignalValidatorMiniAOD'
             tp_ref = tp_rel
-            print("testForDataSetsFile : tp_rel %s") % tp_rel
+#            print("testForDataSetsFile : tp_rel %s") % tp_rel
     #print "testForDataSetsFile end OK "
     return [t_rel, t_ref, tp_rel, tp_ref]
 

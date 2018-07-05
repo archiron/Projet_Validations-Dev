@@ -6,7 +6,7 @@ from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
 def initDataSets(self):
-    print "initDataSets"
+#    print "initDataSets"
 
     self.QLW_dataset.clear()
     for it in self.DataSetTable: # list of DataSets

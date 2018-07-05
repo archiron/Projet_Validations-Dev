@@ -6,7 +6,7 @@ from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
 def initGpNextPrevious(self):
-    print "initGpNextPrevious"
+#    print "initGpNextPrevious"
     
     # créer un bouton
     self.bouton_Next = QPushButton("Next", self)
@@ -25,7 +25,7 @@ def initGpNextPrevious(self):
     return
 
 def initQuit(self):
-    print("initQuit")
+#    print("initQuit")
         
     # Creation of the Exit button
     self.bouton_Quit = QPushButton(self.trUtf8("Exit ?"),self)
@@ -35,7 +35,7 @@ def initQuit(self):
     return
 
 def initHelp(self):
-    print("initHelp")
+#    print("initHelp")
     
     # Création du bouton Help
     self.bouton_Help = QPushButton(self.trUtf8("Help"),self)
@@ -45,7 +45,7 @@ def initHelp(self):
     return
 
 def initAbout(self):
-    print("initAbout")
+#    print("initAbout")
     
     # Création du bouton About
     self.bouton_About = QPushButton(self.trUtf8("About"),self)

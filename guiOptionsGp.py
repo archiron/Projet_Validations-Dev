@@ -9,7 +9,7 @@ from Datasets_default import DataSetsFilter
 from Paths_default import *
 
 def initGpCalcul(self):
-    print "initGpCalcul"
+#    print "initGpCalcul"
 
     self.QGBox1 = QGroupBox("Calcul")
     self.QGBox1.setMaximumHeight(120)
@@ -34,7 +34,7 @@ def initGpCalcul(self):
     return
     
 def initGpSpecTarget(self):
-    print "initGpSpecTarget"
+#    print "initGpSpecTarget"
 
     self.QGBox2 = QGroupBox("Validation")
     self.QGBox2.setMaximumHeight(120)
@@ -64,7 +64,7 @@ def initGpSpecTarget(self):
     return
 
 def initGpSpecReference(self):
-    print "initGpSpecReference"
+#    print "initGpSpecReference"
 
     self.QGBoxSpecReference = QGroupBox("Spec/Ref")
     self.QGBoxSpecReference.setMaximumHeight(120)
@@ -93,7 +93,7 @@ def initGpSpecReference(self):
     return
 
 def initGpAllNone(self):
-    print "initGpAllNone"
+#    print "initGpAllNone"
 
     self.QGBoxAllNone = QGroupBox("All / None")
     self.QGBoxAllNone.setMaximumHeight(120)
@@ -114,7 +114,7 @@ def initGpAllNone(self):
     return
 
 def initGpDataSets(self):
-    print "initGpDataSets"
+#    print "initGpDataSets"
 
     self.QGBoxDataSets = QGroupBox("DataSets")
     self.QGBoxDataSets.setMaximumHeight(120)
@@ -127,7 +127,7 @@ def initGpDataSets(self):
     self.menu = QMenu()
     self.ag = QActionGroup(self, exclusive=False)
     self.DataSetTable = DataSetsFilter(self)
-    print "###################################################", self.DataSetTable # TEMPORAIRE
+#    print "###################################################", self.DataSetTable # TEMPORAIRE
     for item in self.DataSetTable:
         (item_name, item_checked) = item
         a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
@@ -144,7 +144,7 @@ def initGpDataSets(self):
     return
 
 def initGpFolderName(self): # can add modification on release name to obtain the folder name for the web page.
-    print "initGpDataSets"
+#    print "initGpDataSets"
 
     self.QGBoxFolderName = QGroupBox("Web folder name customization : ")
     self.QGBoxFolderName.setMaximumHeight(120)
@@ -200,7 +200,7 @@ def initStdDev(self):
     return
 
 def initGpLocation(self):
-    print "initGpLocation"
+#    print "initGpLocation"
 
     self.QGBoxLocation = QGroupBox("Location")
     self.QGBoxLocation.setMaximumHeight(120)
@@ -213,7 +213,7 @@ def initGpLocation(self):
     self.menu_loc = QMenu()
     self.loc = QActionGroup(self, exclusive=True)
     self.LocationTable = LocationFilter(self)
-    print "###################################################", self.LocationTable # TEMPORAIRE
+#    print "###################################################", self.LocationTable # TEMPORAIRE
     for item in self.LocationTable:
         (item_name, item_checked, item_location) = item
         a2 = self.loc.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
@@ -229,7 +229,7 @@ def initGpLocation(self):
     return
 
 def initGpResume(self):
-    print "initGpResume"
+#    print "initGpResume"
 
     self.QGBoxRelRef = QGroupBox("release")
     self.QGBoxRelRef.setMaximumHeight(120)
