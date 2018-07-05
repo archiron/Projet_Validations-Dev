@@ -37,8 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # Remove print cmd and add some comment via self.wp.write and self.report.
-        # correction of miniAOD datasets selection for reco vs miniAOD in DataSetsFilter() function in Datasets_default.py
+        self.setWindowTitle(self.version) # little bug ofr local/non local paths
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -637,7 +636,7 @@ class Gev(QWidget):
 #            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
 #            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
-            self.wp.write("foldercreation & file loading")
+            self.wp.write("foldercreation & file loading\n")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
             self.textReport += "<b><font color=\'blue\'>foldercreation & file loading</font></b>" + "<br>"
             self.bouton_Previous.setEnabled(True)
@@ -655,6 +654,12 @@ class Gev(QWidget):
             self.lineEdit_rel.setEnabled(False)
             selectedText = ""
             
+            # defining/creating paths & folders
+            self.PathUpdate()
+            # call for folders creation
+            working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
+            folder_creation(self) # create local folder for files loading and operation resuming
+
             #cmd_load_files(self) # no test if the folders are created. We have an error output in PathUpdate() if the was a pbm with the folder creation.
             self.cmd_load_files_2()
 
@@ -700,11 +705,6 @@ class Gev(QWidget):
 #            print self.finalList
 #            print "***** end self.FinalList *****"
 
-            # defining/creating paths & folders
-            self.PathUpdate()
-            # call for folders creation
-            working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
-            folder_creation(self) # create local folder for files loading and operation resuming
             finalFolder_creation(self) # create the save folder for html and gifs files
             updateLabelResume(self)
             self.QGBoxListsUpdate()
@@ -729,7 +729,7 @@ class Gev(QWidget):
 #            for line in self.selected_files_ref:
 #                print line
                 
-            # creating the datasets folders
+            # creating the web pages
             dataSets_finalFolder_creation(self)
             
             # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
