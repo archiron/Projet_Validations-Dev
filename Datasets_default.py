@@ -140,7 +140,7 @@ def extractDatasets(self):
     cuttedRelease = str(self.selectedRelDatasets).split(',')
     print "cuttedRelease : ", cuttedRelease
     self.wp.write("cuttedRelease : %s\n" % cuttedRelease)
-    self.textReport += "cuttedRelease   : " + cuttedRelease + "<br>"
+    self.textReport += "cuttedRelease   : " + str(cuttedRelease) + "<br>"
     # searching in self.selectedRefDatasets
     for elem in cuttedRelease:
 #        print elem

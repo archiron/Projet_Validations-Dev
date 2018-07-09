@@ -37,7 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # little bug ofr local/non local paths
+        self.setWindowTitle(self.version) # little bug for printing cuttedRelease in self.textReport
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
