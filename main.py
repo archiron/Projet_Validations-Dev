@@ -16,7 +16,6 @@ def main(args):
     
     fenetre = Gev.Gev()
     fenetre.move(100, 100)
-    #fenetre.setFixedSize(1400, 700)
     fenetre.setMinimumSize(1400, 700)
     fenetre.show()
     r = a.exec_()

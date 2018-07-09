@@ -15,17 +15,14 @@ argv.remove( '-b-' )
 from getEnv import env
 from Paths_default import *
 
-from ROOT import * # TFile, TH2F, TCanvas, gStyle, gPad, TRatioPlot
+from ROOT import * 
 from math import log10
 
 def getHisto(file, tp):
-    #file.ls()
-    #print ("tree path part = %s" % tp)
     t1 = file.Get("DQMData")
     t2 = t1.Get("Run 1")
     t3 = t2.Get("EgammaV")
     t4 = t3.Get("Run summary")
-    #t5 = t4.Get("ElectronMcSignalValidator")
     t5 = t4.Get(tp)
     return t5
 
@@ -47,7 +44,6 @@ def initRoot(self):
     self.cnv = TCanvas("canvas")    
 
 def initRootStyle():
-    #eleStyle = gStyle
     eleStyle = ROOT.TStyle("eleStyle","Style for electron validation")
     eleStyle.SetCanvasBorderMode(0)
     eleStyle.SetCanvasColor(kWhite)
@@ -80,10 +76,7 @@ def initRootStyle():
     eleStyle.SetTitleFont(22,"Y")
     eleStyle.SetPadBottomMargin(0.13) # 0.05
     eleStyle.SetPadLeftMargin(0.15)
-    #eleStyle.SetPadTopMargin(0.075)
     eleStyle.SetPadRightMargin(0.2) 
-    #eleStyle.SetTitleStyle(1001)
-    #eleStyle.SetTitleBorderSize(2)
     eleStyle.SetMarkerStyle(21)
     eleStyle.SetMarkerSize(0.8)
     eleStyle.cd()
@@ -100,7 +93,6 @@ def PictureChoice(histo1, histo2, scaled, err, filename, self):
 def createPicture(histo1, histo2, scaled, err, filename, self):
     new_entries = histo1.GetEntries()
     ref_entries = histo2.GetEntries()
-    #print("new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
     if (scaled and (new_entries != 0) and (ref_entries != 0)):
         rescale_factor = new_entries / ref_entries
         histo2.Scale(rescale_factor)
@@ -109,23 +101,19 @@ def createPicture(histo1, histo2, scaled, err, filename, self):
     if (filename == "h_ele_charge"):
        n_ele_charge = histo1.GetEntries()
        
-    #self.cnv = TCanvas("canvas","",960,600)    
     self.cnv.SetCanvasSize(960, 600)
     self.cnv.Clear()
     histo2.Draw()
     self.cnv.Update()
     gMax2 = ROOT.gPad.GetUymax()
-    #print "    histo 2 max : ", ROOT.gPad.GetUymax(), gMax2
 
     self.cnv.Clear()
     histo1.Draw()
     self.cnv.Update()
     gMax1 = ROOT.gPad.GetUymax()
-    #print "    histo 1 max : ", ROOT.gPad.GetUymax(), gMax1
 
     if (gMax1 != gMax2):
         var_1 = log10( abs(gMax1 - gMax2) )
-        #print "log = %8.2f" % var_1
 
     self.cnv.Clear()
     histo1.Draw()
@@ -162,13 +150,8 @@ def createPicture(histo1, histo2, scaled, err, filename, self):
     return
     
 def createPicture2(histo1, histo2, scaled, err, filename, self):
-    #print "createPicture2"
-    #print "createPicture2 : %s" % filename
-    #print "histo1 : %s" % histo1
-    #print "histo2 : %s" % histo2
     new_entries = histo1.GetEntries()
     ref_entries = histo2.GetEntries()
-    #print("createPicture2 : new_entries : %d, ref_entries : %d" % (new_entries, ref_entries) )
        
     if ((scaled =="1") and (new_entries != 0) and (ref_entries != 0)):
         rescale_factor = new_entries / ref_entries
@@ -178,14 +161,12 @@ def createPicture2(histo1, histo2, scaled, err, filename, self):
     if (filename == "h_ele_charge"):
        n_ele_charge = histo1.GetEntries()
        
-    #self.cnv = ROOT.TCanvas("canvas", "", 960, 900)
     self.cnv.SetCanvasSize(960, 900)
     self.cnv.Clear()
     self.cnv.SetFillColor(10)
     
     pad1 = ROOT.TPad("pad1", "pad1", 0, 0.25, 1, 1.0) # ,0,0,0
     pad1.SetBottomMargin(0.05)
-    #pad1.SetGridx()
     pad1.Draw()
     pad1.cd()
     
@@ -227,7 +208,6 @@ def createPicture2(histo1, histo2, scaled, err, filename, self):
     pad2 = ROOT.TPad("pad2", "pad2", 0, 0.05, 1, 0.25) # ,0,0,0
     pad2.SetTopMargin(0.025)
     pad2.SetBottomMargin(0.2)
-    #pad2.SetGridx()
     pad2.SetGridy()
     pad2.Draw()
     pad2.cd()
@@ -235,7 +215,6 @@ def createPicture2(histo1, histo2, scaled, err, filename, self):
     histo3 = histo1.Clone("histo3")
     histo3.SetLineColor(kBlack)
     histo3.SetMaximum(2.)
-    #histo3.Sumw2()
     histo3.SetStats(0)
     histo3.Divide(histo2)
     histo3.SetMarkerStyle(21)
@@ -271,8 +250,6 @@ def createPicture2(histo1, histo2, scaled, err, filename, self):
     self.cnv.Update()
 
     self.cnv.SaveAs(filename)
-#    self.cnv.Closed()
-    #print "createPicture2 end OK"
     
     return
         

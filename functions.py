@@ -19,7 +19,6 @@ from ROOT import TCanvas
 
 def working_dirs_creation(self): # working dir are for resuming the computation. Used for root files loading.
     import errno
-#    print "cmd_working_dirs_creation"
     self.working_dir_rel = self.working_dir_base + '/' + str(self.my_choice_rel_1[6:]) # self.lineedit1.text()[6:]
     self.working_dir_ref = self.working_dir_rel + '/' + str(self.my_choice_ref_1[6:]) # self.lineedit3.text()[6:]
     self.wp.write("self.working_dir_rel : %s\n" % self.working_dir_rel)
@@ -29,7 +28,6 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
     
     if not os.path.exists(self.working_dir_rel):
         os.chdir(self.working_dir_base) # going to base folder
-#        print "Creation of %s release folder" % str(self.working_dir_rel)
         try:
             os.makedirs(str(self.working_dir_rel))
         except OSError as e:
@@ -39,13 +37,11 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
         self.textReport += "Creation of " + str(self.working_dir_rel) + " folder" + "<br>"
         self.exist_working_dir_rel = False
     else:
-#        print "release folder %s already created" % str(self.working_dir_rel)
         self.wp.write("release folder %s already created\n" % str(self.working_dir_rel))
         self.textReport += "release folder " + str(self.working_dir_rel) + " already created" + "<br>"
         self.exist_working_dir_rel = True
     os.chdir(self.working_dir_rel)   # Change current working directory
     if not os.path.exists(self.working_dir_ref):
-#        print "Creation of %s reference folder" % str(self.working_dir_ref)
         try:
             os.makedirs(str(self.working_dir_ref))
         except OSError as e:
@@ -55,7 +51,6 @@ def working_dirs_creation(self): # working dir are for resuming the computation.
         self.textReport += "Creation of " + str(self.working_dir_ref) + " reference folder" + "<br>"
         self.exist_working_dir_ref = False
     else:
-#        print "reference folder %s already created" % str(self.working_dir_ref)
         self.wp.write("reference folder %s already created\n" % str(self.working_dir_ref))
         self.textReport += "reference folder " + str(self.working_dir_ref) + " already created" + "<br>"
         self.exist_working_dir_ref = True
@@ -72,7 +67,6 @@ def folder_creation(self): # create the folders for the choice. the resuming tex
     fieldname = self.validationType1 + "_"
     fieldname = fieldname + self.validationType2
     fieldname = fieldname + "_" + now.strftime("%Y_%m_%d-%H%M%S")
-#    print("fieldname : %s") % fieldname
     self.wp.write("fieldname : %s\n" % fieldname)
     self.textReport += "fieldname : " + fieldname + "<br>"
     
@@ -86,29 +80,15 @@ def folder_creation(self): # create the folders for the choice. the resuming tex
         self.wp.write("creating : %s folder\n" % m_dir)
         self.textReport += "creating : " + m_dir + " folder" + "<br>"
     else:
-#        print "%s already created" % m_dir
         self.wp.write("%s already created\n" % m_dir)
         self.textReport += m_dir + " already created" + "<br>"
     os.chdir(actual_dir)
                
-    return # m_dir
+    return 
 
 def finalFolder_creation(self):
-#    print "finalFolder_creation"
-    #actual_dir = os.getcwd()
-#    if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
-#        os.makedirs(str(self.finalFolder))
-#        self.wp.write("Creation of (%s) folder\n" % str(self.finalFolder))
-#        self.textReport += "Creation of " + str(self.finalFolder) + " final folder" + "<br>"
-#        self.exist_finalFolder = False
-#    else:
-#        print "%s already created" % str(self.finalFolder)
-#        self.wp.write("%s already created\n" % str(self.finalFolder))
-#        self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
-#        self.exist_finalFolder = True
     check_finalFolder(self)
     if self.exist_finalFolder: # True
-#        print "%s already created" % str(self.finalFolder)
         self.wp.write("%s already created\n" % str(self.finalFolder))
         self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
     else: # False
@@ -118,12 +98,7 @@ def finalFolder_creation(self):
     
 def dataSets_finalFolder_creation(self):
     actual_dir = os.getcwd()
-#    print "actual dir : %s" % actual_dir
     os.chdir(self.finalFolder) # going into finalFolder
-#    print "here : %s" % os.getcwd()
-#    print "okToPublishDatasets"
-#    print self.selectedRelDatasets
-#    print self.okToPublishDatasets
     # create datasets folders
     selectedText = ""
     report_name = self.working_dir_report + '/report.olog'
@@ -131,8 +106,6 @@ def dataSets_finalFolder_creation(self):
     wr.write("Validation report : \n")
     
     for i, elt in enumerate(self.finalList):
-#        print("finalFolder_creation : dataset=%s" % elt[0])
-#        print("finalFolder_creation : root file=%s" % elt[1])
         wr.write("\ndataset=%s\n" % elt[0])
         dts = elt[0]
         # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
@@ -140,7 +113,6 @@ def dataSets_finalFolder_creation(self):
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
         
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
-#        print '%s : %s' % (dts, dataSetFolder)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
             wr.write("%s does not exist. Creating it\n" % dataSetFolder)
             os.makedirs(dataSetFolder) # create reference folder
@@ -153,7 +125,6 @@ def dataSets_finalFolder_creation(self):
             self.textReport += "creating gifs folder" + "<br>"
             os.chdir('../')
         else: # dataSetFolder already created
-#            print "%s already created" % dataSetFolder
             wr.write("%s already created\n" % dataSetFolder)
             self.wp.write("%s already created\n" % dataSetFolder)
             self.textReport += dataSetFolder + " already created" + "<br>"
@@ -176,24 +147,16 @@ def dataSets_finalFolder_creation(self):
         wr.write("config file for reference : %s \n" % it2)
         self.textReport += "config file for target : " + it1 + "<br>"
         self.textReport += "config file for reference : " + it2 + "<br>"
-        #print "finalFolder_creation : config file for target : " + it1
-        #print "finalFolder_creation : config file for reference : " + it2
         self.wp.write("tree path for target : %s \n" % tp_1)
         self.wp.write("tree path for reference : %s \n" % tp_2)
         wr.write("tree path for target : %s \n" % tp_1)
         wr.write("tree path for reference : %s \n" % tp_2)
         self.textReport += "tree path for target : " + tp_1 + "<br>"
         self.textReport += "tree path for reference : " + tp_2 + "<br>"
-        #print "finalFolder_creation : tree path for target : " + tp_1
-        #print "finalFolder_creation : tree path for reference : " + tp_2
         
         shutil.copy2(it1, 'config_target.txt')
         shutil.copy2(it2, 'config_reference.txt')
         # create gifs pictures & web page
-        
-        #initRoot() # trafered to Gev.py init part
-        #initRootStyle()
-        #cnv = TCanvas("canvas")
         
         CMP_CONFIG = 'config_target.txt'
         CMP_TITLE = 'gedGsfElectrons ' + dts
@@ -201,28 +164,15 @@ def dataSets_finalFolder_creation(self):
         CMP_BLUE_FILE = self.my_choice_ref_1
         image_up = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/up.gif"
         image_point = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/point.gif"
-        #tree_path = "/DQMData/Run 1/EgammaV/Run summary/ElectronMcSignalValidator/" # WARNING : must be different for miniAOD, not used
-        # ElectronMcSignalValidator
-        # ElectronMcSignalValidatorMiniAOD
-        # ElectronMcSignalValidatorPt1000
-        # ElectronMcFakeValidator
        
         f = open(CMP_CONFIG, 'r')
         input_rel_file = self.working_dir_rel + '/' + elt[1]
-        #print("finalFolder_creation : input_rel_file : %s" % input_rel_file )
         f_rel = ROOT.TFile(input_rel_file)
-        #f_rel.ls()
-        #print("finalFolder_creation : tp_1 : %s" % tp_1 )
         h1 = getHisto(f_rel, tp_1)
-        #h1.ls()
 
         input_ref_file = self.working_dir_ref + '/' + elt[2]
-        #print("finalFolder_creation : input_ref_file : %s" % input_ref_file )
         f_ref = ROOT.TFile(input_ref_file)
-        #f_ref.ls()
-        #print("finalFolder_creation : tp_2 : %s" % tp_2 )
         h2 = getHisto(f_ref, tp_2)
-        #h2.ls()
         wr.write("CMP_CONFIG = %s\n" % CMP_CONFIG)
         wr.write("input_rel_file = %s\n" % input_rel_file)
         wr.write("input_ref_file = %s\n" % input_ref_file)
@@ -253,9 +203,7 @@ def dataSets_finalFolder_creation(self):
             wp.write("<p>In all plots below")
             wp.write(", the <b><font color='red'> " + CMP_RED_FILE + " </font></b> histograms are in red") # new release red in OvalFile
             wp.write(", and the <b><font color='blue'> " + CMP_BLUE_FILE + " </font></b> histograms are in blue.") # ref release blue in OvalFile
-#        wp.write(" " + "red_comment" + " " + "blue_comment") # comments from OvalFile
         wp.write(" Some more details") # 
-#        wp.write(": <a href=\"electronCompare.C\">script</a> used to make the plots") # no more used : i.e. no more oval & no more electronCompare.C
         wp.write(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms") # .txt file
         wp.write(", <a href=\"gifs/\">images</a> of histograms" + "." ) # 
         wp.write("</p>\n")
@@ -267,32 +215,24 @@ def dataSets_finalFolder_creation(self):
         tmp = []
         for line in f:
             if ( len(line) == 1 ): # len == 0, empty line
-                #print "empty"
                 if ( ( len(key) != 0 ) and ( len(tmp) != 0) ): 
                     histoArray_0[key] = tmp
                     key = ""
                     tmp = []
             else: # len <> 0
-                #print line + " : " + str(len(line))
                 if ( len(key) == 0 ):
                     key = line # get title
-#                    print ("title : %s" % key)
                     titlesList.append(line)
                 else:
                     tmp.append(line) # histo name
                     t1 = line.split("/")
                     t2 = str(t1[1])
                     short_positions = t2.split()
-                    #print short_positions[3]
                     if ( short_positions[3] == '1' ): # be careful it is '1' and not 1 (without quote)
                         tmp.append("endLine")
 
-#        print "***"
-        #print titlesList
-        #print histoArray_0
         # fin remplissage tableau titres et dict
         f.close()
-        #print len(titlesList)
         wp.write( "<table border=\"1\" cellpadding=\"5\" width=\"100%\">" )
         
         for i in range(0, len(titlesList)):
@@ -303,11 +243,8 @@ def dataSets_finalFolder_creation(self):
             titles = titlesList[i].split() # explode(" ", $clefs[$i])
             if len(titles) > 1 :
                 titleShortName = titles[0] + "_" + titles[1]
-#                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
             else:
                 titleShortName = titles[0]
-                #print i, ' ', titlesList[i], ' : ', titles, titles[0]
-            #titleShortName = substr($titleShortName, 0, -1) # keep out the last character. not used.
             wp.write( "&nbsp;&nbsp;" + "<a href=\"#" + titleShortName + "\">" ) # write group title
             wp.write( "<img width=\"18\" height=\"15\" border=\"0\" align=\"center\" src=" + image_point + " alt=\"Top\"/>" + "<br><br>" )
             textToWrite += "</a>"
@@ -315,12 +252,9 @@ def dataSets_finalFolder_creation(self):
             numLine = 0
             
             for elem in histoArray_0[titlesList[i]]:
-                #print elem
-#                print numLine
                 otherTextToWrite = ""
                 
                 if ( elem == "endLine" ): 
-                    #print "==> endLine"
                     otherTextToWrite += "<br>"
                 else: # no endLine
                     histo_names = elem.split("/")
@@ -328,7 +262,6 @@ def dataSets_finalFolder_creation(self):
                     histoShortNames = histo_names[1]
                     histo_pos = histoShortNames
                     histo_positions = histo_pos.split()
-                    #print "histo_positions : ", histo_positions
                     short_histo_names = histoShortNames.split(" ")
                     short_histo_name = short_histo_names[0].replace("h_", "")
                     if "ele_" in short_histo_name:
@@ -337,11 +270,9 @@ def dataSets_finalFolder_creation(self):
                         short_histo_name = short_histo_name.replace("scl_", "")
                     if "bcl_" in short_histo_name:
                         short_histo_name = short_histo_name.replace("bcl_", "")
-                    #print "short_histo_name : %s" % short_histo_name
                     [after, before, common] = testExtension(short_histo_name, histoPrevious, self)
                     
                     if ( histo_positions[3] == "0" ):
-                        #print 'histo_positions[3] = 0 : ', histo_positions[3]
                         if ( numLine == 0 ):
                             otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=\'green\'>" + short_histo_name + "</font></a>" + "&nbsp;\n"
                             common = short_histo_name
@@ -353,7 +284,6 @@ def dataSets_finalFolder_creation(self):
                                 otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=green>" + after + "</font></a>" + "&nbsp;\n"
                             common = before
                     else: # histo_positions[3] == "1"
-                        #print 'histo_positions[3] = 1 : ', histo_positions[3]
                         if ( numLine == 0 ):
                             otherTextToWrite += "<a href=\"#" + short_histo_name + "\"><font color=grey>" + short_histo_name + "</font></a>" + "&nbsp;\n"
                             common = short_histo_name
@@ -395,7 +325,6 @@ def dataSets_finalFolder_creation(self):
             titles = titlesList[i].split()
             if len(titles) > 1 :
                 titleShortName = titles[0] + "_" + titles[1]
-#                print i, ' ', titlesList[i], ' : ', titles, titles[0], "_", titles[1]
             else:
                 titleShortName = titles[0]
             wp.write( "\n<td>\n<b> " )
@@ -403,7 +332,6 @@ def dataSets_finalFolder_creation(self):
             wp.write( titlesList[i] + "</b></td>" )
             wp.write( "</tr><tr valign=\"top\">" )
             for elem in histoArray_0[titlesList[i]]:
-                #print elem
                 if ( elem != "endLine" ): 
                     histo_names = elem.split("/")
                     histo_name = histo_names[0]
@@ -420,22 +348,17 @@ def dataSets_finalFolder_creation(self):
                         short_histo_name = short_histo_name.replace("bcl_", "") # ARRET
                     gif_name = "gifs/" + short_histo_names[0] + ".gif"
                     histo_name_recomp = short_histo_names[0]
-                    #print "dataSets_finalFolder_creation : histo2 name = %s" % short_histo_names[0]
                     histo_2 = h2.Get(short_histo_names[0]) #  
                     if checkRecompInName(histo_name_recomp): # 
-                        #print("RECOMP")
                         short_histo_names[0] = histo_name_recomp.replace("_recomp", "")
                         gif_name = "gifs/" + short_histo_names[0] + "_recomp.gif"
                     
-                    #print "dataSets_finalFolder_creation : histo1 name = %s" % short_histo_names[0]
                     histo_1 = h1.Get(short_histo_names[0]) #  
                     if checkRecompInName(histo_name_recomp) and self.checkSpecTarget1.isChecked(): # RECO vs miniAOD. For miniAOD vs miniAOD, we do not do this.
                         # we inverse histo1 & histo2 in order to keep the term "recomputed" into the title.
                         PictureChoice(histo_2, histo_1, histo_positions[1], histo_positions[2], gif_name, self)
-                        #print ("finalFolder_creation : recomp" )
                     else:
                         PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, self)
-                        #print ("finalFolder_creation : no recomp" )
                     
                     if ( lineFlag ):
                         wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
@@ -485,14 +408,11 @@ def testExtension(histoName, histoPrevious, self):
             for i in range(1, nMax-1):
                 before += "_" + afters[i]
         else:
-#            print "general"
             if ( histoPrevious == "" ):
-#                print "empty"
                 before = histoName
                 after = "" 
                 common = histoName
             else:
-#                print "not empty"
                 avant =  afters[0]
                 after = ""
                 for i in range(1, nMax-1):
@@ -506,19 +426,15 @@ def testExtension(histoName, histoPrevious, self):
                 after = after[1:]
                 
     else: # no _ in histoName
-#        print "no _ in histo name"
         before = histoName
         common = histoName
     
-    #print after, before, common
     return [after, before, common]
         
 def clean_collections2(collectionItem, validationType_1, validationType_2, validationType_3, relrefChoice):
     import re
     temp = True
     checkFvsF = ""
-    # relrefChoice == "ref" and validationType1 == "FastFull" ==> Full, validationType_3
-    # relrefChoice == "rel" and validationType1 == "FastFull" ==> Fast, validationType_2
     if ( ( relrefChoice == "ref") and (validationType_1 == "FastFull") ):
         checkFvsF = "Full"
     if ( ( relrefChoice == "rel") and (validationType_1 == "FastFull") ):
@@ -527,7 +443,6 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     valType = validationType_2 # default
     if ( relrefChoice == "ref" ):
         valType = validationType_3
-    #print "relrefChoice : %s, valType : %s" %(relrefChoice, valType)
     
     c_Fast = False
     if ( re.search('Fast', collectionItem) ): #  match Fast 
@@ -560,9 +475,6 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
         if (c_Fast): # Fast test
             temp = False
     
-    # RESUMING
-    #print "relrefChoice : %s, c_Fast : %s, c_PU25 : %s, c_pmx25 : %s - temp : %s)" % (collectionItem, c_Fast, c_PU25, c_pmx25, temp)
-    
     return temp
 
 def list_search_0(self):
@@ -586,11 +498,9 @@ def list_search_0(self):
     temp_0 = []  
     for item in liste_releases_0:
         # find if some elements are empty or not. if no -> append
-#        print item[0:-1], " : "
         tt = list_search_1(item[0:-1])
         if (len(tt) > 0):
- #           print len(tt)
-            temp_0.append(item[0:-1])
+             temp_0.append(item[0:-1])
 
     return temp_0
 
@@ -603,8 +513,6 @@ def list_search_1(my_choice_0):
     ## Define options
     option_is_from_data = "mc" # mc ou data
     option_release_1 = str( my_choice_0 )
-#    print "**list search 1 : ", option_release_1
-#    option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
     option_mthreads = 3
     option_dry_run = True # False for loading files
     
@@ -613,10 +521,8 @@ def list_search_1(my_choice_0):
 
     i = 0
     temp_1 = []  
-#    print "longueur : ", len(liste_releases_1)
     if ( len(liste_releases_1) > 0 ):
         for item in liste_releases_1:
-#            print "list search 1 : ", item
             temp_1.append(item)
 
     return temp_1
@@ -624,42 +530,28 @@ def list_search_1(my_choice_0):
 def list_search_2(collection, filtre):
     import re
 
-#    print "list_search_2"
     temp_1 = []  
     filtre = sorted(set(filtre), reverse=True)
-#    print "list_search_2 : filtre : ", filtre
-#    print "list_search_2 : collection : ", collection
     for item1 in collection:
         for item2 in filtre:
             if (item2 == item1):
                 temp_1.append(item1)
-#                print "list_search_2 : OK : ", item2, item1
                 break
     temp_1 = sorted(set(temp_1), reverse=True)
-#    print "list_search_2 end OK"
     return temp_1
     
 def list_search_3(collection, filtre):
     import re
 
-#    print "lg collection : ", len(collection)
-#    print "lg filtre     : ", len(filtre), filtre
     temp_1 = []  
     for item1 in collection:
         if re.search(filtre, item1):
             temp_1.append(item1)
-#            print "OK : ", filtre, item1
-#        else:
-#            print "KO : ", filtre, item1
     return temp_1
        
 def list_search_5(self):
     import re
 
-#    print "list_search_5"
-#    print "list_search_5 : self.validationType1 = ",  self.validationType1
-#    print "list_search_5 : self.validationType2 = ",  self.validationType2
-#    print "list_search_5 : self.validationType3 = ",  self.validationType3
     self.wp.write("list_search_5 : self.validationType1 = %s\n " % self.validationType1)
     self.wp.write("list_search_5 : self.validationType2 = %s\n " % self.validationType2)
     self.wp.write("list_search_5 : self.validationType3 = %s\n " % self.validationType3)
@@ -677,8 +569,6 @@ def list_search_5(self):
     temp_ref = []
 
     filtre = sorted(set(self.selectedDataSets), reverse=True)
-#    print "list_search_5 : self.selectedDataSets = %s." % str(self.selectedDataSets)
-#    print "list_search_5 : filtre = %s." % str(filtre)
     self.wp.write("list_search_5 : self.selectedDataSets = %s\n " % str(self.selectedDataSets))
     self.wp.write("list_search_5 : filtre = %s\n " % str(filtre))
     self.textReport += "list_search_5 : self.selectedDataSets = " + str(self.selectedDataSets) + "<br>"
@@ -689,27 +579,19 @@ def list_search_5(self):
     # DATASET
     self.rel_list_2 = list_search_2(self.rel_list_1, self.selectedDataSets) # get dataset list used in rel_list_1
     self.ref_list_2 = list_search_2(self.ref_list_1, self.selectedDataSets) # get dataset list used in ref_list_1
-#    print "list_search_5 : self.rel_list_2 = %s." % self.rel_list_2
-#    print "list_search_5 : self.ref_list_2 = %s." % self.ref_list_2 # => OK, 1 dataset
     
     # PART RELEASE
     filtre = sorted(set(self.rel_list_2), reverse=True)
-#    print "list_search_5 : filtre rel = %s." % str(filtre)
     self.wp.write("list_search_5 : filtre = %s\n " % str(filtre))
     self.textReport += "list_search_5 : filtre = " + str(filtre) + "<br>"
     for item1 in self.releasesList_rel_2:
         for item2 in filtre:
-            #print("item1 : %s - item2 : %s") % (item1, item2)
             if re.search(item2 + '__', item1):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "rel"):
-#                    print("item1 : %s - item2 : %s") % (item1, item2)
                     temp_12.append([explode_item(item1)[2], item2])
-#                    print "list_search_5 : len = %i" % len(temp_12)
                 break
 
-#    print "list_search_5 : len of temp_12 = %i." % len(temp_12)
     if ( len(temp_12) > 0 ):
-#        print "list_search_5 : " + str(temp_12)
         temp_12.sort()
 
         temp_rel.append( [temp_12[0][0], temp_12[0][1]] )
@@ -726,7 +608,6 @@ def list_search_5(self):
         
     # PART REFERENCE
     filtre = sorted(set(self.ref_list_2), reverse=True)
-#    print "list_search_5 : filtre ref = %s." % str(filtre)
     self.wp.write("list_search_5 : filtre = %s\n " % str(filtre))
     self.textReport += "list_search_5 : filtre = " + str(filtre) + "<br>"
     if (( validationType_3 == 'miniAOD' ) and ( validationType_2 == 'RECO' )): # case RECO vs miniAOD
@@ -739,16 +620,11 @@ def list_search_5(self):
         for item1 in releasesTemp:
             for item2 in filtre:
                 if re.search(item2 + '__', item1):
-                    #print("item1 : %s - item2 : %s") % (item1, item2)
                     if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "ref"):
-#                        print("item1 : %s - item2 : %s") % (item1, item2)
                         temp_34.append([explode_item(item1)[2], item2])
-#                        print "list_search_5 : len = %i" % len(temp_34)
                     break
     
-#    print "list_search_5 : len of temp_34 = %i." % len(temp_34)
     if ( len(temp_34) > 0 ):
-#        print "list_search_5 : " + str(temp_34)
         temp_34.sort()
 
         temp_ref.append( [temp_34[0][0], temp_34[0][1]] )
@@ -763,16 +639,13 @@ def list_search_5(self):
         temp_3.append(temp_ref[i][1])
         temp_4.append(temp_ref[i][0])
     
-#    print "list_search_5 end OK"
     return (temp_1, temp_2, temp_3, temp_4)
     
 def sub_releases(tab_files):
-#    print "sub_releases", len(tab_files)
     i = 0
     temp = []
     for t in tab_files:
         tt = explode_item(t)
-#        print '%d, %s' % (i+1, tt[1])
         temp.append(tt[1])
         i += 1
     temp = sorted(set(temp), reverse=True)
@@ -780,15 +653,11 @@ def sub_releases(tab_files):
     
 def sub_releases2(release, tab_files):
     import re
-#    print "sub_releases2 : ", len(tab_files)
-#    print "release : ", release
     i = 0
     temp = []
     for t in tab_files:
         if ( re.search(release, t) ):
-#            print 'sub_releases2 : %s' % t
             tt = explode_item(t)
-#            print 'sub_releases2 : %d, %s, %s' % (i+1, tt[0], tt[1])
             temp.append(tt[0])
         i += 1
     temp = sorted(set(temp)) # , reverse=True
@@ -802,30 +671,22 @@ def explode_item(item):
     # splitting with __ : TTbar_13 CMSSW_7_4_0_pre8-PUpmx50ns_MCRUN2_74_V6_gs_pre7-v1
     # splitting second term with - : TTbar_13 CMSSW_7_4_0_pre8 PUpmx50ns_MCRUN2_74_V6_gs_pre7-v1
     
-#    print "explode item : ", item
     temp_item = item[22:] # DQM_V0001_R000000001__ removed
     temp_item = temp_item[:-12] # __DQMIO.root removed
     temp_item = temp_item[6:] # RelVal removed
     temp_item = temp_item.split('__')
-#    print "coucou : ", temp_item
     temp_item2 = temp_item[1].split('-', 1)
     temp_item = [ temp_item[0] ]
     for it in temp_item2:
         temp_item.append(it)
-#    print "coucou : ", temp_item
 
     return temp_item
 
 def checkFastvsFull(self):
-#    print "checkFastvsFull"
     if ( self.radio13.isChecked() ):
-    # check for FastvsFull for Fast.
         self.checkFastvsFull = True
-#        print("checkFastvsFull : checkFastvsFull = True")
     else:
         self.checkFastvsFull = False
-#        print("checkFastvsFull : checkFastvsFull = False")
-#    print "checkFastvsFull end OK"
     return self.checkFastvsFull
 
 def newName(prefix, fileName, suffix):
@@ -834,10 +695,6 @@ def newName(prefix, fileName, suffix):
 
 def checkFileName(self, fileName, case):
     checkFileName = True
-#    print self.my_choice_rel_1 + " - " + self.my_choice_ref_1
-#    newName1 = "__" + self.my_choice_rel_1 + "-"
-#    nN = newName("__", self.my_choice_rel_1, "-")
-#    print "<<<<<< : " + newName1 + " - " + fileName + " - " + nN
 
     if ( case == "rel" ):
         name = self.my_choice_rel_1
@@ -900,7 +757,6 @@ def getCheckedOptions(self):
     elif self.checkSpecReference4.isChecked():
         self.validationType3 = 'miniAOD'
 
-#    print "validationType1 : %s, validationType2 : %s, validationType3 : %s" % (self.validationType1, self.validationType2, self.validationType3)
     self.wp.write("validationType1 : %s, validationType2 : %s, validationType3 : %s\n " % (str(self.validationType1), str(self.validationType2), str(self.validationType3)))
     self.textReport += "validationType1 : " + str(self.validationType1) + "validationType2 : " + str(self.validationType2) + "validationType3 : " + str(self.validationType3) + "<br>"
     return
@@ -921,18 +777,13 @@ def updateLabelResumeSelected(self):
     selectedText += "<tr>"
     if (self.selectedRelDatasets == self.selectedRefDatasets):
         self.okToPublishDatasets = self.selectedRelDatasets
-#        self.okToDisplayDatasets = self.selectedRelDatasets
         selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
     else: # need to extract common terms in blue and others in black (red?)
-        #(self.okToPublishDatasets, self.okToDisplayDatasets) = extractDatasets(self)
         self.okToPublishDatasets = extractDatasets(self)
-        #selectedText += "<td colspan=\"2\"><br /><strong>Datasets : " + self.okToDisplayDatasets + "</strong><br /></td>"
     selectedText += "<td>  </td>"
-    #selectedText += "<td><font color = \"blue\">For Web Page Publish</font><br /><strong><font color = \"red\">" + self.okToPublishDatasets + "</font></strong><br /></td>"           
     selectedText += "</tr><tr><td><strong>GlobalTags : </td>" 
     selectedText += "<td>" + self.my_choice_rel_1 + "<br />" + self.selectedRelGlobalTag + "</td>" 
     selectedText += "<td> &nbsp;&nbsp;&nbsp; </td>"
-    #selectedText += "<td>" + self.my_choice_ref_1 + "<br />" + self.selectedRefGlobalTag + "</strong></td>"           
     selectedText += "</tr></table>"
             
     self.labelResumeSelected.clear() # 
@@ -972,9 +823,6 @@ def changeRef2Tmp(self): # put ref into memory, and put ref == rel
     
 def changeTmp2Ref(self): # retrieve rel != ref
     if ( self.my_choice_tmp != "" ): # we have an old choice for reference
-#        print "back to reference"
-#        print "actual : " + self.my_choice_ref_1
-#        print "native : " + self.my_choice_tmp
         self.wp.write("back to reference\n")
         self.wp.write("actual : %s\n" % self.my_choice_ref_1)
         self.wp.write("native : %s\n" % self.my_choice_tmp)
@@ -1018,24 +866,18 @@ def checkRecompInName(name):
 
 def set_finalFolder(self, i_loc):
     self.finalFolder = self.LocationTable[i_loc][2] + "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-#    print("set_finalFolder : %s" % self.finalFolder)
     self.finalFolder += '/' + getCheckedRadioButton(self) + '_'
-#    print("set_finalFolder : %s" % self.finalFolder)
     self.finalFolder += str(self.my_choice_ref_1[6:]) + self.temp_rf # _xxx is temp. must be only _DQM_std/_DMQ_dev.
-#    print("set_finalFolder : %s" % self.finalFolder)
 
 def check_finalFolder(self):
     if not os.path.exists(self.finalFolder): # only create the first folder for saving gifs, i.e. release folder. 
         self.wp.write("testExist_finalFolder ; (%s) folder not exist\n" % str(self.finalFolder))
         self.textReport += "testExist_finalFolder : " + str(self.finalFolder) + " final folder not exist" + "<br>"
         self.exist_finalFolder = False
-#        print "testExist_finalFolder : False"
     else:
-#        print "testExist_finalFolder : %s already created" % str(self.finalFolder)
         self.wp.write("%s already created\n" % str(self.finalFolder))
         self.textReport += "final folder " + str(self.finalFolder) + " already created" + "<br>"
         self.exist_finalFolder = True
-#        print "testExist_finalFolder : True"
     return
 
 def check_working_dirs(self): # 
@@ -1048,23 +890,19 @@ def check_working_dirs(self): #
     self.textReport += "self.working_dir_ref : " + self.working_dir_ref + "<br>"
     
     if not os.path.exists(self.working_dir_rel):
-#        print "%s release folder not exist" % str(self.working_dir_rel)
         self.wp.write("%s release folder not exist\n" % str(self.working_dir_rel))
         self.textReport += str(self.working_dir_rel) + " folder not exist" + "<br>"
         self.exist_working_dir_rel = False
     else:
-#        print "release folder %s already created" % str(self.working_dir_rel)
         self.wp.write("release folder %s already created\n" % str(self.working_dir_rel))
         self.textReport += "release folder " + str(self.working_dir_rel) + " already created" + "<br>"
         self.exist_working_dir_rel = True
 
     if not os.path.exists(self.working_dir_ref):
-#        print "%s reference folder not exist" % str(self.working_dir_ref)
         self.wp.write("%s reference folder not exist\n" % str(self.working_dir_ref))
         self.textReport += str(self.working_dir_ref) + " reference folder not exist" + "<br>"
         self.exist_working_dir_ref = False
     else:
-#        print "reference folder %s already created" % str(self.working_dir_ref)
         self.wp.write("reference folder %s already created\n" % str(self.working_dir_ref))
         self.textReport += "reference folder " + str(self.working_dir_ref) + " already created" + "<br>"
         self.exist_working_dir_ref = True

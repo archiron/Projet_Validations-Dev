@@ -11,7 +11,7 @@ def initGpLabelResume(self):
     return
 
 def initButtonResume(self):
-    self.buttonResume = QPushButton(self.trUtf8("Get list of operations")) # par defaut
+    self.buttonResume = QPushButton(self.trUtf8("Get list of operations")) # default
     self.buttonResume.setMinimumWidth(150)
     self.buttonResume.setMaximumWidth(150)
     self.connect(self.buttonResume, SIGNAL("clicked()"), self.showResume) #

@@ -18,13 +18,11 @@ def DataSetsFilter(self):
         fieldname = fieldname + self.validationType3
     else:
         fieldname = fieldname + self.validationType2
-#    print("fieldname=%s") % fieldname
     table=getattr(sys.modules[__name__], "DataSetsFilter_%s" % fieldname)(self)
     
     return table
 
 def DataSetsFilter_FullRECO(self):
-#    print "Full"
     table=[
     ["SingleElectronPt10", 1], # 1 : displayed
     ["SingleElectronPt10_UP15", 0], 
@@ -38,7 +36,6 @@ def DataSetsFilter_FullRECO(self):
     return table
 
 def DataSetsFilter_FastRECO(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -46,7 +43,6 @@ def DataSetsFilter_FastRECO(self):
     return table
 
 def DataSetsFilter_FastFullRECO(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -54,7 +50,6 @@ def DataSetsFilter_FastFullRECO(self):
     return table
 
 def DataSetsFilter_FullPU25(self):
-#    print "Full"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -62,7 +57,6 @@ def DataSetsFilter_FullPU25(self):
     return table
 
 def DataSetsFilter_FastPU25(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -70,7 +64,6 @@ def DataSetsFilter_FastPU25(self):
     return table
 
 def DataSetsFilter_FastFullPU25(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -78,7 +71,6 @@ def DataSetsFilter_FastFullPU25(self):
     return table
 
 def DataSetsFilter_FullPUpmx25(self):
-#    print "Full"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -86,7 +78,6 @@ def DataSetsFilter_FullPUpmx25(self):
     return table
 
 def DataSetsFilter_FastPUpmx25(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -94,7 +85,6 @@ def DataSetsFilter_FastPUpmx25(self):
     return table
 
 def DataSetsFilter_FastFullPUpmx25(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -102,7 +92,6 @@ def DataSetsFilter_FastFullPUpmx25(self):
     return table
 
 def DataSetsFilter_FullminiAOD(self):
-#    print "Full"
     table=[
     ["SingleElectronPt10", 1],
     ["TTbar_13", 1],
@@ -111,7 +100,6 @@ def DataSetsFilter_FullminiAOD(self):
     return table
 
 def DataSetsFilter_FastminiAOD(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -119,7 +107,6 @@ def DataSetsFilter_FastminiAOD(self):
     return table
 
 def DataSetsFilter_FastFullminiAOD(self):
-#    print "Fast"
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
@@ -130,8 +117,6 @@ def extractDatasets(self):
     extraction = ""
     extractionDisplay = ""
     # display of the datasets strings
-#    print "datasets release   : ", self.selectedRelDatasets
-#    print "datasets reference : ", self.selectedRefDatasets
     self.wp.write("datasets release   : %s\n" % self.selectedRelDatasets)
     self.wp.write("datasets reference : %s\n" % self.selectedRefDatasets)
     self.textReport += "datasets release   : " + self.selectedRelDatasets + "<br>"
@@ -143,44 +128,35 @@ def extractDatasets(self):
     self.textReport += "cuttedRelease   : " + str(cuttedRelease) + "<br>"
     # searching in self.selectedRefDatasets
     for elem in cuttedRelease:
-#        print elem
         if re.search(elem, self.selectedRefDatasets):
-#            print "OK"
             extraction += ', ' + elem
             extractionDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
         else:
-#            print "KO"
             extractionDisplay += ', ' + elem
 
     extraction = extraction[2:]
     extractionDisplay = extractionDisplay[2:]
     
-    return extraction #, extractionDisplay
+    return extraction 
     
 def extractDatasetsFastvsFull(self): # do not verify if checkFastvsFull(self) !! MUST be called inside a if(checkFastvsFull(self)): !!
     extractionFastvsFull = ""
     extractionFastvsFullDisplay = ""
     # display of the datasets strings
-#    print "datasets release   : ", self.selectedRelDatasets
-#    print "datasets reference : ", self.selectedFvsFDatasets
     self.wp.write("datasets release   : %s\n" % self.selectedRelDatasets)
     self.wp.write("datasets reference : %s\n" % self.selectedFvsFDatasets)
     self.textReport += "datasets release   : " + self.selectedRelDatasets + "<br>"
     self.textReport += "datasets reference : " + self.selectedFvsFDatasets + "<br>"
     # cutting self.selectedRelDatasets
     cuttedRelease = str(self.selectedRelDatasets).split(',')
-#    print "cuttedRelease : ", cuttedRelease
     self.wp.write("cuttedRelease : %s\n" % str(cuttedRelease))
     self.textReport += "cuttedRelease   : " + str(cuttedRelease) + "<br>"
     # searching in self.selectedFvsFDatasets
     for elem in cuttedRelease:
-#        print elem
         if re.search(elem, self.selectedFvsFDatasets):
-#            print "OK"
             extractionFastvsFull += ', ' + elem
             extractionFastvsFullDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
         else:
-#            print "KO"
             extractionFastvsFullDisplay += ', ' + elem
     
     extractionFastvsFull = extractionFastvsFull[2:]
@@ -291,8 +267,6 @@ def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
     # ElectronMcSignalValidatorPt1000
     # ElectronMcFakeValidator
 
-#    print "testForDataSetsFile : ", dataSetsName
-    
     t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
     t_ref = t_rel
     tp_rel = 'ElectronMcSignalValidator'
@@ -309,27 +283,20 @@ def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
         tp_ref = tp_rel
     else: # general
         if self.checkSpecTarget1.isChecked(): # RECO
-            #print "testForDataSetsFile : RECO"
             if self.checkSpecReference4.isChecked(): # RECO vs miniAOD
-                #print "testForDataSetsFile : RECO vs miniAOD"
-                #t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
                 t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt' # we have only miniAOD histos to compare.
                 t_ref = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
                 tp_rel = 'ElectronMcSignalValidator'
                 tp_ref = 'ElectronMcSignalValidatorMiniAOD'
             else: # RECO vs RECO
-                #print "testForDataSetsFile : RECO vs RECO"
                 t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
                 t_ref = t_rel
                 tp_rel = 'ElectronMcSignalValidator'
                 tp_ref = 'ElectronMcSignalValidator'
         elif self.checkSpecTarget4.isChecked(): # miniAOD vs miniAOD
-            #print "testForDataSetsFile : miniAOD vs miniAOD"
             t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
             t_ref = t_rel
             tp_rel = 'ElectronMcSignalValidatorMiniAOD'
             tp_ref = tp_rel
-#            print("testForDataSetsFile : tp_rel %s") % tp_rel
-    #print "testForDataSetsFile end OK "
     return [t_rel, t_ref, tp_rel, tp_ref]
 

@@ -6,7 +6,6 @@ from PyQt4.QtCore import *
 from PyQt4 import QtCore
 
 def initDataSets(self):
-#    print "initDataSets"
 
     self.QLW_dataset.clear()
     for it in self.DataSetTable: # list of DataSets
@@ -34,8 +33,6 @@ def clearReleasesList(self):
     return
     
 def writeLabelCombo3(self):
-#    print "LabelCombo3 = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
-#    print "LabelCombo3 : %s" % self.tasks_list[self.tasks_counter]
     if self.tasks_counter >= self.tasks_counterMax:
         txt = "(" + str(self.tasks_counter) + "/" + str(self.tasks_counter) + ") Next : " 
     else:

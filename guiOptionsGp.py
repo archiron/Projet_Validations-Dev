@@ -9,13 +9,11 @@ from Datasets_default import DataSetsFilter
 from Paths_default import *
 
 def initGpCalcul(self):
-#    print "initGpCalcul"
 
     self.QGBox1 = QGroupBox("Calcul")
     self.QGBox1.setMaximumHeight(120)
-#    self.QGBox1.setMaximumWidth(120)
     self.QGBox1.setMinimumWidth(120)
-    self.radio11 = QRadioButton("FULL vs FULL") # par defaut
+    self.radio11 = QRadioButton("FULL vs FULL") # default
     self.radio12 = QRadioButton("FAST vs FAST")
     self.radio13 = QRadioButton("FAST vs FULL")
     self.radio11.setChecked(True)
@@ -34,13 +32,11 @@ def initGpCalcul(self):
     return
     
 def initGpSpecTarget(self):
-#    print "initGpSpecTarget"
 
     self.QGBox2 = QGroupBox("Validation")
     self.QGBox2.setMaximumHeight(120)
-    #self.QGBox2.setMaximumWidth(100)
     self.QGBox2.setMinimumWidth(100)
-    self.checkSpecTarget1 = QRadioButton("RECO") # par defaut
+    self.checkSpecTarget1 = QRadioButton("RECO") # default
     self.checkSpecTarget2 = QRadioButton("PU25")
     self.checkSpecTarget3 = QRadioButton("PUpmx25")
     self.checkSpecTarget4 = QRadioButton("miniAOD")
@@ -60,11 +56,9 @@ def initGpSpecTarget(self):
     vbox2.addWidget(self.checkSpecTarget4)
     vbox2.addStretch(1)
     self.QGBox2.setLayout(vbox2)
-    #self.checkSpecTarget1_Clicked()
     return
 
 def initGpSpecReference(self):
-#    print "initGpSpecReference"
 
     self.QGBoxSpecReference = QGroupBox("Spec/Ref")
     self.QGBoxSpecReference.setMaximumHeight(120)
@@ -93,7 +87,6 @@ def initGpSpecReference(self):
     return
 
 def initGpAllNone(self):
-#    print "initGpAllNone"
 
     self.QGBoxAllNone = QGroupBox("All / None")
     self.QGBoxAllNone.setMaximumHeight(120)
@@ -114,7 +107,6 @@ def initGpAllNone(self):
     return
 
 def initGpDataSets(self):
-#    print "initGpDataSets"
 
     self.QGBoxDataSets = QGroupBox("DataSets")
     self.QGBoxDataSets.setMaximumHeight(120)
@@ -127,7 +119,6 @@ def initGpDataSets(self):
     self.menu = QMenu()
     self.ag = QActionGroup(self, exclusive=False)
     self.DataSetTable = DataSetsFilter(self)
-#    print "###################################################", self.DataSetTable # TEMPORAIRE
     for item in self.DataSetTable:
         (item_name, item_checked) = item
         a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
@@ -144,7 +135,6 @@ def initGpDataSets(self):
     return
 
 def initGpFolderName(self): # can add modification on release name to obtain the folder name for the web page.
-#    print "initGpDataSets"
 
     self.QGBoxFolderName = QGroupBox("Web folder name customization : ")
     self.QGBoxFolderName.setMaximumHeight(120)
@@ -185,7 +175,7 @@ def initStdDev(self):
     self.QGBoxStdDev.setMinimumHeight(120)
     self.QGBoxStdDev.setMaximumWidth(100)		
     self.checkStdDev1 = QRadioButton("std")
-    self.checkStdDev2 = QRadioButton("dev") # par defaut
+    self.checkStdDev2 = QRadioButton("dev") # default
     self.checkStdDev2.setChecked(True)
     self.checkStdDev1.setEnabled(False)
     self.checkStdDev2.setEnabled(False)
@@ -200,7 +190,6 @@ def initStdDev(self):
     return
 
 def initGpLocation(self):
-#    print "initGpLocation"
 
     self.QGBoxLocation = QGroupBox("Location")
     self.QGBoxLocation.setMaximumHeight(120)
@@ -213,14 +202,12 @@ def initGpLocation(self):
     self.menu_loc = QMenu()
     self.loc = QActionGroup(self, exclusive=True)
     self.LocationTable = LocationFilter(self)
-#    print "###################################################", self.LocationTable # TEMPORAIRE
     for item in self.LocationTable:
         (item_name, item_checked, item_location) = item
         a2 = self.loc.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
         self.menu_loc.addAction(a2)
         self.connect(a2, SIGNAL('triggered()'), self.PathUpdate)
     self.checkLocation1.setMenu(self.menu_loc)
-    #self.selectedLocation = self.LocationTable # default, all datasets selected
     vboxLocation = QVBoxLayout()
     vboxLocation.addWidget(self.checkLocation1)
     vboxLocation.addWidget(self.checkLocation2)
@@ -229,7 +216,6 @@ def initGpLocation(self):
     return
 
 def initGpResume(self):
-#    print "initGpResume"
 
     self.QGBoxRelRef = QGroupBox("release")
     self.QGBoxRelRef.setMaximumHeight(120)

@@ -37,7 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # little bug for printing cuttedRelease in self.textReport
+        self.setWindowTitle(self.version) # only useful comments are kept.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -107,10 +107,6 @@ class Gev(QWidget):
         changeRef2Tmp(self)
 
         self.my_choice_ref_0 = self.my_choice_rel_0 # need to see if we have to keep it
-#        print ("my_choice_rel_0 = ") , self.my_choice_rel_0 # temp
-#        print ("my_choice_rel_1 = ") , self.my_choice_rel_1 # temp
-#        print ("my_choice_ref_0 = ") , self.my_choice_ref_0 # temp
-#        print ("my_choice_ref_1 = ") , self.my_choice_ref_1 # temp
         self.wp.write("my_choice_rel_0 = %s\n " % self.my_choice_rel_0)
         self.textReport += "my_choice_rel_0 = " + self.my_choice_rel_0 + "<br>"
         self.wp.write("my_choice_rel_1 = %s\n " % self.my_choice_rel_1)
@@ -138,8 +134,6 @@ class Gev(QWidget):
         self.validationType2 = 'RECO'
         getCheckedOptions(self)
         comparisonRules(self)
-#        print "Target, self.validationType2 : %s" % self.validationType2
-#        print "Target, self.validationType3 : %s" % self.validationType3
         self.wp.write("Target, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "Target, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("Target, self.validationType3 : %s\n " % self.validationType3)
@@ -153,8 +147,6 @@ class Gev(QWidget):
         self.validationType2 = 'PU25'
         getCheckedOptions(self)
         comparisonRules(self)
-#        print "Target, self.validationType2 : %s" % self.validationType2
-#        print "Target, self.validationType3 : %s" % self.validationType3
         self.wp.write("Target, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "Target, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("Target, self.validationType3 : %s\n " % self.validationType3)
@@ -168,8 +160,6 @@ class Gev(QWidget):
         self.validationType2 = 'PUpmx25'
         getCheckedOptions(self)
         comparisonRules(self)
-#        print "Target, self.validationType2 : %s" % self.validationType2
-#        print "Target, self.validationType3 : %s" % self.validationType3
         self.wp.write("Target, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "Target, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("Target, self.validationType3 : %s\n " % self.validationType3)
@@ -183,8 +173,6 @@ class Gev(QWidget):
         self.checkSpecReference4_Clicked()
         getCheckedOptions(self)
         comparisonRules(self)
-#        print "Target, self.validationType2 : %s" % self.validationType2
-#        print "Target, self.validationType3 : %s" % self.validationType3
         self.wp.write("Target, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "Target, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("Target, self.validationType3 : %s\n " % self.validationType3)
@@ -195,7 +183,6 @@ class Gev(QWidget):
     def checkAllNone1Clicked(self):
         if self.checkAllNone1.isChecked():
         # ALL : reload the default
-#            print "All"
             self.menu.clear()
             self.ag = QActionGroup(self, exclusive=False)
             for item in self.DataSetTable:
@@ -209,7 +196,6 @@ class Gev(QWidget):
     def checkAllNone2Clicked(self):
         if self.checkAllNone2.isChecked():
         # NONE : uncheck all
-#            print "None"
             self.menu.clear()
             self.ag = QActionGroup(self, exclusive=False)
             for item in self.DataSetTable:
@@ -221,11 +207,9 @@ class Gev(QWidget):
         QtCore.QCoreApplication.processEvents() 
 
     def checkStdDev1_Clicked(self):
-#        print "std"
         QtCore.QCoreApplication.processEvents() 
 
     def checkStdDev2_Clicked(self):
-#        print "dev"
         QtCore.QCoreApplication.processEvents() 
 
     def checkSpecReference1_Clicked(self):
@@ -237,14 +221,10 @@ class Gev(QWidget):
                 changeRef2Tmp(self)
             else: # Full vs Full or Fast vs Fast
                 changeTmp2Ref(self)
-#        print "----- Reference, self.validationType2 : %s" % self.validationType2
-#        print "----- Reference, self.validationType3 : %s" % self.validationType3
         self.wp.write("----- Reference, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "----- Reference, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("----- Reference, self.validationType3 : %s\n " % self.validationType3)
         self.textReport += "----- Reference, self.validationType3 : " + self.validationType3 + "<br>"
-#        print "----- Reference rel : " + self.my_choice_rel_1
-#        print "----- Reference ref : " + self.my_choice_ref_1
         self.wp.write("----- Reference rel : %s\n " % self.my_choice_rel_1)
         self.textReport += "----- Reference rel : " + self.my_choice_rel_1 + "<br>"
         self.wp.write("----- Reference ref : %s\n " % self.my_choice_ref_1)
@@ -263,14 +243,10 @@ class Gev(QWidget):
                 changeTmp2Ref(self)
         elif ( self.checkSpecTarget3.isChecked() ): # PUpmx25 vs PUpmx25
             changeRef2Tmp(self)
-#        print "Reference, self.validationType2 : %s" % self.validationType2
-#        print "Reference, self.validationType3 : %s" % self.validationType3
         self.wp.write("----- Reference, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "----- Reference, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("----- Reference, self.validationType3 : %s\n " % self.validationType3)
         self.textReport += "----- Reference, self.validationType3 : " + self.validationType3 + "<br>"
-#        print "Reference rel : " + self.my_choice_rel_1
-#        print "Reference ref : " + self.my_choice_ref_1
         self.wp.write("----- Reference rel : %s\n " % self.my_choice_rel_1)
         self.textReport += "----- Reference rel : " + self.my_choice_rel_1 + "<br>"
         self.wp.write("----- Reference ref : %s\n " % self.my_choice_ref_1)
@@ -287,14 +263,10 @@ class Gev(QWidget):
                 changeRef2Tmp(self)
             else: # Full vs Full or Fast vs Fast
                 changeTmp2Ref(self)
-#        print "Reference, self.validationType2 : %s" % self.validationType2
-#        print "Reference, self.validationType3 : %s" % self.validationType3
         self.wp.write("----- Reference, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "----- Reference, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("----- Reference, self.validationType3 : %s\n " % self.validationType3)
         self.textReport += "----- Reference, self.validationType3 : " + self.validationType3 + "<br>"
-#        print "Reference rel : " + self.my_choice_rel_1
-#        print "Reference ref : " + self.my_choice_ref_1
         self.wp.write("----- Reference rel : %s\n " % self.my_choice_rel_1)
         self.textReport += "----- Reference rel : " + self.my_choice_rel_1 + "<br>"
         self.wp.write("----- Reference ref : %s\n " % self.my_choice_ref_1)
@@ -313,14 +285,10 @@ class Gev(QWidget):
                 changeRef2Tmp(self)
             else: # Full vs Full or Fast vs Fast
                 changeTmp2Ref(self)
-#        print "Reference, self.validationType2 : %s" % self.validationType2
-#        print "Reference, self.validationType3 : %s" % self.validationType3
         self.wp.write("----- Reference, self.validationType2 : %s\n " % self.validationType2)
         self.textReport += "----- Reference, self.validationType2 : " + self.validationType2 + "<br>"
         self.wp.write("----- Reference, self.validationType3 : %s\n " % self.validationType3)
         self.textReport += "----- Reference, self.validationType3 : " + self.validationType3 + "<br>"
-#        print "Reference rel : " + self.my_choice_rel_1
-#        print "Reference ref : " + self.my_choice_ref_1
         self.wp.write("----- Reference rel : %s\n " % self.my_choice_rel_1)
         self.textReport += "----- Reference rel : " + self.my_choice_rel_1 + "<br>"
         self.wp.write("----- Reference ref : %s\n " % self.my_choice_ref_1)
@@ -344,12 +312,10 @@ class Gev(QWidget):
             a = self.ag.addAction(QAction(item_name, self, checkable=True, checked=item_checked)) # checked=True
             self.menu.addAction(a)
             self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
-        #self.setFixedSize(1200, 700)
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents() 
     
     def checkLocation2Clicked(self):
-#        print "checkLocation2Clicked"
         self.wp.write("checkLocation2Clicked")
         self.textReport += "checkLocation2Clicked" + "<br>"
         from Paths_default import LocationFilter
@@ -370,7 +336,6 @@ class Gev(QWidget):
         self.QGBox_rel2.setTitle(self.QLW_rel1.currentItem().text())        
         self.QLW_rel2.clear()
         if self.QGBox_rel0.title() == "Reference list":
-#            print "reference"
             self.wp.write("reference\n ")
             self.textReport += "reference" + "<br>"
             if (checkFastvsFull(self)):
@@ -389,31 +354,21 @@ class Gev(QWidget):
                 self.my_choice_ref_0 = self.QLW_rel1.currentItem().text()
                 self.releasesList_ref_1 = list_search_1(self.my_choice_ref_0)
                 self.ref_list_0 = sub_releases(self.releasesList_ref_1) #list_search_1(self.my_choice_ref_0))
-#            print "ItemRefClicked1 : self.my_choice_ref_0 : %s " % self.my_choice_ref_0
             self.wp.write("ItemRefClicked1 : self.my_choice_ref_0 : %s\n " % self.my_choice_ref_0)
             self.textReport += "ItemRefClicked1 : self.my_choice_ref_0 : " + self.my_choice_ref_0 + "<br>"
             fillQLW_rel2_ref(self)
         else:
-#            print "release"
             self.wp.write("release\n ")
             self.textReport += "release" + "<br>"
             self.my_choice_rel_0 = self.QLW_rel1.currentItem().text()
-#            print "ItemRelRefClicked1 : self.my_choice_rel_0 : %s " % self.my_choice_rel_0
             self.wp.write("ItemRefClicked1 : self.my_choice_rel_0 : %s\n " % self.my_choice_rel_0)
             self.textReport += "ItemRefClicked1 : self.my_choice_rel_0 : " + self.my_choice_rel_0 + "<br>"
             self.releasesList_rel_1 = list_search_1(self.my_choice_rel_0)
             self.rel_list_0 = sub_releases(self.releasesList_rel_1) #list_search_1(self.my_choice_rel_0))
-            # tester si =0 
-            #for it in self.rel_list_0:
-            #    item = QListWidgetItem("%s" % it)
-            #    self.QLW_rel2.addItem(item)
             fillQLW_rel2_rel(self)
             
     def ItemRelRefClicked2(self):
-        #rel_text = self.QLW_rel2.currentItem().text() + " DataSets"
-        #if self.QGBox_rel0.title() == "Reference list":
         if ( self.tasks_counter == 1 ):
-#            print "reference" + str(self.tasks_counter)
             self.wp.write("reference : %s\n " % str(self.tasks_counter))
             self.textReport += "reference : " + str(self.tasks_counter) + "<br>"
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
@@ -423,18 +378,15 @@ class Gev(QWidget):
             self.referenceList = self.releasesList_ref_2
             self.ref_list_1 = sub_releases2(str(self.my_choice_ref_1), self.releasesList_ref_2)
             self.refList = self.rel_list_1            
-#            print "ItemRefClicked2 : self.my_choice_ref_1 : %s " % self.my_choice_ref_1
             self.wp.write("ItemRefClicked2 : self.my_choice_ref_1 : %s\n " % self.my_choice_ref_1)
             self.textReport += "ItemRefClicked2 : self.my_choice_ref_1 : " + self.my_choice_ref_1 + "<br>"
             tmp = "Reference : " + self.my_choice_ref_1
             self.labelCombo2.setText(tmp)
         else: # self.tasks_counter == 0
-#            print "release" + str(self.tasks_counter)
             self.wp.write("release : %s\n " % str(self.tasks_counter))
             self.textReport += "release : " + str(self.tasks_counter) + "<br>"
             self.my_choice_rel_1 = self.QLW_rel2.currentItem().text()
             self.target = self.my_choice_rel_1
-#            print "ItemRelRefClicked2 : self.my_choice_rel_1 : %s " % self.my_choice_rel_1
             self.wp.write("ItemRefClicked2 : self.my_choice_rel_1 : %s\n " % self.my_choice_rel_1)
             self.textReport += "ItemRefClicked2 : self.my_choice_rel_1 : " + self.my_choice_rel_1 + "<br>"
             tmp = "Release : " + self.my_choice_rel_1
@@ -444,22 +396,18 @@ class Gev(QWidget):
         updateLabelResume(self)
         
     def Previous_Choice(self):
-#        print "Previous_Choice tmp: "
         if self.tasks_counter == 0:
             print "no way !, self.tasks_counter = 0"
         else:
             self.tasks_counter -= 1
             self.checkTaskCounter()
-#        print self.tasks_counter
         
     def Next_Choice(self):
-#        print "Next_Choice tmp: "
         if self.tasks_counter > self.tasks_counterMax:
             print "no way !, self.tasks_counter = %d" % self.tasks_counterMax
         else:
             self.tasks_counter += 1
             self.checkTaskCounter()
-#        print self.tasks_counter
         
     def checkTaskCounter(self):
         import re#, os
@@ -467,9 +415,6 @@ class Gev(QWidget):
         self.bouton_Previous.setText(self.trUtf8(self.tasks_list[self.tasks_counter-1]))
         
         if self.tasks_counter == 0: # release selection
-#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
-#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
-#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("release selection")
             self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'
@@ -483,17 +428,11 @@ class Gev(QWidget):
             self.QGBox_rel0.setVisible(True)
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(False)
-            #for it in self.releasesList_0:
-            #    item = QListWidgetItem("%s" % it)
-            #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
             disableStdDevButtons(self)
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 1: # reference selection
-#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
-#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
-#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("reference selection")
             self.textReport += 'self.tasks_counter = ' + str(self.tasks_counter) + '/' + str(self.tasks_counterMax) + '<br>'
@@ -507,17 +446,11 @@ class Gev(QWidget):
             self.QGBox_rel0.setVisible(True)
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(False)
-            #for it in self.releasesList_0:
-            #    item = QListWidgetItem("%s" % it)
-            #    self.QLW_rel1.addItem(item)
             disableRadioButtons(self)
             disableStdDevButtons(self)
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 2: # GlobalTag selections
-#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
-#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
-#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("GlobalTag selections")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
@@ -543,9 +476,6 @@ class Gev(QWidget):
             self.selectedFvsFGlobalTag = ""
             # what to do if len(self.QLW_rel(f)_datasets) = 0? -> solved before arriving here !
         elif self.tasks_counter == 3: # resuming selections
-#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
-#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
-#            print "check tasks counter next : %s" % self.tasks_list[self.tasks_counter+1]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("resuming selections")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
@@ -564,14 +494,10 @@ class Gev(QWidget):
             self.lineEdit_rel.setEnabled(True)
             clearReleasesList(self)
             self.PathUpdate()
-            #check_finalFolder(self)
             updateLabelResume(self)
             self.QGBoxListsUpdate()
             updateLabelResumeSelected(self) # perhaps need to be redone
             
-#            print "checkTaskCounter 3 : self.selectedDataSets = %s" % self.selectedDataSets
-#            print "checkTaskCounter 3 : self.okToPublishDatasets = %s" % self.okToPublishDatasets
-            #print "checkTaskCounter 3 : self.okToDisplayDatasets = %s" % self.okToDisplayDatasets
             self.wp.write("checkTaskCounter 3 : self.selectedDataSets = %s\n" % self.selectedDataSets)
             self.textReport += "checkTaskCounter 3 : self.selectedDataSets = " + str(self.selectedDataSets) + "<br>"
             self.wp.write("checkTaskCounter 3 : self.okToPublishDatasets = %s\n" % self.okToPublishDatasets)
@@ -582,59 +508,35 @@ class Gev(QWidget):
             ## WARNING : we need to have self.okToPublishFvsFDatasets = self.okToPublishDatasets !! ##
             
             # create list of root files for rel & ref
-#            print "checkTaskCounter 3 : 0 " + self.selectedRelDatasets
-#            print "checkTaskCounter 3 : 1 " + self.okToPublishDatasets
             self.wp.write("checkTaskCounter 3 : 0 %s\n" % self.selectedRelDatasets)
             self.textReport += "checkTaskCounter 3 : 0 " + self.selectedRelDatasets + "<br>"
             self.wp.write("checkTaskCounter 3 : 1 %s\n" % self.okToPublishDatasets)
             self.textReport += "checkTaskCounter 3 : 1 " + self.okToPublishDatasets + "<br>"
             self.releasesList_3 = (self.okToPublishDatasets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
-            #self.releasesList_3 = (self.selectedDataSets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
-#            print "\nRelease :"
             for it1 in self.releasesList_rel_2: # it1 = root file
-                #print "checkTaskCounter 3 : %s" % it1
                 if checkFileName(self, it1, "rel"):
                     for it2 in self.releasesList_3: # it2 = dataSet
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRelGlobalTag), it1)): # at least one file here
-#                             print "checkTaskCounter 3 : %s" % it1
                              if checkCalculValidation(self, it1, "rel"):
-#                                print it2 + " : " + it1 + " : OK"
                                 self.releasesList_rel_5.append(it1)
             # perhaps add a test to verify if there is at least one file and if not, remove the dataSet.
-#            print "\nReference :"
             for it1 in self.releasesList_ref_2: # it1 = root file
-               #print "checkTaskCounter 3 : %s" % it1
                if checkFileName(self, it1, "ref"):
                     for it2 in self.releasesList_3: # it2 = dataSet
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
-#                            print "checkTaskCounter 3 : %s" % it1
                             if checkCalculValidation(self, it1, "ref"):
-#                                print it2 + " : " + it1 + " : OK"
                                 self.releasesList_ref_5.append(it1)
             
-            # print the used GlobalTags
-#            print "checkTaskCounter 3 : self.selectedRelGlobalTag = %s" % self.selectedRelGlobalTag
-#            print "checkTaskCounter 3 : self.selectedRefGlobalTag = %s" % self.selectedRefGlobalTag
             self.wp.write("checkTaskCounter 3 : self.selectedRelGlobalTag = %s\n" % self.selectedRelGlobalTag)
             self.textReport += "checkTaskCounter 3 : self.selectedRelGlobalTag = " + self.selectedRelGlobalTag + "<br>"
             self.wp.write("checkTaskCounter 3 : self.selectedRefGlobalTag = %s\n" % self.selectedRefGlobalTag)
             self.textReport += "checkTaskCounter 3 : self.selectedRefGlobalTag = " + self.selectedRefGlobalTag + "<br>"
             
             # print length of the arrays
-            #print "self.releasesList_rel_3 : %d\n" % len(self.releasesList_rel_3) # to be deleted
-            #print "self.releasesList_ref_3 : %d\n" % len(self.releasesList_ref_3) # to be deleted
-            #print "self.releasesList_3 : %d\n" % len(self.releasesList_3)
-            #print "self.releasesList_rel_2 : %d\n" % len(self.releasesList_rel_2)
-            #print "self.releasesList_ref_2 : %d\n" % len(self.releasesList_ref_2)
-            #print "self.releasesList_rel_5 : %d\n" % len(self.releasesList_rel_5)
-            #print "self.releasesList_ref_5 : %d\n" % len(self.releasesList_ref_5)
-            #print BaseURL(self) # temporaire
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
             self.textReport += "BaseUrl = " + BaseURL(self) + "<br>"
           
         elif self.tasks_counter == 4: # folder creation & file loading
-#            print "self.tasks_counter = %d/%d" % (self.tasks_counter, self.tasks_counterMax)
-#            print "check tasks counter : %s" % self.tasks_list[self.tasks_counter]
             self.wp.write("self.tasks_counter = %d/%d\n" % (self.tasks_counter, self.tasks_counterMax))
             self.wp.write("foldercreation & file loading\n")
             self.textReport += "self.tasks_counter = " + str(self.tasks_counter) + "/" + str(self.tasks_counterMax) + "<br>"
@@ -660,81 +562,46 @@ class Gev(QWidget):
             working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
             folder_creation(self) # create local folder for files loading and operation resuming
 
-            #cmd_load_files(self) # no test if the folders are created. We have an error output in PathUpdate() if the was a pbm with the folder creation.
             self.cmd_load_files_2()
 
             # collapsing self.releasesList_rel_5, self.releasesList_ref_5 & self.okToPublishDatasets into one list.
             merged_1 = []
             for dts in self.okToPublishDatasets.split(','):
-#                print "dts : " + dts
                 merged_1.append(str(dts))
-            #print merged_1
-#            print "***** self.FinalList creation *****"
             merged_1 = sorted(set(merged_1), reverse=True)
-            #print merged_1
-            #print "-----"
-            #merged_1b = list(reversed(merged_1)) # merged_1[::-1]
             merged_1b = list(merged_1) # merged_1[::-1]
-            #print merged_1b
             
             #####
             tmp_rel = []
             tmp_ref = []
             for it in merged_1b:
-                #print "merged_1b : %s" % it
-                #for val in self.releasesList_rel_5:
                 for val in self.selected_files_rel:
                     if ( re.search(str(it + "__"), val) ):
-#                        print "OK %s" % val
                         tmp_rel.append(val)
-                    #else:
-                    #    print "KO %s" % val
-                #for val in self.releasesList_ref_5:
                 for val in self.selected_files_ref:
                     if ( re.search(str(it + "__"), val) ):
-#                        print "OK %s" % val
                         tmp_ref.append(val)
-                    #else:
-                    #    print "KO %s" % val
             #####
-            #print "tmp_rel : ", tmp_rel
-            #print "tmp_ref : ", tmp_ref
             self.finalList = map(list, zip(merged_1b, tmp_rel, tmp_ref))
-            #print "-----"
-            #print self.finalList[0][1]
-#            print self.finalList
-#            print "***** end self.FinalList *****"
 
             finalFolder_creation(self) # create the save folder for html and gifs files
             updateLabelResume(self)
             self.QGBoxListsUpdate()
             # loading files
             selectedText += "begin files loading ! <br>"
-#            print "begin files loading !"
             self.wp.write("begin files loading !\n")
             self.textReport += "begin files loading !" + "<br>"
 
-#            cmd_load_files(self) # no test if the folders are created. We have an error output in PathUpdate() if the was a pbm with the folder creation.
-#            self.cmd_load_files_2()
             # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
             selectedText += "All files loaded <br>"
             self.labelResumeSelected.setText(self.trUtf8(selectedText))
             QtCore.QCoreApplication.processEvents() 
             
-            #TEMPORAIRE display list of root files
-#            print "releasesList_rel_5"
-#            for line in self.selected_files_rel:
-#                print line
-#            print "releasesList_ref_5"
-#            for line in self.selected_files_ref:
-#                print line
-                
             # creating the web pages
             dataSets_finalFolder_creation(self)
             
             # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
             
-            #print "fin ..."
             self.wp.write("end ...\n")
             self.textReport += "end ..." + "<br>"
             
@@ -742,8 +609,6 @@ class Gev(QWidget):
             print "Hello Houston, we have a pbm !!"
 
     def PathUpdate(self): # get paths & create folders
-#        print "PathUpdate menu clicked !"
-#        print "*-*-**--*-*-*-*-*-* Location"
         self.wp.write("PathUpdate\n")
         self.textReport += "PathUpdate" + "<br>"
         os.chdir(self.working_dir_base) # going into base dir
@@ -752,16 +617,12 @@ class Gev(QWidget):
         i_loc = 0
         # perhaps add a check on tasks_counter value
         for it in tt:
-#            print "self.ag.actions()", it.text()
             if it.isChecked():
-#                print "%s is checked" % it.text()
                 self.wp.write("%s is checked\n" % it.text())
                 self.textReport += it.text() + " is checked" + "<br>"
-#                print "folder path : %s" % self.LocationTable[i_loc][2]
                 self.wp.write("folder path : %s\n" % self.LocationTable[i_loc][2])
                 self.textReport += "folder path : " + self.LocationTable[i_loc][2] + "<br>"
                 if ( self.my_choice_rel_1[6:] == '' ):
-#                    print "Can not create finalFolder ! "
                     BoiteMessage = QMessageBox()
                     BoiteMessage.setText("cannot create finalFolder !!")
                     self.wp.write("cannot create finalFolder !!")
@@ -776,42 +637,27 @@ class Gev(QWidget):
                     self.wp.write("self.finalFolder reference : %s\n" % self.finalFolder)
                     self.wp.write("set_finalFolder : %s\n" % set_finalFolder(self, i_loc))
             else:
-#                print "%s is unchecked" % it.text()
                 self.wp.write("%s is unchecked\n" % it.text())
                 self.textReport += it.text() + " is unchecked\n" + "<br>"
             i_loc += 1
             
     def QGBoxListsUpdate(self):
-#        print "QGBoxListsUpdate"
         getCheckedOptions(self)
         
-#        if (self.my_choice_rel_0 != ''): # print the list of the releases
-#            for index in xrange(self.QLW_rel1.count()):
-#                print "QGBoxListsUpdate : self.QLW_rel1.item(%d) : %s" % ( index, self.QLW_rel1.item(index).text() )
         if (self.my_choice_ref_1 != ''): # this implies that all others my_choice_ref(l) have been chosen
             self.selectedDataSets = []
-#            print "QGBoxListsUpdate : self.validationType1 :", self.validationType1
-#            print "QGBoxListsUpdate : self.validationType2 :", self.validationType2
-#            print "QGBoxListsUpdate : self.validationType3 :", self.validationType3
             self.wp.write("QGBoxListsUpdate : self.validationType1 %s\n " % self.validationType1)
             self.wp.write("QGBoxListsUpdate : self.validationType2 %s\n " % self.validationType2)
             self.wp.write("QGBoxListsUpdate : self.validationType3 %s\n " % self.validationType3)
             tt = self.ag.actions()
             self.allMenuListDatasetsChecked = False # default
             for it in tt:
-#                print "QGBoxListsUpdate : self.ag.actions()", it.text()
                 if it.isChecked():
-                    #print "QGBoxListsUpdate : %s is checked" % it.text()
                     self.selectedDataSets.append(str(it.text()))
                     self.allMenuListDatasetsChecked = True # we need only one Dataset selected
-                #else:
-                    #print "QGBoxListsUpdate : %s is unchecked" % it.text()
-#            print "QGBoxListsUpdate : selectedDataSets : ", self.selectedDataSets
-#            print "QGBoxListsUpdate : allMenuListDatasetsChecked : ", self.allMenuListDatasetsChecked
             self.wp.write("QGBoxListsUpdate : selectedDataSets %s\n " % self.selectedDataSets)
             self.wp.write("QGBoxListsUpdate : allMenuListDatasetsChecked %s\n " % self.allMenuListDatasetsChecked)
 
-            #if (self.checkAllNone1.isChecked() and self.allMenuListDatasetsChecked): # ALL and at least one selected
             if (self.allMenuListDatasetsChecked):
                 (self.releasesList_rel_3, self.releasesList_rel_3b, self.releasesList_ref_3, self.releasesList_ref_3b) = list_search_5(self)
                 # perhaps we can rewrite later as list_search_5(self) instead of (...) = list_search_5(self) 
@@ -823,18 +669,10 @@ class Gev(QWidget):
                 datasetList = self.selectedDataSets[0]
                 for it in range(1, len(tempDataset)):
                     datasetList += ', ' + self.selectedDataSets[it]
-#                print "QGBoxListsUpdate : datasetList = " + datasetList # TEMPORAIRE
                 self.wp.write("QGBoxListsUpdate : datasetList = %s\n " % datasetList)
                 self.wp.write("QGBoxListsUpdate : datasetList = %s\n " % datasetList)
 
-                #clearDataSets(self)
                 clearDataSetsLists(self) # empty the tables
-                #print "QGBoxListsUpdate : nb of datasets rel   : ", len(self.releasesList_rel_3) # TEMPORAIRE
-                #print "QGBoxListsUpdate : nb of globaltags rel : ", len(self.releasesList_rel_3b) # TEMPORAIRE
-#                print "QGBoxListsUpdate : self.releasesList_rel_3  : " + str(self.releasesList_rel_3)
-#                print "QGBoxListsUpdate : self.releasesList_rel_3b : " + str(self.releasesList_rel_3b)
-#                print "QGBoxListsUpdate : self.releasesList_ref_3  : " + str(self.releasesList_ref_3)
-#                print "QGBoxListsUpdate : self.releasesList_ref_3b : " + str(self.releasesList_ref_3b)
                 self.wp.write("QGBoxListsUpdate : self.releasesList_rel_3   : %s\n " % str(self.releasesList_rel_3))
                 self.wp.write("QGBoxListsUpdate : self.releasesList_rel_3b  : %s\n " % str(self.releasesList_rel_3b))
                 self.wp.write("QGBoxListsUpdate : self.releasesList_ref_3   : %s\n " % str(self.releasesList_ref_3))
@@ -860,8 +698,6 @@ class Gev(QWidget):
                     i_count += 1
                 self.connect(self.QTable_rel, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_rel)
                 
-#                print "QGBoxListsUpdate : nb of datasets ref   : ", len(self.releasesList_ref_3) # TEMPORAIRE
-#                print "QGBoxListsUpdate : nb of globaltags ref : ", len(self.releasesList_ref_3b) # TEMPORAIRE
                 self.QTable_ref.setRowCount( len(self.releasesList_ref_3) )
                 i_count = 0
                 for it in self.releasesList_ref_3:
@@ -880,58 +716,41 @@ class Gev(QWidget):
                 self.connect(self.QTable_ref, SIGNAL("cellClicked(int, int)"),self.ItemSelectedTable_ref)
                                     
             else: # NONE & none checked, or ALL & none checked
-#                print "QGBoxListsUpdate : len of selectedDataSets = %d" % len(self.selectedDataSets)
                 self.wp.write("QGBoxListsUpdate : len of selectedDataSets = %d\n " % len(self.selectedDataSets))
                 self.textReport += "QGBoxListsUpdate : len of selectedDataSets = " + str(len(self.selectedDataSets)) + "<br>"
                 clearDataSetsLists(self)
 
         QtCore.QCoreApplication.processEvents() 
-#        print "QGBoxListsUpdate end OK"
         
     def ItemSelectedTable_rel(self, nRow, nCol):
-#        print "(%d, %d)" % (nRow, nCol)
         if (nCol): # nCol=1, True
-#            print self.QTable_rel.item(nRow, nCol-1).text()
             self.QTable_rel.item(nRow, nCol-1).setSelected(True)
-#            print self.QTable_rel.item(nRow, nCol).text()
             self.selectedRelDatasets = self.QTable_rel.item(nRow, nCol-1).text()
             self.selectedRelGlobalTag = self.QTable_rel.item(nRow, nCol).text()
         else : # nCol=0, False
-#            print self.QTable_rel.item(nRow, nCol).text()
-#            print self.QTable_rel.item(nRow, nCol+1).text()
             self.QTable_rel.item(nRow, nCol+1).setSelected(True)
             self.selectedRelDatasets = self.QTable_rel.item(nRow, nCol).text()
             self.selectedRelGlobalTag = self.QTable_rel.item(nRow, nCol+1).text()
-#        print "ItemSelectedTable_rel : self.selectedRelDatasets : %s - %s " % (self.selectedRelDatasets, self.QTable_rel.item(nRow, nCol).text())
-#        print "ItemSelectedTable_rel : self.selectedRelGlobalTag : %s " % self.selectedRelGlobalTag
         self.wp.write("ItemSelectedTable_rel : self.selectedRelDatasets : %s\n " % self.selectedRelDatasets)
         self.wp.write("ItemSelectedTable_rel : self.selectedRelGlobalTag : %s\n " % self.selectedRelGlobalTag)
         self.textReport += "ItemSelectedTable_rel : self.selectedRelDatasets : " + self.selectedRelDatasets + "<br>"
         self.textReport += "ItemSelectedTable_rel : self.selectedRelGlobalTag : " + self.selectedRelGlobalTag + "<br>"
 
     def ItemSelectedTable_ref(self, nRow, nCol):
-#        print "(%d, %d)" % (nRow, nCol)
         if (nCol): # nCol=1, True
-#            print self.QTable_ref.item(nRow, nCol-1).text()
             self.QTable_ref.item(nRow, nCol-1).setSelected(True)
-#            print self.QTable_ref.item(nRow, nCol).text()
             self.selectedRefDatasets = self.QTable_ref.item(nRow, nCol-1).text()
             self.selectedRefGlobalTag = self.QTable_ref.item(nRow, nCol).text()
         else : # nCol=0, False
-#            print self.QTable_ref.item(nRow, nCol).text()
-#            print self.QTable_ref.item(nRow, nCol+1).text()
             self.QTable_ref.item(nRow, nCol+1).setSelected(True)
             self.selectedRefDatasets = self.QTable_ref.item(nRow, nCol).text()
             self.selectedRefGlobalTag = self.QTable_ref.item(nRow, nCol+1).text()
-#        print "ItemSelectedTable_ref : self.selectedRefDatasets : %s " % self.selectedRefDatasets
-#        print "ItemSelectedTable_ref : self.selectedRefGlobalTag : %s " % self.selectedRefGlobalTag
         self.wp.write("ItemSelectedTable_ref : self.selectedRefDatasets : %s\n " % self.selectedRefDatasets)
         self.wp.write("ItemSelectedTable_ref : self.selectedRefGlobalTag : %s\n " % self.selectedRefGlobalTag)
         self.textReport += "ItemSelectedTable_ref : self.selectedRefDatasets : " + self.selectedRefDatasets + "<br>"
         self.textReport += "ItemSelectedTable_ref : self.selectedRefGlobalTag : " + self.selectedRefGlobalTag + "<br>"
 
     def showAbout(self):
-#        print("About")
         
         pixmap2 = QPixmap('/afs/cern.ch/user/a/archiron/lbin/Projet_Validations-Dev/Img/GUI_001.bmp')
         dialog = QDialog()
@@ -952,12 +771,10 @@ class Gev(QWidget):
         dialog.exec_()
     
     def showHelp(self):
-#        print("Help")
         link = 'https://twiki.cern.ch/twiki/bin/view/Main/ElectronValidationGUIHelpPage#Step_' + str(self.tasks_counter + 1)
         QDesktopServices.openUrl(QUrl(link))
 
     def showResume(self):
-#        print "showResume"
         dialogR = QDialog()
         layoutR = QVBoxLayout(dialogR)
         text = '<b>List of operations</b><br>'
@@ -994,12 +811,8 @@ class Gev(QWidget):
         from functions import clean_collections2
         from networkFunctions import cmd_fetch_2
         
-#        print "cmd_load_files 2"
         self.wp.write("cmd_load_files 2 : \n")
    
-#    print "cmd_load_files : self.validationType1 = ",  self.validationType1 # temp
-#    print "cmd_load_files : self.validationType2 = ",  self.validationType2 # temp
-#    print "cmd_load_files : self.validationType3 = ",  self.validationType3 # temp
         validationType_2 = self.validationType2
         validationType_3 = self.validationType3
         temp_toBeRemoved = []
@@ -1014,53 +827,36 @@ class Gev(QWidget):
             relvaldir = 'RelValData'
     
     #case 1 self.my_choice_rel_0 : RELEASE
-#        print("cmd_load_files 2 : case 1 %s : RELEASE" % self.my_choice_rel_0)
         self.wp.write("cmd_load_files 2 : case 1 %s : RELEASE\n " % self.my_choice_rel_0)
         self.textReport += "cmd_load_files 2 : case 1 " + self.my_choice_rel_0 + " : RELEASE" + "<br>"
         option_release_rel = str(self.my_choice_rel_0)
         filedir_url = BaseURL(self) + relvaldir + '/' + str(self.my_choice_rel_0) + '/'
         for line in self.releasesList_rel_5:
-#            print("cmd_load_files 2 : self.releasesList_rel_5 : %s" % line)
             if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
-#                print "cmd_load_files 2 : " + filedir_url + line + " removed"
                 temp_toBeRemoved.append(line)
-        #print("cmd_load_files : self.releasesList_rel_5 : remove lines")
         for line in temp_toBeRemoved:
             self.releasesList_rel_5.remove(line)
-        #print("cmd_load_files : copy self.releasesList_rel_5 to self.selected_files_rel")
         self.selected_files_rel = self.releasesList_rel_5
-#        print("cmd_load_files 2 : self.selected_files_rel = %s" % str(self.selected_files_rel))
     
-        #print("cmd_load_files : change directory")
         os.chdir(self.working_dir_rel)   # Change current working directory to release directory
     
-#        print("cmd_load_files 2 : cmd_fetch_2")
         cmd_fetch_2(option_is_from_data, option_release_rel, option_mthreads, filedir_url, self.selected_files_rel)
 
     #case 2 self.my_choice_ref_0 : REFERENCE
         temp_toBeRemoved[:] = []# clear the temp array
-#        print("cmd_load_files 2 : case 2 %s : REFERENCE" % self.my_choice_ref_0)
         self.wp.write("cmd_load_files 2 : case 1 %s : REFERENCE\n " % self.my_choice_ref_0)
         self.textReport += "cmd_load_files 2 : case 1 " + self.my_choice_ref_0 + " : REFERENCE" + "<br>"
         option_release_ref = str(self.my_choice_ref_0) 
         filedir_url = BaseURL(self) + relvaldir + '/' + str(self.my_choice_ref_0) + '/'
         for line in self.releasesList_ref_5:
-#            print("cmd_load_files 2 : self.releasesList_ref_5 : %s" % line)
             if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "ref"):
-#                print "cmd_load_files 2 : " + filedir_url + line + " removed"
                 temp_toBeRemoved.append(line)
-    #print("cmd_load_files 2 : self.releasesList_ref_5 : remove lines")
         for line in temp_toBeRemoved:
             self.releasesList_ref_5.remove(line)
-    #print("cmd_load_files 2 : copy self.releasesList_ref_5 to self.selected_files_ref")
         self.selected_files_ref = self.releasesList_ref_5
-#        print("cmd_load_files 2 : self.selected_files_ref = %s" % str(self.selected_files_ref))
     
-    #print("cmd_load_files : change directory")
         os.chdir(self.working_dir_ref)   # Change current working directory to release directory
     
-#        print("cmd_load_files 2 : cmd_fetch_2")
         cmd_fetch_2(option_is_from_data, option_release_ref, option_mthreads, filedir_url, self.selected_files_ref)
     
-#        print "cmd_load_files 2 end OK"
         return
