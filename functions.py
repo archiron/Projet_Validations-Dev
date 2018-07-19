@@ -10,6 +10,7 @@ argv.remove( '-b-' )
 import os,sys,subprocess, shutil
 import urllib2
 import re
+from PyQt4 import QtCore
 from getEnv import env
 from Paths_default import *
 from Datasets_default import extractDatasets, extractDatasetsFastvsFull, testForDataSetsFile # DataSetsFilter, checkCalculValidation, 
@@ -111,6 +112,7 @@ def dataSets_finalFolder_creation(self):
         # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
         selectedText += "<strong>" + dts
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
+        QtCore.QCoreApplication.processEvents()
         
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
@@ -381,10 +383,12 @@ def dataSets_finalFolder_creation(self):
         
         selectedText += " : <b><font color='blue'> DONE ! </font></b></strong><br>"
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
+        QtCore.QCoreApplication.processEvents()
         wr.write("Dataset %s DONE\n" % elt[0])
         self.textReport += "Dataset " + elt[0] + "DONE" + "<br>"
     
     self.labelResumeSelected.setText(self.trUtf8(selectedText))
+    QtCore.QCoreApplication.processEvents()
     wr.close() # close the report file for the bottom operations.
     #back to initial dir
     os.chdir(actual_dir) # going back
@@ -788,7 +792,8 @@ def updateLabelResumeSelected(self):
             
     self.labelResumeSelected.clear() # 
     self.labelResumeSelected.setText(self.trUtf8(selectedText))
-            
+    QtCore.QCoreApplication.processEvents()
+    
     return
 
 def updateLabelResume(self):

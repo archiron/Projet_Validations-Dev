@@ -37,7 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # only useful comments are kept.
+        self.setWindowTitle(self.version) # add some refresh for each dataset created on the web page.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -562,8 +562,20 @@ class Gev(QWidget):
             working_dirs_creation(self) # create folders for root files. MUST BE before folder_creation()
             folder_creation(self) # create local folder for files loading and operation resuming
 
+            # loading files
+            selectedText += "begin files loading ! <br>"
+            self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            QtCore.QCoreApplication.processEvents() 
+            self.wp.write("begin files loading !\n")
+            self.textReport += "begin files loading !" + "<br>"
+            
             self.cmd_load_files_2()
 
+            # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            selectedText += "All files loaded <br>"
+            self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            QtCore.QCoreApplication.processEvents() 
+            
             # collapsing self.releasesList_rel_5, self.releasesList_ref_5 & self.okToPublishDatasets into one list.
             merged_1 = []
             for dts in self.okToPublishDatasets.split(','):
@@ -587,16 +599,7 @@ class Gev(QWidget):
             finalFolder_creation(self) # create the save folder for html and gifs files
             updateLabelResume(self)
             self.QGBoxListsUpdate()
-            # loading files
-            selectedText += "begin files loading ! <br>"
-            self.wp.write("begin files loading !\n")
-            self.textReport += "begin files loading !" + "<br>"
 
-            # do something with self.labelResumeSelected.setText(self.trUtf8(selectedText))
-            selectedText += "All files loaded <br>"
-            self.labelResumeSelected.setText(self.trUtf8(selectedText))
-            QtCore.QCoreApplication.processEvents() 
-            
             # creating the web pages
             dataSets_finalFolder_creation(self)
             
