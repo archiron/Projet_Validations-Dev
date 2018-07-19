@@ -101,7 +101,7 @@ def dataSets_finalFolder_creation(self):
     actual_dir = os.getcwd()
     os.chdir(self.finalFolder) # going into finalFolder
     # create datasets folders
-    selectedText = ""
+    selectedText = self.labelResumeSelected.text() # ""
     report_name = self.working_dir_report + '/report.olog'
     wr = open(report_name, 'w') # report page
     wr.write("Validation report : \n")

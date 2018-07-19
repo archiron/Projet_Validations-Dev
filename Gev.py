@@ -37,7 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # add some refresh for each dataset created on the web page.
+        self.setWindowTitle(self.version) # addd files loading/loaded state.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
