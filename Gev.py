@@ -37,9 +37,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # Add URL for DataSets.
-        # Add new function pathToURL(self) in Paths_default.py in order to convert paths to URLs
-        # Add self.location & self.URL variables for simplifications.
+        self.setWindowTitle(self.version) # add http link for URL.
 
         
         # From top to bottom, there is 4 parts :

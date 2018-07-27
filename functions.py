@@ -115,7 +115,7 @@ def dataSets_finalFolder_creation(self):
         QtCore.QCoreApplication.processEvents()
         
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
-        print("\ndataset = %s" % elt[0])
+#        print("\ndataset = %s" % elt[0])
 #        print("finalFolder = %s" % self.finalFolder)
 #        print("dataSetFolder = %s" % dataSetFolder)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
@@ -384,15 +384,15 @@ def dataSets_finalFolder_creation(self):
         wp.close()
         os.chdir('../') # back to the final folder.
         
-        selectedText += " : <b><font color='blue'> DONE ! </font></b></strong><br>"
+        selectedText += " : <b><font color='blue'> DONE ! </font></b></strong>"
         wr.write("Dataset %s DONE\n" % elt[0])
         self.textReport += "Dataset " + elt[0] + "DONE"
-        print("URL = %s" % getURL(dataSetFolder, self.URL))
-        print("debut = %s" % getURL(dataSetFolder, self.URL)[:4])
         if ( getURL(dataSetFolder, self.URL)[:4] == 'http' ):
-            selectedText += '\t\t' + getURL(dataSetFolder, self.URL) + "<br>"
+            selectedText += '\t\t<a href=\"' + getURL(dataSetFolder, self.URL) + "\">" + getURL(dataSetFolder, self.URL) + "</a><br>"
         else:
             selectedText += "<br>"
+        wr.write(" Dataset URL%s\n" % getURL(dataSetFolder, self.URL))
+        self.textReport += " Dataset URL " + getURL(dataSetFolder, self.URL)
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
         QtCore.QCoreApplication.processEvents()
     
@@ -931,10 +931,10 @@ def check_working_dirs(self): #
 
 def getURL(folder, urlBase):
 #    print("path    : %s" % path)
-    print("folder  : %s" % folder)
+#    print("folder  : %s" % folder)
 #    print("choix   : %s" % location)
-    print("urlBase : %s" % urlBase)
+#    print("urlBase : %s" % urlBase)
     URL = urlBase + '/' + folder
-    print("URL     : %s" % urlBase + '/' + folder)
+#    print("URL     : %s" % urlBase + '/' + folder)
     return URL
     

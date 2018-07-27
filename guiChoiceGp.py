@@ -89,6 +89,7 @@ def initGpSelected(self):
     self.QGBox_Selected.setVisible(False)       
     
     self.labelResumeSelected = QLabel(self.trUtf8("<strong>Selected :</strong>"), self)   # label used for resuming the rel/ref.
+    self.labelResumeSelected.setOpenExternalLinks(True)
     vboxSelected = QVBoxLayout()
     vboxSelected.addWidget(self.labelResumeSelected)
     self.QGBox_Selected.setLayout(vboxSelected)
