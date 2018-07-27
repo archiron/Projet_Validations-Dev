@@ -99,18 +99,6 @@ def enableRadioButtons(self):
 
     return
 
-def disableStdDevButtons(self):
-    self.checkStdDev1.setEnabled(False)
-    self.checkStdDev2.setEnabled(False)
-
-    return
-
-def enableStdDevButtons(self):
-    self.checkStdDev1.setEnabled(True)
-    self.checkStdDev2.setEnabled(True)
-
-    return
-    
 def disableLocationButtons(self): 
     self.checkLocation1.setEnabled(False)
     self.checkLocation2.setEnabled(False)

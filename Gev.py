@@ -15,7 +15,6 @@ from guiMiddleGp import initGpMiddle
 from getEnv import env
 from functions import folder_creation, finalFolder_creation, working_dirs_creation, dataSets_finalFolder_creation 
 from functions import list_search_1, list_search_3 
-from functions import folderExtension_creation 
 from functions import sub_releases, sub_releases2, list_search_5 
 from functions import checkFastvsFull, getCheckedOptions, getCheckedRadioButton
 from functions import checkFileName, newName, updateLabelResumeSelected, updateLabelResume
@@ -24,7 +23,7 @@ from Datasets_default import DataSetsFilter, checkCalculValidation # extractData
 from Paths_default import *
 from functionGui import clearDataSets, clearDataSetsLists, writeLabelCombo3, clearReleasesList
 from functionGui import fillQLW_rel1, fillQLW_rel2_rel, fillQLW_rel2_ref 
-from functionGui import enableRadioButtons, disableRadioButtons, disableStdDevButtons, enableStdDevButtons, disableLocationButtons, enableLocationButtons, comparisonRules
+from functionGui import enableRadioButtons, disableRadioButtons, disableLocationButtons, enableLocationButtons, comparisonRules
 from networkFunctions import cmd_load_files
 from electronCompare import initRoot
 		
@@ -37,8 +36,11 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # add http link for URL.
-
+        self.setWindowTitle(self.version) # remove std/dev choice. All folders terminate with _std.
+        # remove _xxx_ add-in set_finalFolder() function.
+        # remove folderExtension_creation() function.
+        # remove initStdDev QGBox and dev/std option.
+        # remove disableStdDevButtons() and enableStdDevButtons() functions and calls.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -205,12 +207,6 @@ class Gev(QWidget):
                 self.menu.addAction(a)
                 self.connect(a, SIGNAL('triggered()'), self.QGBoxListsUpdate)
             self.QGBoxListsUpdate() # needed ?
-        QtCore.QCoreApplication.processEvents() 
-
-    def checkStdDev1_Clicked(self):
-        QtCore.QCoreApplication.processEvents() 
-
-    def checkStdDev2_Clicked(self):
         QtCore.QCoreApplication.processEvents() 
 
     def checkSpecReference1_Clicked(self):
@@ -430,7 +426,6 @@ class Gev(QWidget):
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(False)
             disableRadioButtons(self)
-            disableStdDevButtons(self)
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 1: # reference selection
@@ -448,7 +443,6 @@ class Gev(QWidget):
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(False)
             disableRadioButtons(self)
-            disableStdDevButtons(self)
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 2: # GlobalTag selections
@@ -459,7 +453,6 @@ class Gev(QWidget):
             updateLabelResume(self)
             enableRadioButtons(self)
             comparisonRules(self)
-            disableStdDevButtons(self)
             self.lineEdit_ref.setEnabled(False)
             self.lineEdit_rel.setEnabled(False)
             self.bouton_Previous.setEnabled(True)
@@ -489,7 +482,6 @@ class Gev(QWidget):
             self.QGBox_Selected.setTitle("Selected")
             self.QGBox_Selected.setVisible(True)
             disableRadioButtons(self)
-            enableStdDevButtons(self)
             enableLocationButtons(self)
             self.lineEdit_ref.setEnabled(True)
             self.lineEdit_rel.setEnabled(True)
@@ -551,7 +543,6 @@ class Gev(QWidget):
             os.chdir(self.working_dir_base) # going to base folder
             self.labelResumeSelected.clear() # 
             disableRadioButtons(self)
-            disableStdDevButtons(self)
             disableLocationButtons(self)
             self.lineEdit_ref.setEnabled(False)
             self.lineEdit_rel.setEnabled(False)

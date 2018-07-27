@@ -725,15 +725,7 @@ def checkFileName(self, fileName, case):
 
     return checkFileName
 
-def folderExtension_creation(self):
-    extension = '_DQM_'
-    if ( self.checkStdDev1.isChecked()  ):
-        extension += 'std'
-    else: # default suppose that self.checkStdDev2 is checked
-        extension += 'dev'
-    return extension
-
-def getCheckedRadioButton(self):
+def getCheckedRadioButton(self): 
     value = "FullvsFull"
     if self.radio11.isChecked():
         value = 'FullvsFull'
@@ -884,9 +876,9 @@ def set_finalFolder(self, i_loc):
         self.URL = pathToURL(self)[i_loc-1][1]
     else: # i_loc = 0
         self.URL = "" # put to empty
-    folderADD = "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_xxx' + folderExtension_creation(self) # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+    folderADD = "/" + self.my_choice_rel_1[6:] + self.temp_rl + '_DQM_std' 
     folderADD += '/' + getCheckedRadioButton(self) + '_'
-    folderADD += str(self.my_choice_ref_1[6:]) + self.temp_rf # _xxx is temp. must be only _DQM_std/_DMQ_dev.
+    folderADD += str(self.my_choice_ref_1[6:]) + self.temp_rf
     self.finalFolder = self.location + folderADD
     self.URL += folderADD
 

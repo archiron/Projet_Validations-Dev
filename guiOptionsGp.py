@@ -169,26 +169,6 @@ def initGpFolderName(self): # can add modification on release name to obtain the
 
     return
 
-def initStdDev(self):
-    self.QGBoxStdDev = QGroupBox("std/dev")
-    self.QGBoxStdDev.setMaximumHeight(120)
-    self.QGBoxStdDev.setMinimumHeight(120)
-    self.QGBoxStdDev.setMaximumWidth(100)		
-    self.checkStdDev1 = QRadioButton("std")
-    self.checkStdDev2 = QRadioButton("dev") # default
-    self.checkStdDev2.setChecked(True)
-    self.checkStdDev1.setEnabled(False)
-    self.checkStdDev2.setEnabled(False)
-    self.connect(self.checkStdDev1, SIGNAL("clicked()"), self.checkStdDev1_Clicked)
-    self.connect(self.checkStdDev2, SIGNAL("clicked()"), self.checkStdDev2_Clicked)
-    vboxStdDev = QVBoxLayout()
-    vboxStdDev.addWidget(self.checkStdDev1)
-    vboxStdDev.addWidget(self.checkStdDev2)
-    vboxStdDev.addStretch(1)
-    self.QGBoxStdDev.setLayout(vboxStdDev)
-
-    return
-
 def initGpLocation(self):
 
     self.QGBoxLocation = QGroupBox("Location")
@@ -251,9 +231,6 @@ def initGpOptions(self):
     # creation du grpe All/None
     initGpAllNone(self)
 
-    # creation du grpe Std/Dev
-    initStdDev(self)
-    
     # creation du grpe Location
     initGpLocation(self)
     
@@ -270,7 +247,6 @@ def initGpOptions(self):
     self.layoutH_radio.addStretch(1)
     self.layoutH_radio.addWidget(self.QGBoxFolderName)
     self.layoutH_radio.addStretch(1)
-    self.layoutH_radio.addWidget(self.QGBoxStdDev)
     self.layoutH_radio.addWidget(self.QGBoxLocation)
     self.layoutH_radio.addWidget(self.QGBoxRelRef)
 
