@@ -15,10 +15,10 @@ def LocationFilter(self):
 def DataLocation(self):
     table=[
     ["Local", 1, str(localLocation(self))],
-    ["Remote afs", 0, '/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev/'],
-    #["Remote afs", 0, '/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases/'],
-    ["Remote eos", 0, '/eos/project/c/cmsweb/www/egamma/validation/Electrons/Dev/'],
-    #["Remote eos", 0, '/eos/project/c/cmsweb/www/egamma/validation/Electrons/Releases/'],
+    ["Remote afs dev", 0, '/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev/'],
+    ["Remote afs std", 0, '/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases/'],
+    ["Remote eos dev", 0, '/eos/project/c/cmsweb/www/egamma/validation/Electrons/Dev/'],
+    ["Remote eos std", 0, '/eos/project/c/cmsweb/www/egamma/validation/Electrons/Releases/'],
     ]
     return table
 

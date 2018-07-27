@@ -23,7 +23,7 @@ def initGpMiddle(self):
     initButtonResume(self)
     
 	#creation du grpe Resume
-    self.QGBoxResume = QGroupBox("Resume")
+    self.QGBoxResume = QGroupBox("Summary")
     self.QGBoxResume.setMinimumHeight(200)
     self.QGBoxResume.setMaximumHeight(200)
     vbox8 = QHBoxLayout()

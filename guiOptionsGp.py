@@ -10,7 +10,7 @@ from Paths_default import *
 
 def initGpCalcul(self):
 
-    self.QGBox1 = QGroupBox("Calcul")
+    self.QGBox1 = QGroupBox("Comparison")
     self.QGBox1.setMaximumHeight(120)
     self.QGBox1.setMinimumWidth(120)
     self.radio11 = QRadioButton("FULL vs FULL") # default

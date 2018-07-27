@@ -37,7 +37,10 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # addd files loading/loaded state.
+        self.setWindowTitle(self.version) # remove a print in Datasets_default.py.
+        # paths add/modification in paths list. Add difference dev vs std.
+        # replace Calcul with Comparison in function initGpCalcul(self) in guiOptionsGp.py.
+        # replace Resume with Summary in function initGpMiddle(self) guiMiddleGp.py.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice

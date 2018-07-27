@@ -11,7 +11,7 @@ from getEnv import env
 from functions import list_search_0
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.4.7.2'
+    self.version = 'GUI Electron Validations v0.4.7.3'
     
     self.cmsenv = env()
     self.texte = self.cmsenv.cmsAll()
