@@ -37,10 +37,10 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # remove a print in Datasets_default.py.
-        # paths add/modification in paths list. Add difference dev vs std.
-        # replace Calcul with Comparison in function initGpCalcul(self) in guiOptionsGp.py.
-        # replace Resume with Summary in function initGpMiddle(self) guiMiddleGp.py.
+        self.setWindowTitle(self.version) # Add URL for DataSets.
+        # Add new function pathToURL(self) in Paths_default.py in order to convert paths to URLs
+        # Add self.location & self.URL variables for simplifications.
+
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
