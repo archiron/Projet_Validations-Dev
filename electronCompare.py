@@ -12,7 +12,6 @@ ROOT.gROOT.SetBatch(True)
 ROOT.gErrorIgnoreLevel = ROOT.kWarning # remove info like : Info in <TCanvas::Print>: gif file gifs/h_ele_vertexPhi.gif has been created
 argv.remove( '-b-' )
 
-from getEnv import env
 from Paths_default import *
 
 from ROOT import * 

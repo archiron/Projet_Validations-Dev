@@ -6,8 +6,6 @@ from PyQt4.QtCore import *
 
 import os,sys
 import Gev
-
-from getEnv import env
 		
 def main(args):
     a=QApplication(args)

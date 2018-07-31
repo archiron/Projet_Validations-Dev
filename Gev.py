@@ -12,7 +12,6 @@ from guiOptionsGp import initGpOptions
 from guiChoiceGp import initGpChoice
 from guiBottomGp import initGpBottom
 from guiMiddleGp import initGpMiddle
-from getEnv import env
 from functions import folder_creation, finalFolder_creation, working_dirs_creation, dataSets_finalFolder_creation 
 from functions import list_search_1, list_search_3 
 from functions import sub_releases, sub_releases2, list_search_5 
@@ -36,8 +35,9 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # mini bug corrected : when going back from last step to summary step, the datasets are not conserved.
-        # Add "All DataSets are done." when they are done.
+        self.setWindowTitle(self.version) # correction and simplification of parameters send in fetch commands.
+        # Add authentication.py from Utilities/Relmon/python.
+        # Remove calls from env and file getEnv.py
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -814,18 +814,15 @@ class Gev(QWidget):
         temp_toBeRemoved = []
 
     ## Define options
-        option_is_from_data = "mc" # mc ou data
         option_mthreads = 3
         
     ## Use options
         relvaldir = 'RelVal'
-        if option_is_from_data == 'data':
-            relvaldir = 'RelValData'
     
     #case 1 self.my_choice_rel_0 : RELEASE
         self.wp.write("cmd_load_files 2 : case 1 %s : RELEASE\n " % self.my_choice_rel_0)
         self.textReport += "cmd_load_files 2 : case 1 " + self.my_choice_rel_0 + " : RELEASE" + "<br>"
-        option_release_rel = str(self.my_choice_rel_0)
+#        option_release_rel = str(self.my_choice_rel_0)
         filedir_url = BaseURL(self) + relvaldir + '/' + str(self.my_choice_rel_0) + '/'
         for line in self.releasesList_rel_5:
             if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "rel"):
@@ -836,13 +833,13 @@ class Gev(QWidget):
     
         os.chdir(self.working_dir_rel)   # Change current working directory to release directory
     
-        cmd_fetch_2(option_is_from_data, option_release_rel, option_mthreads, filedir_url, self.selected_files_rel)
+        cmd_fetch_2(option_mthreads, filedir_url, self.selected_files_rel)
 
     #case 2 self.my_choice_ref_0 : REFERENCE
         temp_toBeRemoved[:] = []# clear the temp array
         self.wp.write("cmd_load_files 2 : case 1 %s : REFERENCE\n " % self.my_choice_ref_0)
         self.textReport += "cmd_load_files 2 : case 1 " + self.my_choice_ref_0 + " : REFERENCE" + "<br>"
-        option_release_ref = str(self.my_choice_ref_0) 
+#        option_release_ref = str(self.my_choice_ref_0) 
         filedir_url = BaseURL(self) + relvaldir + '/' + str(self.my_choice_ref_0) + '/'
         for line in self.releasesList_ref_5:
             if not clean_collections2(line, self.validationType1, validationType_2, validationType_3, "ref"):
@@ -853,6 +850,6 @@ class Gev(QWidget):
     
         os.chdir(self.working_dir_ref)   # Change current working directory to release directory
     
-        cmd_fetch_2(option_is_from_data, option_release_ref, option_mthreads, filedir_url, self.selected_files_ref)
+        cmd_fetch_2(option_mthreads, filedir_url, self.selected_files_ref)
     
         return

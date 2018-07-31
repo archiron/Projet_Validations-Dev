@@ -6,8 +6,9 @@ import urllib2
 import re
 from Paths_default import *
 from functions import clean_collections2 # 
+from authentication import *                              
 
-def cmd_fetch_0(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
+def cmd_fetch_0(option_is_from_data, option_regexp, option_mthreads, option_dry_run):
     import re
     import sys
     import os
@@ -25,7 +26,8 @@ def cmd_fetch_0(option_is_from_data, option_release, option_regexp, option_mthre
 #    option_dry_run = True
         
     try:
-        from Utilities.RelMon.authentication import X509CertOpen
+#        from Utilities.RelMon.authentication import X509CertOpen # 2018-07-31
+        from authentication import X509CertOpen
     except ImportError:
         from authentication import X509CertOpen
 
@@ -62,10 +64,10 @@ def cmd_fetch_0(option_is_from_data, option_release, option_regexp, option_mthre
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
-    release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
-    if not release:
-        parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
-    releasedir = release[0] + "x"
+#    release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
+#    if not release:
+#        parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
+#    releasedir = release[0] + "x"
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/' # + releasedir + '/'
     filedir_html = auth_wget(filedir_url)
@@ -83,7 +85,7 @@ def cmd_fetch_0(option_is_from_data, option_release, option_regexp, option_mthre
     
     return 
     
-def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_mthreads, option_dry_run):
+def cmd_fetch_1(option_is_from_data, option_release, option_regexp, option_dry_run):
     import re
     import sys
     import os
@@ -184,7 +186,7 @@ def auth_wget2(url, chunk_size=2097152):
         chunk = url_file.read(chunk_size)
     file.close()
 
-def cmd_fetch_2(option_is_from_data, option_release, option_mthreads, filedir_url, selectedFilesList):
+def cmd_fetch_2(option_mthreads, filedir_url, selectedFilesList):
     import re
     import sys
     import os

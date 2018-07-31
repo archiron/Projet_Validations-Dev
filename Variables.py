@@ -7,14 +7,12 @@ from PyQt4 import QtCore
 
 import os,sys,subprocess, datetime
 
-from getEnv import env
 from functions import list_search_0
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.4.10.0'
+    self.version = 'GUI Electron Validations v0.4.11.0'
     
-    self.cmsenv = env()
-    self.texte = self.cmsenv.cmsAll()
+    self.texte = ""
     self.validationType1 = 'Full'   # default
     self.validationType2 = 'RECO'   # default
     self.validationType3 = 'RECO' # default

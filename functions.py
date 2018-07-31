@@ -11,7 +11,6 @@ import os,sys,subprocess, shutil
 import urllib2
 import re
 from PyQt4 import QtCore
-from getEnv import env
 from Paths_default import *
 from Datasets_default import extractDatasets, extractDatasetsFastvsFull, testForDataSetsFile # DataSetsFilter, checkCalculValidation, 
 from electronCompare import *
@@ -498,14 +497,13 @@ def list_search_0(self):
         
     ## Define options
     option_is_from_data = "mc" # mc ou data
-    option_release_1 = self.cmsenv.getCMSSWBASECMSSWVERSION()
     option_regexp = '_RelValTTbar_13' # str( self.lineedit4.text() ) to be removed
     option_mthreads = 3
     option_dry_run = True # False for loading files
     
     
     option_regexp = '' 
-    (liste_releases_0) = cmd_fetch_0(option_is_from_data, option_release_1, option_regexp, option_mthreads, option_dry_run)
+    (liste_releases_0) = cmd_fetch_0(option_is_from_data, option_regexp, option_mthreads, option_dry_run)
 
     i = 0
     temp_0 = []  
@@ -526,11 +524,10 @@ def list_search_1(my_choice_0):
     ## Define options
     option_is_from_data = "mc" # mc ou data
     option_release_1 = str( my_choice_0 )
-    option_mthreads = 3
     option_dry_run = True # False for loading files
     
     option_regexp = '' 
-    (liste_releases_1) = cmd_fetch_1(option_is_from_data, option_release_1, option_regexp, option_mthreads, option_dry_run)
+    (liste_releases_1) = cmd_fetch_1(option_is_from_data, option_release_1, option_regexp, option_dry_run)
 
     i = 0
     temp_1 = []  

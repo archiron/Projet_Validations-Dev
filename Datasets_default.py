@@ -8,7 +8,6 @@
 # new way to load datasets items into the menu. datasets are presented as [name, True/False] with True/False the default choice to be checked or not.
 
 import re
-from getEnv import env
 from Paths_default import *
 
 def DataSetsFilter(self):
