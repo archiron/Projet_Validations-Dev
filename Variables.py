@@ -10,7 +10,7 @@ import os,sys,subprocess, datetime
 from functions import list_search_0
 
 def initVariables(self):
-    self.version = 'GUI Electron Validations v0.4.11.0'
+    self.version = 'GUI Electron Validations v0.4.11.1'
     
     self.texte = ""
     self.validationType1 = 'Full'   # default

@@ -5,8 +5,8 @@ import os,sys,subprocess
 import urllib2
 import re
 from Paths_default import *
-from functions import clean_collections2 # 
-from authentication import *                              
+from functions import clean_collections2 #
+from authentication import *
 
 def cmd_fetch_0(option_is_from_data, option_regexp, option_mthreads, option_dry_run):
     import re
@@ -64,10 +64,6 @@ def cmd_fetch_0(option_is_from_data, option_regexp, option_mthreads, option_dry_
     relvaldir = "RelVal"
     if option_is_from_data == 'data':
         relvaldir = "RelValData"
-#    release = re.findall('(CMSSW_\d*_\d*_)\d*(?:_[\w\d]*)?', option_release)
-#    if not release:
-#        parser.error('No such CMSSW release found. Please check the ``--release`` commandline option value.')
-#    releasedir = release[0] + "x"
     base_url = 'https://cmsweb.cern.ch/dqm/relval/data/browse/ROOT/'
     filedir_url = base_url + relvaldir + '/' # + releasedir + '/'
     filedir_html = auth_wget(filedir_url)

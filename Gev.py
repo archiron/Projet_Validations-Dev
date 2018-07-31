@@ -35,9 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # correction and simplification of parameters send in fetch commands.
-        # Add authentication.py from Utilities/Relmon/python.
-        # Remove calls from env and file getEnv.py
+        self.setWindowTitle(self.version) # very minor correction.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice

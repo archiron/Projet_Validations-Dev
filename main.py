@@ -6,7 +6,7 @@ from PyQt4.QtCore import *
 
 import os,sys
 import Gev
-		
+
 def main(args):
     a=QApplication(args)
     # Creation d'un widget qui servira de fenetre

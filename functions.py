@@ -115,8 +115,6 @@ def dataSets_finalFolder_creation(self):
         
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
 #        print("\ndataSets_finalFolder_creation - dataset = %s" % elt[0])
-#        print("finalFolder = %s" % self.finalFolder)
-#        print("dataSetFolder = %s" % dataSetFolder)
         if not os.path.exists(dataSetFolder): # create dataSetFolder
             wr.write("%s does not exist. Creating it\n" % dataSetFolder)
             os.makedirs(dataSetFolder) # create reference folder
@@ -777,7 +775,6 @@ def updateLabelResumeSelected(self):
     selectedText += "Selected :</strong>"
     selectedText += "<table>"
     selectedText += "<tr>"
-
     if (self.selectedRelDatasets == self.selectedRefDatasets):
         self.okToPublishDatasets = self.selectedRelDatasets
         selectedText += "<td colspan=\"2\"><br /><strong><font color = \"green\">Datasets : " + self.selectedRelDatasets + "</font></strong><br /></td>"
