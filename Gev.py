@@ -36,11 +36,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # remove std/dev choice. All folders terminate with _std.
-        # remove _xxx_ add-in set_finalFolder() function.
-        # remove folderExtension_creation() function.
-        # remove initStdDev QGBox and dev/std option.
-        # remove disableStdDevButtons() and enableStdDevButtons() functions and calls.
+        self.setWindowTitle(self.version) # mini bug corrected : when going back from last step to summary step, the datasets are not conserved.
+        # Add "All DataSets are done." when they are done.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -490,7 +487,6 @@ class Gev(QWidget):
             updateLabelResume(self)
             self.QGBoxListsUpdate()
             updateLabelResumeSelected(self) # perhaps need to be redone
-            
             self.wp.write("checkTaskCounter 3 : self.selectedDataSets = %s\n" % self.selectedDataSets)
             self.textReport += "checkTaskCounter 3 : self.selectedDataSets = " + str(self.selectedDataSets) + "<br>"
             self.wp.write("checkTaskCounter 3 : self.okToPublishDatasets = %s\n" % self.okToPublishDatasets)
@@ -506,6 +502,7 @@ class Gev(QWidget):
             self.wp.write("checkTaskCounter 3 : 1 %s\n" % self.okToPublishDatasets)
             self.textReport += "checkTaskCounter 3 : 1 " + self.okToPublishDatasets + "<br>"
             self.releasesList_3 = (self.okToPublishDatasets.replace(" ", "")).split(',') # replace releasesList_rel_3 & releasesList_ref_3
+            
             for it1 in self.releasesList_rel_2: # it1 = root file
                 if checkFileName(self, it1, "rel"):
                     for it2 in self.releasesList_3: # it2 = dataSet
@@ -525,7 +522,6 @@ class Gev(QWidget):
             self.wp.write("checkTaskCounter 3 : self.selectedRefGlobalTag = %s\n" % self.selectedRefGlobalTag)
             self.textReport += "checkTaskCounter 3 : self.selectedRefGlobalTag = " + self.selectedRefGlobalTag + "<br>"
             
-            # print length of the arrays
             self.wp.write("BaseUrl = %s\n" % BaseURL(self))
             self.textReport += "BaseUrl = " + BaseURL(self) + "<br>"
           
@@ -588,6 +584,7 @@ class Gev(QWidget):
             #####
             self.finalList = map(list, zip(merged_1b, tmp_rel, tmp_ref))
 
+            self.okToPublishDatasets.replace(",", ", ") # back to the initial form
             finalFolder_creation(self) # create the save folder for html and gifs files
             updateLabelResume(self)
             self.QGBoxListsUpdate()
@@ -599,6 +596,10 @@ class Gev(QWidget):
             
             self.wp.write("end ...\n")
             self.textReport += "end ..." + "<br>"
+            selectedText = self.labelResumeSelected.text()
+            selectedText += "All DataSets are done.<br>"
+            self.labelResumeSelected.setText(self.trUtf8(selectedText))
+            QtCore.QCoreApplication.processEvents()
             
         else:
             print "Hello Houston, we have a pbm !!"
