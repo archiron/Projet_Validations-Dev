@@ -813,6 +813,8 @@ def updateLabelResume(self):
 
 def changeRef2Tmp(self): # put ref into memory, and put ref == rel
     self.my_choice_tmp = self.my_choice_ref_1 # keep the chosen reference into memory
+    self.my_choice_ref_0_tmp = self.my_choice_ref_0 # keep it for files loading
+    self.my_choice_ref_0 = self.my_choice_rel_0
     self.releasesList_ref_2_tmp = self.releasesList_ref_2 # keep the reference root files list into memory
     self.ref_list_1_tmp = self.ref_list_1 # keep the reference datasets list into memory
     self.my_choice_ref_1 = self.my_choice_rel_1
@@ -832,6 +834,7 @@ def changeTmp2Ref(self): # retrieve rel != ref
         self.textReport += "native : " + self.my_choice_tmp + "<br>"
         self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
         self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
+        self.my_choice_ref_0 = self.my_choice_ref_0_tmp
         self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back
         self.my_choice_tmp = ""
         self.releasesList_ref_2_tmp = []
@@ -849,6 +852,7 @@ def changeTmp2Ref(self): # retrieve rel != ref
     self.textReport += "back to reference" + "<br>"
     self.textReport += "actual : " + self.my_choice_ref_1 + "<br>"
     self.textReport += "native : " + self.my_choice_tmp + "<br>"
+    self.my_choice_ref_0 = self.my_choice_ref_0_tmp # keep the GLOBALTAG for files loading back
     self.my_choice_ref_1 = self.my_choice_tmp # keep the reference back
     self.ref_list_1 = self.ref_list_1_tmp # keep the reference datasets list back
     self.releasesList_ref_2 = self.releasesList_ref_2_tmp # keep the reference root files list back

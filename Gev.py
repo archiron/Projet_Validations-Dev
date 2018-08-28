@@ -35,7 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # very minor correction.
+        self.setWindowTitle(self.version) # correction for path folder of reference root files.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -789,8 +789,8 @@ class Gev(QWidget):
         self.temp_rf = ''
         if ( self.lineEdit_ref.text() != '' ):
             self.temp_rf = '_' + unicode(self.lineEdit_ref.text())       
-        print "temp_rl : %s" % self.temp_rl
-        print "temp_rf : %s" % self.temp_rf
+#        print "temp_rl : %s" % self.temp_rl
+#        print "temp_rf : %s" % self.temp_rf
         self.wp.write("temp_rl : %s\n " % self.temp_rl)
         self.wp.write("temp_rf : %s\n " % self.temp_rf)
         self.textReport += "temp_rl : " + self.temp_rl + "<br>"
