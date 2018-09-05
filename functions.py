@@ -388,7 +388,7 @@ def dataSets_finalFolder_creation(self):
             selectedText += '\t\t<a href=\"' + getURL(dataSetFolder, self.URL) + "\">" + getURL(dataSetFolder, self.URL) + "</a><br>"
         else:
             selectedText += "<br>"
-        wr.write(" Dataset URL%s\n" % getURL(dataSetFolder, self.URL))
+        wr.write(" Dataset URL %s\n" % getURL(dataSetFolder, self.URL))
         self.textReport += " Dataset URL " + getURL(dataSetFolder, self.URL)
         self.labelResumeSelected.setText(self.trUtf8(selectedText))
         QtCore.QCoreApplication.processEvents()

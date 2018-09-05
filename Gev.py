@@ -35,7 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # correction for path folder of reference root files.
+        self.setWindowTitle(self.version) # very minor correction for Dataset URL output in report.olog file.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -485,6 +485,7 @@ class Gev(QWidget):
             updateLabelResume(self)
             self.QGBoxListsUpdate()
             updateLabelResumeSelected(self) # perhaps need to be redone
+            
             self.wp.write("checkTaskCounter 3 : self.selectedDataSets = %s\n" % self.selectedDataSets)
             self.textReport += "checkTaskCounter 3 : self.selectedDataSets = " + str(self.selectedDataSets) + "<br>"
             self.wp.write("checkTaskCounter 3 : self.okToPublishDatasets = %s\n" % self.okToPublishDatasets)
