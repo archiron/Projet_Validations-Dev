@@ -8,12 +8,7 @@ path to Dev on eos : http://cms-egamma.web.cern.ch/cms-egamma/validation/Electro
 path to GUI on eos : /eos/project/c/cmsweb/www/egamma/validation/Electrons/GUI/Validation-Project-DEV <br>
 and use it with : python /eos/project/c/cmsweb/www/egamma/validation/Electrons/GUI/Validation-Project-DEV/main.py <br>
 
-before using it, you need : <br>
-cmsrel CMSSW_X_Y_Z[_preT] <br>
-cd CMSSW_X_Y_Z[_preT]/src <br>
-cmsenv <br>
-git cms-addpkg Validation/RecoEgamma and then <br>
-cd Validation/RecoEGamma/test <br>
-
+before using it, you can : <br>
+/eos/project/c/cmsweb/www/egamma/validation/Electrons/GUI/validationDev.sh CMSSW_RELEASE_VERSION where CMSSW_RELEASE_VERSION can be CMSSW_10_3_0_pre1 or any version you want.
 
 [1] : by clicking on a folder you are using the new web page with filters made with PHP. If you want the "classical" view, click on 'classical view'.  <br>
