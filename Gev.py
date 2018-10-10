@@ -35,7 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # correction in Fast vs Full to take into account the _UP17 extension for DataSets names.
+        self.setWindowTitle(self.version) # moving the strip() function in the precedent correction (gev.py file).
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -565,7 +565,7 @@ class Gev(QWidget):
             # collapsing self.releasesList_rel_5, self.releasesList_ref_5 & self.okToPublishDatasets into one list.
             merged_1 = []
             for dts in self.okToPublishDatasets.split(','):
-                merged_1.append(str(dts.strip()))
+                merged_1.append(str(dts).strip())
             merged_1 = sorted(set(merged_1), reverse=True)
             merged_1b = list(merged_1) # merged_1[::-1]
             
