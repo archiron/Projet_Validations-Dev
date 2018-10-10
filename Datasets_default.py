@@ -36,8 +36,10 @@ def DataSetsFilter_FullRECO(self):
 
 def DataSetsFilter_FastRECO(self):
     table=[
-    ["TTbar_13", 1],
-    ["ZEE_13", 1],
+    ["TTbar_13", 0],
+    ["ZEE_13", 0],
+    ["TTbar_13_UP17", 1],
+    ["ZEE_13_UP17", 1],
     ]
     return table
 
@@ -45,6 +47,8 @@ def DataSetsFilter_FastFullRECO(self):
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
+    ["TTbar_13_UP17", 1],
+    ["ZEE_13_UP17", 1],
     ]
     return table
 
@@ -127,7 +131,8 @@ def extractDatasets(self):
     self.textReport += "cuttedRelease   : " + str(cuttedRelease) + "<br>"
     # searching in self.selectedRefDatasets
     for elem in cuttedRelease:
-        if re.search(elem, self.selectedRefDatasets):
+        elem2 = elem.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
+        if re.search(elem2, self.selectedRefDatasets): # TEMP for _UP17 & Fast vs Full
             extraction += ', ' + elem
             extractionDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
         else:
@@ -137,31 +142,6 @@ def extractDatasets(self):
     extractionDisplay = extractionDisplay[2:]
     
     return extraction 
-    
-def extractDatasetsFastvsFull(self): # do not verify if checkFastvsFull(self) !! MUST be called inside a if(checkFastvsFull(self)): !!
-    extractionFastvsFull = ""
-    extractionFastvsFullDisplay = ""
-    # display of the datasets strings
-    self.wp.write("datasets release   : %s\n" % self.selectedRelDatasets)
-    self.wp.write("datasets reference : %s\n" % self.selectedFvsFDatasets)
-    self.textReport += "datasets release   : " + self.selectedRelDatasets + "<br>"
-    self.textReport += "datasets reference : " + self.selectedFvsFDatasets + "<br>"
-    # cutting self.selectedRelDatasets
-    cuttedRelease = str(self.selectedRelDatasets).split(',')
-    self.wp.write("cuttedRelease : %s\n" % str(cuttedRelease))
-    self.textReport += "cuttedRelease   : " + str(cuttedRelease) + "<br>"
-    # searching in self.selectedFvsFDatasets
-    for elem in cuttedRelease:
-        if re.search(elem, self.selectedFvsFDatasets):
-            extractionFastvsFull += ', ' + elem
-            extractionFastvsFullDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
-        else:
-            extractionFastvsFullDisplay += ', ' + elem
-    
-    extractionFastvsFull = extractionFastvsFull[2:]
-    extractionFastvsFullDisplay = extractionFastvsFullDisplay[2:]
-    
-    return extractionFastvsFull, extractionFastvsFullDisplay
 
 def checkCalculValidation(self, fileName, side):
 #Full, RECO    : (not PU) and (not Fast)
@@ -261,39 +241,52 @@ def checkCalculValidation(self, fileName, side):
 
 def testForDataSetsFile(self, dataSetsName): # perhaps t_ref is not useful
     # also get the tree path part (tp_rel, tp_ref) for root files :
+    # folder location for those files : HistosConfigFiles/
     # ElectronMcSignalValidator
     # ElectronMcSignalValidatorMiniAOD
     # ElectronMcSignalValidatorPt1000
     # ElectronMcFakeValidator
+    
+    '''
+    in order to use the GUI without the CMSSW env (i.e. without the cmsrel, and the need of the Validation/RecoEgamma/test folder)
+    you have to use the following line below.
+    '''
+    #tmp_path = '/afs/cern.ch/user/a/archiron/lbin/Projet_Validations-PortableDev/HistosConfigFiles/'
+    tmp_path = '/eos/project/c/cmsweb/www/egamma/validation/Electrons/GUI/Projet_Validations-PortableDev/HistosConfigFiles/'
+    '''
+    in order to use the GUI with the CMSSW env (i.e. with the Validation/RecoEgamma/test folder)
+    you have to use the following line below with self.working_dir_base.
+    '''
+    #tmp_path = self.working_dir_base + '/'
 
-    t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
+    t_rel = tmp_path + 'ElectronMcSignalHistos.txt'
     t_ref = t_rel
     tp_rel = 'ElectronMcSignalValidator'
     tp_ref = tp_rel
     if ( re.search('Pt1000', dataSetsName) ):
-        t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosPt1000.txt'
+        t_rel = tmp_path + 'ElectronMcSignalHistosPt1000.txt'
         t_ref = t_rel
         tp_rel = 'ElectronMcSignalValidatorPt1000'
         tp_ref = tp_rel
     elif ( re.search('QCD', dataSetsName) ):
-        t_rel = self.working_dir_base + '/' + 'ElectronMcFakeHistos.txt'
+        t_rel = tmp_path + 'ElectronMcFakeHistos.txt'
         t_ref = t_rel
         tp_rel = 'ElectronMcFakeValidator'
         tp_ref = tp_rel
     else: # general
         if self.checkSpecTarget1.isChecked(): # RECO
             if self.checkSpecReference4.isChecked(): # RECO vs miniAOD
-                t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt' # we have only miniAOD histos to compare.
-                t_ref = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
+                t_rel = tmp_path + 'ElectronMcSignalHistosMiniAOD.txt' # we have only miniAOD histos to compare.
+                t_ref = tmp_path + 'ElectronMcSignalHistosMiniAOD.txt'
                 tp_rel = 'ElectronMcSignalValidator'
                 tp_ref = 'ElectronMcSignalValidatorMiniAOD'
             else: # RECO vs RECO
-                t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistos.txt'
+                t_rel = tmp_path + 'ElectronMcSignalHistos.txt'
                 t_ref = t_rel
                 tp_rel = 'ElectronMcSignalValidator'
                 tp_ref = 'ElectronMcSignalValidator'
         elif self.checkSpecTarget4.isChecked(): # miniAOD vs miniAOD
-            t_rel = self.working_dir_base + '/' + 'ElectronMcSignalHistosMiniAOD.txt'
+            t_rel = tmp_path + 'ElectronMcSignalHistosMiniAOD.txt'
             t_ref = t_rel
             tp_rel = 'ElectronMcSignalValidatorMiniAOD'
             tp_ref = tp_rel

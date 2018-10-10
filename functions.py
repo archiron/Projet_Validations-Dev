@@ -12,7 +12,7 @@ import urllib2
 import re
 from PyQt4 import QtCore
 from Paths_default import *
-from Datasets_default import extractDatasets, extractDatasetsFastvsFull, testForDataSetsFile # DataSetsFilter, checkCalculValidation, 
+from Datasets_default import extractDatasets, testForDataSetsFile # DataSetsFilter, checkCalculValidation, # extractDatasetsFastvsFull,
 from electronCompare import *
 
 from ROOT import TCanvas

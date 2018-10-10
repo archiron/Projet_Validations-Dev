@@ -35,7 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # very minor correction for Dataset URL output in report.olog file.
+        self.setWindowTitle(self.version) # correction in Fast vs Full to take into account the _UP17 extension for DataSets names.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -461,7 +461,6 @@ class Gev(QWidget):
             self.selectedRefDatasets = ""
             self.selectedRelGlobalTag = ""
             self.selectedRefGlobalTag = ""
-            self.selectedFvsFDatasets = ""
             self.selectedFvsFGlobalTag = ""
             # what to do if len(self.QLW_rel(f)_datasets) = 0? -> solved before arriving here !
         elif self.tasks_counter == 3: # resuming selections
@@ -485,7 +484,6 @@ class Gev(QWidget):
             updateLabelResume(self)
             self.QGBoxListsUpdate()
             updateLabelResumeSelected(self) # perhaps need to be redone
-            
             self.wp.write("checkTaskCounter 3 : self.selectedDataSets = %s\n" % self.selectedDataSets)
             self.textReport += "checkTaskCounter 3 : self.selectedDataSets = " + str(self.selectedDataSets) + "<br>"
             self.wp.write("checkTaskCounter 3 : self.okToPublishDatasets = %s\n" % self.okToPublishDatasets)
@@ -512,6 +510,7 @@ class Gev(QWidget):
             for it1 in self.releasesList_ref_2: # it1 = root file
                if checkFileName(self, it1, "ref"):
                     for it2 in self.releasesList_3: # it2 = dataSet
+                        it2 = it2.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
                             if checkCalculValidation(self, it1, "ref"):
                                 self.releasesList_ref_5.append(it1)
@@ -566,7 +565,7 @@ class Gev(QWidget):
             # collapsing self.releasesList_rel_5, self.releasesList_ref_5 & self.okToPublishDatasets into one list.
             merged_1 = []
             for dts in self.okToPublishDatasets.split(','):
-                merged_1.append(str(dts))
+                merged_1.append(str(dts.strip()))
             merged_1 = sorted(set(merged_1), reverse=True)
             merged_1b = list(merged_1) # merged_1[::-1]
             
@@ -574,11 +573,12 @@ class Gev(QWidget):
             tmp_rel = []
             tmp_ref = []
             for it in merged_1b:
+                it2 = it.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
                 for val in self.selected_files_rel:
                     if ( re.search(str(it + "__"), val) ):
                         tmp_rel.append(val)
                 for val in self.selected_files_ref:
-                    if ( re.search(str(it + "__"), val) ):
+                    if ( re.search(str(it2 + "__"), val) ): # TEMP for _UP17 & Fast vs Full
                         tmp_ref.append(val)
             #####
             self.finalList = map(list, zip(merged_1b, tmp_rel, tmp_ref))
