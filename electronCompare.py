@@ -18,12 +18,14 @@ from ROOT import *
 from math import log10
 
 def getHisto(file, tp):
-    t1 = file.Get("DQMData")
-    t2 = t1.Get("Run 1")
-    t3 = t2.Get("EgammaV")
-    t4 = t3.Get("Run summary")
-    t5 = t4.Get(tp)
-    return t5
+#    t1 = file.Get("DQMData")
+#    t2 = t1.Get("Run 1")
+#    t3 = t2.Get("EgammaV")
+#    t4 = t3.Get("Run summary")
+#    t5 = t4.Get(tp)
+    path = 'DQMData/Run 1/EgammaV/Run summary/' + tp
+    t_path = file.Get(path)
+    return t_path # t5
 
 def RenderHisto(histo, self):
     

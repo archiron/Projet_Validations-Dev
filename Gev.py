@@ -35,7 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # moving the strip() function in the precedent correction (gev.py file).
+        self.setWindowTitle(self.version) # add a new scheme for getting histos in electronComapre.py getHisto() function.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
