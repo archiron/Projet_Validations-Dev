@@ -219,7 +219,7 @@ def cmd_load_files(self):
 
     ## Define options
     option_is_from_data = "mc" # mc ou data
-    option_mthreads = 3
+    option_mthreads = 8
         
     ## Use options
     relvaldir = 'RelVal'

@@ -114,7 +114,7 @@ def dataSets_finalFolder_creation(self):
         QtCore.QCoreApplication.processEvents()
         
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
-#        print("\ndataSets_finalFolder_creation - dataset = %s" % elt[0])
+        print("\ndataSets_finalFolder_creation - dataset = %s" % elt[0])
         if not os.path.exists(dataSetFolder): # create dataSetFolder
             wr.write("%s does not exist. Creating it\n" % dataSetFolder)
             os.makedirs(dataSetFolder) # create reference folder
@@ -594,7 +594,7 @@ def list_search_5(self):
     self.textReport += "list_search_5 : filtre = " + str(filtre) + "<br>"
     for item1 in self.releasesList_rel_2:
         for item2 in filtre:
-            if re.search(item2 + '__', item1):
+            if (re.search(item2 + '__', item1) and re.search(str(self.my_choice_rel_1) + '-', item1)):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "rel"):
                     temp_12.append([explode_item(item1)[2], item2])
                 break
@@ -627,7 +627,7 @@ def list_search_5(self):
             releasesTemp = self.releasesList_rel_2
         for item1 in releasesTemp:
             for item2 in filtre:
-                if re.search(item2 + '__', item1):
+                if (re.search(item2 + '__', item1) and re.search(str(self.my_choice_ref_1) + '-', item1)):
                     if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "ref"):
                         temp_34.append([explode_item(item1)[2], item2])
                     break

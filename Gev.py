@@ -35,7 +35,8 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # add a new scheme for getting histos in electronComapre.py getHisto() function.
+        self.setWindowTitle(self.version) # add a new scheme for the root files selections - now we can have 10_3_0 instead of all the 10_3_0_preX.
+        # we have a correction for the new dataset name in Fast vs Fast TTbar_UP17 & ZEE_UP17
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -510,7 +511,8 @@ class Gev(QWidget):
             for it1 in self.releasesList_ref_2: # it1 = root file
                if checkFileName(self, it1, "ref"):
                     for it2 in self.releasesList_3: # it2 = dataSet
-                        it2 = it2.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
+                        if self.radio13.isChecked():
+                            it2 = it2.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
                             if checkCalculValidation(self, it1, "ref"):
                                 self.releasesList_ref_5.append(it1)
@@ -573,7 +575,10 @@ class Gev(QWidget):
             tmp_rel = []
             tmp_ref = []
             for it in merged_1b:
-                it2 = it.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
+                if self.radio13.isChecked():
+                    it2 = it.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
+                else:
+                    it2 = it
                 for val in self.selected_files_rel:
                     if ( re.search(str(it + "__"), val) ):
                         tmp_rel.append(val)
@@ -813,7 +818,7 @@ class Gev(QWidget):
         temp_toBeRemoved = []
 
     ## Define options
-        option_mthreads = 3
+        option_mthreads = 8
         
     ## Use options
         relvaldir = 'RelVal'
