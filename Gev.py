@@ -35,8 +35,16 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # add a new scheme for the root files selections - now we can have 10_3_0 instead of all the 10_3_0_preX.
-        # we have a correction for the new dataset name in Fast vs Fast TTbar_UP17 & ZEE_UP17
+        self.setWindowTitle(self.version) # we now use the GT in the Datasets_default.py checkCalculValidation() function.
+                                          # check_PU25 -> check_PU to take into account future PUs.
+                                          # check_pmx25 -> check_pmx for the same reasen.
+                                          # add new datasets     ["TTbar_14TeV", 1],
+                                          #                      ["ZEE_14", 1],
+                                          # in DataSetsFilter_FullRECO(), DataSetsFilter_FullPU25, DataSetsFilter_FullminiAOD functions.
+                                          # we now use the GT in the functions.py clean_collections2() function.
+                                          # c_PU25 -> c_PU to take into account future PUs.
+                                          # c_pmx25 -> c_pmx for the same reasen.
+
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -513,6 +521,7 @@ class Gev(QWidget):
                     for it2 in self.releasesList_3: # it2 = dataSet
                         if self.radio13.isChecked():
                             it2 = it2.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
+                            it2 = it2.replace("_UP18", "") # TEMP for _UP18 & Fast vs Full
                         if (re.search(str(newName("__RelVal", it2, "__")), it1) and re.search(str(self.selectedRefGlobalTag), it1)):
                             if checkCalculValidation(self, it1, "ref"):
                                 self.releasesList_ref_5.append(it1)
@@ -577,13 +586,14 @@ class Gev(QWidget):
             for it in merged_1b:
                 if self.radio13.isChecked():
                     it2 = it.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
+                    it2 = it2.replace("_UP18", "") # TEMP for _UP18 & Fast vs Full
                 else:
                     it2 = it
                 for val in self.selected_files_rel:
                     if ( re.search(str(it + "__"), val) ):
                         tmp_rel.append(val)
                 for val in self.selected_files_ref:
-                    if ( re.search(str(it2 + "__"), val) ): # TEMP for _UP17 & Fast vs Full
+                    if ( re.search(str(it2 + "__"), val) ): # TEMP for _UP17/8 & Fast vs Full
                         tmp_ref.append(val)
             #####
             self.finalList = map(list, zip(merged_1b, tmp_rel, tmp_ref))

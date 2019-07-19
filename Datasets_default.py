@@ -31,15 +31,19 @@ def DataSetsFilter_FullRECO(self):
     ["QCD_Pt_80_120_13", 1],
     ["TTbar_13", 1],
     ["ZEE_13", 1],
+    ["TTbar_14TeV", 1],
+    ["ZEE_14", 1],
     ]
     return table
 
 def DataSetsFilter_FastRECO(self):
     table=[
-    ["TTbar_13", 0],
-    ["ZEE_13", 0],
+    ["TTbar_13", 1],
+    ["ZEE_13", 1],
     ["TTbar_13_UP17", 1],
     ["ZEE_13_UP17", 1],
+    ["TTbar_13_UP18", 1],
+    ["ZEE_13_UP18", 1],
     ]
     return table
 
@@ -49,6 +53,8 @@ def DataSetsFilter_FastFullRECO(self):
     ["ZEE_13", 1],
     ["TTbar_13_UP17", 1],
     ["ZEE_13_UP17", 1],
+    ["TTbar_13_UP18", 1],
+    ["ZEE_13_UP18", 1],
     ]
     return table
 
@@ -56,6 +62,8 @@ def DataSetsFilter_FullPU25(self):
     table=[
     ["TTbar_13", 1],
     ["ZEE_13", 1],
+    ["TTbar_14TeV", 1],
+    ["ZEE_14", 1],
     ]
     return table
 
@@ -99,6 +107,8 @@ def DataSetsFilter_FullminiAOD(self):
     ["SingleElectronPt10", 1],
     ["TTbar_13", 1],
     ["ZEE_13", 1],
+    ["TTbar_14TeV", 1],
+    ["ZEE_14", 1],
     ]
     return table
 
@@ -132,7 +142,8 @@ def extractDatasets(self):
     # searching in self.selectedRefDatasets
     for elem in cuttedRelease:
         elem2 = elem.replace("_UP17", "") # TEMP for _UP17 & Fast vs Full
-        if re.search(elem2, self.selectedRefDatasets): # TEMP for _UP17 & Fast vs Full
+        elem2 = elem2.replace("_UP18", "") # TEMP for _UP18 & Fast vs Full
+        if re.search(elem2, self.selectedRefDatasets): # TEMP for _UP17, _UP18 & Fast vs Full
             extraction += ', ' + elem
             extractionDisplay += ', ' + "<font color = \"blue\">" + elem + "</font>"
         else:
@@ -155,8 +166,8 @@ def checkCalculValidation(self, fileName, side):
 #Fast, miniAOD : idem Fast, RECO
     
     checkCalculValidation = True
-    check_PU25 = False
-    check_pmx25 = False
+    check_PU = False
+    check_pmx = False
     check_Fast = False
     
     if self.radio11.isChecked(): # Full vs Full
@@ -175,15 +186,20 @@ def checkCalculValidation(self, fileName, side):
         else:
             print "BIG PBM !!"
     
-    if ( re.search("PU25", fileName) ):
-        check_PU25 = True
-    if ( re.search("PUpmx25", fileName) ):
-        check_pmx25 = True
-    if ( re.search("Fast", fileName) ):
+    print('fileName : %s' % fileName) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
+    blob1 = fileName.split('-') # ['DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1', 'PU25ns_106X_mc2017_realistic_v6', 'v1__DQMIO.root']
+    blob2 = blob1[1].split('_') # ['PU25ns', '106X', 'mc2017', 'realistic', 'v6']
+#    if ( re.search("PU25", blob2[0]) ): # fileName previously
+    if ( re.search("PU", blob2[0]) ): # fileName previously
+        check_PU = True
+#    if ( re.search("PUpmx25", blob2[0]) ):
+    if ( re.search("PUpmx", blob2[0]) ):
+        check_pmx = True
+    if ( re.search("Fast", blob2[0]) ):
         check_Fast = True
     
     if self.checkSpecTarget1.isChecked(): # RECO or miniAOD
-        if check_PU25 or check_pmx25:
+        if check_PU or check_pmx:
             checkCalculValidation = False
         else:
             if testFast: # Fast
@@ -197,7 +213,7 @@ def checkCalculValidation(self, fileName, side):
                 else:
                     checkCalculValidation = True
     elif self.checkSpecTarget2.isChecked(): # PU25ns
-        if check_PU25:
+        if check_PU:
             if testFast: # Fast, PU25ns
                 if check_Fast:
                     checkCalculValidation = True
@@ -211,7 +227,7 @@ def checkCalculValidation(self, fileName, side):
         else:
             checkCalculValidation = False
     elif self.checkSpecTarget3.isChecked(): # PUpmx25ns
-        if check_pmx25:
+        if check_pmx:
             if testFast: # Fast, PUpmx25ns
                 if check_Fast:
                     checkCalculValidation = True
@@ -222,7 +238,7 @@ def checkCalculValidation(self, fileName, side):
                     checkCalculValidation = False
                 else:
                     checkCalculValidation = True
-        elif check_PU25:
+        elif check_PU:
             if testFast: # Fast, PU25ns
                 if check_Fast:
                     checkCalculValidation = True

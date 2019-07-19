@@ -1,3 +1,5 @@
+extraire la partie PU correctement (DQM_V0001_R000000001__RelValZEE_14__CMSSW_10_6_0-PU25ns_106X_upgrade2021_realistic_v4_PU70_rsb-v1__DQMIO.root est un cas très spécial).
+
 RAJOUTER UN BOUTON RESET, TESTER UN RETOUR POUR MINIAOD
 
 utiliser clean_collections pour nettoyer en fonction de Full, PU, Fast

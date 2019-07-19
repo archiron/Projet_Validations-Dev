@@ -12,7 +12,7 @@ import urllib2
 import re
 from PyQt4 import QtCore
 from Paths_default import *
-from Datasets_default import extractDatasets, testForDataSetsFile # DataSetsFilter, checkCalculValidation, # extractDatasetsFastvsFull,
+from Datasets_default import extractDatasets, testForDataSetsFile 
 from electronCompare import *
 
 from ROOT import TCanvas
@@ -114,7 +114,7 @@ def dataSets_finalFolder_creation(self):
         QtCore.QCoreApplication.processEvents()
         
         dataSetFolder = str(self.validationType2 + '-' + self.validationType3 + '_' + dts)
-        print("\ndataSets_finalFolder_creation - dataset = %s" % elt[0])
+#        print("\ndataSets_finalFolder_creation - dataset = %s" % elt[0])
         if not os.path.exists(dataSetFolder): # create dataSetFolder
             wr.write("%s does not exist. Creating it\n" % dataSetFolder)
             os.makedirs(dataSetFolder) # create reference folder
@@ -454,28 +454,33 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     if ( relrefChoice == "ref" ):
         valType = validationType_3
     
+    print('collectionItem : %s' % collectionItem) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
+    blob1 = collectionItem.split('-') # ['DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1', 'PU25ns_106X_mc2017_realistic_v6', 'v1__DQMIO.root']
+    blob2 = blob1[1].split('_') # ['PU25ns', '106X', 'mc2017', 'realistic', 'v6']
+    print(blob2)
     c_Fast = False
-    if ( re.search('Fast', collectionItem) ): #  match Fast 
+#    if ( re.search('Fast', collectionItem) ): #  match Fast,  collectionItem previously
+    if ( re.search('Fast', blob2[0]) ): #  match Fast,  collectionItem previously
         c_Fast = True
-    c_PU25 = False
-    if ( re.search('PU25', collectionItem) ): #  match PU AND PUpmx
-        c_PU25 = True
-    c_pmx25 = False
-    if ( re.search('PUpmx25', collectionItem) ): #  match pmx
-        c_pmx25 = True
+    c_PU = False
+    if ( re.search('PU', blob2[0]) ): #  match PU AND PUpmx,  collectionItem previously
+        c_PU = True
+    c_pmx = False
+    if ( re.search('PUpmx', blob2[0]) ): #  match pmx,  collectionItem previously
+        c_pmx = True
     
     if ( valType == "PU25" ): # PU test (PU and not pmx)
-        if ( not c_PU25 ):
+        if ( not c_PU ):
             temp = False
     else: # valType != "PU25"
-        if (c_PU25):
+        if (c_PU):
             temp = False
     
     if ( valType == "PUpmx25" ): # 
-        if (not c_pmx25): # pmx test
+        if (not c_pmx): # pmx test
             temp = False
     else:
-        if (c_pmx25): # pmx test
+        if (c_pmx): # pmx test
             temp = False
 
     if ( (validationType_1 == "Fast") or ( checkFvsF == "Fast" )):
