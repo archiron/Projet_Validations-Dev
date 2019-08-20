@@ -35,16 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # we now use the GT in the Datasets_default.py checkCalculValidation() function.
-                                          # check_PU25 -> check_PU to take into account future PUs.
-                                          # check_pmx25 -> check_pmx for the same reasen.
-                                          # add new datasets     ["TTbar_14TeV", 1],
-                                          #                      ["ZEE_14", 1],
-                                          # in DataSetsFilter_FullRECO(), DataSetsFilter_FullPU25, DataSetsFilter_FullminiAOD functions.
-                                          # we now use the GT in the functions.py clean_collections2() function.
-                                          # c_PU25 -> c_PU to take into account future PUs.
-                                          # c_pmx25 -> c_pmx for the same reasen.
-
+        self.setWindowTitle(self.version) # small correction for the comparison between pmx & PU.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice

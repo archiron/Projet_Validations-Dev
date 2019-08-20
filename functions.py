@@ -454,21 +454,23 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     if ( relrefChoice == "ref" ):
         valType = validationType_3
     
-    print('collectionItem : %s' % collectionItem) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
     blob1 = collectionItem.split('-') # ['DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1', 'PU25ns_106X_mc2017_realistic_v6', 'v1__DQMIO.root']
     blob2 = blob1[1].split('_') # ['PU25ns', '106X', 'mc2017', 'realistic', 'v6']
-    print(blob2)
     c_Fast = False
 #    if ( re.search('Fast', collectionItem) ): #  match Fast,  collectionItem previously
     if ( re.search('Fast', blob2[0]) ): #  match Fast,  collectionItem previously
         c_Fast = True
     c_PU = False
+    #if ( re.search('PU25', blob2[0]) ): #  match PU AND PUpmx,  collectionItem previously
     if ( re.search('PU', blob2[0]) ): #  match PU AND PUpmx,  collectionItem previously
+    # must be PU insteas of PU25 in order to accept PU70 or others.
         c_PU = True
     c_pmx = False
-    if ( re.search('PUpmx', blob2[0]) ): #  match pmx,  collectionItem previously
+    if ( re.search('pmx', blob2[0]) ): #  match pmx,  collectionItem previously
         c_pmx = True
-    
+        c_PU = False
+#        print('c_pmx = True', blob2[0], valType)
+
     if ( valType == "PU25" ): # PU test (PU and not pmx)
         if ( not c_PU ):
             temp = False
@@ -479,9 +481,11 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     if ( valType == "PUpmx25" ): # 
         if (not c_pmx): # pmx test
             temp = False
+#            print('test valType = PUpmx25 False', blob2[0], valType)
     else:
         if (c_pmx): # pmx test
             temp = False
+#            print('test valType != PUpmx25 False', blob2[0], valType)
 
     if ( (validationType_1 == "Fast") or ( checkFvsF == "Fast" )):
         if (not c_Fast):
@@ -490,6 +494,9 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
         if (c_Fast): # Fast test
             temp = False
     
+#    if (temp):
+#        print('collectionItem : %s' % collectionItem) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
+#        print(blob2)
     return temp
 
 def list_search_0(self):
@@ -598,7 +605,7 @@ def list_search_5(self):
     self.wp.write("list_search_5 : filtre = %s\n " % str(filtre))
     self.textReport += "list_search_5 : filtre = " + str(filtre) + "<br>"
     for item1 in self.releasesList_rel_2:
-        for item2 in filtre:
+        for item2 in filtre: # datasets
             if (re.search(item2 + '__', item1) and re.search(str(self.my_choice_rel_1) + '-', item1)):
                 if clean_collections2(item1, self.validationType1, validationType_2, validationType_3, "rel"):
                     temp_12.append([explode_item(item1)[2], item2])

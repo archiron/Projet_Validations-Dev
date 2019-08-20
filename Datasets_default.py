@@ -195,6 +195,7 @@ def checkCalculValidation(self, fileName, side):
 #    if ( re.search("PUpmx25", blob2[0]) ):
     if ( re.search("PUpmx", blob2[0]) ):
         check_pmx = True
+#        print('check_pmx = True')
     if ( re.search("Fast", blob2[0]) ):
         check_Fast = True
     
