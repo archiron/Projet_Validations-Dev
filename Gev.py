@@ -35,7 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # small correction for the comparison between pmx & PU.
+        self.setWindowTitle(self.version) # small correction for the Fast comparison.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice

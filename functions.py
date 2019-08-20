@@ -457,9 +457,10 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     blob1 = collectionItem.split('-') # ['DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1', 'PU25ns_106X_mc2017_realistic_v6', 'v1__DQMIO.root']
     blob2 = blob1[1].split('_') # ['PU25ns', '106X', 'mc2017', 'realistic', 'v6']
     c_Fast = False
-#    if ( re.search('Fast', collectionItem) ): #  match Fast,  collectionItem previously
-    if ( re.search('Fast', blob2[0]) ): #  match Fast,  collectionItem previously
+    if ( re.search('Fast', collectionItem) ): #  match Fast,  collectionItem previously
+#    if ( re.search('Fast', blob2[0]) ): #  match Fast,  collectionItem previously
         c_Fast = True
+#        print('c_Fast = True', collectionItem, valType)
     c_PU = False
     #if ( re.search('PU25', blob2[0]) ): #  match PU AND PUpmx,  collectionItem previously
     if ( re.search('PU', blob2[0]) ): #  match PU AND PUpmx,  collectionItem previously
