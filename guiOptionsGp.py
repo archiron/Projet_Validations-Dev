@@ -169,6 +169,21 @@ def initGpFolderName(self): # can add modification on release name to obtain the
 
     return
 
+def initDecisionBox(self):
+
+    self.QGBoxDecision = QGroupBox("Decision Box")
+    self.QGBoxDecision.setMaximumHeight(120)
+    self.QGBoxDecision.setMinimumHeight(120)
+    self.check1 = QCheckBox("Use DBox") # default
+    self.check1.setChecked(False)
+    self.check1.setEnabled(False)
+    self.connect(self.check1, SIGNAL("clicked()"), self.check1Clicked) 
+    vboxDBox = QVBoxLayout()
+    vboxDBox.addWidget(self.check1)
+    vboxDBox.addStretch(1)
+    self.QGBoxDecision.setLayout(vboxDBox)
+    return
+
 def initGpLocation(self):
 
     self.QGBoxLocation = QGroupBox("Location")
@@ -234,6 +249,9 @@ def initGpOptions(self):
     # creation du grpe Location
     initGpLocation(self)
     
+    # creation du grpe Location
+    initDecisionBox(self)
+    
     # creation des Label pour release/reference resume
     initGpResume(self)    
     
@@ -247,6 +265,7 @@ def initGpOptions(self):
     self.layoutH_radio.addStretch(1)
     self.layoutH_radio.addWidget(self.QGBoxFolderName)
     self.layoutH_radio.addStretch(1)
+    self.layoutH_radio.addWidget(self.QGBoxDecision)
     self.layoutH_radio.addWidget(self.QGBoxLocation)
     self.layoutH_radio.addWidget(self.QGBoxRelRef)
 

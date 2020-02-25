@@ -35,7 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # small correction for the Fast comparison.
+        self.setWindowTitle(self.version) # add an option to use/not use a decision box in order to estimate if the histograms are correct.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
@@ -124,6 +124,15 @@ class Gev(QWidget):
         self.QGBoxListsUpdate()
         QtCore.QCoreApplication.processEvents()
         
+    def check1Clicked(self):
+        #print(self.check1.checkState())
+        if (self.check1.isChecked() == False):
+            print("unchecked")
+        if (self.check1.isChecked() == True):
+            print("checked")
+        self.QGBoxListsUpdate()
+        QtCore.QCoreApplication.processEvents()
+
     def checkSpecTarget1_Clicked(self):
         self.my_choice_ref_1 = self.reference
         self.my_choice_rel_1 = self.target
@@ -421,6 +430,7 @@ class Gev(QWidget):
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(False)
             disableRadioButtons(self)
+            self.check1.setEnabled(False)
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 1: # reference selection
@@ -438,6 +448,7 @@ class Gev(QWidget):
             self.QGBox_Lists.setVisible(False)
             self.QGBox_Selected.setVisible(False)
             disableRadioButtons(self)
+            self.check1.setEnabled(False)
             disableLocationButtons(self)
             fillQLW_rel1(self)
         elif self.tasks_counter == 2: # GlobalTag selections
@@ -447,6 +458,7 @@ class Gev(QWidget):
             self.textReport += "GlobalTag selections" + "<br>"
             updateLabelResume(self)
             enableRadioButtons(self)
+            self.check1.setEnabled(False)
             comparisonRules(self)
             self.lineEdit_ref.setEnabled(False)
             self.lineEdit_rel.setEnabled(False)
@@ -476,6 +488,7 @@ class Gev(QWidget):
             self.QGBox_Selected.setTitle("Selected")
             self.QGBox_Selected.setVisible(True)
             disableRadioButtons(self)
+            self.check1.setEnabled(True)
             enableLocationButtons(self)
             self.lineEdit_ref.setEnabled(True)
             self.lineEdit_rel.setEnabled(True)
@@ -539,6 +552,7 @@ class Gev(QWidget):
             os.chdir(self.working_dir_base) # going to base folder
             self.labelResumeSelected.clear() # 
             disableRadioButtons(self)
+            self.check1.setEnabled(False)
             disableLocationButtons(self)
             self.lineEdit_ref.setEnabled(False)
             self.lineEdit_rel.setEnabled(False)
