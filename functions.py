@@ -179,36 +179,39 @@ def dataSets_finalFolder_creation(self):
         wr.write("input_rel_file = %s\n" % input_rel_file)
         wr.write("input_ref_file = %s\n" % input_ref_file)
 
-        wp = open('index.html', 'w') # web page
-        wp.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n")
-        wp.write("<html>\n")
-        wp.write("<head>\n")
-        wp.write("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n")
-        wp.write("<title> " + CMP_TITLE + " </title>\n") #option -t dans OvalFile
-        wp.write("</head>\n")
-        wp.write("<a NAME=\"TOP\"></a>")
-        wp.write("<h1><a href=\"../\"><img border=0 width=\"22\" height=\"22\" src=\"../../../../img/up.gif\" alt=\"Up\"/></a>&nbsp; " + CMP_TITLE + " </h1>\n" ) # option -t dans OvalFile
+        wp_index = open('index.html', 'w') # web page
+        if (self.check1.isChecked() == True):
+	    wp_DB = open('DB_index.html', 'w') # web page for Decision Box
+	    DB_flag = True
+        extWrite("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n", [wp_index, wp_DB])
+        extWrite("<html>\n", [wp_index, wp_DB])
+        extWrite("<head>\n", [wp_index, wp_DB])
+        extWrite("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n", [wp_index, wp_DB])
+        extWrite("<title> " + CMP_TITLE + " </title>\n", [wp_index, wp_DB]) #option -t dans OvalFile
+        extWrite("</head>\n", [wp_index, wp_DB])
+        extWrite("<a NAME=\"TOP\"></a>", [wp_index, wp_DB])
+        extWrite("<h1><a href=\"../\"><img border=0 width=\"22\" height=\"22\" src=\"../../../../img/up.gif\" alt=\"Up\"/></a>&nbsp; " + CMP_TITLE + " </h1>\n", [wp_index, wp_DB] ) # option -t dans OvalFile
         
-        wp.write("<b><font color='red'> " + self.validationType2 + " " + self.my_choice_rel_1 + " </font></b>")
-        wp.write(" : " + self.selectedRelGlobalTag )
-        wp.write(" : " + elt[1] )
-        wp.write("<br>\n")
-        wp.write("<b><font color='blue'> " + self.validationType3 + " " + self.my_choice_ref_1 + " </font></b>")
-        wp.write(" : " + self.selectedRefGlobalTag )
-        wp.write(" : " + elt[2] )
-        wp.write("<br>\n")
+        extWrite("<b><font color='red'> " + self.validationType2 + " " + self.my_choice_rel_1 + " </font></b>", [wp_index, wp_DB])
+        extWrite(" : " + self.selectedRelGlobalTag, [wp_index, wp_DB] )
+        extWrite(" : " + elt[1], [wp_index, wp_DB] )
+        extWrite("<br>\n", [wp_index, wp_DB])
+        extWrite("<b><font color='blue'> " + self.validationType3 + " " + self.my_choice_ref_1 + " </font></b>", [wp_index, wp_DB])
+        extWrite(" : " + self.selectedRefGlobalTag, [wp_index, wp_DB])
+        extWrite(" : " + elt[2], [wp_index, wp_DB] )
+        extWrite("<br>\n", [wp_index, wp_DB])
         
         if (f_ref == 0):
-            wp.write("<p>In all plots below, there was no reference histograms to compare with")
-            wp.write(", and the " + CMP_RED_FILE + " histograms are in red.") # new release red in OvalFile
+            extWrite("<p>In all plots below, there was no reference histograms to compare with", [wp_index, wp_DB])
+            extWrite(", and the " + CMP_RED_FILE + " histograms are in red.", [wp_index, wp_DB]) # new release red in OvalFile
         else:
-            wp.write("<p>In all plots below")
-            wp.write(", the <b><font color='red'> " + CMP_RED_FILE + " </font></b> histograms are in red") # new release red in OvalFile
-            wp.write(", and the <b><font color='blue'> " + CMP_BLUE_FILE + " </font></b> histograms are in blue.") # ref release blue in OvalFile
-        wp.write(" Some more details") # 
-        wp.write(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms") # .txt file
-        wp.write(", <a href=\"gifs/\">images</a> of histograms" + "." ) # 
-        wp.write("</p>\n")
+            extWrite("<p>In all plots below", [wp_index, wp_DB])
+            extWrite(", the <b><font color='red'> " + CMP_RED_FILE + " </font></b> histograms are in red", [wp_index, wp_DB]) # new release red in OvalFile
+            extWrite(", and the <b><font color='blue'> " + CMP_BLUE_FILE + " </font></b> histograms are in blue.", [wp_index, wp_DB]) # ref release blue in OvalFile
+        extWrite(" Some more details", [wp_index, wp_DB]) # 
+        extWrite(", <a href=\"" + CMP_CONFIG + "\">specification</a> of histograms", [wp_index, wp_DB]) # .txt file
+        extWrite(", <a href=\"gifs/\">images</a> of histograms" + ".", [wp_index, wp_DB] ) # 
+        extWrite("</p>\n", [wp_index, wp_DB])
 
         # remplissage tableau titres et dict
         histoArray_0 = {}
@@ -235,20 +238,20 @@ def dataSets_finalFolder_creation(self):
 
         # fin remplissage tableau titres et dict
         f.close()
-        wp.write( "<table border=\"1\" cellpadding=\"5\" width=\"100%\">" )
+        extWrite( "<table border=\"1\" cellpadding=\"5\" width=\"100%\">", [wp_index, wp_DB] )
         
         for i in range(0, len(titlesList)):
             if ( i % 5  == 0 ):
-                wp.write( "\n<tr valign=\"top\">" )
+                extWrite( "\n<tr valign=\"top\">", [wp_index, wp_DB] )
             textToWrite = ""
-            wp.write( "\n<td width=\"10\">\n<b> " + titlesList[i] + "</b>" )
+            extWrite( "\n<td width=\"10\">\n<b> " + titlesList[i] + "</b>", [wp_index, wp_DB] )
             titles = titlesList[i].split() # explode(" ", $clefs[$i])
             if len(titles) > 1 :
                 titleShortName = titles[0] + "_" + titles[1]
             else:
                 titleShortName = titles[0]
-            wp.write( "&nbsp;&nbsp;" + "<a href=\"#" + titleShortName + "\">" ) # write group title
-            wp.write( "<img width=\"18\" height=\"15\" border=\"0\" align=\"center\" src=" + image_point + " alt=\"Top\"/>" + "<br><br>" )
+            extWrite( "&nbsp;&nbsp;" + "<a href=\"#" + titleShortName + "\">", [wp_index, wp_DB] ) # write group title
+            extWrite( "<img width=\"18\" height=\"15\" border=\"0\" align=\"center\" src=" + image_point + " alt=\"Top\"/>" + "<br><br>", [wp_index, wp_DB] )
             textToWrite += "</a>"
             histoPrevious = ""
             numLine = 0
@@ -310,29 +313,29 @@ def dataSets_finalFolder_creation(self):
                     textReplace = False
             if ( textToWrite.count("</a><br><a") >= 1 ):
                     textToWrite = textToWrite.replace("</a><br><a", "</a><a")
-            wp.write( textToWrite )
+            extWrite( textToWrite, [wp_index, wp_DB] )
                     
-            wp.write( "</td>" )
+            extWrite( "</td>", [wp_index, wp_DB] )
             if ( i % 5 == 4 ):
-                wp.write( "</tr>" )
+                extWrite( "</tr>", [wp_index, wp_DB] )
         
-        wp.write( "</table>\n" )
-        wp.write( "<br>" )
+        extWrite( "</table>\n", [wp_index, wp_DB] )
+        extWrite( "<br>", [wp_index, wp_DB] )
         
         lineFlag = True
-        wp.write( "<table border=\"0\" cellpadding=\"5\" width=\"100%\">" )
+        extWrite( "<table border=\"0\" cellpadding=\"5\" width=\"100%\">", [wp_index, wp_DB] )
         for i in range(0, len(titlesList)):
-            wp.write( "\n<tr valign=\"top\">" )
-            wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
+            extWrite( "\n<tr valign=\"top\">", [wp_index, wp_DB] )
+            extWrite( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n", [wp_index, wp_DB] )
             titles = titlesList[i].split()
             if len(titles) > 1 :
                 titleShortName = titles[0] + "_" + titles[1]
             else:
                 titleShortName = titles[0]
-            wp.write( "\n<td>\n<b> " )
-            wp.write( "<a id=\"" + titleShortName + "\" name=\"" + titleShortName + "\"></a>" )
-            wp.write( titlesList[i] + "</b></td>" )
-            wp.write( "</tr><tr valign=\"top\">" )
+            extWrite( "\n<td>\n<b> ", [wp_index, wp_DB] )
+            extWrite( "<a id=\"" + titleShortName + "\" name=\"" + titleShortName + "\"></a>", [wp_index, wp_DB] )
+            extWrite( titlesList[i] + "</b></td>", [wp_index, wp_DB] )
+            extWrite( "</tr><tr valign=\"top\">", [wp_index, wp_DB] )
             for elem in histoArray_0[titlesList[i]]:
                 if ( elem != "endLine" ): 
                     histo_names = elem.split("/")
@@ -363,22 +366,24 @@ def dataSets_finalFolder_creation(self):
                         PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, self)
                     
                     if ( lineFlag ):
-                        wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
+                        extWrite( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n", [wp_index, wp_DB] )
                     if (  histo_positions[3] == "0" ):
-                        wp.write( "<td>" )
-                        wp.write( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>" )
-                        wp.write( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>" )
-                        wp.write( " </td>\n" )
+                        extWrite( "<td>", [wp_index, wp_DB] )
+                        extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>", [wp_index, wp_DB])
+                        extWrite( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
+                        extWrite( " </td>\n", [wp_index, wp_DB] )
                         lineFlag = False
                     else: # line_sp[3]=="1"
-                        wp.write( "<td>" )
-                        wp.write( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>" )
-                        wp.write( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>" )
-                        wp.write( "</td></tr><tr valign=\"top\">" )
+                        extWrite( "<td>", [wp_index, wp_DB] )
+                        extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>", [wp_index, wp_DB] )
+                        extWrite( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
+                        extWrite( "</td></tr><tr valign=\"top\">", [wp_index, wp_DB] )
                         lineFlag = True
 
-        wp.write( "</tr></table>\n" )
-        wp.close()
+        extWrite( "</tr></table>\n", [wp_index, wp_DB] )
+        wp_index.close()
+        if DB_flag:
+            wp_DB.close() # must have a test if exist
         os.chdir('../') # back to the final folder.
         
         selectedText += " : <b><font color='blue'> DONE ! </font></b></strong>"
@@ -460,7 +465,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     if ( re.search('Fast', collectionItem) ): #  match Fast,  collectionItem previously
 #    if ( re.search('Fast', blob2[0]) ): #  match Fast,  collectionItem previously
         c_Fast = True
-#        print('c_Fast = True', collectionItem, valType)
+        print('c_Fast = True', collectionItem, valType)
     c_PU = False
     #if ( re.search('PU25', blob2[0]) ): #  match PU AND PUpmx,  collectionItem previously
     if ( re.search('PU', blob2[0]) ): #  match PU AND PUpmx,  collectionItem previously
@@ -470,7 +475,7 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     if ( re.search('pmx', blob2[0]) ): #  match pmx,  collectionItem previously
         c_pmx = True
         c_PU = False
-#        print('c_pmx = True', blob2[0], valType)
+        print('c_pmx = True', blob2[0], valType)
 
     if ( valType == "PU25" ): # PU test (PU and not pmx)
         if ( not c_PU ):
@@ -482,11 +487,11 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
     if ( valType == "PUpmx25" ): # 
         if (not c_pmx): # pmx test
             temp = False
-#            print('test valType = PUpmx25 False', blob2[0], valType)
+            print('test valType = PUpmx25 False', blob2[0], valType)
     else:
         if (c_pmx): # pmx test
             temp = False
-#            print('test valType != PUpmx25 False', blob2[0], valType)
+            print('test valType != PUpmx25 False', blob2[0], valType)
 
     if ( (validationType_1 == "Fast") or ( checkFvsF == "Fast" )):
         if (not c_Fast):
@@ -495,9 +500,9 @@ def clean_collections2(collectionItem, validationType_1, validationType_2, valid
         if (c_Fast): # Fast test
             temp = False
     
-#    if (temp):
-#        print('collectionItem : %s' % collectionItem) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
-#        print(blob2)
+    if (temp):
+        print('collectionItem : %s' % collectionItem) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
+        print(blob2)
     return temp
 
 def list_search_0(self):
@@ -941,4 +946,15 @@ def getURL(folder, urlBase):
     URL = urlBase + '/' + folder
 #    print("URL     : %s" % urlBase + '/' + folder)
     return URL
+
+def extWrite(text, fileList):
+    #print(text)
+    #print(fileList)
+    for f in fileList:
+        #print(f)
+        #f.write("titi")
+        f.write(text)
+    return
+
+
     

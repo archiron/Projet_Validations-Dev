@@ -23,10 +23,10 @@ def DataLocation(self):
     DO NOT FORGET to update the pathToURL() function below.
     '''
     table=[
-    ["Local", 1, str(localLocation(self))],
+    ["Local", 0, str(localLocation(self))],
     ["Remote afs dev", 0, '/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Dev/'],
     ["Remote afs std", 0, '/afs/cern.ch/cms/Physics/egamma/www/validation/Electrons/Releases/'],
-    ["Remote eos dev", 0, '/eos/project/c/cmsweb/www/egamma/validation/Electrons/Dev/'],
+    ["Remote eos dev", 1, '/eos/project/c/cmsweb/www/egamma/validation/Electrons/Dev/'],
     ["Remote eos std", 0, '/eos/project/c/cmsweb/www/egamma/validation/Electrons/Releases/'],
     ]
     return table

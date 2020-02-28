@@ -60,9 +60,9 @@ def DataSetsFilter_FastFullRECO(self):
 
 def DataSetsFilter_FullPU25(self):
     table=[
-    ["TTbar_13", 1],
-    ["ZEE_13", 1],
-    ["TTbar_14TeV", 1],
+    ["TTbar_13", 0],
+    ["ZEE_13", 0],
+    ["TTbar_14TeV", 0],
     ["ZEE_14", 1],
     ]
     return table
@@ -186,7 +186,7 @@ def checkCalculValidation(self, fileName, side):
         else:
             print "BIG PBM !!"
     
-#    print('fileName : %s' % fileName) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
+    print('fileName : %s' % fileName) # we have the complete root name here : DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1-PU25ns_106X_mc2017_realistic_v6-v1__DQMIO.root
     blob1 = fileName.split('-') # ['DQM_V0001_R000000001__RelValZEE_13__CMSSW_10_6_1', 'PU25ns_106X_mc2017_realistic_v6', 'v1__DQMIO.root']
     blob2 = blob1[1].split('_') # ['PU25ns', '106X', 'mc2017', 'realistic', 'v6']
 #    if ( re.search("PU25", blob2[0]) ): # fileName previously
@@ -195,10 +195,10 @@ def checkCalculValidation(self, fileName, side):
 #    if ( re.search("PUpmx25", blob2[0]) ):
     if ( re.search("PUpmx", blob2[0]) ):
         check_pmx = True
-#        print('check_pmx = True')
+        print('check_pmx = True')
     if ( re.search("Fast", fileName) ):
         check_Fast = True
-#        print('check_Fast = True')
+        print('check_Fast = True')
 
     if self.checkSpecTarget1.isChecked(): # RECO or miniAOD
         if check_PU or check_pmx:

@@ -35,7 +35,10 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # add an option to use/not use a decision box in order to estimate if the histograms are correct.
+        self.setWindowTitle(self.version) # rename "List" in datasets/location with Datasets/Location List in file guiOptionsGp.py
+                                          # rename wp in finctions.py with wp_index for index.html file creeation (confusion could
+                                          # be made with self.wp
+                                          # add a extWrite( text, [list of opened files] ) to write on multiple files
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
