@@ -14,6 +14,7 @@ from PyQt4 import QtCore
 from Paths_default import *
 from Datasets_default import extractDatasets, testForDataSetsFile 
 from electronCompare import *
+from DecisionBox import DecisionBox
 
 from ROOT import TCanvas
 
@@ -97,6 +98,8 @@ def finalFolder_creation(self):
     return
     
 def dataSets_finalFolder_creation(self):
+    DB = DecisionBox()
+
     actual_dir = os.getcwd()
     os.chdir(self.finalFolder) # going into finalFolder
     # create datasets folders
@@ -166,6 +169,8 @@ def dataSets_finalFolder_creation(self):
         CMP_BLUE_FILE = self.my_choice_ref_1
         image_up = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/up.gif"
         image_point = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/point.gif"
+        image_OK = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/OK.gif"
+        image_KO = "http://cms-egamma.web.cern.ch/cms-egamma/validation/Electrons/img/KO.gif"
        
         f = open(CMP_CONFIG, 'r')
         input_rel_file = self.working_dir_rel + '/' + elt[1]
@@ -238,6 +243,8 @@ def dataSets_finalFolder_creation(self):
 
         # fin remplissage tableau titres et dict
         f.close()
+        
+        #### START OF WRITING TABLE & LINKS ####
         extWrite( "<table border=\"1\" cellpadding=\"5\" width=\"100%\">", [wp_index, wp_DB] )
         
         for i in range(0, len(titlesList)):
@@ -321,9 +328,12 @@ def dataSets_finalFolder_creation(self):
         
         extWrite( "</table>\n", [wp_index, wp_DB] )
         extWrite( "<br>", [wp_index, wp_DB] )
+        #### END OF WRITING TABLE & LINKS ####
         
+        #### START OF WRITING TABLE & PICTURES ####
         lineFlag = True
-        extWrite( "<table border=\"0\" cellpadding=\"5\" width=\"100%\">", [wp_index, wp_DB] )
+        #extWrite( "<table border=\"0\" cellpadding=\"5\" width=\"100%\">", [wp_index, wp_DB] )
+        extWrite( "<table cellpadding=\"5\" width=\"100%\">", [wp_index, wp_DB] )
         for i in range(0, len(titlesList)):
             extWrite( "\n<tr valign=\"top\">", [wp_index, wp_DB] )
             extWrite( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n", [wp_index, wp_DB] )
@@ -365,6 +375,21 @@ def dataSets_finalFolder_creation(self):
                     else:
                         PictureChoice(histo_1, histo_2, histo_positions[1], histo_positions[2], gif_name, self)
                     
+                    ### call to Decision Box class <TD BORDERCOLOR=LIME>Starflower</TD>
+                    #coeff_1, coeff_2, coeff_3 = decisionBox(histo_1, histo_2)
+                    coeff_1, coeff_2, coeff_3 = DB.decisionBox(histo_1, histo_2)
+                    #print("\nconfiance : coeff 1 : %6.4f - coeff 2 : %6.4f - coeff 3 : %6.4f" % (coeff_1, coeff_2, coeff_3))
+                    #print(" confiance : coeff 1 : %6.4f - coeff 2 : %6.4f - coeff 3 : %6.4f" % (c1, c2, c3))
+                    
+                    # get the 3rd letter of short_histo_name
+#                    print('short_histo_name : %s' % short_histo_names[0])
+                    letter = short_histo_names[0][2]
+                    if ( letter =='e' ):
+                        color = 'green'
+                        DB_picture = image_OK
+                    else:
+                        color = 'red'
+                        DB_picture = image_KO
                     if ( lineFlag ):
                         extWrite( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n", [wp_index, wp_DB] )
                     if (  histo_positions[3] == "0" ):
@@ -372,12 +397,30 @@ def dataSets_finalFolder_creation(self):
                         extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>", [wp_index, wp_DB])
                         extWrite( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
                         extWrite( " </td>\n", [wp_index, wp_DB] )
+                        # insert here the decision box
+                        extWrite( "<td><table border=\"1\" bordercolor=" + color + ">", [wp_DB] )
+                        extWrite( "Decision Box\n", [wp_DB] )
+                        extWrite( "<td>", [wp_DB] )
+                        #extWrite(" <b>confiance : </b>%s - %s - %s\n" % (setColor(coeff_1), setColor(coeff_2), setColor(coeff_3)), [wp_DB] )
+                        extWrite(" <p><b>confiance : </b></p><p>coeff 1 : %6.4s</p><p>coeff 2 : %6.4s</p><p>coeff 3 : %6.4s</p>" % (coeff_1, coeff_2, coeff_3), [wp_DB] )
+                        extWrite( "<div><a href=\"" + DB_picture + "\"><img border=\"0\" class=\"image\" width=\"40\" src=\"" + DB_picture + "\"></a></div>", [wp_DB] )
+                        extWrite( "</td>", [wp_DB] )
+                        extWrite( "</table></td>", [wp_DB] )
                         lineFlag = False
                     else: # line_sp[3]=="1"
                         extWrite( "<td>", [wp_index, wp_DB] )
                         extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>", [wp_index, wp_DB] )
                         extWrite( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
-                        extWrite( "</td></tr><tr valign=\"top\">", [wp_index, wp_DB] )
+                        extWrite( "</td>", [wp_DB] )
+                        # insert here the decision box
+                        extWrite( "<td><table border=\"1\" bordercolor=" + color + ">", [wp_DB] )
+                        extWrite( "Decision Box\n", [wp_DB] )
+                        extWrite( "<td>", [wp_DB] )
+                        #extWrite(" <b>confiance : </b>%s - %s - %s\n" % (setColor(coeff_1), setColor(coeff_2), setColor(coeff_3)), [wp_DB] )
+                        extWrite(" <p><b>confiance : </b></p><p>coeff 1 : %6.4s</p><p>coeff 2 : %6.4s</p><p>coeff 3 : %6.4s</p>" % (coeff_1, coeff_2, coeff_3), [wp_DB] )
+                        extWrite( "<div><a href=\"" + DB_picture + "\"><img border=\"0\" class=\"image\" width=\"40\" src=\"" + DB_picture + "\"></a></div>", [wp_DB] )
+                        extWrite( "</td>", [wp_DB] )
+                        extWrite( "</table></td></tr><tr valign=\"top\">", [wp_index, wp_DB] )
                         lineFlag = True
 
         extWrite( "</tr></table>\n", [wp_index, wp_DB] )
@@ -385,6 +428,7 @@ def dataSets_finalFolder_creation(self):
         if DB_flag:
             wp_DB.close() # must have a test if exist
         os.chdir('../') # back to the final folder.
+        #### END OF WRITING TABLE & PICTURES ####
         
         selectedText += " : <b><font color='blue'> DONE ! </font></b></strong>"
         wr.write("Dataset %s DONE\n" % elt[0])
