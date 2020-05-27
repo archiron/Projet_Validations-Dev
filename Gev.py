@@ -35,9 +35,7 @@ class Gev(QWidget):
         self.wp.write("initVariables OK\n")
         self.textReport += "initVariables OK<br>"
         
-        self.setWindowTitle(self.version) # add modification into dataSets_finalFolder_creation() function (into functions.py) & have a "pseudo" decision box
-        # with validation or not picture.
-        # Also add a DecisionBox.py file for the Decision Box class.
+        self.setWindowTitle(self.version) # little correction for <a id=... href=...> to point to the correct histo.
         
         # From top to bottom, there is 4 parts :
         # PART 1 : GroupBoxes for validation choice
