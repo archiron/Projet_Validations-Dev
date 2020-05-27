@@ -394,8 +394,8 @@ def dataSets_finalFolder_creation(self):
                         extWrite( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n", [wp_index, wp_DB] )
                     if (  histo_positions[3] == "0" ):
                         extWrite( "<td>", [wp_index, wp_DB] )
-                        extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>", [wp_index, wp_DB])
-                        extWrite( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
+                        extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"", [wp_index, wp_DB])
+                        extWrite( " href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
                         extWrite( " </td>\n", [wp_index, wp_DB] )
                         # insert here the decision box
                         extWrite( "<td><table border=\"1\" bordercolor=" + color + ">", [wp_DB] )
@@ -409,8 +409,8 @@ def dataSets_finalFolder_creation(self):
                         lineFlag = False
                     else: # line_sp[3]=="1"
                         extWrite( "<td>", [wp_index, wp_DB] )
-                        extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>", [wp_index, wp_DB] )
-                        extWrite( "<a href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
+                        extWrite( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"", [wp_index, wp_DB] )
+                        extWrite( " href=\"" + gif_name + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name + "\"></a>", [wp_index, wp_DB] )
                         extWrite( "</td>", [wp_DB] )
                         # insert here the decision box
                         extWrite( "<td><table border=\"1\" bordercolor=" + color + ">", [wp_DB] )
